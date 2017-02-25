@@ -1,0 +1,67 @@
+@model HeaderViewRenderMode
+
+@if (Model == HeaderViewRenderMode.Title)
+{
+    <table>
+        <tr>
+            <td>
+                <table>
+                    <tr>
+                        <td>
+                            <img src="~/Content/Images/Logo-BiaPlus.png" style="width: 70px; height: 70px; margin-top: 5px;" />
+                        </td>
+                        <td>
+                            <h1>@Resources.BCMWebGlobalResource.labelAppTitle</h1>
+                            <h4>@Resources.BCMWebGlobalResource.labelAppSlogan</h4>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+}
+else
+{
+    if (Model == HeaderViewRenderMode.Full)
+    {
+        <table>
+            <tr>
+                <td style="width: 35%;">
+                    <a href="@Url.Action("Index", "Home")" style="color: #000; text-decoration: none;">
+                        <table>
+                            <tr>
+                                <td>
+                                    <img src="~/Content/Images/Logo-BiaPlus.png" style="width: 70px; height: 70px;" />
+                                </td>
+                                <td>
+                                    <h1 style="text-decoration: none;">@Resources.BCMWebPublic.labelAppTitle</h1>
+                                    <h4>@Resources.BCMWebPublic.labelAppSlogan</h4>
+                                </td>
+                            </tr>
+                        </table>
+                    </a>
+                </td>
+                <td style="text-align: right; width: 70%;">
+                    <div class="loginControl">
+                        @Html.Partial("LogOnPartialView")
+                    </div>
+                </td>
+            </tr>
+        </table>
+    }
+
+    <div class="headerMenu">
+        @* DXCOMMENT: Configure the header menu *@
+        @Html.DevExpress().Menu(settings =>
+{
+    settings.Name = "HeaderMenu";
+    settings.ItemAutoWidth = false;
+    settings.ControlStyle.CssClass = "headerMenu";
+    settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+    settings.Items.Add(Resources.HomeIndex.labelHome);
+    settings.Items.Add(Resources.HomeIndex.labelContact);
+    settings.Items.Add(Resources.HomeIndex.labelFAQ);
+    settings.Items.Add(Resources.HomeIndex.labelAbout);
+}).GetHtml()
+    </div>
+}
