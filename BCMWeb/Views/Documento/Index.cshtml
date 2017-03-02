@@ -1,0 +1,54 @@
+﻿@using BCMWeb.Models
+
+@model DocumentosModel
+
+<script type="text/javascript">
+    function SelectionChanged(s, e) {
+        s.GetSelectedFieldValues("ContactName", GetSelectedFieldValuesCallback);
+    }
+    function GetSelectedFieldValuesCallback(values) {
+        alert(values);
+    }
+</script>
+
+@using (Html.BeginForm("Index", "Documento", FormMethod.Post, htmlAttributes: new { id = "docForm" }))
+{
+    @Html.Hidden("DocSelected")
+    @Html.HiddenFor(m => m.IdClaseDocumento)
+    @Html.HiddenFor(m => m.IdModulo)
+
+    @section LeftPanel {
+        @Html.DevExpress().Panel(settings => {
+            settings.Name = "LeftPane";
+            settings.FixedPosition = PanelFixedPosition.WindowLeft;
+            settings.Collapsible = true;
+            settings.SettingsAdaptivity.CollapseAtWindowInnerWidth = 1023;
+            settings.ControlStyle.CssClass = "leftPane";
+            settings.Styles.Panel.CssClass = "panel";
+            settings.SetContent(() => {
+                Html.RenderPartial("ContentLeftPartialView");
+            });
+        }).GetHtml()
+    }
+
+    @Html.Partial("DocumentoPartialView", Model)
+
+    if (Model.IdDocumentoSelected > 0)
+    {
+        @section RightPanel {
+            @Html.DevExpress().Panel(settings =>
+            {
+                settings.Name = "RightPane";
+                settings.FixedPosition = PanelFixedPosition.WindowRight;
+                settings.Collapsible = true;
+                settings.SettingsAdaptivity.CollapseAtWindowInnerWidth = 1023;
+                settings.ControlStyle.CssClass = "rightPane";
+                settings.Styles.Panel.CssClass = "panel";
+                settings.SetContent(() =>
+                {
+                    Html.RenderPartial("ContentRightPartialView");
+                });
+            }).GetHtml()
+        }
+    }
+}

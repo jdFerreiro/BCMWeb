@@ -117,10 +117,52 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AboutPageTitle" xml:space="preserve">
+    <value>Sobre BCMWeb</value>
+  </data>
+  <data name="BSMMovilPageTitle" xml:space="preserve">
+    <value>Acceso desde dispositivos móviles</value>
+  </data>
+  <data name="ConfidencialidadPageTitle" xml:space="preserve">
+    <value>Políticas de Confidencialidad</value>
+  </data>
+  <data name="ContactPageTitle" xml:space="preserve">
+    <value>Contáctenos</value>
+  </data>
+  <data name="FAQPageTitle" xml:space="preserve">
+    <value>Preguntas Frecuentes</value>
+  </data>
   <data name="labelAppSlogan" xml:space="preserve">
-    <value>Manejador de Contenido para Negocios</value>
+    <value>Manejador de Contenido para Continuidad de Negocios</value>
   </data>
   <data name="labelAppTitle" xml:space="preserve">
     <value>BCMWeb</value>
+  </data>
+  <data name="LoginPageTitle" xml:space="preserve">
+    <value>Acceso a la Aplicación</value>
+  </data>
+  <data name="ProcedimientoBCPPageTitle" xml:space="preserve">
+    <value>Procedimientos de Continuidad</value>
+  </data>
+  <data name="ProcedimientoBIAPageTitle" xml:space="preserve">
+    <value>Análisis de Impacto</value>
+  </data>
+  <data name="labelLoadPanel" xml:space="preserve">
+    <value>Procesando. Espere por favor...</value>
+  </data>
+  <data name="botReturnText" xml:space="preserve">
+    <value>Regresar</value>
+  </data>
+  <data name="ConfirmDeleteMessage" xml:space="preserve">
+    <value>¿Realmente desea eliminar el documento {0}?</value>
+  </data>
+  <data name="captionButtonDelete" xml:space="preserve">
+    <value>Eliminar</value>
+  </data>
+  <data name="captionButtonEdit" xml:space="preserve">
+    <value>Actualizar</value>
+  </data>
+  <data name="captionButtonNew" xml:space="preserve">
+    <value>Nuevo</value>
   </data>
 </root>

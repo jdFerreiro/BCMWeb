@@ -8,6 +8,7 @@ using System.Web.Security;
 using WebMatrix.WebData;
 using BCMWeb.Filters;
 using BCMWeb.Models;
+using BCMWeb.Security;
 
 namespace BCMWeb.Controllers {
     [Authorize]
@@ -29,10 +30,22 @@ namespace BCMWeb.Controllers {
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginModel model, string returnUrl) {
             if(ModelState.IsValid) {
-                if(WebSecurity.Login(model.UserName, model.Password, persistCookie: model.RememberMe.Value)) {
-                    return Redirect(returnUrl ?? "/");
+                User _User = Repository.GetUserDetails(model.UserName, model.Password);
+                if (_User != null)
+                {
+
+                    FormsAuthentication.SetAuthCookie(_User.Email, true);
+                    string UserId = _User.Id.ToString();
+                    var authTicket = new FormsAuthenticationTicket(1, _User.Name, DateTime.Now, DateTime.Now.AddMinutes(20), false, UserId);
+                    string encriptedTicket = FormsAuthentication.Encrypt(authTicket);
+                    var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encriptedTicket);
+                    HttpContext.Response.Cookies.Add(authCookie);
+                    Session["UserId"] = UserId;
+                    Session["IdEmpresa"] = Metodos.GetEmpresasUsuario().FirstOrDefault().IdEmpresa;
+                    return RedirectToAction("Index", "Menu");
+
                 }
-                ViewBag.ErrorMessage = "The user name or password provided is incorrect";
+                ViewBag.ErrorMessage = Resources.ErrorResource.LoginFailError;
             }
 
             // If we got this far, something failed, redisplay form
@@ -43,8 +56,8 @@ namespace BCMWeb.Controllers {
         // GET: /Account/LogOff
 
         public ActionResult LogOff() {
-            WebSecurity.Logout();
-            return Redirect("/");
+            FormsAuthentication.SignOut();
+            return RedirectToAction("Index", "Home");
         }
 
         //
@@ -103,7 +116,7 @@ namespace BCMWeb.Controllers {
                     return RedirectToAction("ChangePasswordSuccess");
                 }
                 else {
-                    ViewBag.ErrorMessage = "The current password is incorrect or the new password is invalid.";
+                    ViewBag.ErrorMessage = Resources.ErrorResource.ChangePasswordFailError;
                 }
                 
             }
@@ -126,34 +139,34 @@ namespace BCMWeb.Controllers {
             // a full list of status codes.
             switch(createStatus) {
                 case MembershipCreateStatus.DuplicateUserName:
-                    return "User name already exists. Please enter a different user name.";
+                    return Resources.ErrorResource.DuplicateUserNameError;
 
                 case MembershipCreateStatus.DuplicateEmail:
-                    return "A user name for that e-mail address already exists. Please enter a different e-mail address.";
+                    return Resources.ErrorResource.DuplicateEmailError;
 
                 case MembershipCreateStatus.InvalidPassword:
-                    return "The password provided is invalid. Please enter a valid password value.";
+                    return Resources.ErrorResource.InvalidPasswordError;
 
                 case MembershipCreateStatus.InvalidEmail:
-                    return "The e-mail address provided is invalid. Please check the value and try again.";
+                    return Resources.ErrorResource.InvalidEmailError;
 
                 case MembershipCreateStatus.InvalidAnswer:
-                    return "The password retrieval answer provided is invalid. Please check the value and try again.";
+                    return Resources.ErrorResource.InvalidAnswerError;
 
                 case MembershipCreateStatus.InvalidQuestion:
-                    return "The password retrieval question provided is invalid. Please check the value and try again.";
+                    return Resources.ErrorResource.InvalidQuestionError;
 
                 case MembershipCreateStatus.InvalidUserName:
-                    return "The user name provided is invalid. Please check the value and try again.";
+                    return Resources.ErrorResource.InvalidUserNameError;
 
                 case MembershipCreateStatus.ProviderError:
-                    return "The authentication provider returned an error. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
+                    return Resources.ErrorResource.ProviderError;
 
                 case MembershipCreateStatus.UserRejected:
-                    return "The user creation request has been canceled. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
+                    return Resources.ErrorResource.UserRejectedError;
 
                 default:
-                    return "An unknown error occurred. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
+                    return Resources.ErrorResource.defaultError;
             }
         }
         #endregion

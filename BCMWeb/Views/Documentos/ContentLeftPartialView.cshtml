@@ -1,0 +1,53 @@
+@using BCMWeb.Models
+
+@model DocumentosModel
+
+<div class="leftPanel">
+    <table>
+        <tr>
+            <td>
+                @Html.DevExpress().Button(b =>
+                {
+                    b.Name = "botReturn";
+                    b.Text = Resources.BCMWebPublic.botReturnText;
+                    b.ClientSideEvents.Click = "function(s, e) { lp.Show(); document.location='" + DevExpressHelper.GetUrl(new { Controller = "Documento", Action = "Index" }) + "?IdModulo=" + Model.IdModulo.ToString() + "' }";
+
+                }).GetHtml()
+            </td>
+        </tr>
+        <tr>
+            <td>
+                &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table>
+                    <tr>
+                        <td class="ModuloHeader">
+                            Header
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            &nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.DevExpress().Menu(s =>
+                                {
+                                    s.Name = "menuOpciones";
+                                    s.Width = Unit.Percentage(100);
+                                    s.Orientation = Orientation.Vertical;
+                                    s.ShowPopOutImages = DefaultBoolean.True;
+                                    s.ControlStyle.HorizontalAlign = HorizontalAlign.Center;
+                                    s.EnableAdaptivity = true;
+                                }).Bind(Model.SubModulos).GetHtml()
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>

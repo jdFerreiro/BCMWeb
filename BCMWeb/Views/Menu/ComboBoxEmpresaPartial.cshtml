@@ -1,0 +1,27 @@
+﻿@using BCMWeb
+@using BCMWeb.Models
+
+@model ModulosUserModel
+
+@Html.HiddenFor(m => m.IdEmpresa)
+
+@Html.DevExpress().ComboBox(
+    settings =>
+    {
+        settings.Name = "cbxEmpresa";
+        settings.Width = Unit.Percentage(50);
+        settings.SelectedIndex = 0;
+        settings.CallbackRouteValues = new { Controller = "Menu", Action = "ComboBoxEmpresaPartial" };
+        settings.Properties.CallbackPageSize = 15;
+        settings.Properties.Caption = Resources.EmpresaResource.captionEmpresa;
+        settings.Properties.DropDownStyle = DropDownStyle.DropDownList;
+        settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+        settings.Properties.TextFormatString = "{0}";
+        settings.Properties.TextField = "NombreComercial";
+        settings.Properties.ValueField = "IdEmpresa";
+        settings.Properties.ValueType = typeof(System.Int64);
+        settings.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.OnHover;
+        settings.Properties.ClientSideEvents.BeginCallback = "function (s,e) { lp.Show();}";
+        settings.Properties.ClientSideEvents.SelectedIndexChanged = "function (s,e) { lp.Show(); $(\"#IdEmpresa\").val(cbxEmpresa.GetValue()); document.forms[\"frmMenu\"].submit(); }";
+    }
+).BindList(Metodos.GetEmpresasUsuario()).Bind(Model.IdEmpresa).GetHtml()

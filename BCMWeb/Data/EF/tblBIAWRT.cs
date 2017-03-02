@@ -14,13 +14,15 @@ namespace BCMWeb.Data.EF
     
     public partial class tblBIAWRT
     {
+        public long IdEmpresa { get; set; }
+        public long IdDocumentoBIA { get; set; }
         public long IdProceso { get; set; }
         public long IdWRT { get; set; }
         public string Observacion { get; set; }
         public Nullable<int> IdValorTiempo { get; set; }
         public Nullable<long> IdEscala { get; set; }
-        public Nullable<long> IdEmpresa { get; set; }
     
+        public virtual tblBIAProceso tblBIAProceso { get; set; }
         public virtual tblEscala tblEscala { get; set; }
     }
 }

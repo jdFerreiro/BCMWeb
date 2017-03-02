@@ -1,7 +1,4 @@
-﻿@{
-    ViewBag.Title = "FAQ";
-}
-<p>
+﻿<p>
     <h2>@Resources.FAQResource.PageHeader</h2>
 </p>
 <h3 style="padding-bottom:10px;">@Resources.FAQResource.Pregunta1</h3>
@@ -16,7 +13,7 @@
         <li style="margin-bottom:5px;">@Resources.FAQResource.Lista1Elemento7</li>
     </ul>
 </div>
-<h3 style="padding-bottom:10px;"></h3>
+<h3 style="padding-bottom:10px;">@Resources.FAQResource.Pregunta2</h3>
 <div style="border:1px solid #000; border-radius:5px; padding: 5px 10px 5px 10px; margin-top:5px; margin-bottom:5px;">
     <p>
         @Resources.FAQResource.Parrafo1
@@ -43,10 +40,3 @@
         @Resources.FAQResource.Parrafo7
     </p>
 </div>
-@section Scripts {
-    <script type="text/javascript">
-        function IsValid() {
-           return true;
-        }
-    </script>
-}

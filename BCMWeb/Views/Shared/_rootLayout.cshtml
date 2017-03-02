@@ -6,57 +6,86 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0" />
     <title>@ViewBag.Title</title>
 
-    
-@Html.DevExpress().GetStyleSheets(
-new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
-new StyleSheet { ExtensionSuite = ExtensionSuite.SpellChecker },
-new StyleSheet { ExtensionSuite = ExtensionSuite.RichEdit },
-new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
-new StyleSheet { ExtensionSuite = ExtensionSuite.VerticalGrid },
-new StyleSheet { ExtensionSuite = ExtensionSuite.Scheduler },
-new StyleSheet { ExtensionSuite = ExtensionSuite.Chart },
-new StyleSheet { ExtensionSuite = ExtensionSuite.GridView },
-new StyleSheet { ExtensionSuite = ExtensionSuite.TreeList },
-new StyleSheet { ExtensionSuite = ExtensionSuite.Dashboard },
-new StyleSheet { ExtensionSuite = ExtensionSuite.DashboardViewer },
-new StyleSheet { ExtensionSuite = ExtensionSuite.Bootstrap }
-)
-@Html.DevExpress().GetScripts(
-new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
-new Script { ExtensionSuite = ExtensionSuite.SpellChecker },
-new Script { ExtensionSuite = ExtensionSuite.RichEdit },
-new Script { ExtensionSuite = ExtensionSuite.Editors },
-new Script { ExtensionSuite = ExtensionSuite.VerticalGrid },
-new Script { ExtensionSuite = ExtensionSuite.Scheduler },
-new Script { ExtensionSuite = ExtensionSuite.Chart },
-new Script { ExtensionSuite = ExtensionSuite.GridView },
-new Script { ExtensionSuite = ExtensionSuite.TreeList },
-new Script { ExtensionSuite = ExtensionSuite.Dashboard },
-new Script { ExtensionSuite = ExtensionSuite.DashboardViewer },
-new Script { ExtensionSuite = ExtensionSuite.Bootstrap }
-)
+    @Html.DevExpress().GetStyleSheets(
+        new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+        new StyleSheet { ExtensionSuite = ExtensionSuite.SpellChecker },
+        new StyleSheet { ExtensionSuite = ExtensionSuite.RichEdit },
+        new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
+        new StyleSheet { ExtensionSuite = ExtensionSuite.VerticalGrid },
+        new StyleSheet { ExtensionSuite = ExtensionSuite.Scheduler },
+        new StyleSheet { ExtensionSuite = ExtensionSuite.Chart },
+        new StyleSheet { ExtensionSuite = ExtensionSuite.GridView },
+        new StyleSheet { ExtensionSuite = ExtensionSuite.TreeList },
+        new StyleSheet { ExtensionSuite = ExtensionSuite.Dashboard },
+        new StyleSheet { ExtensionSuite = ExtensionSuite.DashboardViewer },
+        new StyleSheet { ExtensionSuite = ExtensionSuite.Bootstrap }
+    )
+    @Html.DevExpress().GetScripts(
+        new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+        new Script { ExtensionSuite = ExtensionSuite.SpellChecker },
+        new Script { ExtensionSuite = ExtensionSuite.RichEdit },
+        new Script { ExtensionSuite = ExtensionSuite.Editors },
+        new Script { ExtensionSuite = ExtensionSuite.VerticalGrid },
+        new Script { ExtensionSuite = ExtensionSuite.Scheduler },
+        new Script { ExtensionSuite = ExtensionSuite.Chart },
+        new Script { ExtensionSuite = ExtensionSuite.GridView },
+        new Script { ExtensionSuite = ExtensionSuite.TreeList },
+        new Script { ExtensionSuite = ExtensionSuite.Dashboard },
+        new Script { ExtensionSuite = ExtensionSuite.DashboardViewer },
+        new Script { ExtensionSuite = ExtensionSuite.Bootstrap }
+    )
 
-    
+    <script src="@Url.Content("~/Scripts/jquery-1.11.3.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
     <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
     <link href="@Url.Content("~/Content/BCMWeb.css")" rel="stylesheet" type="text/css" />
+
+    <script type="text/javascript">
+       function hideDialogo() {
+            setTimeout(function () {
+                lp.Hide();
+            }, 300);
+        }
+       function showDialogo() {
+            //if ()
+                lp.Show();
+       }
+       function GetEditableForm() {
+           return document.getElementById("editForm");
+       }
+    </script>
 </head>
-<body>
-    @Html.DevExpress().Panel(settings => {
-        settings.Name = "HeaderPane";
-        settings.FixedPosition = PanelFixedPosition.WindowTop;
-        settings.Collapsible = true;
-        settings.SettingsAdaptivity.CollapseAtWindowInnerWidth = 500;
-        settings.ControlStyle.CssClass = "headerPane";
-        settings.Styles.Panel.CssClass = "panel";
-        settings.Styles.ExpandedPanel.CssClass = "expandedPanel";
-        settings.Styles.ExpandBar.CssClass = "bar";
-        settings.SetContent(() => {
-            Html.RenderPartial("HeaderPartialView", HeaderViewRenderMode.Full);
-        });
-        settings.SetExpandBarTemplateContent((c) => {
-            Html.RenderPartial("HeaderPartialView", HeaderViewRenderMode.Title);
-        });
-    }).GetHtml()
+<body onloadstart="lp.Show()" onload="lp.Hide()">
+
+    @Html.DevExpress().LoadingPanel(s =>
+        {
+            s.Name = "lp";
+            s.Modal = true;
+            s.Text = Resources.BCMWebPublic.labelLoadPanel;
+            s.Width = Unit.Percentage(20);
+        }).GetHtml()
+
+    @Html.DevExpress().Panel(settings =>
+{
+    settings.Name = "HeaderPane";
+    settings.FixedPosition = PanelFixedPosition.WindowTop;
+    settings.Collapsible = true;
+    settings.SettingsAdaptivity.CollapseAtWindowInnerWidth = 500;
+    settings.ControlStyle.CssClass = "headerPane";
+    settings.Styles.Panel.CssClass = "panel";
+    settings.Styles.ExpandedPanel.CssClass = "expandedPanel";
+    settings.Styles.ExpandBar.CssClass = "bar";
+    settings.SetContent(() =>
+    {
+        Html.RenderPartial("HeaderPartialView", HeaderViewRenderMode.Full);
+    });
+    settings.SetExpandBarTemplateContent((c) =>
+    {
+        Html.RenderPartial("HeaderPartialView", HeaderViewRenderMode.Title);
+    });
+}).GetHtml()
 
     <script type="text/javascript">
         function updateHeaderMenuOrientation(){
@@ -70,11 +99,14 @@ new Script { ExtensionSuite = ExtensionSuite.Bootstrap }
         collection.BrowserWindowResized.AddHandler(updateHeaderMenuOrientation);
     </script>
 
-    @Html.DevExpress().Panel(settings => {
-        settings.Name = "MainPane";
-        settings.ControlStyle.CssClass = "mainContentPane";
-        settings.SetContent(RenderBody().ToHtmlString());
-    }).GetHtml()
+    <div class="container" style="margin-top: 10px; margin-bottom: 10px;">
+        @Html.DevExpress().Panel(settings =>
+        {
+            settings.Name = "MainPane";
+            settings.ControlStyle.CssClass = "mainContentPane";
+            settings.SetContent(RenderBody().ToHtmlString());
+        }).GetHtml()
+    </div>
 
 </body>
 </html>

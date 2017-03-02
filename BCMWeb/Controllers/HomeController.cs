@@ -11,7 +11,8 @@ namespace BCMWeb.Controllers
         public ActionResult Index()
         {
             // DXCOMMENT: Pass a data model for GridView
-            
+
+            ViewBag.PageTitle = Resources.BCMWebPublic.labelAppSlogan;
             return View();
         }
         
@@ -20,7 +21,41 @@ namespace BCMWeb.Controllers
             // DXCOMMENT: Pass a data model for GridView in the PartialView method's second parameter
             return PartialView("GridViewPartialView");
         }
-    
+        public ActionResult About()
+        {
+            ViewBag.PageTitle = Resources.BCMWebPublic.AboutPageTitle;
+            return View();
+        }
+        public ActionResult BSMMovil()
+        {
+            ViewBag.PageTitle = Resources.BCMWebPublic.BSMMovilPageTitle;
+            return View();
+        }
+        public ActionResult Confidencialidad()
+        {
+            ViewBag.PageTitle = Resources.BCMWebPublic.ConfidencialidadPageTitle;
+            return View();
+        }
+        public ActionResult Contact()
+        {
+            ViewBag.PageTitle = Resources.BCMWebPublic.ContactPageTitle;
+            return View();
+        }
+        public ActionResult FAQ()
+        {
+            ViewBag.PageTitle = Resources.BCMWebPublic.FAQPageTitle;
+            return View();
+        }
+        public ActionResult ProcedimientoBCP()
+        {
+            ViewBag.PageTitle = Resources.BCMWebPublic.ProcedimientoBCPPageTitle;
+            return View();
+        }
+        public ActionResult ProcedimientoBIA()
+        {
+            ViewBag.PageTitle = Resources.BCMWebPublic.ProcedimientoBIAPageTitle;
+            return View();
+        }
     }
 }
 

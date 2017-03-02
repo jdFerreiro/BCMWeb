@@ -25,6 +25,7 @@ namespace BCMWeb.Data.EF
     
         public long IdNivelUsuario { get; set; }
         public bool TodosDocs { get; set; }
+        public string RolUsuario { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblCultura_NivelUsuario> tblCultura_NivelUsuario { get; set; }

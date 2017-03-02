@@ -8,9 +8,11 @@ using System.Web.Mvc;
 using System.Web.Security;
 
 namespace BCMWeb.Models {
-        public class UsersContext : DbContext {
+    public class UsersContext : DbContext
+    {
         public UsersContext()
-            : base("DefaultConnection") {
+            : base("DefaultConnection")
+        {
         }
         public DbSet<UserProfile> UserProfiles { get; set; }
     }
@@ -21,64 +23,54 @@ namespace BCMWeb.Models {
         public int UserId { get; set; }
         public string UserName { get; set; }
     }
-        
- 
     public class ChangePasswordModel {
-        [Required]
+        [Required(ErrorMessageResourceName = "RequiredErrorFemale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
         [DataType(DataType.Password)]
-        [Display(Name = "Current password")]
+        [Display(Name = "captionOldPassword", ResourceType = typeof(Resources.LoginResource))]
         public string OldPassword { get; set; }
 
-        [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [Required(ErrorMessageResourceName = "RequiredErrorFemale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
+        [StringLength(100, ErrorMessageResourceName = "StringLengthErrorFemale", ErrorMessageResourceType = typeof(Resources.ErrorResource), MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "New password")]
+        [Display(ResourceType = typeof(Resources.LoginResource), Name = "captionNewPassword")]
         public string NewPassword { get; set; }
 
+        [Required(ErrorMessageResourceName = "RequiredErrorFemale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm new password")]
-        [System.ComponentModel.DataAnnotations.Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
+        [Display(Name = "captionPasswordConfirm", ResourceType = typeof(Resources.LoginResource))]
+        [System.ComponentModel.DataAnnotations.Compare("NewPassword", ErrorMessageResourceType = typeof(Resources.ErrorResource), ErrorMessageResourceName = "CompareErrorFemalevsFemale")]
         public string ConfirmPassword { get; set; }
     }
-
     public class LoginModel {
-        [Required]
-        [Display(Name = "User name")]
+        [Required(ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
+        [Display(Name = "captionUsername", ResourceType = typeof(Resources.LoginResource))]
         public string UserName { get; set; }
 
-        [Required]
+        [Required(ErrorMessageResourceName = "RequiredErrorFemale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "captionPassword", ResourceType = typeof(Resources.LoginResource))]
         public string Password { get; set; }
-
-        bool? rememberMe;
-        [Display(Name = "Remember me?")]
-        public bool? RememberMe {
-            get { return rememberMe ?? false; }
-            set { rememberMe = value; }
-        }
     }
-
     public class RegisterModel {
-        [Required]
-        [Display(Name = "User name")]
+        [Required(ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
+        [Display(Name = "captionUsername", ResourceType = typeof(Resources.LoginResource))]
         public string UserName { get; set; }
 
-        [Required]
-        [RegularExpression("\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*", ErrorMessage = "Please enter a valid email address.")]
+        [Required(ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
+        [RegularExpression("\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*", ErrorMessageResourceName = "EmailError", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
         [DataType(DataType.EmailAddress)]
-        [Display(Name = "Email address")]
+        [Display(Name = "captionEmail", ResourceType = typeof(Resources.LoginResource))]
         public string Email { get; set; }
 
-        [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [Required(ErrorMessageResourceName = "RequiredErrorFemale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
+        [StringLength(100, ErrorMessageResourceType = typeof(Resources.ErrorResource), ErrorMessageResourceName = "StringLengthErrorFemale", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "captionPassword", ResourceType = typeof(Resources.LoginResource))]
         public string Password { get; set; }
 
-        [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Required(ErrorMessageResourceName = "RequiredErrorFemale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
+        [Display(Name = "captionPasswordConfirm", ResourceType = typeof(Resources.LoginResource))]
+        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessageResourceName = "CompareErrorFemalevsFemale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
         public string ConfirmPassword { get; set; }
     }
 }

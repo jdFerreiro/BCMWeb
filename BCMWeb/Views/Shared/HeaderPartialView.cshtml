@@ -4,18 +4,12 @@
 {
     <table>
         <tr>
-            <td>
-                <table>
-                    <tr>
-                        <td>
-                            <img src="~/Content/Images/Logo-BiaPlus.png" style="width: 70px; height: 70px; margin-top: 5px;" />
-                        </td>
-                        <td>
-                            <h1>@Resources.BCMWebGlobalResource.labelAppTitle</h1>
-                            <h4>@Resources.BCMWebGlobalResource.labelAppSlogan</h4>
-                        </td>
-                    </tr>
-                </table>
+            <td style="width: 10%; text-align: right; ">
+                <img src="~/Content/Images/Logo-BiaPlus.png" style="width: 70px; height: 70px; margin-top: 5px;" />
+            </td>
+            <td style="width: 90%;">
+                <h1>@Resources.BCMWebPublic.labelAppTitle</h1>
+                <h4>@Resources.BCMWebPublic.labelAppSlogan</h4>
             </td>
         </tr>
     </table>
@@ -26,14 +20,14 @@ else
     {
         <table>
             <tr>
-                <td style="width: 35%;">
-                    <a href="@Url.Action("Index", "Home")" style="color: #000; text-decoration: none;">
+                <td style="width: 75%;">
+                    <a href="@Url.Action("Index", "Home")" style="color: #000; text-decoration: none;" onclick="lp.Show()">
                         <table>
                             <tr>
-                                <td>
+                                <td style="width: 10%; text-align: right; ">
                                     <img src="~/Content/Images/Logo-BiaPlus.png" style="width: 70px; height: 70px;" />
                                 </td>
-                                <td>
+                                <td style="width: 90%;">
                                     <h1 style="text-decoration: none;">@Resources.BCMWebPublic.labelAppTitle</h1>
                                     <h4>@Resources.BCMWebPublic.labelAppSlogan</h4>
                                 </td>
@@ -41,7 +35,7 @@ else
                         </table>
                     </a>
                 </td>
-                <td style="text-align: right; width: 70%;">
+                <td style="text-align: right; width: 25%;">
                     <div class="loginControl">
                         @Html.Partial("LogOnPartialView")
                     </div>
@@ -50,18 +44,23 @@ else
         </table>
     }
 
+    if (!Request.IsAuthenticated)
+    {
     <div class="headerMenu">
         @* DXCOMMENT: Configure the header menu *@
         @Html.DevExpress().Menu(settings =>
-{
-    settings.Name = "HeaderMenu";
-    settings.ItemAutoWidth = false;
-    settings.ControlStyle.CssClass = "headerMenu";
-    settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
-    settings.Items.Add(Resources.HomeIndex.labelHome);
-    settings.Items.Add(Resources.HomeIndex.labelContact);
-    settings.Items.Add(Resources.HomeIndex.labelFAQ);
-    settings.Items.Add(Resources.HomeIndex.labelAbout);
-}).GetHtml()
+   {
+       settings.Name = "HeaderMenu";
+       settings.ItemAutoWidth = false;
+       settings.ControlStyle.CssClass = "headerMenu";
+       settings.SyncSelectionMode = SyncSelectionMode.CurrentPathAndQuery;
+       settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+       settings.Items.Add(Resources.HomeIndex.labelHome).NavigateUrl = DevExpressHelper.GetUrl(new { Controller = "Home", Action = "Index" });
+       settings.Items.Add(Resources.HomeIndex.labelContact).NavigateUrl = DevExpressHelper.GetUrl(new { Controller = "Home", Action = "Contact" });
+       settings.Items.Add(Resources.HomeIndex.labelFAQ).NavigateUrl = DevExpressHelper.GetUrl(new { Controller = "Home", Action = "FAQ" });
+       settings.Items.Add(Resources.HomeIndex.labelAbout).NavigateUrl = DevExpressHelper.GetUrl(new { Controller = "Home", Action = "About" });
+       settings.ClientSideEvents.ItemClick = "function (s,e) { lp.Show(); }";
+   }).GetHtml()
     </div>
+    }
 }

@@ -35,6 +35,7 @@ namespace BCMWeb.Data.EF
             this.tblBIARespaldoSecundario = new HashSet<tblBIARespaldoSecundario>();
             this.tblBIARPO = new HashSet<tblBIARPO>();
             this.tblBIARTO = new HashSet<tblBIARTO>();
+            this.tblBIAWRT = new HashSet<tblBIAWRT>();
         }
     
         public long IdEmpresa { get; set; }
@@ -88,5 +89,7 @@ namespace BCMWeb.Data.EF
         public virtual ICollection<tblBIARPO> tblBIARPO { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIARTO> tblBIARTO { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblBIAWRT> tblBIAWRT { get; set; }
     }
 }

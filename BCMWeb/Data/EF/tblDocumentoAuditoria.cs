@@ -25,6 +25,7 @@ namespace BCMWeb.Data.EF
         public long IdUsuario { get; set; }
         public bool Negocios { get; set; }
     
+        public virtual tblDocumento tblDocumento { get; set; }
         public virtual tblEmpresa tblEmpresa { get; set; }
         public virtual tblUsuario tblUsuario { get; set; }
     }

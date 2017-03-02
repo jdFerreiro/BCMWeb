@@ -1,6 +1,7 @@
 ﻿html, body {
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-size: 10pt;
+    background-color: #eaeaea;
 }
 
 #slideshow {
@@ -28,7 +29,7 @@
 table {
     width: 100%;
     border-collapse: collapse;
-    border-spacing: 0px;
+    border-spacing: 1px 1px;
 }
 
 h1 {
@@ -39,4 +40,167 @@ h1 {
 h4 {
     margin-top: 0;
     font-size: 12pt;
+}
+
+.distribute {
+    display: flex;
+    justify-content: space-between;
+}
+
+.padding10 {
+    padding: 10px;
+}
+
+
+.col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12 {
+    float: left;
+    position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.col-md-12 {
+    width: 100%;
+}
+
+.col-md-11 {
+    width: 91.66666667%;
+}
+
+.col-md-10 {
+    width: 83.33333333%;
+}
+
+.col-md-9 {
+    width: 75%;
+}
+
+.col-md-8 {
+    width: 60%;
+}
+
+.col-md-7 {
+    width: 58.33%;
+}
+
+.col-md-6 {
+    width: 50%;
+}
+
+.col-md-5 {
+    width: 41.66%;
+}
+
+.col-md-4 {
+    width: 35%;
+}
+
+.col-md-3 {
+    width: 25%;
+}
+
+.col-md-2 {
+    width: 16.66%;
+}
+
+.col-md-1 {
+    width: 8.33%;
+}
+
+#Panel {
+    width: 100%;
+}
+.panel-width30 {
+    width: 30%;
+    font-family: inherit;
+    font-size: 10pt;
+    padding: 10px;
+}
+
+    .panel-width30 p {
+        text-align: justify;
+        text-indent: 2em;
+    }
+
+.backButton {
+    width: 250px;
+    margin-right: 10px;
+    margin-top: 4px;
+    padding-left: 40px;
+}
+
+    .backButton a {
+        color: #000;
+    }
+
+        .backButton a:hover {
+            text-decoration: none;
+        }
+
+.col-md-20p {
+    position: relative;
+    min-height: 1px;
+    float: left;
+    width: 20%;
+}
+
+.col-md-80p {
+    position: relative;
+    min-height: 1px;
+    padding-right: 5px;
+    padding-left: 15px;
+    float: left;
+    width: 80%;
+}
+
+.col-md-60p {
+    position: relative;
+    min-height: 1px;
+    padding-right: 5px;
+    padding-left: 15px;
+    float: left;
+    width: 60%;
+}
+
+.Redondeado {
+    border-radius: 5px;
+}
+
+.border {
+    border: 1px solid #000;
+}
+
+.container {
+    margin-right: auto;
+    margin-left: auto;
+    width: 95%;
+}
+
+.AppList {
+    font-size: 14pt;
+    text-wrap: none;
+    margin: auto;
+}
+
+    .AppList ul {
+        list-style: circle;
+    }
+
+        .AppList ul li {
+            font-weight: lighter;
+    line-height: 1.5em;
+        }
+
+.login {
+    display: contents;
+    border: solid 1px #000;
+    border-radius: 5px;
+    padding: 10px 10px 40px 10px;
+    width: 50%;
+    margin: auto;
+}
+
+.right {
+    float: right;
 }

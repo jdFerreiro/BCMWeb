@@ -179,9 +179,24 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\BCMWeb.css" />
+    <Content Include="Content\BCMWeb_Menu.css" />
     <Content Include="Content\Images\AquaHeader.jpg" />
     <Content Include="Content\Images\BlackGlassHeader.jpg" />
     <Content Include="Content\Images\GlassHeader.jpg" />
+    <Content Include="Content\Images\Internal\icono-pdf.jpg" />
+    <Content Include="Content\Images\Menu\Adiestramiento.png" />
+    <Content Include="Content\Images\Menu\Administration.jpg" />
+    <Content Include="Content\Images\Menu\BCP.jpg" />
+    <Content Include="Content\Images\Menu\BIA.jpg" />
+    <Content Include="Content\Images\Menu\Estrategia.jpg" />
+    <Content Include="Content\Images\Menu\Estructura.jpg" />
+    <Content Include="Content\Images\Menu\Mantenimiento.jpg" />
+    <Content Include="Content\Images\Menu\no_disponible.jpg" />
+    <Content Include="Content\Images\Menu\PMI.jpg" />
+    <Content Include="Content\Images\Menu\Politicas.jpg" />
+    <Content Include="Content\Images\Menu\PPE.png" />
+    <Content Include="Content\Images\Menu\Reportes y Gráficos.png" />
+    <Content Include="Content\Images\Menu\Riesgo.png" />
     <Content Include="Content\Images\PlasticBlueHeader.jpg" />
     <Content Include="Content\Images\RedWineHeader.jpg" />
     <Content Include="Content\jquery-ui.css" />
@@ -209,9 +224,16 @@
     <Content Include="Content\Images\Movil.png" />
     <Content Include="Content\Images\seo_analysis_big-403x250.jpg" />
     <Content Include="Content\Images\tornado_163m.jpg" />
-    <Content Include="LogosEmpresa\Bancaribe Curacap.jpg" />
-    <Content Include="LogosEmpresa\BancoActivo.jpg" />
     <Content Include="LogosEmpresa\biv_logo.jpg" />
+    <Content Include="LogosEmpresa\logo BancaribeCB.jpg" />
+    <Content Include="LogosEmpresa\Logo BancoExterior.jpg" />
+    <Content Include="LogosEmpresa\LogoAplired.png" />
+    <Content Include="LogosEmpresa\LogoBancaribe.jpg" />
+    <Content Include="LogosEmpresa\logoBancoActivo.png" />
+    <Content Include="LogosEmpresa\LogoBancoVenezuela.jpg" />
+    <Content Include="LogosEmpresa\LogoBandes.png" />
+    <Content Include="LogosEmpresa\logoBanesco.jpg" />
+    <Content Include="LogosEmpresa\logo_bangente.jpg" />
     <Content Include="Scripts\ace.js" />
     <Content Include="Scripts\cldr.event.js" />
     <Content Include="Scripts\cldr.js" />
@@ -244,6 +266,12 @@
       <DependentUpon>BCMWebEntities.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\MicrosoftAjax.debug.js" />
+    <Content Include="Scripts\MicrosoftAjax.js" />
+    <Content Include="Scripts\MicrosoftMvcAjax.debug.js" />
+    <Content Include="Scripts\MicrosoftMvcAjax.js" />
+    <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
+    <Content Include="Scripts\MicrosoftMvcValidation.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Views\Shared\DisplayTemplates\Boolean.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Boolean.cshtml" />
@@ -268,8 +296,8 @@
     <Content Include="Views\Shared\_lightLayout.cshtml" />
     <Content Include="Views\Shared\_mainLayout.cshtml" />
     <Content Include="Views\Shared\_rootLayout.cshtml" />
-    <Content Include="Views\Shared\ContentLeftPartialView.cshtml" />
-    <Content Include="Views\Shared\ContentRightPartialView.cshtml" />
+    <Content Include="Views\Documento\ContentLeftPartialView.cshtml" />
+    <Content Include="Views\Documento\ContentRightPartialView.cshtml" />
     <Content Include="Views\Shared\FooterPartialView.cshtml" />
     <Content Include="Views\Shared\HeaderPartialView.cshtml" />
     <Content Include="Views\Shared\LogOnPartialView.cshtml" />
@@ -281,6 +309,19 @@
     <Content Include="Views\Home\FAQ.cshtml" />
     <Content Include="Views\Home\ProcedimientoBCP.cshtml" />
     <Content Include="Views\Home\ProcedimientoBIA.cshtml" />
+    <Content Include="Views\Menu\Index.cshtml" />
+    <Content Include="Views\Menu\ComboBoxEmpresaPartial.cshtml" />
+    <Content Include="Views\Documento\Index.cshtml" />
+    <Content Include="Views\Documento\DocumentoPartialView.cshtml" />
+    <Content Include="Views\Documento\EditarDocumento.cshtml" />
+    <Content Include="Views\Documentos\Ficha.cshtml" />
+    <Content Include="Views\Documentos\ContentLeftPartialView.cshtml" />
+    <Content Include="Views\Documentos\FichaPartialView.cshtml" />
+    <Content Include="Views\Documentos\CertificacionesPartialView.cshtml" />
+    <Content Include="Views\Documentos\ProcesosPartialView.cshtml" />
+    <Content Include="Views\Documentos\AprobacionesPartialView.cshtml" />
+    <Content Include="Views\Documentos\PersonasClavePartialView.cshtml" />
+    <Content Include="Views\Documentos\EntrevistasPartialView.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -289,22 +330,95 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_GlobalResources\DocumentosGlobalResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DocumentosGlobalResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_LocalResources\AboutResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AboutResource.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_LocalResources\BCMWebPublic.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>BCMWebPublic.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_LocalResources\BSMMovilResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BSMMovilResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_LocalResources\ConfidencialidadResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ConfidencialidadResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_LocalResources\ContactResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ContactResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_LocalResources\DocumentoResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DocumentoResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_LocalResources\EmpresaResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EmpresaResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_LocalResources\ErrorResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ErrorResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_LocalResources\FAQResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FAQResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_LocalResources\FichaResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FichaResource.resx</DependentUpon>
     </Compile>
     <Compile Include="App_LocalResources\HomeIndex.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>HomeIndex.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_LocalResources\LoginResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LoginResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_LocalResources\ProcedimientoBCPResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProcedimientoBCPResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_LocalResources\ProcedimientoBIAResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProcedimientoBIAResource.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_Start\AuthConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\DocumentoController.cs" />
+    <Compile Include="Controllers\DocumentosController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MenuController.cs" />
+    <Compile Include="DAL\EmpresaUsuario.cs" />
+    <Compile Include="DAL\Encriptador.cs" />
+    <Compile Include="DAL\FirstModuloSelected.cs" />
+    <Compile Include="DAL\Repository.cs" />
+    <Compile Include="DAL\User.cs" />
     <Compile Include="Data\EF\BCMWebEntities.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -749,11 +863,17 @@
     <Compile Include="Data\EF\tblVicepresidencia.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Data\Metodos.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\DocumentoModels.cs" />
+    <Compile Include="Models\EmpresaModels.cs" />
+    <Compile Include="Models\MenuModels.cs" />
+    <Compile Include="Models\ModuloModels.cs" />
+    <Compile Include="Models\PersonaModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -763,15 +883,80 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="App_GlobalResources\DocumentosGlobalResource.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>DocumentosGlobalResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App_LocalResources\AboutResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AboutResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources</CustomToolNamespace>
+    </EmbeddedResource>
     <EmbeddedResource Include="App_LocalResources\BCMWebPublic.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>BCMWebPublic.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App_LocalResources\BSMMovilResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>BSMMovilResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App_LocalResources\ConfidencialidadResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ConfidencialidadResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App_LocalResources\ContactResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ContactResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App_LocalResources\DocumentoResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DocumentoResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App_LocalResources\EmpresaResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EmpresaResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App_LocalResources\ErrorResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ErrorResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App_LocalResources\FAQResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>FAQResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App_LocalResources\FichaResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>FichaResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Resources</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="App_LocalResources\HomeIndex.resx">
       <CustomToolNamespace>Resources</CustomToolNamespace>
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>HomeIndex.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App_LocalResources\LoginResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>LoginResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App_LocalResources\ProcedimientoBCPResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ProcedimientoBCPResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App_LocalResources\ProcedimientoBIAResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ProcedimientoBIAResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

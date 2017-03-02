@@ -20,7 +20,6 @@ namespace BCMWeb.Data.EF
         public long IdSubModulo { get; set; }
         public byte[] ContenidoBin { get; set; }
         public Nullable<System.DateTime> FechaCreacion { get; set; }
-        public Nullable<System.DateTime> FechaUltimaModificacion { get; set; }
     
         public virtual tblDocumento tblDocumento { get; set; }
     }

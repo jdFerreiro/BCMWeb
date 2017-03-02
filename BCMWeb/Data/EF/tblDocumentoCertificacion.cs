@@ -19,10 +19,9 @@ namespace BCMWeb.Data.EF
         public long IdTipoDocumento { get; set; }
         public long IdCertificacion { get; set; }
         public Nullable<System.DateTime> Fecha { get; set; }
-        public Nullable<System.DateTime> Hora { get; set; }
-        public long IdModulo { get; set; }
         public long IdPersona { get; set; }
         public bool Procesado { get; set; }
+        public Nullable<bool> Certificado { get; set; }
     
         public virtual tblDocumento tblDocumento { get; set; }
         public virtual tblPersona tblPersona { get; set; }

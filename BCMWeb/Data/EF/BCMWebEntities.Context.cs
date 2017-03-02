@@ -70,7 +70,6 @@ namespace BCMWeb.Data.EF
         public virtual DbSet<tblBIAUnidadTrabajo> tblBIAUnidadTrabajo { get; set; }
         public virtual DbSet<tblBIAUnidadTrabajoPersonas> tblBIAUnidadTrabajoPersonas { get; set; }
         public virtual DbSet<tblBIAUnidadTrabajoProceso> tblBIAUnidadTrabajoProceso { get; set; }
-        public virtual DbSet<tblBIAWRT> tblBIAWRT { get; set; }
         public virtual DbSet<tblCargo> tblCargo { get; set; }
         public virtual DbSet<tblCiudad> tblCiudad { get; set; }
         public virtual DbSet<tblCultura_Ciudad> tblCultura_Ciudad { get; set; }
@@ -168,5 +167,6 @@ namespace BCMWeb.Data.EF
         public virtual DbSet<tblUsuario> tblUsuario { get; set; }
         public virtual DbSet<tblUsuarioUnidadOrganizativa> tblUsuarioUnidadOrganizativa { get; set; }
         public virtual DbSet<tblVicepresidencia> tblVicepresidencia { get; set; }
+        public virtual DbSet<tblBIAWRT> tblBIAWRT { get; set; }
     }
 }
