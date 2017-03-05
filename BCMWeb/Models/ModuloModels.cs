@@ -20,7 +20,7 @@ namespace BCMWeb.Models
                 return Metodos.GetNombreModulo(IdModulo);
             }
         }
-        public List<ModuloModel> ModulosPrincipales { get; set; }
+        public IList<ModuloModel> ModulosPrincipales { get; set; }
         public SubModulosData SubModulos
         {
             get

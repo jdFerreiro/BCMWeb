@@ -9,6 +9,15 @@
     }
 </style>
 
+<script type="text/javascript">
+    function onButtonClick(s, e) {
+        if (e.buttonIndex == 0) {
+            modalPersona.PerformCallback();
+            modalPersona.Show();
+        }
+    }
+</script>
+
 @{
     Html.EnableClientValidation();
     Html.EnableUnobtrusiveJavaScript();
@@ -17,6 +26,7 @@
 @using (Html.BeginForm("Ficha", "Documentos", FormMethod.Post, htmlAttributes: new { id = "frmLayout" }))
 {
 
+    @Html.Hidden("Certificar")
     @Html.DevExpress().FormLayout(s =>
 {
     s.Name = "fichaLayout";
@@ -36,21 +46,26 @@
                 set.Width = Unit.Percentage(100);
                 set.ShowModelErrors = true;
 
-                set.Properties.Caption = Resources.FichaResource.captionGrupo1Nombre;
-                set.Properties.ClientSideEvents.ValueChanged = "UpdatePersona";
+                //set.Properties.ClientSideEvents.ValueChanged = "UpdatePersona";
                 set.Properties.ValueType = typeof(long);
                 set.Properties.DataSource = BCMWeb.Metodos.GetPersonasConUsuario();
-                set.Properties.DataMember = "Nombre";
+                set.Properties.TextField = "Nombre";
                 set.Properties.ValueField = "IdPersona";
                 set.Properties.ValidationSettings.Display = Display.Dynamic;
                 set.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                set.Properties.ClientSideEvents.ButtonClick = "onButtonClick";
+                set.PreRender = (sender, e) =>
+                {
+                    ASPxComboBox cmb = (ASPxComboBox)sender;
+                    cmb.DropDownButton.Visible = true;
+                    cmb.Buttons.Add(new EditButton(Resources.BCMWebPublic.captionButtonNew));
+                };
             });
         });
         gi.Items.Add(m => m.Responsable.Cargo, i =>
         {
             i.NestedExtension().TextBox(set =>
             {
-                set.Properties.Caption = Resources.FichaResource.captionGrupo1Cargo;
                 set.Width = Unit.Percentage(100);
                 set.Enabled = false;
             });
@@ -59,7 +74,6 @@
         {
             i.NestedExtension().TextBox(set =>
             {
-                set.Properties.Caption = Resources.FichaResource.captionGrupo1UO;
                 set.Width = Unit.Percentage(100);
                 set.Enabled = false;
             });
@@ -72,9 +86,10 @@
         gi.ColCount = 1;
         gi.Items.Add(m => m.Entrevistas, i =>
         {
+            i.Caption = string.Empty;
             i.SetNestedContent(() =>
             {
-                Html.RenderPartial("EntrevistasPartialView", Model.Entrevistas);
+                Html.RenderPartial("EntrevistasPartialView", Model);
             });
         });
     });
@@ -83,11 +98,12 @@
         gi.Caption = Resources.FichaResource.captionGrupo3;
         gi.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
         gi.ColCount = 1;
-        gi.Items.Add(m => m.Entrevistas, i =>
+        gi.Items.Add(m => m.Aprobaciones, i =>
         {
+            i.Caption = string.Empty;
             i.SetNestedContent(() =>
             {
-                Html.RenderPartial("AprobacionesPartialView", Model.Aprobaciones);
+                Html.RenderPartial("AprobacionesPartialView", Model);
             });
         });
     });
@@ -97,8 +113,7 @@
         i.NestedExtension().CheckBox(set =>
         {
             set.Name = "cbxRequiereCertificacion";
-            set.Properties.ValueChecked = "function (s,e) { $(\"#gbCertificacion\").style.display = 'block'; }";
-            set.Properties.ValueUnchecked = "function (s,e) { $(\"#gbCertificacion\").style.display = 'none'; }";
+            set.Properties.ClientSideEvents.CheckedChanged = "function (s,e) {  if (s.GetChecked() == true) { fichaLayout.GetItemByName(\"gbCertificacion\").SetVisible(true); } else { fichaLayout.GetItemByName(\"gbCertificacion\").SetVisible(false);  } }";
         });
     });
     s.Items.AddGroupItem(gi =>
@@ -108,45 +123,81 @@
         gi.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
         gi.ColCount = 1;
         gi.Visible = Model.RequiereCertificacion;
-        gi.Items.Add(m => m.Entrevistas, i =>
+        gi.Items.Add(m => m.Certificaciones, i =>
         {
+            i.Caption = string.Empty;
             i.SetNestedContent(() =>
             {
-                Html.RenderPartial("CertificacionesPartialView", Model.Certificaciones);
+                Html.RenderPartial("CertificacionesPartialView", Model);
             });
         });
     });
     s.Items.AddGroupItem(gi =>
     {
         gi.Name = "gbPersonasClaves";
-        gi.Caption = Resources.FichaResource.captionGrupo4;
+        gi.Caption = Resources.FichaResource.captionGrupo5;
         gi.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
         gi.ColCount = 1;
-        gi.Visible = gi.Visible = (Session["IdTipoDocumento"].ToString() != "4" && Session["IdTipoDocumento"].ToString() != "7"); ;
-        gi.Items.Add(m => m.Entrevistas, i =>
+        gi.Visible = (Session["IdTipoDocumento"].ToString() != "4" && Session["IdTipoDocumento"].ToString() != "7");
+        gi.Items.Add(m => m.PersonasClave, i =>
         {
+            i.Caption = string.Empty;
             i.SetNestedContent(() =>
             {
-                Html.RenderPartial("PersonasClavePartialView", Model.Certificaciones);
+                Html.RenderPartial("PersonasClavePartialView", Model);
             });
         });
     });
     s.Items.AddGroupItem(gi =>
     {
         gi.Name = "gbProcesos";
-        gi.Caption = Resources.FichaResource.captionGrupo4;
+        gi.Caption = Resources.FichaResource.captionGrupo6;
         gi.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
         gi.ColCount = 1;
-        gi.Visible = gi.Visible = (Session["IdTipoDocumento"].ToString() == "4"); ;
-        gi.Items.Add(m => m.Entrevistas, i =>
+        gi.Visible = (Session["IdTipoDocumento"].ToString() == "4");
+        gi.Items.Add(m => m.Procesos, i =>
         {
+            i.Caption = string.Empty;
             i.SetNestedContent(() =>
             {
-                Html.RenderPartial("ProcesosPartialView", Model.Certificaciones);
+                Html.RenderPartial("ProcesosPartialView", Model);
             });
         });
     });
+    s.Items.Add(i =>
+    {
+        i.ShowCaption = DefaultBoolean.False;
+        i.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+        i.NestedExtension().Button(bt =>
+        {
+            bt.Name = "botSaveFicha";
+            bt.Text = Resources.BCMWebPublic.captionButtonSave;
+            bt.UseSubmitBehavior = true;
+        });
+    });
 
-})
-
+}).GetHtml();
 }
+
+
+@Html.DevExpress().PopupControl(s =>
+{
+    s.Name = "modalPersona";
+    s.CallbackRouteValues = new { Controller = "Documentos", Action = "PersonaPartialView" };
+    s.Width = 700;
+    s.Height = 550;
+    s.AllowDragging = true;
+    s.CloseAction = CloseAction.CloseButton;
+    s.CloseOnEscape = true;
+    s.PopupAnimationType = AnimationType.Slide;
+    s.HeaderText = Resources.FichaResource.headerPopup;
+    s.Modal = true;
+    s.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    s.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    s.ScrollBars = ScrollBars.Vertical;
+    s.SetContent(() =>
+    {
+        Html.RenderPartial("PersonaPartialView", new PersonaModel());
+    });
+}).GetHtml();
+

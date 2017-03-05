@@ -61,11 +61,155 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Acción.
+        /// </summary>
+        public static string captionAccion {
+            get {
+                return ResourceManager.GetString("captionAccion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aprobado.
+        /// </summary>
+        public static string captionAprobado {
+            get {
+                return ResourceManager.GetString("captionAprobado", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aprobador.
+        /// </summary>
+        public static string captionAprobador {
+            get {
+                return ResourceManager.GetString("captionAprobador", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Certificado.
+        /// </summary>
+        public static string captionCertificado {
+            get {
+                return ResourceManager.GetString("captionCertificado", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Certificador.
+        /// </summary>
+        public static string captionCertificador {
+            get {
+                return ResourceManager.GetString("captionCertificador", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tipo de Proceso.
+        /// </summary>
+        public static string captionCriticoProceso {
+            get {
+                return ResourceManager.GetString("captionCriticoProceso", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Descripción del Proceso.
+        /// </summary>
+        public static string captionDescripcionProceso {
+            get {
+                return ResourceManager.GetString("captionDescripcionProceso", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dirección.
+        /// </summary>
+        public static string captionDireccion {
+            get {
+                return ResourceManager.GetString("captionDireccion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DireccionIP.
+        /// </summary>
+        public static string captionDireccionIP {
+            get {
+                return ResourceManager.GetString("captionDireccionIP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documento.
+        /// </summary>
+        public static string captionDocumento {
+            get {
+                return ResourceManager.GetString("captionDocumento", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Correo Electrónico.
+        /// </summary>
+        public static string captionEmailPersonaClave {
+            get {
+                return ResourceManager.GetString("captionEmailPersonaClave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Empresa del Participante.
+        /// </summary>
+        public static string captionEmpresaParticipante {
+            get {
+                return ResourceManager.GetString("captionEmpresaParticipante", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Es entrevistador.
+        /// </summary>
+        public static string captionEntrevistador {
+            get {
+                return ResourceManager.GetString("captionEntrevistador", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Estado del Documento.
         /// </summary>
         public static string captionEstatus {
             get {
                 return ResourceManager.GetString("captionEstatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Estatus del Proceso.
+        /// </summary>
+        public static string captionEstatusProceso {
+            get {
+                return ResourceManager.GetString("captionEstatusProceso", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fecha de Aprobación.
+        /// </summary>
+        public static string captionFechaAprobacion {
+            get {
+                return ResourceManager.GetString("captionFechaAprobacion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fecha de Certificación.
+        /// </summary>
+        public static string captionFechaCertificacion {
+            get {
+                return ResourceManager.GetString("captionFechaCertificacion", resourceCulture);
             }
         }
         
@@ -79,11 +223,56 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fecha de Creación.
+        /// </summary>
+        public static string captionFechaCreacionProceso {
+            get {
+                return ResourceManager.GetString("captionFechaCreacionProceso", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fecha del Estatus.
         /// </summary>
         public static string captionFechaEstatus {
             get {
                 return ResourceManager.GetString("captionFechaEstatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fecha del Último Estatus.
+        /// </summary>
+        public static string captionFechaEstatusProceso {
+            get {
+                return ResourceManager.GetString("captionFechaEstatusProceso", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fecha Final.
+        /// </summary>
+        public static string captionFechaFinal {
+            get {
+                return ResourceManager.GetString("captionFechaFinal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fecha de Inicio.
+        /// </summary>
+        public static string captionFechaInicio {
+            get {
+                return ResourceManager.GetString("captionFechaInicio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fecha.
+        /// </summary>
+        public static string captionFechaRegistro {
+            get {
+                return ResourceManager.GetString("captionFechaRegistro", resourceCulture);
             }
         }
         
@@ -97,11 +286,155 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cédula.
+        /// </summary>
+        public static string captionIdentificacionPersonaClave {
+            get {
+                return ResourceManager.GetString("captionIdentificacionPersonaClave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mensaje.
+        /// </summary>
+        public static string captionMensaje {
+            get {
+                return ResourceManager.GetString("captionMensaje", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nombre del Participante.
+        /// </summary>
+        public static string captionNombreParticipante {
+            get {
+                return ResourceManager.GetString("captionNombreParticipante", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nombre.
+        /// </summary>
+        public static string captionNombrePersonaClave {
+            get {
+                return ResourceManager.GetString("captionNombrePersonaClave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nombre.
+        /// </summary>
+        public static string captionNombreProceso {
+            get {
+                return ResourceManager.GetString("captionNombreProceso", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Número de Documento.
         /// </summary>
         public static string captionNroDocumento {
             get {
                 return ResourceManager.GetString("captionNroDocumento", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Número de Proceso.
+        /// </summary>
+        public static string captionNroProceso {
+            get {
+                return ResourceManager.GetString("captionNroProceso", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Participantes.
+        /// </summary>
+        public static string captionParticipantes {
+            get {
+                return ResourceManager.GetString("captionParticipantes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Es Principal.
+        /// </summary>
+        public static string captionPrincipalPersonaClave {
+            get {
+                return ResourceManager.GetString("captionPrincipalPersonaClave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Procesado.
+        /// </summary>
+        public static string captionProcesado {
+            get {
+                return ResourceManager.GetString("captionProcesado", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Proceso.
+        /// </summary>
+        public static string captionProceso {
+            get {
+                return ResourceManager.GetString("captionProceso", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Requiere Certificación.
+        /// </summary>
+        public static string captionRequiereCertificacion {
+            get {
+                return ResourceManager.GetString("captionRequiereCertificacion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Responsable.
+        /// </summary>
+        public static string captionResponsable {
+            get {
+                return ResourceManager.GetString("captionResponsable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Teléfono Móvil.
+        /// </summary>
+        public static string captionTelefonoCelular {
+            get {
+                return ResourceManager.GetString("captionTelefonoCelular", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Teléfono de Habitación.
+        /// </summary>
+        public static string captionTelefonoHabitacion {
+            get {
+                return ResourceManager.GetString("captionTelefonoHabitacion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Teléfono de Oficina.
+        /// </summary>
+        public static string captionTelefonoOficina {
+            get {
+                return ResourceManager.GetString("captionTelefonoOficina", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tipo de Documento.
+        /// </summary>
+        public static string captionTipoDocumento {
+            get {
+                return ResourceManager.GetString("captionTipoDocumento", resourceCulture);
             }
         }
         
@@ -115,11 +448,29 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Usuario.
+        /// </summary>
+        public static string captionUsuario {
+            get {
+                return ResourceManager.GetString("captionUsuario", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Versión.
         /// </summary>
         public static string captionVersion {
             get {
                 return ResourceManager.GetString("captionVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Versión Original.
+        /// </summary>
+        public static string captionVersionAnterior {
+            get {
+                return ResourceManager.GetString("captionVersionAnterior", resourceCulture);
             }
         }
         

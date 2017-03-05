@@ -322,6 +322,13 @@
     <Content Include="Views\Documentos\AprobacionesPartialView.cshtml" />
     <Content Include="Views\Documentos\PersonasClavePartialView.cshtml" />
     <Content Include="Views\Documentos\EntrevistasPartialView.cshtml" />
+    <Content Include="Views\Documentos\EntrevistaParticipantesPartialView.cshtml" />
+    <Content Include="Views\Documentos\PersonaPartialView.cshtml" />
+    <Content Include="Views\Documentos\DireccionesPartialView.cshtml" />
+    <Content Include="Views\Documentos\CorreosPartialView.cshtml" />
+    <Content Include="Views\Documentos\TelefonosPartialView.cshtml" />
+    <Content Include="Views\Documentos\NuevaUnidadOrganizativaPartialView.cshtml" />
+    <Content Include="Views\Documentos\NuevoCargoPartialView.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -874,6 +881,7 @@
     <Compile Include="Models\MenuModels.cs" />
     <Compile Include="Models\ModuloModels.cs" />
     <Compile Include="Models\PersonaModels.cs" />
+    <Compile Include="Models\TablaModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

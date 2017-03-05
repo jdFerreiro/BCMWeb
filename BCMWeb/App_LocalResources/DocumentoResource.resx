@@ -144,4 +144,121 @@
   <data name="captionVersion" xml:space="preserve">
     <value>Versión</value>
   </data>
+  <data name="captionAccion" xml:space="preserve">
+    <value>Acción</value>
+  </data>
+  <data name="captionAprobado" xml:space="preserve">
+    <value>Aprobado</value>
+  </data>
+  <data name="captionAprobador" xml:space="preserve">
+    <value>Aprobador</value>
+  </data>
+  <data name="captionCertificado" xml:space="preserve">
+    <value>Certificado</value>
+  </data>
+  <data name="captionCertificador" xml:space="preserve">
+    <value>Certificador</value>
+  </data>
+  <data name="captionDireccion" xml:space="preserve">
+    <value>Dirección</value>
+  </data>
+  <data name="captionDireccionIP" xml:space="preserve">
+    <value>DireccionIP</value>
+  </data>
+  <data name="captionDocumento" xml:space="preserve">
+    <value>Documento</value>
+  </data>
+  <data name="captionEmailPersonaClave" xml:space="preserve">
+    <value>Correo Electrónico</value>
+  </data>
+  <data name="captionEmpresaParticipante" xml:space="preserve">
+    <value>Empresa del Participante</value>
+  </data>
+  <data name="captionEntrevistador" xml:space="preserve">
+    <value>Es entrevistador</value>
+  </data>
+  <data name="captionFechaAprobacion" xml:space="preserve">
+    <value>Fecha de Aprobación</value>
+  </data>
+  <data name="captionFechaCertificacion" xml:space="preserve">
+    <value>Fecha de Certificación</value>
+  </data>
+  <data name="captionFechaRegistro" xml:space="preserve">
+    <value>Fecha</value>
+  </data>
+  <data name="captionIdentificacionPersonaClave" xml:space="preserve">
+    <value>Cédula</value>
+  </data>
+  <data name="captionMensaje" xml:space="preserve">
+    <value>Mensaje</value>
+  </data>
+  <data name="captionNombreParticipante" xml:space="preserve">
+    <value>Nombre del Participante</value>
+  </data>
+  <data name="captionNombrePersonaClave" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="captionParticipantes" xml:space="preserve">
+    <value>Participantes</value>
+  </data>
+  <data name="captionPrincipalPersonaClave" xml:space="preserve">
+    <value>Es Principal</value>
+  </data>
+  <data name="captionProcesado" xml:space="preserve">
+    <value>Procesado</value>
+  </data>
+  <data name="captionRequiereCertificacion" xml:space="preserve">
+    <value>Requiere Certificación</value>
+  </data>
+  <data name="captionResponsable" xml:space="preserve">
+    <value>Responsable</value>
+  </data>
+  <data name="captionTelefonoCelular" xml:space="preserve">
+    <value>Teléfono Móvil</value>
+  </data>
+  <data name="captionTelefonoHabitacion" xml:space="preserve">
+    <value>Teléfono de Habitación</value>
+  </data>
+  <data name="captionTelefonoOficina" xml:space="preserve">
+    <value>Teléfono de Oficina</value>
+  </data>
+  <data name="captionTipoDocumento" xml:space="preserve">
+    <value>Tipo de Documento</value>
+  </data>
+  <data name="captionUsuario" xml:space="preserve">
+    <value>Usuario</value>
+  </data>
+  <data name="captionVersionAnterior" xml:space="preserve">
+    <value>Versión Original</value>
+  </data>
+  <data name="captionFechaFinal" xml:space="preserve">
+    <value>Fecha Final</value>
+  </data>
+  <data name="captionFechaInicio" xml:space="preserve">
+    <value>Fecha de Inicio</value>
+  </data>
+  <data name="captionCriticoProceso" xml:space="preserve">
+    <value>Tipo de Proceso</value>
+  </data>
+  <data name="captionDescripcionProceso" xml:space="preserve">
+    <value>Descripción del Proceso</value>
+  </data>
+  <data name="captionEstatusProceso" xml:space="preserve">
+    <value>Estatus del Proceso</value>
+  </data>
+  <data name="captionFechaCreacionProceso" xml:space="preserve">
+    <value>Fecha de Creación</value>
+  </data>
+  <data name="captionFechaEstatusProceso" xml:space="preserve">
+    <value>Fecha del Último Estatus</value>
+  </data>
+  <data name="captionNombreProceso" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="captionNroProceso" xml:space="preserve">
+    <value>Número de Proceso</value>
+  </data>
+  <data name="captionProceso" xml:space="preserve">
+    <value>Proceso</value>
+  </data>
 </root>

@@ -61,47 +61,74 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Información del Entrevistado.
+        ///   Looks up a localized string similar to Calle o Avenida.
         /// </summary>
-        public static string captionGrupo1 {
+        public static string captionCalleAvenida {
             get {
-                return ResourceManager.GetString("captionGrupo1", resourceCulture);
+                return ResourceManager.GetString("captionCalleAvenida", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Cargo:.
         /// </summary>
-        public static string captionGrupo1Cargo {
+        public static string captionCargo {
             get {
-                return ResourceManager.GetString("captionGrupo1Cargo", resourceCulture);
+                return ResourceManager.GetString("captionCargo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ciudad.
+        /// </summary>
+        public static string captionCiudad {
+            get {
+                return ResourceManager.GetString("captionCiudad", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Código de Área Telefónica.
+        /// </summary>
+        public static string captionCodigoAreaTelefono {
+            get {
+                return ResourceManager.GetString("captionCodigoAreaTelefono", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edificio o Casa.
+        /// </summary>
+        public static string captionEdificioCasa {
+            get {
+                return ResourceManager.GetString("captionEdificioCasa", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Correo Electrónico.
         /// </summary>
-        public static string captionGrupo1Email {
+        public static string captionEmail {
             get {
-                return ResourceManager.GetString("captionGrupo1Email", resourceCulture);
+                return ResourceManager.GetString("captionEmail", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nombre.
+        ///   Looks up a localized string similar to Estado.
         /// </summary>
-        public static string captionGrupo1Nombre {
+        public static string captionEstado {
             get {
-                return ResourceManager.GetString("captionGrupo1Nombre", resourceCulture);
+                return ResourceManager.GetString("captionEstado", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unidad Organizativa.
+        ///   Looks up a localized string similar to Información del Entrevistado.
         /// </summary>
-        public static string captionGrupo1UO {
+        public static string captionGrupo1 {
             get {
-                return ResourceManager.GetString("captionGrupo1UO", resourceCulture);
+                return ResourceManager.GetString("captionGrupo1", resourceCulture);
             }
         }
         
@@ -151,11 +178,200 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nro. de Cédula:.
+        /// </summary>
+        public static string captionIdentificacion {
+            get {
+                return ResourceManager.GetString("captionIdentificacion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dirección.
+        /// </summary>
+        public static string captionIdPersonaDireccion {
+            get {
+                return ResourceManager.GetString("captionIdPersonaDireccion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Teléfono.
+        /// </summary>
+        public static string captionIdTelefono {
+            get {
+                return ResourceManager.GetString("captionIdTelefono", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nombre.
+        /// </summary>
+        public static string captionNombre {
+            get {
+                return ResourceManager.GetString("captionNombre", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Extensión.
+        /// </summary>
+        public static string captionNroExtension {
+            get {
+                return ResourceManager.GetString("captionNroExtension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Número de Teléfono.
+        /// </summary>
+        public static string captionNroTelefono {
+            get {
+                return ResourceManager.GetString("captionNroTelefono", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to País.
+        /// </summary>
+        public static string captionPais {
+            get {
+                return ResourceManager.GetString("captionPais", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Piso o Nivel.
+        /// </summary>
+        public static string captionPisoNivel {
+            get {
+                return ResourceManager.GetString("captionPisoNivel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Requiere Certificación.
         /// </summary>
         public static string captionRequiereCertificacion {
             get {
                 return ResourceManager.GetString("captionRequiereCertificacion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tipo de Dirección.
+        /// </summary>
+        public static string captionTipoDireccion {
+            get {
+                return ResourceManager.GetString("captionTipoDireccion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tipo de Correo Electrónico.
+        /// </summary>
+        public static string captionTipoEmail {
+            get {
+                return ResourceManager.GetString("captionTipoEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tipo de Teléfono.
+        /// </summary>
+        public static string captionTipoTelefono {
+            get {
+                return ResourceManager.GetString("captionTipoTelefono", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Torre o Ala.
+        /// </summary>
+        public static string captionTorreAla {
+            get {
+                return ResourceManager.GetString("captionTorreAla", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unidad Organizativa.
+        /// </summary>
+        public static string captionUO {
+            get {
+                return ResourceManager.GetString("captionUO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Urbanización.
+        /// </summary>
+        public static string captionUrbanizacion {
+            get {
+                return ResourceManager.GetString("captionUrbanizacion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Registro de Persona.
+        /// </summary>
+        public static string headerPopup {
+            get {
+                return ResourceManager.GetString("headerPopup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A-999,000,000.
+        /// </summary>
+        public static string MaskIdentificacion {
+            get {
+                return ResourceManager.GetString("MaskIdentificacion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Correos Electrónicos.
+        /// </summary>
+        public static string personaGrupoCorreos {
+            get {
+                return ResourceManager.GetString("personaGrupoCorreos", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Datos Básicos.
+        /// </summary>
+        public static string personaGrupoDatos {
+            get {
+                return ResourceManager.GetString("personaGrupoDatos", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Direcciones.
+        /// </summary>
+        public static string personaGrupoDireccion {
+            get {
+                return ResourceManager.GetString("personaGrupoDireccion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Telefonos.
+        /// </summary>
+        public static string personaGrupoTelefono {
+            get {
+                return ResourceManager.GetString("personaGrupoTelefono", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [VEJGPvejgp]-[0-9](9).
+        /// </summary>
+        public static string RegexIdentiticacion {
+            get {
+                return ResourceManager.GetString("RegexIdentiticacion", resourceCulture);
             }
         }
     }

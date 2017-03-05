@@ -3,8 +3,10 @@
 
 <script type="text/javascript">
     function OnClick(s, e) {
-
-        alert(@ViewContext.ViewData.ModelState.IsValid);
+        if ($("#editForm").valid()) {
+            lp.Hide();
+        }
+        // if ($("#editForm").valid())
         //lp.Show();
         //var isValid = ASPxClientEdit.AreEditorsValid();
         //alert(isValid);
@@ -57,7 +59,7 @@
        {
            b.Name = "botLogin";
            b.Text = Resources.LoginResource.botLoginText;
-           //b.ClientSideEvents.Click = "OnClick";
+           b.ClientSideEvents.Click = "OnClick";
            b.UseSubmitBehavior = true;
        }).GetHtml()
         </div>

@@ -47,7 +47,7 @@ settings =>
         column.SetHeaderTemplateContent(c =>
         {
             ViewContext.Writer.Write(
-                Html.ActionLink(Resources.BCMWebPublic.captionButtonNew, "EditarDocumento", new { IdDocumento = -1, IdClaseDocumento = Model.IdClaseDocumento, IdModulo = Model.IdModulo }).ToHtmlString()
+                Html.ActionLink(Resources.BCMWebPublic.captionButtonNew, "EditarDocumento", new { IdDocumento = -1, IdClaseDocumento = Model.IdClaseDocumento, IdModulo = Model.IdModulo }, new { onclick = "lp.Show();" }).ToHtmlString()
             );
         });
         column.CellStyle.HorizontalAlign = HorizontalAlign.Center;

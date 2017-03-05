@@ -160,6 +160,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to La {0} registrada no es válida..
+        /// </summary>
+        public static string InvalidoErrorFemale {
+            get {
+                return ResourceManager.GetString("InvalidoErrorFemale", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to El {0} registrado no es válido..
+        /// </summary>
+        public static string InvalidoErrorMale {
+            get {
+                return ResourceManager.GetString("InvalidoErrorMale", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to La contraseña indicada no es válida. Por favor indique una nueva contraseña.
         /// </summary>
         public static string InvalidPasswordError {

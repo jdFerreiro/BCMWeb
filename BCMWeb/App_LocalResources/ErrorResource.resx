@@ -180,4 +180,10 @@
   <data name="RequiredErrorMale" xml:space="preserve">
     <value>El {0} debe ser registrado</value>
   </data>
+  <data name="InvalidoErrorFemale" xml:space="preserve">
+    <value>La {0} registrada no es válida.</value>
+  </data>
+  <data name="InvalidoErrorMale" xml:space="preserve">
+    <value>El {0} registrado no es válido.</value>
+  </data>
 </root>

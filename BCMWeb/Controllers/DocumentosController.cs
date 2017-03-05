@@ -1,4 +1,5 @@
 ﻿using BCMWeb.Models;
+using DevExpress.Web.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,9 +19,9 @@ namespace BCMWeb.Controllers
 
             long IdModulo = IdTipoDocumento * 1000000;
             Session["IdTipoDocumento"] = IdTipoDocumento;
-            long IdDocumento  = long.Parse(Session["IdDocumento"].ToString());
-            int  IdClaseDocumento = int.Parse(Session["IdClaseDocumento"].ToString());
-            int IdVersion  = int.Parse(Session["IdVersion"].ToString());
+            long IdDocumento = long.Parse(Session["IdDocumento"].ToString());
+            int IdClaseDocumento = int.Parse(Session["IdClaseDocumento"].ToString());
+            int IdVersion = int.Parse(Session["IdVersion"].ToString());
 
             DocumentoModel Documento = new DocumentoModel();
             FirstModuloSelected firstModulo = Metodos.GetFirstUserModulo(IdModulo);
@@ -65,11 +66,52 @@ namespace BCMWeb.Controllers
                 IdClaseDocumento = IdClaseDocumento,
                 IdDocumentoSelected = 0,
                 IdEmpresa = long.Parse(Session["IdEmpresa"].ToString()),
-                IdModulo = IdModulo
+                IdModulo = IdModulo,
             };
 
             model.Documentos.Add(Documento);
             return View(model);
         }
+        public ActionResult PersonaPartialView()
+        {
+            PersonaModel model = new PersonaModel();
+            return PartialView(model);
+        }
+        public ActionResult DireccionesPartialView()
+        {
+            return PartialView();
+        }
+        public ActionResult CorreosPartialView()
+        {
+            return PartialView();
+        }
+        public ActionResult TelefonosPartialView()
+        {
+            return PartialView();
+        }
+        //[ValidateInput(false)]
+        //public ActionResult BatchEditingUpdateCorreo(MVCxGridViewBatchUpdateValues<PersonaEmail, long> updateValues)
+        //{
+            //foreach (var product in updateValues.Insert)
+            //{
+            //    if (updateValues.IsValid(product))
+            //        InsertProduct(product, updateValues);
+            //}
+            //foreach (var product in updateValues.Update)
+            //{
+            //    if (updateValues.IsValid(product))
+            //        UpdateProduct(product, updateValues);
+            //}
+            //foreach (var productID in updateValues.DeleteKeys)
+            //{
+            //    DeleteProduct(productID, updateValues);
+            //}
+            //return PartialView("CorreosPartialView", NorthwindDataProvider.GetEditableProducts());
+        //}
+        //[ValidateInput(false)]
+        //public ActionResult BatchEditingUpdateTelefono(MVCxGridViewBatchUpdateValues<PersonaTelefono, long> updateValues)
+        //{
+            //return PartialView("BatchEditingPartial", NorthwindDataProvider.GetEditableProducts());
+        //}
     }
 }

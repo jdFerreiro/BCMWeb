@@ -88,6 +88,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancelar.
+        /// </summary>
+        public static string captionButtonCancel {
+            get {
+                return ResourceManager.GetString("captionButtonCancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Eliminar.
         /// </summary>
         public static string captionButtonDelete {
@@ -111,6 +120,15 @@ namespace Resources {
         public static string captionButtonNew {
             get {
                 return ResourceManager.GetString("captionButtonNew", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Guardar.
+        /// </summary>
+        public static string captionButtonSave {
+            get {
+                return ResourceManager.GetString("captionButtonSave", resourceCulture);
             }
         }
         
@@ -147,6 +165,15 @@ namespace Resources {
         public static string FAQPageTitle {
             get {
                 return ResourceManager.GetString("FAQPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Realice su selección....
+        /// </summary>
+        public static string itemSelectValue {
+            get {
+                return ResourceManager.GetString("itemSelectValue", resourceCulture);
             }
         }
         

@@ -1,0 +1,158 @@
+﻿@using BCMWeb.Models
+
+@model PersonaModel
+
+<script type="text/javascript">
+    function botUO_Click() {
+
+    }
+    function botCargo_Click() {
+
+    }
+    function OnBeginGridCallback()
+    {
+        lp.Show();
+    }
+    function OnEndGridCallback() {
+        lp.Hide();
+    }
+</script>
+
+@using (Html.BeginForm("PersonaPartialView", "Documentos", FormMethod.Post, htmlAttributes: new { id = "frmPersona" }))
+{
+
+    @Html.DevExpress().FormLayout(s =>
+{
+    s.Name = "personaLayout";
+    s.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+    s.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 800;
+    s.ControlStyle.CssClass = "fromLayout";
+
+    s.Items.AddGroupItem(gi =>
+    {
+        gi.Caption = Resources.FichaResource.personaGrupoDatos;
+        gi.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        gi.ColCount = 1;
+        gi.Items.Add(m => m.Nombre, i =>
+        {
+            i.NestedExtension().TextBox(tb =>
+            {
+                tb.Width = Unit.Percentage(100);
+                tb.ShowModelErrors = true;
+                tb.Properties.ValidationSettings.Display = Display.Dynamic;
+                tb.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            });
+        });
+        gi.Items.Add(m => m.Identificacion, i =>
+        {
+            i.NestedExtension().TextBox(tb =>
+            {
+                tb.Width = Unit.Percentage(100);
+                tb.ShowModelErrors = true;
+                tb.Properties.ValidationSettings.Display = Display.Dynamic;
+                tb.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+            });
+        });
+        gi.Items.Add(m => m.IdUnidadOrganizativa, i =>
+        {
+            i.NestedExtension().ComboBox(cb =>
+            {
+                cb.Width = Unit.Percentage(100);
+                cb.ShowModelErrors = true;
+
+                //set.Properties.ClientSideEvents.ValueChanged = "UpdatePersona";
+                cb.Properties.ValueType = typeof(long);
+                cb.Properties.DataSource = BCMWeb.Metodos.GetUnidades();
+                cb.Properties.TextField = "Nombre";
+                cb.Properties.ValueField = "IdUnidad";
+                cb.Properties.ValidationSettings.Display = Display.Dynamic;
+                cb.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                cb.Properties.ClientSideEvents.ButtonClick = "botUO_Click";
+                cb.PreRender = (sender, e) =>
+                {
+                    ASPxComboBox cmb = (ASPxComboBox)sender;
+                    cmb.DropDownButton.Visible = true;
+                    cmb.Buttons.Add(new EditButton(Resources.BCMWebPublic.captionButtonNew));
+                };
+
+            });
+        });
+        gi.Items.Add(m => m.IdCargo, i =>
+        {
+            i.NestedExtension().ComboBox(cb =>
+            {
+                cb.Width = Unit.Percentage(100);
+                cb.ShowModelErrors = true;
+
+                cb.Properties.ValueType = typeof(long);
+                cb.Properties.DataSource = BCMWeb.Metodos.GetCargos();
+                cb.Properties.TextField = "Nombre";
+                cb.Properties.ValueField = "IdCargo";
+                cb.Properties.ValidationSettings.Display = Display.Dynamic;
+                cb.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                cb.Properties.ClientSideEvents.ButtonClick = "botCargo_Click";
+                cb.PreRender = (sender, e) =>
+                {
+                    ASPxComboBox cmb = (ASPxComboBox)sender;
+                    cmb.DropDownButton.Visible = true;
+                    cmb.Buttons.Add(new EditButton(Resources.BCMWebPublic.captionButtonNew));
+                };
+
+            });
+        });
+    });
+    //s.Items.AddGroupItem(gi =>
+    //{
+    //    gi.Caption = Resources.FichaResource.personaGrupoDireccion;
+    //    gi.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+    //    gi.ColCount = 1;
+    //    gi.Items.Add(m => m.Direcciones, i =>
+    //    {
+    //        i.Caption = string.Empty;
+    //        i.SetNestedContent(() =>
+    //        {
+    //            Html.RenderPartial("DireccionesPartialView", Model.Direcciones);
+    //        });
+    //    });
+    //});
+    s.Items.AddGroupItem(gi =>
+    {
+        gi.Caption = Resources.FichaResource.personaGrupoCorreos;
+        gi.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        gi.ColCount = 1;
+        gi.Items.Add(m => m.CorreosElectronicos, i =>
+        {
+            i.Caption = string.Empty;
+            i.SetNestedContent(() =>
+            {
+                Html.RenderPartial("CorreosPartialView", Model.CorreosElectronicos);
+            });
+        });
+    });
+    s.Items.AddGroupItem(gi =>
+    {
+        gi.Caption = Resources.FichaResource.personaGrupoTelefono;
+        gi.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        gi.ColCount = 1;
+        gi.Items.Add(m => m.Telefonos, i =>
+        {
+            i.Caption = string.Empty;
+            i.SetNestedContent(() =>
+            {
+                Html.RenderPartial("TelefonosPartialView", Model.Telefonos);
+            });
+        });
+    });
+    s.Items.Add(i =>
+    {
+        i.ShowCaption = DefaultBoolean.False;
+        i.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+        i.NestedExtension().Button(bt =>
+        {
+            bt.Name = "botSavePersona";
+            bt.Text = Resources.BCMWebPublic.captionButtonSave;
+            bt.UseSubmitBehavior = true;
+        });
+    });
+}).GetHtml();
+    }

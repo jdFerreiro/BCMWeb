@@ -15,7 +15,7 @@ namespace BCMWeb
         internal static HttpSessionState Session { get { return HttpContext.Current.Session; } }
         internal static string Culture = HttpContext.Current.Request.UserLanguages[0];
 
-        public static List<EmpresaModel> GetEmpresasUsuario()
+        public static IList<EmpresaModel> GetEmpresasUsuario()
         {
 
             List<EmpresaModel> Data = new List<EmpresaModel>();
@@ -60,7 +60,7 @@ namespace BCMWeb
 
             return _NombreModulo;
         }
-        public static List<ModuloModel> GetModulosPrincipalesEmpresaUsuario()
+        public static IList<ModuloModel> GetModulosPrincipalesEmpresaUsuario()
         {
             List<ModuloModel> Data = new List<ModuloModel>();
 
@@ -102,7 +102,7 @@ namespace BCMWeb
             
             return Data;
         }
-        public static List<DocumentoModel> GetDocumentosModulo(int IdTipoDocumento, bool Negocios)
+        public static IList<DocumentoModel> GetDocumentosModulo(int IdTipoDocumento, bool Negocios)
         {
             long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
 
@@ -145,7 +145,7 @@ namespace BCMWeb
                               let docCertificaciones = d.tblDocumentoCertificacion.Select(x => new DocumentoCertificacionModel
                               {
                                   Certificado = (bool)x.Certificado,
-                                  FechaAprobacion = (DateTime)x.Fecha,
+                                  FechaCertificacion = (DateTime)x.Fecha,
                                   IdCertificacion = x.IdCertificacion,
                                   IdDocumento = x.IdDocumento,
                                   IdEmpresa = x.IdEmpresa,
@@ -269,7 +269,7 @@ namespace BCMWeb
                               let docCertificaciones = d.tblDocumentoCertificacion.Select(x => new DocumentoCertificacionModel
                               {
                                   Certificado = (bool)x.Certificado,
-                                  FechaAprobacion = (DateTime)x.Fecha,
+                                  FechaCertificacion = (DateTime)x.Fecha,
                                   IdCertificacion = x.IdCertificacion,
                                   IdDocumento = x.IdDocumento,
                                   IdEmpresa = x.IdEmpresa,
@@ -490,7 +490,7 @@ namespace BCMWeb
             NextVersion += 1;
             return NextVersion;
         }
-        public static List<tblModulo> GetSubModulos(long IdModuloPadre)
+        public static IList<tblModulo> GetSubModulos(long IdModuloPadre)
         {
             List<tblModulo> SubModulos = new List<tblModulo>();
             long IdUsuario = long.Parse(Session["UserId"].ToString());
@@ -552,21 +552,12 @@ namespace BCMWeb
                            let DireccionesPersona = p.tblPersonaDireccion.Select(x => new PersonaDireccion
                            {
                                CalleAvenida = x.CalleAvenida,
-                               Ciudad = x.tblCiudad.tblCultura_Ciudad
-                                    .Where(c => c.Culture == Culture || c.Culture == "es-VE")
-                                    .FirstOrDefault().Nombre,
                                EdificioCasa = x.EdificioCasa,
-                               Estado = x.tblEstado.tblCultura_Estado
-                                    .Where(c => c.Culture == Culture || c.Culture == "es-VE")
-                                    .FirstOrDefault().Nombre,
                                IdCiudad = x.IdCiudad,
                                IdEstado = x.IdEstado,
                                IdPais = x.IdPais,
                                IdPersonaDireccion = x.IdPersonaDireccion,
                                IdTipoDireccion = x.IdTipoDireccion,
-                               Pais = x.tblPais.tblCultura_Pais
-                                    .Where(c => c.Culture == Culture || c.Culture == "es-VE")
-                                    .FirstOrDefault().Nombre,
                                PisoNivel = x.PisoNivel,
                                TipoDireccion = x.tblTipoDireccion.tblCultura_TipoDireccion
                                     .Where(c => c.Culture == Culture || c.Culture == "es-VE")
@@ -604,7 +595,7 @@ namespace BCMWeb
 
             return Persona;
         }
-        public static List<PersonaModel> GetPersonasConUsuario()
+        public static IList<PersonaModel> GetPersonasConUsuario()
         {
             long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
             List<PersonaModel> Personas = new List<PersonaModel>();
@@ -624,21 +615,12 @@ namespace BCMWeb
                            let DireccionesPersona = p.tblPersonaDireccion.Select(x => new PersonaDireccion
                            {
                                CalleAvenida = x.CalleAvenida,
-                               Ciudad = x.tblCiudad.tblCultura_Ciudad
-                                    .Where(c => c.Culture == Culture || c.Culture == "es-VE")
-                                    .FirstOrDefault().Nombre,
                                EdificioCasa = x.EdificioCasa,
-                               Estado = x.tblEstado.tblCultura_Estado
-                                    .Where(c => c.Culture == Culture || c.Culture == "es-VE")
-                                    .FirstOrDefault().Nombre,
                                IdCiudad = x.IdCiudad,
                                IdEstado = x.IdEstado,
                                IdPais = x.IdPais,
                                IdPersonaDireccion = x.IdPersonaDireccion,
                                IdTipoDireccion = x.IdTipoDireccion,
-                               Pais = x.tblPais.tblCultura_Pais
-                                    .Where(c => c.Culture == Culture || c.Culture == "es-VE")
-                                    .FirstOrDefault().Nombre,
                                PisoNivel = x.PisoNivel,
                                TipoDireccion = x.tblTipoDireccion.tblCultura_TipoDireccion
                                     .Where(c => c.Culture == Culture || c.Culture == "es-VE")
@@ -671,11 +653,200 @@ namespace BCMWeb
                                Nombre = p.Nombre,
                                Telefonos = TelefonosPersona,
                                UnidadOrganizativa = p.tblUnidadOrganizativa.Nombre,
-                           }).ToList();
+                           }).OrderBy(x => x.Nombre).ToList();
 
             }
 
+            Personas.Insert(0, new PersonaModel { IdPersona = 0, Nombre = Resources.BCMWebPublic.itemSelectValue });
+
             return Personas;
         }
+        public static IList<UnidadOrganizativaModel> GetUnidades()
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            List<UnidadOrganizativaModel> Unidades = new List<UnidadOrganizativaModel>();
+
+            using (Entities db = new Entities())
+            {
+                Unidades = (from p in db.tblUnidadOrganizativa
+                            where p.IdEmpresa == IdEmpresa
+                            select new UnidadOrganizativaModel
+                            {
+                                IdUnidad =  p.IdUnidadOrganizativa,
+                                IdUnidadPadre = p.IdUnidadPadre,
+                                Nombre = p.Nombre
+                            }).OrderBy(x => x.Nombre).ToList();
+
+            }
+
+            Unidades.Insert(0, new UnidadOrganizativaModel { IdUnidad = 0, Nombre = Resources.BCMWebPublic.itemSelectValue });
+
+            return Unidades;
+        }
+        public static IList<CargoModel> GetCargos()
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            List<CargoModel> Cargos = new List<CargoModel>();
+
+            using (Entities db = new Entities())
+            {
+                Cargos = (from p in db.tblCargo
+                            where p.IdEmpresa == IdEmpresa
+                            select new CargoModel
+                            {
+                                IdCargo = p.IdCargo,
+                                Nombre = p.Descripcion
+                            }).OrderBy(x => x.Nombre).ToList();
+
+            }
+
+            Cargos.Insert(0, new CargoModel { IdCargo = 0, Nombre = Resources.BCMWebPublic.itemSelectValue });
+
+            return Cargos;
+        }
+        public static string GetPais(long IdPais)
+        {
+            string _Pais = string.Empty;
+
+            using (Entities db = new Entities())
+            {
+                tblPais Pais = db.tblPais.Where(x => x.IdPais == IdPais).FirstOrDefault();
+                if (Pais != null) 
+                    _Pais = Pais.tblCultura_Pais.Where(x => x.Culture == Culture || x.Culture == "es-VE").FirstOrDefault().Nombre;
+            }
+
+            return _Pais;
+        }
+        public static string GetEstado(long IdPais, long IdEstado)
+        {
+            string _Estado = string.Empty;
+
+            using (Entities db = new Entities())
+            {
+                tblEstado Estado = db.tblEstado.Where(x => x.IdPais == IdPais && x.IdEstado == IdEstado).FirstOrDefault();
+                if (Estado != null)
+                    _Estado = Estado.tblCultura_Estado.Where(x => x.Culture == Culture || x.Culture == "es-VE").FirstOrDefault().Nombre;
+            }
+
+            return _Estado;
+        }
+        public static string GetCiudad(long IdPais, long IdEstado, long IdCiudad)
+        {
+            string _Ciudad = string.Empty;
+
+            using (Entities db = new Entities())
+            {
+                tblCiudad Ciudad = db.tblCiudad.Where(x => x.IdPais == IdPais && x.IdEstado == IdEstado && x.IdCiudad == IdCiudad).FirstOrDefault();
+                if (Ciudad != null)
+                    _Ciudad = Ciudad.tblCultura_Ciudad.Where(x => x.Culture == Culture || x.Culture == "es-VE").FirstOrDefault().Nombre;
+            }
+
+            return _Ciudad;
+        }
+        public static string GetEstatusProceso(long IdEstatus)
+        {
+            string _Estatus = string.Empty;
+
+            using (Entities db = new Entities())
+            {
+                tblEstadoProceso EstatusProceso = db.tblEstadoProceso.Where(x => x.IdEstadoProceso == IdEstatus).FirstOrDefault();
+                if (EstatusProceso != null)
+                    _Estatus = EstatusProceso.tblCultura_EstadoProceso.Where(x => x.Culture == Culture || x.Culture == "es-VE").FirstOrDefault().Descripcion;
+            }
+
+            return _Estatus;
+        }
+        public static IList<TablaModel> GetTiposDireccion()
+        {
+            List<TablaModel> data = new List<TablaModel>();
+
+            using (Entities db = new Entities())
+            {
+                data = db.tblTipoDireccion.Select(x => new TablaModel
+                {
+                    Descripcion = x.tblCultura_TipoDireccion.Where(c => c.Culture == Culture || c.Culture == "es-VE").FirstOrDefault().Descripcion,
+                    Id = x.IdTipoDireccion
+                }).ToList();
+            }
+
+            return data;
+        }
+        public static IList<TablaModel> GetTiposTelefono()
+        {
+            List<TablaModel> data = new List<TablaModel>();
+
+            using (Entities db = new Entities())
+            {
+                data = db.tblTipoTelefono.Select(x => new TablaModel
+                {
+                    Descripcion = x.tblCultura_TipoTelefono.Where(c => c.Culture == Culture || c.Culture == "es-VE").FirstOrDefault().Descripcion,
+                    Id = x.IdTipoTelefono
+                }).ToList();
+            }
+
+            return data;
+        }
+        public static IList<TablaModel> GetTiposCorreo()
+        {
+            List<TablaModel> data = new List<TablaModel>();
+
+            using (Entities db = new Entities())
+            {
+                data = db.tblTipoCorreo.Select(x => new TablaModel
+                {
+                    Descripcion = x.tblCultura_TipoCorreo.Where(c => c.Culture == Culture || c.Culture == "es-VE").FirstOrDefault().Descripcion,
+                    Id = x.IdTipoCorreo
+                }).ToList();
+            }
+
+            return data;
+        }
+        public static IList<TablaModel> GetPaises()
+        {
+            List<TablaModel> data = new List<TablaModel>();
+
+            using (Entities db = new Entities())
+            {
+                data = db.tblPais.Select(x => new TablaModel
+                {
+                    Descripcion = x.tblCultura_Pais.Where(c => c.Culture == Culture || c.Culture == "es-VE").FirstOrDefault().Nombre,
+                    Id = x.IdPais
+                }).ToList();
+            }
+
+            return data;
+        }
+        public static IList<TablaModel> GetEstados(long IdPais)
+        {
+            List<TablaModel> data = new List<TablaModel>();
+
+            using (Entities db = new Entities())
+            {
+                data = db.tblEstado.Where(x => x.IdPais == IdPais).Select(x => new TablaModel
+                {
+                    Descripcion = x.tblCultura_Estado.Where(c => c.Culture == Culture || c.Culture == "es-VE").FirstOrDefault().Nombre,
+                    Id = x.IdEstado
+                }).ToList();
+            }
+
+            return data;
+        }
+        public static IList<TablaModel> GetCiudades(long IdPais, long IdEstado)
+        {
+            List<TablaModel> data = new List<TablaModel>();
+
+            using (Entities db = new Entities())
+            {
+                data = db.tblCiudad.Where(x => x.IdPais == IdPais && x.IdEstado == IdEstado)
+                    .Select(x => new TablaModel
+                    {
+                        Descripcion = x.tblCultura_Ciudad.Where(c => c.Culture == Culture || c.Culture == "es-VE").FirstOrDefault().Nombre,
+                        Id = x.IdCiudad
+                    }).ToList();
+            }
+
+            return data;
+        }
+
     }
 }

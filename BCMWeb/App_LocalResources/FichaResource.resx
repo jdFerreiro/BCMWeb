@@ -117,20 +117,29 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="captionGrupo1" xml:space="preserve">
-    <value>Información del Entrevistado</value>
+  <data name="captionCalleAvenida" xml:space="preserve">
+    <value>Calle o Avenida</value>
   </data>
-  <data name="captionGrupo1Cargo" xml:space="preserve">
+  <data name="captionCargo" xml:space="preserve">
     <value>Cargo:</value>
   </data>
-  <data name="captionGrupo1Email" xml:space="preserve">
+  <data name="captionCiudad" xml:space="preserve">
+    <value>Ciudad</value>
+  </data>
+  <data name="captionCodigoAreaTelefono" xml:space="preserve">
+    <value>Código de Área Telefónica</value>
+  </data>
+  <data name="captionEdificioCasa" xml:space="preserve">
+    <value>Edificio o Casa</value>
+  </data>
+  <data name="captionEmail" xml:space="preserve">
     <value>Correo Electrónico</value>
   </data>
-  <data name="captionGrupo1Nombre" xml:space="preserve">
-    <value>Nombre</value>
+  <data name="captionEstado" xml:space="preserve">
+    <value>Estado</value>
   </data>
-  <data name="captionGrupo1UO" xml:space="preserve">
-    <value>Unidad Organizativa</value>
+  <data name="captionGrupo1" xml:space="preserve">
+    <value>Información del Entrevistado</value>
   </data>
   <data name="captionGrupo2" xml:space="preserve">
     <value>Información de la Entrevista</value>
@@ -147,7 +156,70 @@
   <data name="captionGrupo6" xml:space="preserve">
     <value>Procesos</value>
   </data>
+  <data name="captionIdentificacion" xml:space="preserve">
+    <value>Nro. de Cédula:</value>
+  </data>
+  <data name="captionNombre" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="captionNroExtension" xml:space="preserve">
+    <value>Extensión</value>
+  </data>
+  <data name="captionNroTelefono" xml:space="preserve">
+    <value>Número de Teléfono</value>
+  </data>
+  <data name="captionPais" xml:space="preserve">
+    <value>País</value>
+  </data>
+  <data name="captionPisoNivel" xml:space="preserve">
+    <value>Piso o Nivel</value>
+  </data>
   <data name="captionRequiereCertificacion" xml:space="preserve">
     <value>Requiere Certificación</value>
+  </data>
+  <data name="captionTipoDireccion" xml:space="preserve">
+    <value>Tipo de Dirección</value>
+  </data>
+  <data name="captionTipoEmail" xml:space="preserve">
+    <value>Tipo de Correo Electrónico</value>
+  </data>
+  <data name="captionTipoTelefono" xml:space="preserve">
+    <value>Tipo de Teléfono</value>
+  </data>
+  <data name="captionTorreAla" xml:space="preserve">
+    <value>Torre o Ala</value>
+  </data>
+  <data name="captionUO" xml:space="preserve">
+    <value>Unidad Organizativa</value>
+  </data>
+  <data name="captionUrbanizacion" xml:space="preserve">
+    <value>Urbanización</value>
+  </data>
+  <data name="MaskIdentificacion" xml:space="preserve">
+    <value>A-999,000,000</value>
+  </data>
+  <data name="RegexIdentiticacion" xml:space="preserve">
+    <value>[VEJGPvejgp]-[0-9](9)</value>
+  </data>
+  <data name="captionIdPersonaDireccion" xml:space="preserve">
+    <value>Dirección</value>
+  </data>
+  <data name="captionIdTelefono" xml:space="preserve">
+    <value>Teléfono</value>
+  </data>
+  <data name="headerPopup" xml:space="preserve">
+    <value>Registro de Persona</value>
+  </data>
+  <data name="personaGrupoCorreos" xml:space="preserve">
+    <value>Correos Electrónicos</value>
+  </data>
+  <data name="personaGrupoDatos" xml:space="preserve">
+    <value>Datos Básicos</value>
+  </data>
+  <data name="personaGrupoDireccion" xml:space="preserve">
+    <value>Direcciones</value>
+  </data>
+  <data name="personaGrupoTelefono" xml:space="preserve">
+    <value>Telefonos</value>
   </data>
 </root>
