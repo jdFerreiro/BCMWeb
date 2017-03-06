@@ -579,17 +579,17 @@ namespace BCMWeb
                            where p.IdEmpresa == IdEmpresa && p.IdPersona == IdPersona
                            select new PersonaModel
                            {
-                               Cargo = p.tblCargo.Descripcion,
+                               Cargo = new CargoModel { IdCargo = p.tblCargo.IdCargo, NombreCargo = p.tblCargo.Descripcion },
                                CorreosElectronicos = CorreosPersona,
                                Direcciones = DireccionesPersona,
-                               IdCargo = p.IdCargo,
+                               IdCargoPersona = p.IdCargo,
                                Identificacion = p.Identificacion,
                                IdPersona = p.IdPersona,
-                               IdUnidadOrganizativa = p.IdUnidadOrganizativa,
+                               IdUnidadOrganizativaPersona = p.IdUnidadOrganizativa,
                                IdUsuario = p.IdUsuario,
                                Nombre = p.Nombre,
                                Telefonos = TelefonosPersona,
-                               UnidadOrganizativa = p.tblUnidadOrganizativa.Nombre,
+                               UnidadOrganizativa = new UnidadOrganizativaModel { IdUnidad = p.tblUnidadOrganizativa.IdUnidadOrganizativa, IdUnidadPadre = p.tblUnidadOrganizativa.IdUnidadPadre, NombreUnidadOrganizativa = p.tblUnidadOrganizativa.Nombre }
                            }).FirstOrDefault();
             }
 
@@ -642,17 +642,17 @@ namespace BCMWeb
                            where p.IdEmpresa == IdEmpresa && p.IdUsuario != 0
                            select new PersonaModel
                            {
-                               Cargo = p.tblCargo.Descripcion,
+                               Cargo = new CargoModel { IdCargo = p.tblCargo.IdCargo, NombreCargo = p.tblCargo.Descripcion },
                                CorreosElectronicos = CorreosPersona,
                                Direcciones = DireccionesPersona,
-                               IdCargo = p.IdCargo,
+                               IdCargoPersona = p.IdCargo,
                                Identificacion = p.Identificacion,
                                IdPersona = p.IdPersona,
-                               IdUnidadOrganizativa = p.IdUnidadOrganizativa,
+                               IdUnidadOrganizativaPersona = p.IdUnidadOrganizativa,
                                IdUsuario = p.IdUsuario,
                                Nombre = p.Nombre,
                                Telefonos = TelefonosPersona,
-                               UnidadOrganizativa = p.tblUnidadOrganizativa.Nombre,
+                               UnidadOrganizativa = new UnidadOrganizativaModel { IdUnidad = p.tblUnidadOrganizativa.IdUnidadOrganizativa, IdUnidadPadre = p.tblUnidadOrganizativa.IdUnidadPadre,  NombreUnidadOrganizativa = p.tblUnidadOrganizativa.Nombre }
                            }).OrderBy(x => x.Nombre).ToList();
 
             }
@@ -674,12 +674,12 @@ namespace BCMWeb
                             {
                                 IdUnidad =  p.IdUnidadOrganizativa,
                                 IdUnidadPadre = p.IdUnidadPadre,
-                                Nombre = p.Nombre
-                            }).OrderBy(x => x.Nombre).ToList();
+                                NombreUnidadOrganizativa = p.Nombre
+                            }).OrderBy(x => x.NombreUnidadOrganizativa).ToList();
 
             }
 
-            Unidades.Insert(0, new UnidadOrganizativaModel { IdUnidad = 0, Nombre = Resources.BCMWebPublic.itemSelectValue });
+            Unidades.Insert(0, new UnidadOrganizativaModel { IdUnidad = 0, NombreUnidadOrganizativa = Resources.BCMWebPublic.itemSelectValue });
 
             return Unidades;
         }
@@ -695,12 +695,12 @@ namespace BCMWeb
                             select new CargoModel
                             {
                                 IdCargo = p.IdCargo,
-                                Nombre = p.Descripcion
-                            }).OrderBy(x => x.Nombre).ToList();
+                                NombreCargo = p.Descripcion
+                            }).OrderBy(x => x.NombreCargo).ToList();
 
             }
 
-            Cargos.Insert(0, new CargoModel { IdCargo = 0, Nombre = Resources.BCMWebPublic.itemSelectValue });
+            Cargos.Insert(0, new CargoModel { IdCargo = 0, NombreCargo = Resources.BCMWebPublic.itemSelectValue });
 
             return Cargos;
         }

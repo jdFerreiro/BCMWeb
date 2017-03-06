@@ -883,6 +883,7 @@
     <Compile Include="Models\PersonaModels.cs" />
     <Compile Include="Models\TablaModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Validators\EnsureOneElementAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

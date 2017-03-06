@@ -121,7 +121,7 @@
     <value>Calle o Avenida</value>
   </data>
   <data name="captionCargo" xml:space="preserve">
-    <value>Cargo:</value>
+    <value>Cargo</value>
   </data>
   <data name="captionCiudad" xml:space="preserve">
     <value>Ciudad</value>
@@ -221,5 +221,14 @@
   </data>
   <data name="personaGrupoTelefono" xml:space="preserve">
     <value>Telefonos</value>
+  </data>
+  <data name="headerPopupCargo" xml:space="preserve">
+    <value>Registro de Cargos</value>
+  </data>
+  <data name="headerPopupUnidadOrganizativa" xml:space="preserve">
+    <value>Registro de Unidades Organizativas</value>
+  </data>
+  <data name="captionUnidadPadre" xml:space="preserve">
+    <value>Unidad Padre</value>
   </data>
 </root>

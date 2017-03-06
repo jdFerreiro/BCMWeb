@@ -1,4 +1,5 @@
-﻿using BCMWeb.Models;
+﻿using BCMWeb.Data.EF;
+using BCMWeb.Models;
 using DevExpress.Web.Mvc;
 using System;
 using System.Collections.Generic;
@@ -77,6 +78,16 @@ namespace BCMWeb.Controllers
             PersonaModel model = new PersonaModel();
             return PartialView(model);
         }
+        [HttpPost]
+        public ActionResult PersonaPartialView(PersonaModel model)
+        {
+            if (ModelState.IsValid)
+            {
+
+            }
+            return PartialView(model);
+        }
+
         public ActionResult DireccionesPartialView()
         {
             return PartialView();
@@ -89,29 +100,90 @@ namespace BCMWeb.Controllers
         {
             return PartialView();
         }
+        public ActionResult NuevoCargoPartialView()
+        {
+            return PartialView();
+        }
+        public ActionResult NuevaUnidadOrganizativaPartialView()
+        {
+            return PartialView();
+        }
+        [HttpPost]
+        public JsonResult NuevoCargo(string Texto)
+        {
+            string IdCargo = string.Empty;
+
+            long _IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            bool success = false;
+
+            if (Texto != null)
+            {
+                using (Entities db = new Entities())
+                {
+                    tblCargo newCargo = new tblCargo
+                    {
+                        IdEmpresa = _IdEmpresa,
+                        Descripcion = Texto
+                    };
+
+                    db.tblCargo.Add(newCargo);
+                    db.SaveChanges();
+                    IdCargo = newCargo.IdCargo.ToString();
+                    success = true;
+                }
+            }
+            return Json(new { success, IdCargo });
+        }
+        [HttpPost]
+        public JsonResult NuevaUnidad(string Texto, long idUnidadPadre)
+        {
+            string IdUnidad = string.Empty;
+
+            long _IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            bool success = false;
+
+            if (Texto != null)
+            {
+                using (Entities db = new Entities())
+                {
+                    tblUnidadOrganizativa newUnidad = new tblUnidadOrganizativa
+                    {
+                        IdEmpresa = _IdEmpresa,
+                        IdUnidadPadre = idUnidadPadre,
+                        Nombre = Texto
+                    };
+
+                    db.tblUnidadOrganizativa.Add(newUnidad);
+                    db.SaveChanges();
+                    IdUnidad = newUnidad.IdUnidadOrganizativa.ToString();
+                    success = true;
+                }
+            }
+            return Json(new { success, IdUnidad });
+        }
         //[ValidateInput(false)]
         //public ActionResult BatchEditingUpdateCorreo(MVCxGridViewBatchUpdateValues<PersonaEmail, long> updateValues)
         //{
-            //foreach (var product in updateValues.Insert)
-            //{
-            //    if (updateValues.IsValid(product))
-            //        InsertProduct(product, updateValues);
-            //}
-            //foreach (var product in updateValues.Update)
-            //{
-            //    if (updateValues.IsValid(product))
-            //        UpdateProduct(product, updateValues);
-            //}
-            //foreach (var productID in updateValues.DeleteKeys)
-            //{
-            //    DeleteProduct(productID, updateValues);
-            //}
-            //return PartialView("CorreosPartialView", NorthwindDataProvider.GetEditableProducts());
+        //foreach (var product in updateValues.Insert)
+        //{
+        //    if (updateValues.IsValid(product))
+        //        InsertProduct(product, updateValues);
+        //}
+        //foreach (var product in updateValues.Update)
+        //{
+        //    if (updateValues.IsValid(product))
+        //        UpdateProduct(product, updateValues);
+        //}
+        //foreach (var productID in updateValues.DeleteKeys)
+        //{
+        //    DeleteProduct(productID, updateValues);
+        //}
+        //return PartialView("CorreosPartialView", NorthwindDataProvider.GetEditableProducts());
         //}
         //[ValidateInput(false)]
         //public ActionResult BatchEditingUpdateTelefono(MVCxGridViewBatchUpdateValues<PersonaTelefono, long> updateValues)
         //{
-            //return PartialView("BatchEditingPartial", NorthwindDataProvider.GetEditableProducts());
+        //return PartialView("BatchEditingPartial", NorthwindDataProvider.GetEditableProducts());
         //}
     }
 }

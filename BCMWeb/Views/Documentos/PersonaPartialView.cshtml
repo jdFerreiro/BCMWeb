@@ -4,10 +4,10 @@
 
 <script type="text/javascript">
     function botUO_Click() {
-
+        modalUO.Show();
     }
     function botCargo_Click() {
-
+        modalCargo.Show();
     }
     function OnBeginGridCallback()
     {
@@ -16,11 +16,52 @@
     function OnEndGridCallback() {
         lp.Hide();
     }
+    function CreateCargo()
+    {
+        var texto = NombreCargo.GetText();
+        $.ajax({
+            type: 'POST',
+            url: '/Documentos/NuevoCargo',
+            dataType: 'json',
+            data: {
+                Texto: texto
+            },
+            success: function (data) {
+                IdCargoPersona.AddItem(texto, data.IdCargo);
+                IdCargoPersona.SetValue(data.IdCargo);
+                modalCargo.Hide();
+            },
+            error: function () {
+                alert("error");
+            }
+        });
+    }
+    function CreateUnidad() {
+        var texto = NombreUnidadOrganizativa.GetText();
+        var UnidadPadreId = IdUnidadPadre.GetValue();
+
+        $.ajax({
+            type: 'POST',
+            url: '/Documentos/NuevaUnidad',
+            dataType: 'json',
+            data: {
+                Texto: texto,
+                idUnidadPadre: UnidadPadreId
+            },
+            success: function (data) {
+                IdUnidadOrganizativaPersona.AddItem(texto, data.IdUnidad);
+                IdUnidadOrganizativaPersona.SetValue(data.IdUnidad);
+                modalUO.Hide();
+            },
+            error: function () {
+                alert("error");
+            }
+        });
+    }
 </script>
 
 @using (Html.BeginForm("PersonaPartialView", "Documentos", FormMethod.Post, htmlAttributes: new { id = "frmPersona" }))
 {
-
     @Html.DevExpress().FormLayout(s =>
 {
     s.Name = "personaLayout";
@@ -53,7 +94,7 @@
                 tb.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
             });
         });
-        gi.Items.Add(m => m.IdUnidadOrganizativa, i =>
+        gi.Items.Add(m => m.IdUnidadOrganizativaPersona, i =>
         {
             i.NestedExtension().ComboBox(cb =>
             {
@@ -63,7 +104,7 @@
                 //set.Properties.ClientSideEvents.ValueChanged = "UpdatePersona";
                 cb.Properties.ValueType = typeof(long);
                 cb.Properties.DataSource = BCMWeb.Metodos.GetUnidades();
-                cb.Properties.TextField = "Nombre";
+                cb.Properties.TextField = "NombreUnidadOrganizativa";
                 cb.Properties.ValueField = "IdUnidad";
                 cb.Properties.ValidationSettings.Display = Display.Dynamic;
                 cb.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
@@ -77,7 +118,7 @@
 
             });
         });
-        gi.Items.Add(m => m.IdCargo, i =>
+        gi.Items.Add(m => m.IdCargoPersona, i =>
         {
             i.NestedExtension().ComboBox(cb =>
             {
@@ -86,7 +127,7 @@
 
                 cb.Properties.ValueType = typeof(long);
                 cb.Properties.DataSource = BCMWeb.Metodos.GetCargos();
-                cb.Properties.TextField = "Nombre";
+                cb.Properties.TextField = "NombreCargo";
                 cb.Properties.ValueField = "IdCargo";
                 cb.Properties.ValidationSettings.Display = Display.Dynamic;
                 cb.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
@@ -101,20 +142,6 @@
             });
         });
     });
-    //s.Items.AddGroupItem(gi =>
-    //{
-    //    gi.Caption = Resources.FichaResource.personaGrupoDireccion;
-    //    gi.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
-    //    gi.ColCount = 1;
-    //    gi.Items.Add(m => m.Direcciones, i =>
-    //    {
-    //        i.Caption = string.Empty;
-    //        i.SetNestedContent(() =>
-    //        {
-    //            Html.RenderPartial("DireccionesPartialView", Model.Direcciones);
-    //        });
-    //    });
-    //});
     s.Items.AddGroupItem(gi =>
     {
         gi.Caption = Resources.FichaResource.personaGrupoCorreos;
@@ -155,4 +182,45 @@
         });
     });
 }).GetHtml();
-    }
+}
+
+@Html.DevExpress().PopupControl(s =>
+{
+    s.Name = "modalUO";
+    s.CallbackRouteValues = new { Controller = "Documentos", Action = "NuevaUnidadOrganizativaPartialView" };
+    s.Width = 600;
+    s.Height = 150;
+    s.AllowDragging = true;
+    s.CloseAction = CloseAction.CloseButton;
+    s.CloseOnEscape = true;
+    s.PopupAnimationType = AnimationType.Slide;
+    s.HeaderText = Resources.FichaResource.headerPopupUnidadOrganizativa;
+    s.Modal = true;
+    s.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    s.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    s.ScrollBars = ScrollBars.None;
+    s.SetContent(() =>
+    {
+        Html.RenderPartial("NuevaUnidadOrganizativaPartialView", new UnidadOrganizativaModel());
+    });
+}).GetHtml();
+@Html.DevExpress().PopupControl(s =>
+{
+    s.Name = "modalCargo";
+    s.CallbackRouteValues = new { Controller = "Documentos", Action = "NuevoCargoPartialView" };
+    s.Width = 600;
+    s.AllowDragging = true;
+    s.CloseAction = CloseAction.CloseButton;
+    s.CloseOnEscape = true;
+    s.PopupAnimationType = AnimationType.Slide;
+    s.HeaderText = Resources.FichaResource.headerPopupCargo;
+    s.Modal = true;
+    s.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    s.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    s.ScrollBars = ScrollBars.None;
+    s.ClientSideEvents.CloseUp = "function(s, e){ NombreCargo.SetValue(''); }";
+    s.SetContent(() =>
+    {
+        Html.RenderPartial("NuevoCargoPartialView", new CargoModel());
+    });
+}).GetHtml();

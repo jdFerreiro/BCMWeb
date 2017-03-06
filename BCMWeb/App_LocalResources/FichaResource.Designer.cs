@@ -70,7 +70,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cargo:.
+        ///   Looks up a localized string similar to Cargo.
         /// </summary>
         public static string captionCargo {
             get {
@@ -295,6 +295,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unidad Padre.
+        /// </summary>
+        public static string captionUnidadPadre {
+            get {
+                return ResourceManager.GetString("captionUnidadPadre", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unidad Organizativa.
         /// </summary>
         public static string captionUO {
@@ -318,6 +327,24 @@ namespace Resources {
         public static string headerPopup {
             get {
                 return ResourceManager.GetString("headerPopup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Registro de Cargos.
+        /// </summary>
+        public static string headerPopupCargo {
+            get {
+                return ResourceManager.GetString("headerPopupCargo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Registro de Unidades Organizativas.
+        /// </summary>
+        public static string headerPopupUnidadOrganizativa {
+            get {
+                return ResourceManager.GetString("headerPopupUnidadOrganizativa", resourceCulture);
             }
         }
         

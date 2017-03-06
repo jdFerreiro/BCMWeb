@@ -20,17 +20,22 @@ namespace BCMWeb.Models
         public string Identificacion { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "RequiredErrorFemale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
         [Display(Name = "captionUO", ResourceType = typeof(Resources.FichaResource))]
-        public long IdUnidadOrganizativa { get; set; }
+        [Range(1, long.MaxValue, ErrorMessageResourceName = "RequiredErrorFemale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
+        public long IdUnidadOrganizativaPersona { get; set; }
         [Display(Name = "captionUO", ResourceType = typeof(Resources.FichaResource))]
-        public string UnidadOrganizativa { get; set; }
+        public UnidadOrganizativaModel UnidadOrganizativa { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
         [Display(Name = "captionCargo", ResourceType = typeof(Resources.FichaResource))]
-        public long IdCargo { get; set; }
+        [Range(1, long.MaxValue, ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
+        public long IdCargoPersona { get; set; }
         [Display(Name = "captionCargo", ResourceType = typeof(Resources.FichaResource))]
-        public string Cargo { get; set; }
+        public CargoModel Cargo { get; set; }
         public long IdUsuario { get; set; }
+        [EnsureOneElement(ErrorMessageResourceType = typeof(Resources.ErrorResource), ErrorMessageResourceName = "RequiredErrorMale" )]
         public IList<PersonaEmail> CorreosElectronicos { get; set; }
+        [EnsureOneElement(ErrorMessageResourceType = typeof(Resources.ErrorResource), ErrorMessageResourceName = "RequiredErrorMale")]
         public IList<PersonaDireccion> Direcciones { get; set; }
+        [EnsureOneElement(ErrorMessageResourceType = typeof(Resources.ErrorResource), ErrorMessageResourceName = "RequiredErrorMale")]
         public IList<PersonaTelefono> Telefonos { get; set; }
 
         public PersonaModel()
@@ -152,11 +157,15 @@ namespace BCMWeb.Models
     {
         public long IdUnidad { get; set; }
         public long IdUnidadPadre { get; set; }
-        public string Nombre { get; set; }
+        [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "RequiredErrorFemale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
+        [Display(Name = "captionUO", ResourceType = typeof(Resources.FichaResource))]
+        public string NombreUnidadOrganizativa { get; set; }
     }
     public class CargoModel
     {
         public long IdCargo { get; set; }
-        public string Nombre { get; set; }
+        [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
+        [Display(Name = "captionCargo", ResourceType = typeof(Resources.FichaResource))]
+        public string NombreCargo { get; set; }
     }
 }

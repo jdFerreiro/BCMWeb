@@ -3,9 +3,12 @@
 
 <script type="text/javascript">
     function OnClick(s, e) {
-        if ($("#editForm").valid()) {
-            lp.Hide();
-        }
+        if ($("#editForm").valid() && $("#IsValid").val() == 'true') {
+            lp.Show();
+        };
+        //if ($("#editForm").valid()) {
+        //    lp.Hide();
+        //}
         // if ($("#editForm").valid())
         //lp.Show();
         //var isValid = ASPxClientEdit.AreEditorsValid();
@@ -28,7 +31,7 @@
     @using (Html.BeginForm("Login","Account", FormMethod.Post, htmlAttributes: new { id = "editForm" }))
     {
         @Html.AntiForgeryToken()
-        @Html.Hidden("IsValid", ViewContext.ViewData.ModelState.IsValid)
+        @Html.Hidden("IsValid", ViewData.ModelState.IsValid.ToString().ToLower())
 
         @Html.DevExpress().TextBoxFor(m => m.UserName, tb =>
         {
@@ -37,8 +40,7 @@
             tb.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
             tb.ShowModelErrors = true;
             tb.Properties.ValidationSettings.Display = Display.Dynamic;
-            tb.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.Text;
-            tb.Properties.ValidationSettings.ErrorTextPosition = ErrorTextPosition.Bottom;
+            tb.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
         }).GetHtml()
 
         @Html.DevExpress().TextBoxFor(m => m.Password, tb =>
@@ -49,8 +51,7 @@
             tb.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
             tb.ShowModelErrors = true;
             tb.Properties.ValidationSettings.Display = Display.Dynamic;
-            tb.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.Text;
-            tb.Properties.ValidationSettings.ErrorTextPosition = ErrorTextPosition.Bottom;
+            tb.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
         }).GetHtml()
 
         <br />
