@@ -186,4 +186,34 @@
   <data name="InvalidoErrorMale" xml:space="preserve">
     <value>El {0} registrado no es válido.</value>
   </data>
+  <data name="RemoteDireccion" xml:space="preserve">
+    <value>Debe registrar al menos una dirección</value>
+  </data>
+  <data name="RemoteEmail" xml:space="preserve">
+    <value>Debe registrar al menos un correo electrónico</value>
+  </data>
+  <data name="RemoteTelefono" xml:space="preserve">
+    <value>Debe registrar al menos un número telefónico</value>
+  </data>
+  <data name="ErrorEntrevistas" xml:space="preserve">
+    <value>Debe registrar al menos una entrevista</value>
+  </data>
+  <data name="ErrorPersonasClaves" xml:space="preserve">
+    <value>Debe registar al menos una persona clave</value>
+  </data>
+  <data name="ErrorProcesos" xml:space="preserve">
+    <value>Debe registar al menos un proceso</value>
+  </data>
+  <data name="RegexErrorFemale" xml:space="preserve">
+    <value>El {0} no es válida.</value>
+  </data>
+  <data name="RegexErrorMale" xml:space="preserve">
+    <value>El {0} no es válido.</value>
+  </data>
+  <data name="ErrorAprobaciones" xml:space="preserve">
+    <value>Por favor registre al menos un aprobador</value>
+  </data>
+  <data name="ErrorCertificaciones" xml:space="preserve">
+    <value>Por favor registre al menos un certificador</value>
+  </data>
 </root>

@@ -15,7 +15,7 @@ namespace BCMWeb.Controllers
         {
 
             string _IdModulo = IdModulo.ToString();
-            int IdTipoDocumento = int.Parse(_IdModulo.Length == 7 ? _IdModulo.Substring(0, 1) : _IdModulo.Substring(0, 2));
+            int IdTipoDocumento = int.Parse(_IdModulo.Substring(0, (_IdModulo.Length == 7 ? 1 : 2)));
 
             DocumentosModel model = new DocumentosModel();
             model.EditDocumento = false;
@@ -31,6 +31,9 @@ namespace BCMWeb.Controllers
         [HttpPost]
         public ActionResult Index(DocumentosModel model)
         {
+            string _IdModulo = model.IdModulo.ToString();
+            int IdTipoDocumento = int.Parse(_IdModulo.Substring(0, (_IdModulo.Length == 7 ? 1 : 2)));
+            model.Documentos = Metodos.GetDocumentosModulo(IdTipoDocumento, (model.IdClaseDocumento == 1));
             return View(model);
         }
         public ActionResult EditarDocumento(long IdDocumento, int IdClaseDocumento, long IdModulo, int IdVersion = 0)

@@ -286,6 +286,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No. de Cédula.
+        /// </summary>
+        public static string captionIdentificacion {
+            get {
+                return ResourceManager.GetString("captionIdentificacion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cédula.
         /// </summary>
         public static string captionIdentificacionPersonaClave {
@@ -471,6 +480,15 @@ namespace Resources {
         public static string captionVersionAnterior {
             get {
                 return ResourceManager.GetString("captionVersionAnterior", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Registre su número de cédula.
+        /// </summary>
+        public static string helpTextIdentificacion {
+            get {
+                return ResourceManager.GetString("helpTextIdentificacion", resourceCulture);
             }
         }
         

@@ -6,17 +6,6 @@
         if ($("#editForm").valid() && $("#IsValid").val() == 'true') {
             lp.Show();
         };
-        //if ($("#editForm").valid()) {
-        //    lp.Hide();
-        //}
-        // if ($("#editForm").valid())
-        //lp.Show();
-        //var isValid = ASPxClientEdit.AreEditorsValid();
-        //alert(isValid);
-        //e.processOnServer=isValid;
-        //if(!isValid) {
-        //    lp.Hide();
-        //}
     }
 </script>
 
@@ -39,6 +28,8 @@
             tb.Properties.Caption = Resources.LoginResource.captionUsername;
             tb.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
             tb.ShowModelErrors = true;
+            tb.Properties.HelpText = Resources.LoginResource.helpTextEmail;
+            tb.Properties.HelpTextSettings.Position = HelpTextPosition.Bottom;
             tb.Properties.ValidationSettings.Display = Display.Dynamic;
             tb.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
         }).GetHtml()
@@ -46,10 +37,12 @@
         @Html.DevExpress().TextBoxFor(m => m.Password, tb =>
         {
             tb.Width = Unit.Percentage(100);
+            tb.ShowModelErrors = true;
             tb.Properties.Caption = Resources.LoginResource.captionPassword;
+            tb.Properties.HelpText = Resources.LoginResource.helpTextPassword;
+            tb.Properties.HelpTextSettings.Position = HelpTextPosition.Bottom;
             tb.Properties.Password = true;
             tb.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
-            tb.ShowModelErrors = true;
             tb.Properties.ValidationSettings.Display = Display.Dynamic;
             tb.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
         }).GetHtml()

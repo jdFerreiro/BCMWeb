@@ -11,8 +11,13 @@ namespace BCMWeb.Models
     {
         public long IdDocumentoSelected { get; set; }
         public IList<DocumentoModel> Documentos { get; set; }
+
+        public DocumentosModel()
+        {
+            Documentos = new List<DocumentoModel>();
+        }
     }
-    public class DocumentoModel 
+    public class DocumentoModel : ModulosUserModel
     {
         [Display(Name = "captionDocumento", ResourceType = typeof(Resources.DocumentoResource))]
         public long IdDocumento { get; set; }
@@ -40,6 +45,7 @@ namespace BCMWeb.Models
         public int VersionOriginal { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
         [Display(Name = "captionResponsable", ResourceType = typeof(Resources.DocumentoResource))]
+        [Range(1, long.MaxValue, ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
         public long IdPersonaResponsable { get; set; }
         [Display(Name = "captionResponsable", ResourceType = typeof(Resources.DocumentoResource))]
         public PersonaModel Responsable
@@ -59,8 +65,21 @@ namespace BCMWeb.Models
         public IEnumerable<DocumentoEntrevistaModel> Entrevistas { get; set; }
         public IEnumerable<DocumentoPersonaClaveModel> PersonasClave { get; set; }
         public IEnumerable<DocumentoProcesoModel> Procesos { get; set; }
-    }
+        public bool Updated { get; set; }
 
+        public DocumentoModel()
+        {
+            this.Anexos = new List<DocumentoAnexoModel>();
+            this.Aprobaciones = new List<DocumentoAprobacionModel>();
+            this.Auditoria = new List<DocumentoAuditoriaModel>();
+            this.Certificaciones = new List<DocumentoCertificacionModel>();
+            this.Contenido = new List<DocumentoContenidoModel>();
+            this.Entrevistas = new List< DocumentoEntrevistaModel>();
+            this.PersonasClave = new List<DocumentoPersonaClaveModel>();
+            this.Procesos = new List<DocumentoProcesoModel>();
+            this.Updated = false;
+    }
+}
     public class DocumentoAnexoModel
     {
         public long IdEmpresa { get; set; }
@@ -89,6 +108,7 @@ namespace BCMWeb.Models
         public bool Aprobado { get; set; }
         [Display(Name = "captionProcesado", ResourceType = typeof(Resources.DocumentoResource))]
         public bool Procesado { get; set; }
+        public bool Responsable { get; set; }
     }
     public class DocumentoAuditoriaModel
     {
@@ -130,6 +150,7 @@ namespace BCMWeb.Models
         public bool Certificado { get; set; }
         [Display(Name = "captionProcesado", ResourceType = typeof(Resources.DocumentoResource))]
         public bool Procesado { get; set; }
+        public bool Responsable { get; set; }
     }
     public class DocumentoContenidoModel
     {
@@ -159,6 +180,11 @@ namespace BCMWeb.Models
         public DateTime Final { get; set; }
         [Display(Name = "captionParticipantes", ResourceType = typeof(Resources.DocumentoResource))]
         public IEnumerable<DocumentoEntrevistaPersonaModel> Personas { get; set; }
+
+        public DocumentoEntrevistaModel()
+        {
+            Personas = new List<DocumentoEntrevistaPersonaModel>();
+        }
     }
     public class DocumentoEntrevistaPersonaModel
     {
@@ -214,6 +240,8 @@ namespace BCMWeb.Models
         public string DireccionHabitacion { get; set; }
         [Display(Name = "captionPrincipalPersonaClave", ResourceType = typeof(Resources.DocumentoResource))]
         public bool Principal { get; set; }
+        public bool Responsable { get; set; }
+
     }
     public class DocumentoProcesoModel
     {

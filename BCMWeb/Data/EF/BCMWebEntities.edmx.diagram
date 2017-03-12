@@ -5,166 +5,164 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="6db4d287fd974ea8948f35d9fbdff473" Name="Diagram1" ZoomLevel="66">
-        <EntityTypeShape EntityType="BCMWeb.tblAuditoria" Width="1.5" PointX="7.5" PointY="184.5" />
-        <EntityTypeShape EntityType="BCMWeb.tblAuditoriaProcesoCritico" Width="1.5" PointX="5.25" PointY="192.25" />
-        <EntityTypeShape EntityType="BCMWeb.tblBCPDocumento" Width="1.5" PointX="5.25" PointY="132.375" />
-        <EntityTypeShape EntityType="BCMWeb.tblBCPReanudacionPersonaClave" Width="1.5" PointX="9.75" PointY="153" />
-        <EntityTypeShape EntityType="BCMWeb.tblBCPReanudacionTarea" Width="1.5" PointX="7.5" PointY="118.375" />
-        <EntityTypeShape EntityType="BCMWeb.tblBCPReanudacionTareaActividad" Width="1.5" PointX="9.75" PointY="118.375" />
-        <EntityTypeShape EntityType="BCMWeb.tblBCPRecuperacionPersonaClave" Width="1.5" PointX="12.75" PointY="144" />
-        <EntityTypeShape EntityType="BCMWeb.tblBCPRecuperacionRecurso" Width="1.5" PointX="7.5" PointY="146.375" />
-        <EntityTypeShape EntityType="BCMWeb.tblBCPRespuestaAccion" Width="1.5" PointX="7.5" PointY="159" />
-        <EntityTypeShape EntityType="BCMWeb.tblBCPRespuestaRecurso" Width="1.5" PointX="7.5" PointY="153.125" />
-        <EntityTypeShape EntityType="BCMWeb.tblBCPRestauracionEquipo" Width="1.5" PointX="7.5" PointY="150.25" />
-        <EntityTypeShape EntityType="BCMWeb.tblBCPRestauracionInfraestructura" Width="1.5" PointX="7.5" PointY="156" />
-        <EntityTypeShape EntityType="BCMWeb.tblBCPRestauracionMobiliario" Width="1.5" PointX="7.5" PointY="143.5" />
-        <EntityTypeShape EntityType="BCMWeb.tblBCPRestauracionOtro" Width="1.5" PointX="7.5" PointY="122.375" />
-        <EntityTypeShape EntityType="BCMWeb.tblBIAAmenaza" Width="1.5" PointX="15" PointY="196.25" />
-        <EntityTypeShape EntityType="BCMWeb.tblBIAAmenazaEvento" Width="1.5" PointX="17.25" PointY="196.125" />
-        <EntityTypeShape EntityType="BCMWeb.tblBIAAplicacion" Width="1.5" PointX="15" PointY="225" />
-        <EntityTypeShape EntityType="BCMWeb.tblBIACadenaServicio" Width="1.5" PointX="5.25" PointY="115" />
-        <EntityTypeShape EntityType="BCMWeb.tblBIAClienteProducto" Width="1.5" PointX="15" PointY="199.625" />
-        <EntityTypeShape EntityType="BCMWeb.tblBIAComentario" Width="1.5" PointX="12.75" PointY="178.625" />
-        <EntityTypeShape EntityType="BCMWeb.tblBIAControlRiesgo" Width="1.5" PointX="5.25" PointY="178.375" />
-        <EntityTypeShape EntityType="BCMWeb.tblBIADocumentacion" Width="1.5" PointX="15" PointY="219" />
-        <EntityTypeShape EntityType="BCMWeb.tblBIADocumento" Width="1.5" PointX="10.5" PointY="172.375" />
-        <EntityTypeShape EntityType="BCMWeb.tblBIAEntrada" Width="1.5" PointX="15" PointY="228.125" />
-        <EntityTypeShape EntityType="BCMWeb.tblBIAEstadoRiesgo" Width="1.5" PointX="5.25" PointY="112" />
-        <EntityTypeShape EntityType="BCMWeb.tblBIAEventoControl" Width="1.5" PointX="19.5" PointY="196.125" />
-        <EntityTypeShape EntityType="BCMWeb.tblBIAEventoRiesgo" Width="1.5" PointX="7.5" PointY="170.125" />
-        <EntityTypeShape EntityType="BCMWeb.tblBIAFuenteRiesgo" Width="1.5" PointX="5.25" PointY="210.25" />
-        <EntityTypeShape EntityType="BCMWeb.tblBIAGranImpacto" Width="1.5" PointX="15" PointY="192.75" />
-        <EntityTypeShape EntityType="BCMWeb.tblBIAImpactoFinanciero" Width="1.5" PointX="12.75" PointY="171.25" />
-        <EntityTypeShape EntityType="BCMWeb.tblBIAImpactoOperacional" Width="1.5" PointX="15" PointY="162.375" />
-        <EntityTypeShape EntityType="BCMWeb.tblBIAInterdependencia" Width="1.5" PointX="15" PointY="206.5" />
-        <EntityTypeShape EntityType="BCMWeb.tblBIAMTD" Width="1.5" PointX="15" PointY="166.5" />
-        <EntityTypeShape EntityType="BCMWeb.tblBIAPersonaRespaldoProceso" Width="1.5" PointX="15" PointY="178.875" />
-        <EntityTypeShape EntityType="BCMWeb.tblBIAProbabilidadRiesgo" Width="1.5" PointX="5.25" PointY="201.125" />
-        <EntityTypeShape EntityType="BCMWeb.tblBIAProceso" Width="1.5" PointX="12.75" PointY="190.625" />
-        <EntityTypeShape EntityType="BCMWeb.tblBIAProcesoAlterno" Width="1.5" PointX="15" PointY="216.125" />
-        <EntityTypeShape EntityType="BCMWeb.tblBIAProveedor" Width="1.5" PointX="15" PointY="212.75" />
-        <EntityTypeShape EntityType="BCMWeb.tblBIARespaldoPrimario" Width="1.5" PointX="15" PointY="222.125" />
-        <EntityTypeShape EntityType="BCMWeb.tblBIARespaldoSecundario" Width="1.5" PointX="15" PointY="209.875" />
-        <EntityTypeShape EntityType="BCMWeb.tblBIARPO" Width="1.5" PointX="21" PointY="168.625" />
-        <EntityTypeShape EntityType="BCMWeb.tblBIARTO" Width="1.5" PointX="21" PointY="164.625" />
-        <EntityTypeShape EntityType="BCMWeb.tblBIAUnidadTrabajo" Width="1.5" PointX="7.5" PointY="174.625" />
-        <EntityTypeShape EntityType="BCMWeb.tblBIAUnidadTrabajoPersonas" Width="1.5" PointX="12" PointY="183.625" />
-        <EntityTypeShape EntityType="BCMWeb.tblBIAUnidadTrabajoProceso" Width="1.5" PointX="9.75" PointY="183.75" />
-        <EntityTypeShape EntityType="BCMWeb.tblCargo" Width="1.5" PointX="5.25" PointY="117.5" />
-        <EntityTypeShape EntityType="BCMWeb.tblCiudad" Width="1.5" PointX="10.5" PointY="187.625" />
-        <EntityTypeShape EntityType="BCMWeb.tblCultura_Ciudad" Width="1.5" PointX="12.75" PointY="201.875" />
-        <EntityTypeShape EntityType="BCMWeb.tblCultura_Estado" Width="1.5" PointX="10.5" PointY="198.875" />
-        <EntityTypeShape EntityType="BCMWeb.tblCultura_EstadoDocumento" Width="1.5" PointX="15.75" PointY="139.5" />
-        <EntityTypeShape EntityType="BCMWeb.tblCultura_EstadoEmpresa" Width="1.5" PointX="3" PointY="158.5" />
-        <EntityTypeShape EntityType="BCMWeb.tblCultura_EstadoProceso" Width="1.5" PointX="12.75" PointY="205.25" />
-        <EntityTypeShape EntityType="BCMWeb.tblCultura_EstadoUsuario" Width="1.5" PointX="5.25" PointY="157.25" />
-        <EntityTypeShape EntityType="BCMWeb.tblCultura_Mes" Width="1.5" PointX="15" PointY="187.25" />
+        <EntityTypeShape EntityType="BCMWeb.tblAuditoriaProcesoCritico" Width="1.5" PointX="5.25" PointY="200" />
+        <EntityTypeShape EntityType="BCMWeb.tblBCPDocumento" Width="1.5" PointX="8.25" PointY="133.125" />
+        <EntityTypeShape EntityType="BCMWeb.tblBCPReanudacionPersonaClave" Width="1.5" PointX="12.75" PointY="155.25" />
+        <EntityTypeShape EntityType="BCMWeb.tblBCPReanudacionTarea" Width="1.5" PointX="10.5" PointY="124.25" />
+        <EntityTypeShape EntityType="BCMWeb.tblBCPReanudacionTareaActividad" Width="1.5" PointX="12.75" PointY="124.125" />
+        <EntityTypeShape EntityType="BCMWeb.tblBCPRecuperacionPersonaClave" Width="1.5" PointX="15.75" PointY="150.25" />
+        <EntityTypeShape EntityType="BCMWeb.tblBCPRecuperacionRecurso" Width="1.5" PointX="10.5" PointY="158.25" />
+        <EntityTypeShape EntityType="BCMWeb.tblBCPRespuestaAccion" Width="1.5" PointX="10.5" PointY="139.125" />
+        <EntityTypeShape EntityType="BCMWeb.tblBCPRespuestaRecurso" Width="1.5" PointX="10.5" PointY="127.25" />
+        <EntityTypeShape EntityType="BCMWeb.tblBCPRestauracionEquipo" Width="1.5" PointX="10.5" PointY="161.25" />
+        <EntityTypeShape EntityType="BCMWeb.tblBCPRestauracionInfraestructura" Width="1.5" PointX="10.5" PointY="155.125" />
+        <EntityTypeShape EntityType="BCMWeb.tblBCPRestauracionMobiliario" Width="1.5" PointX="10.5" PointY="130.125" />
+        <EntityTypeShape EntityType="BCMWeb.tblBCPRestauracionOtro" Width="1.5" PointX="10.5" PointY="149.5" />
+        <EntityTypeShape EntityType="BCMWeb.tblBIAAmenaza" Width="1.5" PointX="12" PointY="223" />
+        <EntityTypeShape EntityType="BCMWeb.tblBIAAmenazaEvento" Width="1.5" PointX="14.25" PointY="222.75" />
+        <EntityTypeShape EntityType="BCMWeb.tblBIAAplicacion" Width="1.5" PointX="12" PointY="213.625" />
+        <EntityTypeShape EntityType="BCMWeb.tblBIACadenaServicio" Width="1.5" PointX="5.25" PointY="168.375" />
+        <EntityTypeShape EntityType="BCMWeb.tblBIAClienteProducto" Width="1.5" PointX="12" PointY="206.875" />
+        <EntityTypeShape EntityType="BCMWeb.tblBIAComentario" Width="1.5" PointX="9.75" PointY="180.625" />
+        <EntityTypeShape EntityType="BCMWeb.tblBIAControlRiesgo" Width="1.5" PointX="5.25" PointY="157.75" />
+        <EntityTypeShape EntityType="BCMWeb.tblBIADocumentacion" Width="1.5" PointX="12" PointY="219.625" />
+        <EntityTypeShape EntityType="BCMWeb.tblBIADocumento" Width="1.5" PointX="7.5" PointY="174.125" />
+        <EntityTypeShape EntityType="BCMWeb.tblBIAEntrada" Width="1.5" PointX="12" PointY="210.375" />
+        <EntityTypeShape EntityType="BCMWeb.tblBIAEstadoRiesgo" Width="1.5" PointX="5.25" PointY="215.5" />
+        <EntityTypeShape EntityType="BCMWeb.tblBIAEventoControl" Width="1.5" PointX="16.5" PointY="222.75" />
+        <EntityTypeShape EntityType="BCMWeb.tblBIAEventoRiesgo" Width="1.5" PointX="7.5" PointY="158.375" />
+        <EntityTypeShape EntityType="BCMWeb.tblBIAFuenteRiesgo" Width="1.5" PointX="5.25" PointY="120" />
+        <EntityTypeShape EntityType="BCMWeb.tblBIAGranImpacto" Width="1.5" PointX="12" PointY="193" />
+        <EntityTypeShape EntityType="BCMWeb.tblBIAImpactoFinanciero" Width="1.5" PointX="12.75" PointY="176" />
+        <EntityTypeShape EntityType="BCMWeb.tblBIAImpactoOperacional" Width="1.5" PointX="18" PointY="165.5" />
+        <EntityTypeShape EntityType="BCMWeb.tblBIAInterdependencia" Width="1.5" PointX="12" PointY="226.25" />
+        <EntityTypeShape EntityType="BCMWeb.tblBIAMTD" Width="1.5" PointX="21" PointY="165.625" />
+        <EntityTypeShape EntityType="BCMWeb.tblBIAPersonaRespaldoProceso" Width="1.5" PointX="12.75" PointY="181" />
+        <EntityTypeShape EntityType="BCMWeb.tblBIAProbabilidadRiesgo" Width="1.5" PointX="5.25" PointY="194.125" />
+        <EntityTypeShape EntityType="BCMWeb.tblBIAProceso" Width="1.5" PointX="9.75" PointY="190.75" />
+        <EntityTypeShape EntityType="BCMWeb.tblBIAProcesoAlterno" Width="1.5" PointX="12" PointY="232.875" />
+        <EntityTypeShape EntityType="BCMWeb.tblBIAProveedor" Width="1.5" PointX="12" PointY="229.625" />
+        <EntityTypeShape EntityType="BCMWeb.tblBIARespaldoPrimario" Width="1.5" PointX="12" PointY="200.375" />
+        <EntityTypeShape EntityType="BCMWeb.tblBIARespaldoSecundario" Width="1.5" PointX="12" PointY="216.75" />
+        <EntityTypeShape EntityType="BCMWeb.tblBIARPO" Width="1.5" PointX="20" PointY="173.625" />
+        <EntityTypeShape EntityType="BCMWeb.tblBIARTO" Width="1.5" PointX="23" PointY="169.625" />
+        <EntityTypeShape EntityType="BCMWeb.tblBIAUnidadTrabajo" Width="1.5" PointX="10.5" PointY="172.375" />
+        <EntityTypeShape EntityType="BCMWeb.tblBIAUnidadTrabajoPersonas" Width="1.5" PointX="15" PointY="172.375" />
+        <EntityTypeShape EntityType="BCMWeb.tblBIAUnidadTrabajoProceso" Width="1.5" PointX="12.75" PointY="172.5" />
+        <EntityTypeShape EntityType="BCMWeb.tblBIAWRT" Width="1.5" PointX="20" PointY="169.625" />
+        <EntityTypeShape EntityType="BCMWeb.tblCargo" Width="1.5" PointX="5.25" PointY="197" />
+        <EntityTypeShape EntityType="BCMWeb.tblCiudad" Width="1.5" PointX="3" PointY="148.375" />
+        <EntityTypeShape EntityType="BCMWeb.tblCultura_Ciudad" Width="1.5" PointX="5.25" PointY="148.625" />
+        <EntityTypeShape EntityType="BCMWeb.tblCultura_Estado" Width="1.5" PointX="3" PointY="152.625" />
+        <EntityTypeShape EntityType="BCMWeb.tblCultura_EstadoDocumento" Width="1.5" PointX="13.5" PointY="141.875" />
+        <EntityTypeShape EntityType="BCMWeb.tblCultura_EstadoEmpresa" Width="1.5" PointX="3" PointY="158.125" />
+        <EntityTypeShape EntityType="BCMWeb.tblCultura_EstadoProceso" Width="1.5" PointX="9.75" PointY="199.5" />
+        <EntityTypeShape EntityType="BCMWeb.tblCultura_EstadoUsuario" Width="1.5" PointX="3" PointY="122.25" />
+        <EntityTypeShape EntityType="BCMWeb.tblCultura_Mes" Width="1.5" PointX="12" PointY="187.5" />
         <EntityTypeShape EntityType="BCMWeb.tblCultura_NivelImpacto" Width="1.5" PointX="3" PointY="9.875" />
-        <EntityTypeShape EntityType="BCMWeb.tblCultura_NivelUsuario" Width="1.5" PointX="8.25" PointY="109" />
-        <EntityTypeShape EntityType="BCMWeb.tblCultura_Pais" Width="1.5" PointX="8.25" PointY="191.625" />
-        <EntityTypeShape EntityType="BCMWeb.tblCultura_PlanTrabajoEstatus" Width="1.5" PointX="7.5" PointY="114.875" />
-        <EntityTypeShape EntityType="BCMWeb.tblCultura_TipoCorreo" Width="1.5" PointX="9.75" PointY="195.875" />
-        <EntityTypeShape EntityType="BCMWeb.tblCultura_TipoDireccion" Width="1.5" PointX="12.75" PointY="125.125" />
-        <EntityTypeShape EntityType="BCMWeb.tblCultura_TipoEscala" Width="1.5" PointX="5.25" PointY="125" />
-        <EntityTypeShape EntityType="BCMWeb.tblCultura_TipoFrecuencia" Width="1.5" PointX="21" PointY="135.5" />
+        <EntityTypeShape EntityType="BCMWeb.tblCultura_NivelUsuario" Width="1.5" PointX="5.25" PointY="142.25" />
+        <EntityTypeShape EntityType="BCMWeb.tblCultura_Pais" Width="1.5" PointX="11.25" PointY="142.375" />
+        <EntityTypeShape EntityType="BCMWeb.tblCultura_PlanTrabajoEstatus" Width="1.5" PointX="7.5" PointY="150.625" />
+        <EntityTypeShape EntityType="BCMWeb.tblCultura_TipoCorreo" Width="1.5" PointX="17.75" PointY="193.75" />
+        <EntityTypeShape EntityType="BCMWeb.tblCultura_TipoDireccion" Width="1.5" PointX="15.75" PointY="137.75" />
+        <EntityTypeShape EntityType="BCMWeb.tblCultura_TipoFrecuencia" Width="1.5" PointX="22.75" PointY="136.875" />
         <EntityTypeShape EntityType="BCMWeb.tblCultura_TipoImpacto" Width="1.5" PointX="8" PointY="6.875" />
         <EntityTypeShape EntityType="BCMWeb.tblCultura_TipoInterdependencia" Width="1.5" PointX="3" PointY="6.875" />
         <EntityTypeShape EntityType="BCMWeb.tblCultura_TipoRespaldo" Width="1.5" PointX="8" PointY="3.875" />
         <EntityTypeShape EntityType="BCMWeb.tblCultura_TipoResultadoPrueba" Width="1.5" PointX="8" PointY="0.875" />
         <EntityTypeShape EntityType="BCMWeb.tblCultura_TipoTablaContenido" Width="1.5" PointX="3" PointY="3.875" />
-        <EntityTypeShape EntityType="BCMWeb.tblCultura_TipoTelefono" Width="1.5" PointX="12.75" PointY="198.875" />
+        <EntityTypeShape EntityType="BCMWeb.tblCultura_TipoTelefono" Width="1.5" PointX="15.75" PointY="190.75" />
         <EntityTypeShape EntityType="BCMWeb.tblCultura_TipoUbicacionInformacion" Width="1.5" PointX="3" PointY="0.875" />
-        <EntityTypeShape EntityType="BCMWeb.tblDocumento" Width="1.5" PointX="15.75" PointY="146.375" />
-        <EntityTypeShape EntityType="BCMWeb.tblDocumentoAnexo" Width="1.5" PointX="18" PointY="152.125" />
-        <EntityTypeShape EntityType="BCMWeb.tblDocumentoAprobacion" Width="1.5" PointX="20" PointY="156.375" />
-        <EntityTypeShape EntityType="BCMWeb.tblDocumentoAuditoria" Width="1.5" PointX="18" PointY="139.25" />
-        <EntityTypeShape EntityType="BCMWeb.tblDocumentoCertificacion" Width="1.5" PointX="21" PointY="160.375" />
-        <EntityTypeShape EntityType="BCMWeb.tblDocumentoContenido" Width="1.5" PointX="18" PointY="169.75" />
-        <EntityTypeShape EntityType="BCMWeb.tblDocumentoEntrevista" Width="1.5" PointX="18" PointY="173" />
-        <EntityTypeShape EntityType="BCMWeb.tblDocumentoEntrevistaPersona" Width="1.5" PointX="20.25" PointY="172.875" />
-        <EntityTypeShape EntityType="BCMWeb.tblDocumentoPersonaClave" Width="1.5" PointX="18" PointY="146.5" />
-        <EntityTypeShape EntityType="BCMWeb.tblEmpresa" Width="1.5" PointX="3" PointY="129.625" />
-        <EntityTypeShape EntityType="BCMWeb.tblEmpresaModulo" Width="1.5" PointX="7.5" PointY="178.5" />
-        <EntityTypeShape EntityType="BCMWeb.tblEmpresaUsuario" Width="1.5" PointX="8.25" PointY="133.75" />
-        <EntityTypeShape EntityType="BCMWeb.tblEscala" Width="1.5" PointX="5.25" PointY="128.25" />
-        <EntityTypeShape EntityType="BCMWeb.tblEstado" Width="1.5" PointX="8.25" PointY="187.75" />
-        <EntityTypeShape EntityType="BCMWeb.tblEstadoDocumento" Width="1.5" PointX="13.5" PointY="139.625" />
-        <EntityTypeShape EntityType="BCMWeb.tblEstadoEmpresa" Width="1.5" PointX="0.75" PointY="135.375" />
-        <EntityTypeShape EntityType="BCMWeb.tblEstadoProceso" Width="1.5" PointX="10.5" PointY="193.375" />
-        <EntityTypeShape EntityType="BCMWeb.tblEstadoUsuario" Width="1.5" PointX="3" PointY="165.875" />
-        <EntityTypeShape EntityType="BCMWeb.tblFrecuencia" Width="1.5" PointX="5.25" PointY="172.125" />
-        <EntityTypeShape EntityType="BCMWeb.tblImpactoRiesgo" Width="1.5" PointX="5.25" PointY="175.625" />
-        <EntityTypeShape EntityType="BCMWeb.tblLocalidad" Width="1.5" PointX="8.25" PointY="129.375" />
-        <EntityTypeShape EntityType="BCMWeb.tblMes" Width="1.5" PointX="12.75" PointY="187.375" />
-        <EntityTypeShape EntityType="BCMWeb.tblModulo" Width="1.5" PointX="5.25" PointY="216.75" />
-        <EntityTypeShape EntityType="BCMWeb.tblModulo_NivelUsuario" Width="1.5" PointX="10.5" PointY="176.25" />
-        <EntityTypeShape EntityType="BCMWeb.tblModuloAnexo" Width="1.5" PointX="5.25" PointY="160.75" />
+        <EntityTypeShape EntityType="BCMWeb.tblDocumento" Width="1.5" PointX="13.5" PointY="147.75" />
+        <EntityTypeShape EntityType="BCMWeb.tblDocumentoAnexo" Width="1.5" PointX="15.75" PointY="157.75" />
+        <EntityTypeShape EntityType="BCMWeb.tblDocumentoAprobacion" Width="1.5" PointX="18.75" PointY="161" />
+        <EntityTypeShape EntityType="BCMWeb.tblDocumentoAuditoria" Width="1.5" PointX="15.75" PointY="140.375" />
+        <EntityTypeShape EntityType="BCMWeb.tblDocumentoCertificacion" Width="1.5" PointX="21.75" PointY="161" />
+        <EntityTypeShape EntityType="BCMWeb.tblDocumentoContenido" Width="1.5" PointX="15.75" PointY="175.625" />
+        <EntityTypeShape EntityType="BCMWeb.tblDocumentoEntrevista" Width="1.5" PointX="15.75" PointY="182.375" />
+        <EntityTypeShape EntityType="BCMWeb.tblDocumentoEntrevistaPersona" Width="1.5" PointX="18" PointY="182.25" />
+        <EntityTypeShape EntityType="BCMWeb.tblDocumentoPersonaClave" Width="1.5" PointX="22.75" PointY="143.875" />
+        <EntityTypeShape EntityType="BCMWeb.tblEmpresa" Width="1.5" PointX="3" PointY="130.375" />
+        <EntityTypeShape EntityType="BCMWeb.tblEmpresaModulo" Width="1.5" PointX="7.5" PointY="171.25" />
+        <EntityTypeShape EntityType="BCMWeb.tblEmpresaUsuario" Width="1.5" PointX="5.25" PointY="130.5" />
+        <EntityTypeShape EntityType="BCMWeb.tblEscala" Width="1.5" PointX="5.25" PointY="134" />
+        <EntityTypeShape EntityType="BCMWeb.tblEstado" Width="1.5" PointX="0.75" PointY="148.5" />
+        <EntityTypeShape EntityType="BCMWeb.tblEstadoDocumento" Width="1.5" PointX="11.25" PointY="147" />
+        <EntityTypeShape EntityType="BCMWeb.tblEstadoEmpresa" Width="1.5" PointX="0.75" PointY="136.125" />
+        <EntityTypeShape EntityType="BCMWeb.tblEstadoProceso" Width="1.5" PointX="7.5" PointY="193.625" />
+        <EntityTypeShape EntityType="BCMWeb.tblEstadoUsuario" Width="1.5" PointX="0.75" PointY="126.25" />
+        <EntityTypeShape EntityType="BCMWeb.tblImpactoRiesgo" Width="1.5" PointX="5.25" PointY="164.5" />
+        <EntityTypeShape EntityType="BCMWeb.tblLocalidad" Width="1.5" PointX="5.25" PointY="138.125" />
+        <EntityTypeShape EntityType="BCMWeb.tblMes" Width="1.5" PointX="9.75" PointY="187.625" />
+        <EntityTypeShape EntityType="BCMWeb.tblModulo" Width="1.5" PointX="5.25" PointY="203.125" />
+        <EntityTypeShape EntityType="BCMWeb.tblModulo_NivelUsuario" Width="1.5" PointX="7.5" PointY="167.875" />
+        <EntityTypeShape EntityType="BCMWeb.tblModulo_Usuario" Width="1.5" PointX="7.5" PointY="204.375" />
+        <EntityTypeShape EntityType="BCMWeb.tblModuloAnexo" Width="1.5" PointX="5.25" PointY="208.625" />
         <EntityTypeShape EntityType="BCMWeb.tblNivelImpacto" Width="1.5" PointX="0.75" PointY="10.125" />
-        <EntityTypeShape EntityType="BCMWeb.tblNivelUsuario" Width="1.5" PointX="6" PointY="108.75" />
-        <EntityTypeShape EntityType="BCMWeb.tblPais" Width="1.5" PointX="6" PointY="187.75" />
-        <EntityTypeShape EntityType="BCMWeb.tblPBEPruebaEjecucionEjercicio" Width="1.5" PointX="9.75" PointY="147.625" />
-        <EntityTypeShape EntityType="BCMWeb.tblPBEPruebaEjecucionParticipante" Width="1.5" PointX="12" PointY="131.875" />
-        <EntityTypeShape EntityType="BCMWeb.tblPBEPruebaEjecucionParticipanteCorreo" Width="1.5" PointX="14.25" PointY="130.25" />
-        <EntityTypeShape EntityType="BCMWeb.tblPBEPruebaEjecucionParticipanteTelefono" Width="1.5" PointX="14.25" PointY="133.375" />
-        <EntityTypeShape EntityType="BCMWeb.tblPBEPruebaEjecucionRecurso" Width="1.5" PointX="12" PointY="128" />
-        <EntityTypeShape EntityType="BCMWeb.tblPBEPruebaEjecucionResultado" Width="1.5" PointX="12" PointY="154" />
-        <EntityTypeShape EntityType="BCMWeb.tblPBEPruebaPlanificacion" Width="1.5" PointX="12.75" PointY="148.5" />
-        <EntityTypeShape EntityType="BCMWeb.tblPBEPruebaPlanificacionEjercicio" Width="1.5" PointX="15" PointY="153.75" />
-        <EntityTypeShape EntityType="BCMWeb.tblPBEPruebaPlanificacionParticipante" Width="1.5" PointX="15" PointY="158.375" />
-        <EntityTypeShape EntityType="BCMWeb.tblPBEPruebaPlanificacionParticipanteCorreo" Width="1.5" PointX="17.25" PointY="160.375" />
-        <EntityTypeShape EntityType="BCMWeb.tblPBEPruebaPlanificacionParticipanteTelefono" Width="1.5" PointX="17.25" PointY="156.875" />
-        <EntityTypeShape EntityType="BCMWeb.tblPBEPruebaPlanificacionRecurso" Width="1.5" PointX="15" PointY="142.375" />
-        <EntityTypeShape EntityType="BCMWeb.tblPersona" Width="1.5" PointX="7.5" PointY="164.125" />
-        <EntityTypeShape EntityType="BCMWeb.tblPersonaCorreo" Width="1.5" PointX="9.75" PointY="164.5" />
-        <EntityTypeShape EntityType="BCMWeb.tblPersonaDireccion" Width="1.5" PointX="12.75" PointY="159.625" />
-        <EntityTypeShape EntityType="BCMWeb.tblPersonaTelefono" Width="1.5" PointX="12.75" PointY="165.125" />
-        <EntityTypeShape EntityType="BCMWeb.tblPlanTrabajo" Width="1.5" PointX="7.5" PointY="139.125" />
-        <EntityTypeShape EntityType="BCMWeb.tblPlanTrabajoAccion" Width="1.5" PointX="5.25" PointY="149.875" />
-        <EntityTypeShape EntityType="BCMWeb.tblPlanTrabajoAuditoria" Width="1.5" PointX="9.75" PointY="143" />
-        <EntityTypeShape EntityType="BCMWeb.tblPlanTrabajoEstatus" Width="1.5" PointX="5.25" PointY="139.875" />
-        <EntityTypeShape EntityType="BCMWeb.tblPMTFrecuencia" Width="1.5" PointX="18" PointY="163.875" />
-        <EntityTypeShape EntityType="BCMWeb.tblPMTFrecuenciaParticipante" Width="1.5" PointX="20.25" PointY="140.875" />
-        <EntityTypeShape EntityType="BCMWeb.tblPMTMensajeActualizacion" Width="1.5" PointX="13.5" PointY="175.375" />
-        <EntityTypeShape EntityType="BCMWeb.tblPMTProgramacion" Width="1.5" PointX="5.25" PointY="206.75" />
-        <EntityTypeShape EntityType="BCMWeb.tblPMTProgramacionAuditoria" Width="1.5" PointX="5.25" PointY="182.125" />
-        <EntityTypeShape EntityType="BCMWeb.tblPMTResponsableUpdate" Width="1.5" PointX="10.5" PointY="180.25" />
-        <EntityTypeShape EntityType="BCMWeb.tblPMTResponsableUpdate_Correo" Width="1.5" PointX="14.75" PointY="182.375" />
-        <EntityTypeShape EntityType="BCMWeb.tblPPEFrecuencia" Width="1.5" PointX="21" PointY="148" />
-        <EntityTypeShape EntityType="BCMWeb.tblProducto" Width="1.5" PointX="5.25" PointY="195.375" />
-        <EntityTypeShape EntityType="BCMWeb.tblProveedor" Width="1.5" PointX="5.25" PointY="120.375" />
-        <EntityTypeShape EntityType="BCMWeb.tblTipoCorreo" Width="1.5" PointX="7.5" PointY="181.875" />
-        <EntityTypeShape EntityType="BCMWeb.tblTipoDireccion" Width="1.5" PointX="10.5" PointY="159.25" />
-        <EntityTypeShape EntityType="BCMWeb.tblTipoEscala" Width="1.5" PointX="3" PointY="127.125" />
-        <EntityTypeShape EntityType="BCMWeb.tblTipoFrecuencia" Width="1.5" PointX="18.75" PointY="135.375" />
+        <EntityTypeShape EntityType="BCMWeb.tblNivelUsuario" Width="1.5" PointX="3" PointY="142" />
+        <EntityTypeShape EntityType="BCMWeb.tblPais" Width="1.5" PointX="9" PointY="142.5" />
+        <EntityTypeShape EntityType="BCMWeb.tblPBEPruebaEjecucionEjercicio" Width="1.5" PointX="18" PointY="149" />
+        <EntityTypeShape EntityType="BCMWeb.tblPBEPruebaEjecucionParticipante" Width="1.5" PointX="20.25" PointY="155.625" />
+        <EntityTypeShape EntityType="BCMWeb.tblPBEPruebaEjecucionParticipanteCorreo" Width="1.5" PointX="22.5" PointY="154" />
+        <EntityTypeShape EntityType="BCMWeb.tblPBEPruebaEjecucionParticipanteTelefono" Width="1.5" PointX="22.5" PointY="157.125" />
+        <EntityTypeShape EntityType="BCMWeb.tblPBEPruebaEjecucionRecurso" Width="1.5" PointX="20.25" PointY="147.625" />
+        <EntityTypeShape EntityType="BCMWeb.tblPBEPruebaEjecucionResultado" Width="1.5" PointX="20.25" PointY="151.125" />
+        <EntityTypeShape EntityType="BCMWeb.tblPBEPruebaPlanificacion" Width="1.5" PointX="15.75" PointY="144.875" />
+        <EntityTypeShape EntityType="BCMWeb.tblPBEPruebaPlanificacionEjercicio" Width="1.5" PointX="18" PointY="157.5" />
+        <EntityTypeShape EntityType="BCMWeb.tblPBEPruebaPlanificacionParticipante" Width="1.5" PointX="18" PointY="142.375" />
+        <EntityTypeShape EntityType="BCMWeb.tblPBEPruebaPlanificacionParticipanteCorreo" Width="1.5" PointX="20.25" PointY="144.25" />
+        <EntityTypeShape EntityType="BCMWeb.tblPBEPruebaPlanificacionParticipanteTelefono" Width="1.5" PointX="20.25" PointY="140.75" />
+        <EntityTypeShape EntityType="BCMWeb.tblPBEPruebaPlanificacionRecurso" Width="1.5" PointX="18" PointY="154.25" />
+        <EntityTypeShape EntityType="BCMWeb.tblPersona" Width="1.5" PointX="10.5" PointY="166" />
+        <EntityTypeShape EntityType="BCMWeb.tblPersonaCorreo" Width="1.5" PointX="17.75" PointY="171.375" />
+        <EntityTypeShape EntityType="BCMWeb.tblPersonaDireccion" Width="1.5" PointX="15.75" PointY="161.5" />
+        <EntityTypeShape EntityType="BCMWeb.tblPersonaTelefono" Width="1.5" PointX="15.75" PointY="167" />
+        <EntityTypeShape EntityType="BCMWeb.tblPlanTrabajo" Width="1.5" PointX="7.5" PointY="153.75" />
+        <EntityTypeShape EntityType="BCMWeb.tblPlanTrabajoAccion" Width="1.5" PointX="5.25" PointY="178.375" />
+        <EntityTypeShape EntityType="BCMWeb.tblPlanTrabajoAuditoria" Width="1.5" PointX="12.75" PointY="163.625" />
+        <EntityTypeShape EntityType="BCMWeb.tblPlanTrabajoEstatus" Width="1.5" PointX="5.25" PointY="154.625" />
+        <EntityTypeShape EntityType="BCMWeb.tblPMTFrecuencia" Width="1.5" PointX="15.75" PointY="178.75" />
+        <EntityTypeShape EntityType="BCMWeb.tblPMTFrecuenciaParticipante" Width="1.5" PointX="18" PointY="187.75" />
+        <EntityTypeShape EntityType="BCMWeb.tblPMTMensajeActualizacion" Width="1.5" PointX="13.5" PointY="168" />
+        <EntityTypeShape EntityType="BCMWeb.tblPMTProgramacion" Width="1.5" PointX="5.25" PointY="113.875" />
+        <EntityTypeShape EntityType="BCMWeb.tblPMTProgramacionAuditoria" Width="1.5" PointX="5.25" PointY="171" />
+        <EntityTypeShape EntityType="BCMWeb.tblPMTResponsableUpdate" Width="1.5" PointX="7.5" PointY="163.875" />
+        <EntityTypeShape EntityType="BCMWeb.tblPMTResponsableUpdate_Correo" Width="1.5" PointX="12.75" PointY="160" />
+        <EntityTypeShape EntityType="BCMWeb.tblPPEFrecuencia" Width="1.5" PointX="22.75" PointY="149.25" />
+        <EntityTypeShape EntityType="BCMWeb.tblProducto" Width="1.5" PointX="5.25" PointY="161.75" />
+        <EntityTypeShape EntityType="BCMWeb.tblProveedor" Width="1.5" PointX="5.25" PointY="117.375" />
+        <EntityTypeShape EntityType="BCMWeb.tblTipoCorreo" Width="1.5" PointX="15.5" PointY="187.75" />
+        <EntityTypeShape EntityType="BCMWeb.tblTipoDireccion" Width="1.5" PointX="13.5" PointY="144.75" />
+        <EntityTypeShape EntityType="BCMWeb.tblTipoEscala" Width="1.5" PointX="3" PointY="145.75" />
+        <EntityTypeShape EntityType="BCMWeb.tblTipoFrecuencia" Width="1.5" PointX="20.5" PointY="136.375" />
         <EntityTypeShape EntityType="BCMWeb.tblTipoImpacto" Width="1.5" PointX="5.75" PointY="7.125" />
         <EntityTypeShape EntityType="BCMWeb.tblTipoInterdependencia" Width="1.5" PointX="0.75" PointY="7.125" />
         <EntityTypeShape EntityType="BCMWeb.tblTipoRespaldo" Width="1.5" PointX="5.75" PointY="4.125" />
         <EntityTypeShape EntityType="BCMWeb.tblTipoResultadoPrueba" Width="1.5" PointX="5.75" PointY="1.125" />
         <EntityTypeShape EntityType="BCMWeb.tblTipoTablaContenido" Width="1.5" PointX="0.75" PointY="4.125" />
-        <EntityTypeShape EntityType="BCMWeb.tblTipoTelefono" Width="1.5" PointX="10.5" PointY="161.875" />
+        <EntityTypeShape EntityType="BCMWeb.tblTipoTelefono" Width="1.5" PointX="13.5" PointY="184.75" />
         <EntityTypeShape EntityType="BCMWeb.tblTipoUbicacionInformacion" Width="1.5" PointX="0.75" PointY="1.125" />
-        <EntityTypeShape EntityType="BCMWeb.tblUnidadOrganizativa" Width="1.5" PointX="5.25" PointY="213" />
-        <EntityTypeShape EntityType="BCMWeb.tblUsuario" Width="1.5" PointX="5.25" PointY="164.625" />
-        <EntityTypeShape EntityType="BCMWeb.tblUsuarioUnidadOrganizativa" Width="1.5" PointX="10.5" PointY="168.5" />
-        <EntityTypeShape EntityType="BCMWeb.tblVicepresidencia" Width="1.5" PointX="10.25" PointY="137.125" />
-        <AssociationConnector Association="BCMWeb.FK_tblAuditoria_tblUsuario" />
+        <EntityTypeShape EntityType="BCMWeb.tblUnidadOrganizativa" Width="1.5" PointX="5.25" PointY="211.75" />
+        <EntityTypeShape EntityType="BCMWeb.tblUsuario" Width="1.5" PointX="3" PointY="125" />
+        <EntityTypeShape EntityType="BCMWeb.tblUsuarioUnidadOrganizativa" Width="1.5" PointX="10.5" PointY="176.25" />
+        <EntityTypeShape EntityType="BCMWeb.tblVicepresidencia" Width="1.5" PointX="11.25" PointY="133.875" />
         <AssociationConnector Association="BCMWeb.FK_tblAuditoriaProcesoCritico_tblEmpresa" />
+        <AssociationConnector Association="BCMWeb.FK_tblBCPDocumento_tblBCPReanudacionPersonaClave_FK1" />
+        <AssociationConnector Association="BCMWeb.FK_tblBCPDocumento_tblBCPReanudacionTarea_FK1" />
+        <AssociationConnector Association="BCMWeb.FK_tblBCPDocumento_tblBCPRecuperacionPersonaClave_FK1" />
+        <AssociationConnector Association="BCMWeb.FK_tblBCPDocumento_tblBCPRecuperacionRecurso_FK1" />
+        <AssociationConnector Association="BCMWeb.FK_tblBCPDocumento_tblBCPRespuestaRecurso_FK1" />
+        <AssociationConnector Association="BCMWeb.FK_tblBCPDocumento_tblBCPRestauracionEquipo_FK1" />
+        <AssociationConnector Association="BCMWeb.FK_tblBCPDocumento_tblBCPRestauracionInfraestructura_FK1" />
+        <AssociationConnector Association="BCMWeb.FK_tblBCPDocumento_tblBCPRestauracionMobiliario_FK1" />
+        <AssociationConnector Association="BCMWeb.FK_tblBCPDocumento_tblBCPRestauracionOtro_FK1" />
         <AssociationConnector Association="BCMWeb.FK_tblBCPDocumento_tblBIAProceso" />
         <AssociationConnector Association="BCMWeb.FK_tblBCPRespuestaAccion_tblBCPDocumento" />
         <AssociationConnector Association="BCMWeb.FK_tblDocumento_tblBCPDocumento" />
-        <AssociationConnector Association="BCMWeb.tblBCPDocumento_tblBCPReanudacionPersonaClave_FK1" />
-        <AssociationConnector Association="BCMWeb.tblBCPDocumento_tblBCPReanudacionTarea_FK1" />
-        <AssociationConnector Association="BCMWeb.tblBCPDocumento_tblBCPRecuperacionPersonaClave_FK1" />
-        <AssociationConnector Association="BCMWeb.tblBCPDocumento_tblBCPRecuperacionRecurso_FK1" />
-        <AssociationConnector Association="BCMWeb.tblBCPDocumento_tblBCPRespuestaRecurso_FK1" />
-        <AssociationConnector Association="BCMWeb.tblBCPDocumento_tblBCPRestauracionEquipo_FK1" />
-        <AssociationConnector Association="BCMWeb.tblBCPDocumento_tblBCPRestauracionInfraestructura_FK1" />
-        <AssociationConnector Association="BCMWeb.tblBCPDocumento_tblBCPRestauracionMobiliario_FK1" />
-        <AssociationConnector Association="BCMWeb.tblBCPDocumento_tblBCPRestauracionOtro_FK1" />
-        <AssociationConnector Association="BCMWeb.tblEmpresa_tblBCPDocumento_FK1" />
-        <AssociationConnector Association="BCMWeb.tblPersona_tblReanudacionPersonaClave_FK1" />
-        <AssociationConnector Association="BCMWeb.tblBCPReanudacionTarea_tblBCPReanudacionTareaActividad_FK1" />
-        <AssociationConnector Association="BCMWeb.tblPersona_tblBCPRecuperacionPersonaClave_FK1" />
+        <AssociationConnector Association="BCMWeb.FK_tblEmpresa_tblBCPDocumento_FK1" />
+        <AssociationConnector Association="BCMWeb.FK_tblPersona_tblReanudacionPersonaClave_FK1" />
+        <AssociationConnector Association="BCMWeb.FK_tblBCPReanudacionTarea_tblBCPReanudacionTareaActividad_FK1" />
+        <AssociationConnector Association="BCMWeb.FK_tblPersona_tblBCPRecuperacionPersonaClave_FK1" />
         <AssociationConnector Association="BCMWeb.FK_tblBIAAmenaza_tblBIAProceso" />
         <AssociationConnector Association="BCMWeb.FK_tblBIAAmenazaEvento_tblBIAAmenaza" />
         <AssociationConnector Association="BCMWeb.FK_tblBIAEventoControl_tblBIAAmenazaEvento" />
@@ -178,14 +176,14 @@
         <AssociationConnector Association="BCMWeb.FK_tblBIAImpactoFinanciero_tblEscala" />
         <AssociationConnector Association="BCMWeb.FK_tblBIAProceso_tblBIADocumento" />
         <AssociationConnector Association="BCMWeb.FK_tblDocumento_tblBIADocumento" />
-        <AssociationConnector Association="BCMWeb.tblEmpresa_tblBIADocumento_FK1" />
+        <AssociationConnector Association="BCMWeb.FK_tblEmpresa_tblBIADocumento_FK1" />
         <AssociationConnector Association="BCMWeb.FK_tblBIAEntrada_tblBIAProceso" />
         <AssociationConnector Association="BCMWeb.FK_tblBIAEstadoRiesgo_tblEmpresa" />
         <AssociationConnector Association="BCMWeb.FK_tblBIAEventoRiesgo_tblBIAFuenteRiesgo" />
         <AssociationConnector Association="BCMWeb.FK_tblBIAEventoRiesgo_tblBIAImpactoRiesgo" />
         <AssociationConnector Association="BCMWeb.FK_tblBIAEventoRiesgo_tblBIAProbabilidadRiesgo" />
         <AssociationConnector Association="BCMWeb.FK_tblBIAEventoRiesgo_tblEmpresa" />
-        <AssociationConnector Association="BCMWeb.tblEmpresa_tblBIAFuenteRiesgo_FK1" />
+        <AssociationConnector Association="BCMWeb.FK_tblEmpresa_tblBIAFuenteRiesgo_FK1" />
         <AssociationConnector Association="BCMWeb.FK_tblBIAGranImpacto_tblBIAProceso" />
         <AssociationConnector Association="BCMWeb.FK_tblBIAGranImpacto_tblMes" />
         <AssociationConnector Association="BCMWeb.FK_tblBIAImpactoFinanciero_tblBIAProceso" />
@@ -208,15 +206,20 @@
         <AssociationConnector Association="BCMWeb.FK_tblBIARespaldoSecundario_tblBIAProceso" />
         <AssociationConnector Association="BCMWeb.FK_tblBIARPO_tblBIAProceso" />
         <AssociationConnector Association="BCMWeb.FK_tblBIARTO_tblBIAProceso" />
+        <AssociationConnector Association="BCMWeb.FK_tblBIAWRT_tblBIAProceso" />
         <AssociationConnector Association="BCMWeb.FK_tblBIARPO_tblEscala" />
+        <AssociationConnector Association="BCMWeb.FK_tblBIARPO_tblTipoFrecuencia" />
         <AssociationConnector Association="BCMWeb.FK_tblBIARTO_tblEscala" />
+        <AssociationConnector Association="BCMWeb.FK_tblBIARTO_tblTipoFrecuencia" />
         <AssociationConnector Association="BCMWeb.FK_tblBIAUnidadTrabajo_tblEmpresa" />
         <AssociationConnector Association="BCMWeb.FK_tblBIAUnidadTrabajo_tblUnidadOrganizativa" />
         <AssociationConnector Association="BCMWeb.FK_tblBIAUnidadTrabajoProceso_tblBIAUnidadTrabajo" />
         <AssociationConnector Association="BCMWeb.FK_tblBIAUnidadTrabajoPersonas_tblBIAUnidadTrabajoProceso" />
+        <AssociationConnector Association="BCMWeb.FK_tblBIAWRT_tblEscala" />
+        <AssociationConnector Association="BCMWeb.FK_tblBIAWRT_tblTipoFrecuencia" />
+        <AssociationConnector Association="BCMWeb.FK_tblCargo_tblPersona_FK1" />
+        <AssociationConnector Association="BCMWeb.FK_tblEmpresa_tblCargo_FK1" />
         <AssociationConnector Association="BCMWeb.FK_tblPMTFrecuenciaParticipante_tblCargo" />
-        <AssociationConnector Association="BCMWeb.tblCargo_tblPersona_FK1" />
-        <AssociationConnector Association="BCMWeb.tblEmpresa_tblCargo_FK1" />
         <AssociationConnector Association="BCMWeb.FK_tblCiudad_tblEstado" />
         <AssociationConnector Association="BCMWeb.FK_tblCiudad_tblPais" />
         <AssociationConnector Association="BCMWeb.FK_tblCulture_Ciudad_tblCiudad" />
@@ -234,7 +237,6 @@
         <AssociationConnector Association="BCMWeb.FK_tblCultura_PlanTrabajoEstatus_tblPlanTrabajoEstatus" />
         <AssociationConnector Association="BCMWeb.FK_tblCultura_TipoCorreo_tblTipoCorreo" />
         <AssociationConnector Association="BCMWeb.FK_tblCultura_TipoDireccion_tblTipoDireccion" />
-        <AssociationConnector Association="BCMWeb.FK_tblCultura_TipoEscala_tblTipoEscala" />
         <AssociationConnector Association="BCMWeb.FK_tblCultura_TipoFrecuencia_tblTipoFrecuencia" />
         <AssociationConnector Association="BCMWeb.FK_tblCultura_TipoImpacto_tblTipoImpacto" />
         <AssociationConnector Association="BCMWeb.FK_tblCultura_TipoInterdependencia_tblTipoInterdependencia" />
@@ -255,16 +257,21 @@
         <AssociationConnector Association="BCMWeb.FK_tblPMTFrecuencia_tblDocumento" />
         <AssociationConnector Association="BCMWeb.FK_tblPPEFrecuencia_tblDocumento" />
         <AssociationConnector Association="BCMWeb.FK_tblDocumentoAprobacion_tblPersona" />
-        <AssociationConnector Association="BCMWeb.tblEmpresa_tblADMAuditoria_FK1" />
-        <AssociationConnector Association="BCMWeb.tblUsuario_tblADMAuditoria_FK1" />
+        <AssociationConnector Association="BCMWeb.FK_tblEmpresa_tblDocumentoAuditoria_FK1" />
+        <AssociationConnector Association="BCMWeb.FK_tblUsuario_tblDocumentoAuditoria_FK1" />
         <AssociationConnector Association="BCMWeb.FK_tblCertificacion_tblPersona" />
         <AssociationConnector Association="BCMWeb.FK_tblDocumentoEntrevistaPersona_tblDocumentoEntrevista" />
         <AssociationConnector Association="BCMWeb.FK_tblDocumentoPersonaClave_tblPersona" />
         <AssociationConnector Association="BCMWeb.FK_tblPersonaClave_tblEmpresa" />
+        <AssociationConnector Association="BCMWeb.FK_tblEmpresa_tblEscala_FK1" />
         <AssociationConnector Association="BCMWeb.FK_tblEmpresa_tblEstadoEmpresa" />
+        <AssociationConnector Association="BCMWeb.FK_tblEmpresa_tblLocalidad_FK1" />
+        <AssociationConnector Association="BCMWeb.FK_tblEmpresa_tblPersona_FK1" />
+        <AssociationConnector Association="BCMWeb.FK_tblEmpresa_tblProveedor_FK1" />
+        <AssociationConnector Association="BCMWeb.FK_tblEmpresa_tblUnidadOrganizativa_FK1" />
+        <AssociationConnector Association="BCMWeb.FK_tblEmpresa_tblVicepresidencia_FK1" />
         <AssociationConnector Association="BCMWeb.FK_tblEmpresaModulo_tblEmpresa" />
         <AssociationConnector Association="BCMWeb.FK_tblEmpresaUsuario_tblEmpresa" />
-        <AssociationConnector Association="BCMWeb.FK_tblFrecuencia_tblEmpresa" />
         <AssociationConnector Association="BCMWeb.FK_tblModulo_NivelUsuario_tblEmpresa" />
         <AssociationConnector Association="BCMWeb.FK_tblModulo_tblEmpresa" />
         <AssociationConnector Association="BCMWeb.FK_tblModuloAnexo_tblEmpresa" />
@@ -278,25 +285,21 @@
         <AssociationConnector Association="BCMWeb.FK_tblPMTResponsableUpdate_tblEmpresa" />
         <AssociationConnector Association="BCMWeb.FK_tblProducto_tblEmpresa" />
         <AssociationConnector Association="BCMWeb.FK_tblUsuarioUnidadOrganizativa_tblEmpresa" />
-        <AssociationConnector Association="BCMWeb.tblEmpresa_tblEscala_FK1" />
-        <AssociationConnector Association="BCMWeb.tblEmpresa_tblLocalidad_FK1" />
-        <AssociationConnector Association="BCMWeb.tblEmpresa_tblPersona_FK1" />
-        <AssociationConnector Association="BCMWeb.tblEmpresa_tblProveedor_FK1" />
-        <AssociationConnector Association="BCMWeb.tblEmpresa_tblUnidadOrganizativa_FK1" />
-        <AssociationConnector Association="BCMWeb.tblEmpresa_tblVicepresidencia_FK1" />
         <AssociationConnector Association="BCMWeb.FK_tblEmpresaModulo_tblModulo" />
         <AssociationConnector Association="BCMWeb.FK_tblEmpresaUsuario_tblNivelUsuario" />
         <AssociationConnector Association="BCMWeb.FK_tblEmpresaUsuario_tblUsuario" />
         <AssociationConnector Association="BCMWeb.FK_tblEscala_tblTipoEscala" />
         <AssociationConnector Association="BCMWeb.FK_tblLocalidad_tblEstado" />
+        <AssociationConnector Association="BCMWeb.FK_tblPais_tblEstado_FK1" />
         <AssociationConnector Association="BCMWeb.FK_tblPersonaDireccion_tblEstado" />
-        <AssociationConnector Association="BCMWeb.tblPais_tblEstado_FK1" />
         <AssociationConnector Association="BCMWeb.FK_tblUsuario_tblEstadoUsuario" />
         <AssociationConnector Association="BCMWeb.FK_tblLocalidad_tblPais" />
         <AssociationConnector Association="BCMWeb.FK_tblModulo_NivelUsuario_tblModulo" />
+        <AssociationConnector Association="BCMWeb.FK_tblModulo_Usuario_tblModulo" />
         <AssociationConnector Association="BCMWeb.FK_tblPMTMensajeActualizacion_tblModulo" />
         <AssociationConnector Association="BCMWeb.FK_tblPMTResponsableUpdate_tblModulo" />
         <AssociationConnector Association="BCMWeb.FK_tblModulo_NivelUsuario_tblNivelUsuario" />
+        <AssociationConnector Association="BCMWeb.FK_tblModulo_Usuario_tblUsuario" />
         <AssociationConnector Association="BCMWeb.FK_tblUsuarioUnidadOrganizativa_tblNivelUsuario" />
         <AssociationConnector Association="BCMWeb.FK_tblPersonaDireccion_tblPais" />
         <AssociationConnector Association="BCMWeb.FK_tblVicepresidencia_tblPais" />
@@ -313,11 +316,11 @@
         <AssociationConnector Association="BCMWeb.FK_tblPBEPruebaPlanificacionRecurso_tblPBEPruebaPlanificacion" />
         <AssociationConnector Association="BCMWeb.FK_tblPBEPruebaPlanificacionParticipanteCorreo_tblPBEPruebaPlanificacionParticipante" />
         <AssociationConnector Association="BCMWeb.FK_tblPBEPruebaPlanificacionParticipanteTelefono_tblPBEPruebaPlanificacionParticipante" />
+        <AssociationConnector Association="BCMWeb.FK_tblPersona_tblPersonaDireccion_FK1" />
+        <AssociationConnector Association="BCMWeb.FK_tblPersona_tblPersonaTelefono_FK1" />
         <AssociationConnector Association="BCMWeb.FK_tblPersona_tblUnidadOrganizativa" />
         <AssociationConnector Association="BCMWeb.FK_tblPersona_tblUsuario" />
         <AssociationConnector Association="BCMWeb.FK_tblPersonaCorreo_tblPersona" />
-        <AssociationConnector Association="BCMWeb.tblPersona_tblPersonaDireccion_FK1" />
-        <AssociationConnector Association="BCMWeb.tblPersona_tblPersonaTelefono_FK1" />
         <AssociationConnector Association="BCMWeb.FK_tblPersonaCorreo_tblTipoCorreo" />
         <AssociationConnector Association="BCMWeb.FK_tblPersonaDireccion_tblTipoDireccion" />
         <AssociationConnector Association="BCMWeb.FK_tblPersonaTelefono_tblTipoTelefono" />
@@ -333,9 +336,6 @@
         <AssociationConnector Association="BCMWeb.FK_tblPPEFrecuencia_tblTipoFrecuencia" />
         <AssociationConnector Association="BCMWeb.FK_tblUsuarioUnidadOrganizativa_tblUnidadOrganizativa" />
         <AssociationConnector Association="BCMWeb.FK_tblUsuarioUnidadOrganizativa_tblUsuario" />
-        <EntityTypeShape EntityType="BCMWeb.tblBIAWRT" Width="1.5" PointX="23" PointY="156.75" />
-        <AssociationConnector Association="BCMWeb.FK_tblBIAWRT_tblBIAProceso" />
-        <AssociationConnector Association="BCMWeb.tblEscala_tblBIAWRT" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

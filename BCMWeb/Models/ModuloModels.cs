@@ -28,6 +28,7 @@ namespace BCMWeb.Models
                 return new SubModulosData(this.IdModulo);
             }
         }
+        public string returnPage { get; set; }
     }
    public class ModuloModel
     {

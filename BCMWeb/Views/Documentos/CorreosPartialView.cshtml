@@ -26,6 +26,7 @@ settings =>
     settings.ControlStyle.BorderBottom.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
     settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Hidden;
     settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+    settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
     settings.ClientSideEvents.BeginCallback = "OnBeginGridCallback";
     settings.ClientSideEvents.EndCallback = "OnEndGridCallback";
 
@@ -42,6 +43,7 @@ settings =>
     settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.DblClick;
     settings.SettingsEditing.BatchEditSettings.HighlightDeletedRows = true;
     settings.SettingsBehavior.ConfirmDelete = true;
+    settings.SettingsEditing.BatchEditSettings.ShowConfirmOnLosingChanges = false;
 
     settings.CommandColumn.Visible = true;
     settings.CommandColumn.Width = Unit.Percentage(10);

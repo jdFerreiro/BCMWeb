@@ -1,6 +1,6 @@
 ﻿@using BCMWeb.Models
 
-@model DocumentosModel
+@model DocumentoModel
 
 @section LeftPanel {
     @Html.DevExpress().Panel(settings =>
@@ -18,4 +18,4 @@
    }).GetHtml()
 }
 
-@Html.Partial("FichaPartialView", Model.Documentos[0])
+@Html.Partial("FichaPartialView", Model)

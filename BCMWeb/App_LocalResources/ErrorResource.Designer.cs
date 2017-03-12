@@ -142,6 +142,51 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Por favor registre al menos un aprobador.
+        /// </summary>
+        public static string ErrorAprobaciones {
+            get {
+                return ResourceManager.GetString("ErrorAprobaciones", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Por favor registre al menos un certificador.
+        /// </summary>
+        public static string ErrorCertificaciones {
+            get {
+                return ResourceManager.GetString("ErrorCertificaciones", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Debe registrar al menos una entrevista.
+        /// </summary>
+        public static string ErrorEntrevistas {
+            get {
+                return ResourceManager.GetString("ErrorEntrevistas", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Debe registar al menos una persona clave.
+        /// </summary>
+        public static string ErrorPersonasClaves {
+            get {
+                return ResourceManager.GetString("ErrorPersonasClaves", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Debe registar al menos un proceso.
+        /// </summary>
+        public static string ErrorProcesos {
+            get {
+                return ResourceManager.GetString("ErrorProcesos", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The password retrieval answer provided is invalid. Please check the value and try again.
         /// </summary>
         public static string InvalidAnswerError {
@@ -219,6 +264,51 @@ namespace Resources {
         public static string ProviderError {
             get {
                 return ResourceManager.GetString("ProviderError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to El {0} no es válida..
+        /// </summary>
+        public static string RegexErrorFemale {
+            get {
+                return ResourceManager.GetString("RegexErrorFemale", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to El {0} no es válido..
+        /// </summary>
+        public static string RegexErrorMale {
+            get {
+                return ResourceManager.GetString("RegexErrorMale", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Debe registrar al menos una dirección.
+        /// </summary>
+        public static string RemoteDireccion {
+            get {
+                return ResourceManager.GetString("RemoteDireccion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Debe registrar al menos un correo electrónico.
+        /// </summary>
+        public static string RemoteEmail {
+            get {
+                return ResourceManager.GetString("RemoteEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Debe registrar al menos un número telefónico.
+        /// </summary>
+        public static string RemoteTelefono {
+            get {
+                return ResourceManager.GetString("RemoteTelefono", resourceCulture);
             }
         }
         

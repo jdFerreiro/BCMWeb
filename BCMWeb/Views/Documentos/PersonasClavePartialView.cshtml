@@ -38,7 +38,7 @@ settings =>
             ViewContext.Writer.Write(
                 Html.ActionLink(Resources.BCMWebPublic.captionButtonEdit, "EditarPersonaClave", new { IdPersona = DataBinder.Eval(c.DataItem, "IdPersona") }) + "&nbsp;" +
                 Html.ActionLink(Resources.BCMWebPublic.captionButtonDelete, "EliminarPersonaClave", new { IdPersona = DataBinder.Eval(c.DataItem, "IdPersona") },
-                    new { onclick = "return confirm('" + string.Format(Resources.BCMWebPublic.ConfirmDeleteMessage, DataBinder.Eval(c.DataItem, "NroDocumento")) + "')" })
+                    new { onclick = "return confirm('" + string.Format(Resources.BCMWebPublic.ConfirmDeleteMessage, DataBinder.Eval(c.DataItem, "Nombre")) + "')" })
             );
         });
         column.SetHeaderTemplateContent(c =>
@@ -50,14 +50,14 @@ settings =>
         column.CellStyle.HorizontalAlign = HorizontalAlign.Center;
         column.Settings.AllowDragDrop = DefaultBoolean.False;
         column.Settings.AllowSort = DefaultBoolean.False;
-        column.Width = Unit.Percentage(10);
+        column.Width = Unit.Percentage(15);
     });
 
     settings.Columns.Add(c =>
     {
         c.Settings.AllowSort = DefaultBoolean.True;
         c.FieldName = "Nombre";
-        c.Width = Unit.Percentage(25);
+        c.Width = Unit.Percentage(20);
         c.Caption = Resources.DocumentoResource.captionNombrePersonaClave;
         c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
         c.PropertiesEdit.DisplayFormatString = "{0}";

@@ -174,4 +174,7 @@
   <data name="captionButtonSave" xml:space="preserve">
     <value>Guardar</value>
   </data>
+  <data name="ConfirmCancelMessage" xml:space="preserve">
+    <value>Se perderá la información actualizada. ¿Desea continuar con la cancelación?</value>
+  </data>
 </root>

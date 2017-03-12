@@ -261,4 +261,10 @@
   <data name="captionProceso" xml:space="preserve">
     <value>Proceso</value>
   </data>
+  <data name="captionIdentificacion" xml:space="preserve">
+    <value>No. de Cédula</value>
+  </data>
+  <data name="helpTextIdentificacion" xml:space="preserve">
+    <value>Registre su número de cédula</value>
+  </data>
 </root>

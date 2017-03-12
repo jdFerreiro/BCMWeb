@@ -3,39 +3,37 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace BCMWeb.Models
 {
-    public class PersonaModel
+    public class PersonaModel : ModulosUserModel
     {
         [Display(Name = "captionNombre", ResourceType = typeof(Resources.FichaResource))]
         public long IdPersona { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
-        [Display(Name = "captionNombre", ResourceType = typeof(Resources.FichaResource) )]
+        [Display(Name = "captionNombre", ResourceType = typeof(Resources.FichaResource))]
         [StringLength(250, ErrorMessageResourceName = "StringLengthErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource), MinimumLength = 5)]
         public string Nombre { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "RequiredErrorFemale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
-        [Display(Name = "captionNombre", ResourceType = typeof(Resources.FichaResource))]
+        [Display(Name = "captionIdentificacion", ResourceType = typeof(Resources.FichaResource))]
         [StringLength(50, ErrorMessageResourceName = "StringLengthErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
         public string Identificacion { get; set; }
-        [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "RequiredErrorFemale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
         [Display(Name = "captionUO", ResourceType = typeof(Resources.FichaResource))]
         [Range(1, long.MaxValue, ErrorMessageResourceName = "RequiredErrorFemale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
         public long IdUnidadOrganizativaPersona { get; set; }
         [Display(Name = "captionUO", ResourceType = typeof(Resources.FichaResource))]
         public UnidadOrganizativaModel UnidadOrganizativa { get; set; }
-        [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
         [Display(Name = "captionCargo", ResourceType = typeof(Resources.FichaResource))]
         [Range(1, long.MaxValue, ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
         public long IdCargoPersona { get; set; }
         [Display(Name = "captionCargo", ResourceType = typeof(Resources.FichaResource))]
         public CargoModel Cargo { get; set; }
         public long IdUsuario { get; set; }
-        [EnsureOneElement(ErrorMessageResourceType = typeof(Resources.ErrorResource), ErrorMessageResourceName = "RequiredErrorMale" )]
+        [Remote("CheckEmails", "Documentos", ErrorMessageResourceType = typeof(Resources.ErrorResource), ErrorMessageResourceName = "RemoteEmail")]
         public IList<PersonaEmail> CorreosElectronicos { get; set; }
-        [EnsureOneElement(ErrorMessageResourceType = typeof(Resources.ErrorResource), ErrorMessageResourceName = "RequiredErrorMale")]
         public IList<PersonaDireccion> Direcciones { get; set; }
-        [EnsureOneElement(ErrorMessageResourceType = typeof(Resources.ErrorResource), ErrorMessageResourceName = "RequiredErrorMale")]
+        [Remote("CheckTelefonos", "Documentos", ErrorMessageResourceType = typeof(Resources.ErrorResource), ErrorMessageResourceName = "RemoteEmail")]
         public IList<PersonaTelefono> Telefonos { get; set; }
 
         public PersonaModel()
@@ -160,6 +158,13 @@ namespace BCMWeb.Models
         [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "RequiredErrorFemale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
         [Display(Name = "captionUO", ResourceType = typeof(Resources.FichaResource))]
         public string NombreUnidadOrganizativa { get; set; }
+        public string NombreCompleto
+        {
+            get
+            {
+                return Metodos.GetNombreUnidadCompleto(this.IdUnidad);
+            }
+        }
     }
     public class CargoModel
     {

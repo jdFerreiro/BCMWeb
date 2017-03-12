@@ -12,15 +12,15 @@ namespace BCMWeb.Data.EF
     using System;
     using System.Collections.Generic;
     
-    public partial class tblBIAUnidadTrabajoPersonas
+    public partial class tblModulo_Usuario
     {
         public long IdEmpresa { get; set; }
-        public long IdUnidadTrabajo { get; set; }
-        public long IdUnidadTrabajoProceso { get; set; }
-        public long IdUnidadPersona { get; set; }
-        public long IdClienteProceso { get; set; }
-        public string Nombre { get; set; }
+        public long IdModulo { get; set; }
+        public long IdUsuario { get; set; }
+        public bool Actualizar { get; set; }
+        public bool Eliminar { get; set; }
     
-        public virtual tblBIAUnidadTrabajoProceso tblBIAUnidadTrabajoProceso { get; set; }
+        public virtual tblModulo tblModulo { get; set; }
+        public virtual tblUsuario tblUsuario { get; set; }
     }
 }

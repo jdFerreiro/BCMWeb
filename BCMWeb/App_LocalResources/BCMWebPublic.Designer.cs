@@ -142,6 +142,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Se perderá la información actualizada. ¿Desea continuar con la cancelación?.
+        /// </summary>
+        public static string ConfirmCancelMessage {
+            get {
+                return ResourceManager.GetString("ConfirmCancelMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ¿Realmente desea eliminar el documento {0}?.
         /// </summary>
         public static string ConfirmDeleteMessage {

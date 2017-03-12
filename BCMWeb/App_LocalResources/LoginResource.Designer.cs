@@ -133,6 +133,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Indique su correo electrónico.
+        /// </summary>
+        public static string helpTextEmail {
+            get {
+                return ResourceManager.GetString("helpTextEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Indique su contraseña.
+        /// </summary>
+        public static string helpTextPassword {
+            get {
+                return ResourceManager.GetString("helpTextPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Por favor, registre su código de usuario y su contraseña.
         /// </summary>
         public static string loginTextoLinea1 {

@@ -2,6 +2,23 @@
 
 @model DocumentoModel
 
+@section LeftPanel {
+    @Html.DevExpress().Panel(settings =>
+   {
+       settings.Name = "LeftPane";
+       settings.FixedPosition = PanelFixedPosition.WindowLeft;
+       settings.Collapsible = true;
+       settings.SettingsAdaptivity.CollapseAtWindowInnerWidth = 1023;
+       settings.ControlStyle.CssClass = "leftPane";
+       settings.Styles.Panel.CssClass = "panel";
+       settings.SetContent(() =>
+       {
+           Html.RenderPartial("ContentLeftPartialView");
+       });
+   }).GetHtml()
+}
+
+
 <style type="text/css">
     .formLayout {
         max-width: 1300px;
@@ -10,11 +27,39 @@
 </style>
 
 <script type="text/javascript">
+
     function onButtonClick(s, e) {
         if (e.buttonIndex == 0) {
-            modalPersona.PerformCallback();
-            modalPersona.Show();
+            lp.Show();
+            var strUrl = '@Url.Action("PersonaPartialView", "Documentos", new { modId = Model.IdModulo })';
+            window.location.href = strUrl;
         }
+    }
+    function ResponsableChange(s, e) {
+        document.forms["frmFicha"].submit();
+    }
+    function CancelEdition(s, e) {
+        var txt = document.createElement("textarea");
+        var msg = '@Resources.BCMWebPublic.ConfirmCancelMessage';
+        txt.innerHTML = msg;
+        var message = txt.value;
+        if ($("#Updated").val() == 'true') {
+            if (confirm(message)) {
+                lp.Show();
+                document.location = '@Model.returnPage';
+            }
+        }
+        else {
+            lp.Show();
+            document.location = '@Model.returnPage';
+        }
+    }
+    function SendData(s, e) {
+        lp.Show();
+        document.forms["frmFicha"].submit();
+    }
+    function CheckedChange(s, e) {
+        fichaLayout.GetItemByName("gbCertificacion").SetVisible(s.GetChecked());
     }
 </script>
 
@@ -23,21 +68,269 @@
     Html.EnableUnobtrusiveJavaScript();
 }
 
-@using (Html.BeginForm("Ficha", "Documentos", FormMethod.Post, htmlAttributes: new { id = "frmLayout" }))
+@using (Html.BeginForm("Ficha", "Documentos", FormMethod.Post, htmlAttributes: new { id = "frmFicha" }))
 {
 
     @Html.Hidden("Certificar")
+    @Html.HiddenFor(m => m.Updated)
+    @Html.HiddenFor(m => m.Estatus)
+    @Html.HiddenFor(m => m.FechaCreacion)
+    @Html.HiddenFor(m => m.FechaEstadoDocumento)
+    @Html.HiddenFor(m => m.FechaUltimaModificacion)
+    @Html.HiddenFor(m => m.IdClaseDocumento)
+    @Html.HiddenFor(m => m.IdEmpresa)
+    @Html.HiddenFor(m => m.IdEstatus)
+    @Html.HiddenFor(m => m.IdDocumento)
+    @Html.HiddenFor(m => m.IdModulo)
+    @Html.HiddenFor(m => m.NroDocumento)
+    @Html.HiddenFor(m => m.NroVersion)
+    @Html.HiddenFor(m => m.VersionOriginal)
+    @Html.HiddenFor(m => m.returnPage)
+
+    for (int i = 0; i < Model.Entrevistas.Count(); i++)
+    {
+        @Html.HiddenFor(m => m.Entrevistas.ToList()[i].Final)
+        @Html.HiddenFor(m => m.Entrevistas.ToList()[i].IdDocumento)
+        @Html.HiddenFor(m => m.Entrevistas.ToList()[i].IdTipoDocumento)
+        @Html.HiddenFor(m => m.Entrevistas.ToList()[i].IdEntrevista)
+        @Html.HiddenFor(m => m.Entrevistas.ToList()[i].Inicio)
+
+        for (int j = 0; j < Model.Entrevistas.ToList()[i].Personas.Count(); j++)
+        {
+            @Html.HiddenFor(m => m.Entrevistas.ToList()[i].Personas.ToList()[j].IdEmpresa)
+            @Html.HiddenFor(m => m.Entrevistas.ToList()[i].Personas.ToList()[j].IdDocumento)
+            @Html.HiddenFor(m => m.Entrevistas.ToList()[i].Personas.ToList()[j].IdTipoDocumento)
+            @Html.HiddenFor(m => m.Entrevistas.ToList()[i].Personas.ToList()[j].IdEntrevista)
+            @Html.HiddenFor(m => m.Entrevistas.ToList()[i].Personas.ToList()[j].IdPersona)
+            @Html.HiddenFor(m => m.Entrevistas.ToList()[i].Personas.ToList()[j].Entrevistador)
+            @Html.HiddenFor(m => m.Entrevistas.ToList()[i].Personas.ToList()[j].Nombre)
+            @Html.HiddenFor(m => m.Entrevistas.ToList()[i].Personas.ToList()[j].Empresa)
+        }
+    }
+
+    for (int i = 0; i < Model.PersonasClave.Count(); i++)
+    {
+        @Html.HiddenFor(m => m.PersonasClave.ToList()[i].IdEmpresa)
+        @Html.HiddenFor(m => m.PersonasClave.ToList()[i].IdDocumento)
+        @Html.HiddenFor(m => m.PersonasClave.ToList()[i].IdTipoDocumento)
+        @Html.HiddenFor(m => m.PersonasClave.ToList()[i].IdPersona)
+        @Html.HiddenFor(m => m.PersonasClave.ToList()[i].Nombre)
+        @Html.HiddenFor(m => m.PersonasClave.ToList()[i].Cédula)
+        @Html.HiddenFor(m => m.PersonasClave.ToList()[i].TelefonoOficina)
+        @Html.HiddenFor(m => m.PersonasClave.ToList()[i].TelefonoHabitacion)
+        @Html.HiddenFor(m => m.PersonasClave.ToList()[i].TelefonoCelular)
+        @Html.HiddenFor(m => m.PersonasClave.ToList()[i].Email)
+        @Html.HiddenFor(m => m.PersonasClave.ToList()[i].DireccionHabitacion)
+        @Html.HiddenFor(m => m.PersonasClave.ToList()[i].Principal)
+        @Html.HiddenFor(m => m.PersonasClave.ToList()[i].Responsable)
+    }
+
+    for (int i = 0; i < Model.Aprobaciones.Count(); i++)
+    {
+        @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].IdEmpresa)
+        @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].IdDocumento)
+        @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].IdTipoDocumento)
+        @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].IdAprobacion)
+        @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].FechaAprobacion)
+        @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].IdPersona)
+        @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].Persona.IdPersona)
+        @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].Persona.Nombre)
+        @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].Persona.Identificacion)
+        @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].Persona.IdUnidadOrganizativaPersona)
+        @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].Persona.UnidadOrganizativa.IdUnidad)
+        @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].Persona.UnidadOrganizativa.IdUnidadPadre)
+        @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].Persona.UnidadOrganizativa.NombreUnidadOrganizativa)
+        @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].Persona.IdCargoPersona)
+        @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].Persona.Cargo.IdCargo)
+        @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].Persona.Cargo.NombreCargo)
+        @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].Persona.IdUsuario)
+
+        for (int j = 0; j < Model.Aprobaciones.ToList()[i].Persona.CorreosElectronicos.Count(); j++)
+        {
+            @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].Persona.CorreosElectronicos.ToList()[j].Email)
+            @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].Persona.CorreosElectronicos.ToList()[j].IdPersonaEmail)
+            @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].Persona.CorreosElectronicos.ToList()[j].IdTipoEmail)
+            @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].Persona.CorreosElectronicos.ToList()[j].TipoEmail)
+        }
+        for (int j = 0; j < Model.Aprobaciones.ToList()[i].Persona.Direcciones.Count(); j++)
+        {
+            @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].Persona.Direcciones.ToList()[j].CalleAvenida)
+            @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].Persona.Direcciones.ToList()[j].Ciudad)
+            @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].Persona.Direcciones.ToList()[j].EdificioCasa)
+            @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].Persona.Direcciones.ToList()[j].IdCiudad)
+            @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].Persona.Direcciones.ToList()[j].IdEstado)
+            @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].Persona.Direcciones.ToList()[j].IdPais)
+            @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].Persona.Direcciones.ToList()[j].IdPersonaDireccion)
+            @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].Persona.Direcciones.ToList()[j].IdTipoDireccion)
+            @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].Persona.Direcciones.ToList()[j].PisoNivel)
+            @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].Persona.Direcciones.ToList()[j].TipoDireccion)
+            @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].Persona.Direcciones.ToList()[j].TorreAla)
+            @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].Persona.Direcciones.ToList()[j].Urbanizacion)
+        }
+        for (int j = 0; j < Model.Aprobaciones.ToList()[i].Persona.Telefonos.Count(); j++)
+        {
+            @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].Persona.Telefonos.ToList()[j].CodigoArea)
+            @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].Persona.Telefonos.ToList()[j].Extension1)
+            @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].Persona.Telefonos.ToList()[j].Extension2)
+            @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].Persona.Telefonos.ToList()[j].IdPersonaTelefono)
+            @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].Persona.Telefonos.ToList()[j].IdTipoTelefono)
+            @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].Persona.Telefonos.ToList()[j].NroTelefono)
+            @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].Persona.Telefonos.ToList()[j].TipoTelefono)
+        }
+        @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].Aprobado)
+        @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].Procesado)
+        @Html.HiddenFor(m => m.Aprobaciones.ToList()[i].Responsable)
+    }
+    for (int i = 0; i < Model.Certificaciones.Count(); i++)
+    {
+        @Html.HiddenFor(m => m.Certificaciones.ToList()[i].IdEmpresa)
+        @Html.HiddenFor(m => m.Certificaciones.ToList()[i].IdDocumento)
+        @Html.HiddenFor(m => m.Certificaciones.ToList()[i].IdTipoDocumento)
+        @Html.HiddenFor(m => m.Certificaciones.ToList()[i].IdCertificacion)
+        @Html.HiddenFor(m => m.Certificaciones.ToList()[i].FechaCertificacion)
+        @Html.HiddenFor(m => m.Certificaciones.ToList()[i].IdPersona)
+        @Html.HiddenFor(m => m.Certificaciones.ToList()[i].Persona.IdPersona)
+        @Html.HiddenFor(m => m.Certificaciones.ToList()[i].Persona.Nombre)
+        @Html.HiddenFor(m => m.Certificaciones.ToList()[i].Persona.Identificacion)
+        @Html.HiddenFor(m => m.Certificaciones.ToList()[i].Persona.IdUnidadOrganizativaPersona)
+        @Html.HiddenFor(m => m.Certificaciones.ToList()[i].Persona.UnidadOrganizativa.IdUnidad)
+        @Html.HiddenFor(m => m.Certificaciones.ToList()[i].Persona.UnidadOrganizativa.IdUnidadPadre)
+        @Html.HiddenFor(m => m.Certificaciones.ToList()[i].Persona.UnidadOrganizativa.NombreUnidadOrganizativa)
+        @Html.HiddenFor(m => m.Certificaciones.ToList()[i].Persona.IdCargoPersona)
+        @Html.HiddenFor(m => m.Certificaciones.ToList()[i].Persona.Cargo.IdCargo)
+        @Html.HiddenFor(m => m.Certificaciones.ToList()[i].Persona.Cargo.NombreCargo)
+        @Html.HiddenFor(m => m.Certificaciones.ToList()[i].Persona.IdUsuario)
+
+        for (int j = 0; j < Model.Certificaciones.ToList()[i].Persona.CorreosElectronicos.Count(); j++)
+        {
+            @Html.HiddenFor(m => m.Certificaciones.ToList()[i].Persona.CorreosElectronicos.ToList()[j].Email)
+            @Html.HiddenFor(m => m.Certificaciones.ToList()[i].Persona.CorreosElectronicos.ToList()[j].IdPersonaEmail)
+            @Html.HiddenFor(m => m.Certificaciones.ToList()[i].Persona.CorreosElectronicos.ToList()[j].IdTipoEmail)
+            @Html.HiddenFor(m => m.Certificaciones.ToList()[i].Persona.CorreosElectronicos.ToList()[j].TipoEmail)
+        }
+        for (int j = 0; j < Model.Certificaciones.ToList()[i].Persona.Direcciones.Count(); j++)
+        {
+            @Html.HiddenFor(m => m.Certificaciones.ToList()[i].Persona.Direcciones.ToList()[j].CalleAvenida)
+            @Html.HiddenFor(m => m.Certificaciones.ToList()[i].Persona.Direcciones.ToList()[j].Ciudad)
+            @Html.HiddenFor(m => m.Certificaciones.ToList()[i].Persona.Direcciones.ToList()[j].EdificioCasa)
+            @Html.HiddenFor(m => m.Certificaciones.ToList()[i].Persona.Direcciones.ToList()[j].IdCiudad)
+            @Html.HiddenFor(m => m.Certificaciones.ToList()[i].Persona.Direcciones.ToList()[j].IdEstado)
+            @Html.HiddenFor(m => m.Certificaciones.ToList()[i].Persona.Direcciones.ToList()[j].IdPais)
+            @Html.HiddenFor(m => m.Certificaciones.ToList()[i].Persona.Direcciones.ToList()[j].IdPersonaDireccion)
+            @Html.HiddenFor(m => m.Certificaciones.ToList()[i].Persona.Direcciones.ToList()[j].IdTipoDireccion)
+            @Html.HiddenFor(m => m.Certificaciones.ToList()[i].Persona.Direcciones.ToList()[j].PisoNivel)
+            @Html.HiddenFor(m => m.Certificaciones.ToList()[i].Persona.Direcciones.ToList()[j].TipoDireccion)
+            @Html.HiddenFor(m => m.Certificaciones.ToList()[i].Persona.Direcciones.ToList()[j].TorreAla)
+            @Html.HiddenFor(m => m.Certificaciones.ToList()[i].Persona.Direcciones.ToList()[j].Urbanizacion)
+        }
+        for (int j = 0; j < Model.Certificaciones.ToList()[i].Persona.Telefonos.Count(); j++)
+        {
+            @Html.HiddenFor(m => m.Certificaciones.ToList()[i].Persona.Telefonos.ToList()[j].CodigoArea)
+            @Html.HiddenFor(m => m.Certificaciones.ToList()[i].Persona.Telefonos.ToList()[j].Extension1)
+            @Html.HiddenFor(m => m.Certificaciones.ToList()[i].Persona.Telefonos.ToList()[j].Extension2)
+            @Html.HiddenFor(m => m.Certificaciones.ToList()[i].Persona.Telefonos.ToList()[j].IdPersonaTelefono)
+            @Html.HiddenFor(m => m.Certificaciones.ToList()[i].Persona.Telefonos.ToList()[j].IdTipoTelefono)
+            @Html.HiddenFor(m => m.Certificaciones.ToList()[i].Persona.Telefonos.ToList()[j].NroTelefono)
+            @Html.HiddenFor(m => m.Certificaciones.ToList()[i].Persona.Telefonos.ToList()[j].TipoTelefono)
+        }
+        @Html.HiddenFor(m => m.Certificaciones.ToList()[i].Certificado)
+        @Html.HiddenFor(m => m.Certificaciones.ToList()[i].Procesado)
+        @Html.HiddenFor(m => m.Certificaciones.ToList()[i].Responsable)
+    }
+
+    for (int i = 0; i < Model.Anexos.Count(); i++)
+    {
+        @Html.HiddenFor(m => m.Anexos.ToList()[i].IdEmpresa)
+        @Html.HiddenFor(m => m.Anexos.ToList()[i].IdDocumento)
+        @Html.HiddenFor(m => m.Anexos.ToList()[i].IdTipoDocumento)
+        @Html.HiddenFor(m => m.Anexos.ToList()[i].IdAnexo)
+        @Html.HiddenFor(m => m.Anexos.ToList()[i].NombreArchivo)
+        @Html.HiddenFor(m => m.Anexos.ToList()[i].RutaArchivo)
+    }
+
+    for (int i = 0; i < Model.Auditoria.Count(); i++)
+    {
+        @Html.HiddenFor(m => m.Auditoria.ToList()[i].IdEmpresa)
+        @Html.HiddenFor(m => m.Auditoria.ToList()[i].IdDocumento)
+        @Html.HiddenFor(m => m.Auditoria.ToList()[i].IdTipoDocumento)
+        @Html.HiddenFor(m => m.Auditoria.ToList()[i].IdAuditoria)
+        @Html.HiddenFor(m => m.Auditoria.ToList()[i].FechaRegistro)
+        @Html.HiddenFor(m => m.Auditoria.ToList()[i].DireccionIP)
+        @Html.HiddenFor(m => m.Auditoria.ToList()[i].Mensaje)
+        @Html.HiddenFor(m => m.Auditoria.ToList()[i].Accion)
+        @Html.HiddenFor(m => m.Auditoria.ToList()[i].IdUsuario)
+        @Html.HiddenFor(m => m.Auditoria.ToList()[i].Usuario.IdUsuario)
+        @Html.HiddenFor(m => m.Auditoria.ToList()[i].Usuario.Nombre)
+        @Html.HiddenFor(m => m.Auditoria.ToList()[i].Usuario.Identificacion)
+        @Html.HiddenFor(m => m.Auditoria.ToList()[i].Usuario.IdUnidadOrganizativaPersona)
+        @Html.HiddenFor(m => m.Auditoria.ToList()[i].Usuario.UnidadOrganizativa.IdUnidad)
+        @Html.HiddenFor(m => m.Auditoria.ToList()[i].Usuario.UnidadOrganizativa.IdUnidadPadre)
+        @Html.HiddenFor(m => m.Auditoria.ToList()[i].Usuario.UnidadOrganizativa.NombreUnidadOrganizativa)
+        @Html.HiddenFor(m => m.Auditoria.ToList()[i].Usuario.IdCargoPersona)
+        @Html.HiddenFor(m => m.Auditoria.ToList()[i].Usuario.Cargo.IdCargo)
+        @Html.HiddenFor(m => m.Auditoria.ToList()[i].Usuario.Cargo.NombreCargo)
+        @Html.HiddenFor(m => m.Auditoria.ToList()[i].Usuario.IdUsuario)
+
+        for (int j = 0; j < Model.Auditoria.ToList()[i].Usuario.CorreosElectronicos.Count(); j++)
+        {
+            @Html.HiddenFor(m => m.Auditoria.ToList()[i].Usuario.CorreosElectronicos.ToList()[j].Email)
+            @Html.HiddenFor(m => m.Auditoria.ToList()[i].Usuario.CorreosElectronicos.ToList()[j].IdPersonaEmail)
+            @Html.HiddenFor(m => m.Auditoria.ToList()[i].Usuario.CorreosElectronicos.ToList()[j].IdTipoEmail)
+            @Html.HiddenFor(m => m.Auditoria.ToList()[i].Usuario.CorreosElectronicos.ToList()[j].TipoEmail)
+        }
+        for (int j = 0; j < Model.Auditoria.ToList()[i].Usuario.Direcciones.Count(); j++)
+        {
+            @Html.HiddenFor(m => m.Auditoria.ToList()[i].Usuario.Direcciones.ToList()[j].CalleAvenida)
+            @Html.HiddenFor(m => m.Auditoria.ToList()[i].Usuario.Direcciones.ToList()[j].Ciudad)
+            @Html.HiddenFor(m => m.Auditoria.ToList()[i].Usuario.Direcciones.ToList()[j].EdificioCasa)
+            @Html.HiddenFor(m => m.Auditoria.ToList()[i].Usuario.Direcciones.ToList()[j].IdCiudad)
+            @Html.HiddenFor(m => m.Auditoria.ToList()[i].Usuario.Direcciones.ToList()[j].IdEstado)
+            @Html.HiddenFor(m => m.Auditoria.ToList()[i].Usuario.Direcciones.ToList()[j].IdPais)
+            @Html.HiddenFor(m => m.Auditoria.ToList()[i].Usuario.Direcciones.ToList()[j].IdPersonaDireccion)
+            @Html.HiddenFor(m => m.Auditoria.ToList()[i].Usuario.Direcciones.ToList()[j].IdTipoDireccion)
+            @Html.HiddenFor(m => m.Auditoria.ToList()[i].Usuario.Direcciones.ToList()[j].PisoNivel)
+            @Html.HiddenFor(m => m.Auditoria.ToList()[i].Usuario.Direcciones.ToList()[j].TipoDireccion)
+            @Html.HiddenFor(m => m.Auditoria.ToList()[i].Usuario.Direcciones.ToList()[j].TorreAla)
+            @Html.HiddenFor(m => m.Auditoria.ToList()[i].Usuario.Direcciones.ToList()[j].Urbanizacion)
+        }
+        for (int j = 0; j < Model.Auditoria.ToList()[i].Usuario.Telefonos.Count(); j++)
+        {
+            @Html.HiddenFor(m => m.Auditoria.ToList()[i].Usuario.Telefonos.ToList()[j].CodigoArea)
+            @Html.HiddenFor(m => m.Auditoria.ToList()[i].Usuario.Telefonos.ToList()[j].Extension1)
+            @Html.HiddenFor(m => m.Auditoria.ToList()[i].Usuario.Telefonos.ToList()[j].Extension2)
+            @Html.HiddenFor(m => m.Auditoria.ToList()[i].Usuario.Telefonos.ToList()[j].IdPersonaTelefono)
+            @Html.HiddenFor(m => m.Auditoria.ToList()[i].Usuario.Telefonos.ToList()[j].IdTipoTelefono)
+            @Html.HiddenFor(m => m.Auditoria.ToList()[i].Usuario.Telefonos.ToList()[j].NroTelefono)
+            @Html.HiddenFor(m => m.Auditoria.ToList()[i].Usuario.Telefonos.ToList()[j].TipoTelefono)
+        }
+        @Html.HiddenFor(m => m.Auditoria.ToList()[i].Negocios)
+    }
+
+    for (int i = 0; i < Model.Procesos.Count(); i++)
+    {
+        @Html.HiddenFor(m => m.Procesos.ToList()[i].IdProceso)
+        @Html.HiddenFor(m => m.Procesos.ToList()[i].Nombre)
+        @Html.HiddenFor(m => m.Procesos.ToList()[i].Descripcion)
+        @Html.HiddenFor(m => m.Procesos.ToList()[i].NroProceso)
+        @Html.HiddenFor(m => m.Procesos.ToList()[i].FechaCreacion)
+        @Html.HiddenFor(m => m.Procesos.ToList()[i].Critico)
+        @Html.HiddenFor(m => m.Procesos.ToList()[i].IdEstatus)
+    }
+
     @Html.DevExpress().FormLayout(s =>
 {
     s.Name = "fichaLayout";
     s.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
     s.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 800;
     s.ControlStyle.CssClass = "fromLayout";
+    s.ColCount = 3;
 
     s.Items.AddGroupItem(gi =>
     {
         gi.Caption = Resources.FichaResource.captionGrupo1;
         gi.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        gi.Width = Unit.Percentage(100);
+        gi.ColSpan = 3;
         gi.ColCount = 1;
         gi.Items.Add(m => m.IdPersonaResponsable, i =>
         {
@@ -46,7 +339,7 @@
                 set.Width = Unit.Percentage(100);
                 set.ShowModelErrors = true;
 
-                //set.Properties.ClientSideEvents.ValueChanged = "UpdatePersona";
+                set.Name = "IdPersonaResponsable";
                 set.Properties.ValueType = typeof(long);
                 set.Properties.DataSource = BCMWeb.Metodos.GetPersonasConUsuario();
                 set.Properties.TextField = "Nombre";
@@ -60,29 +353,46 @@
                     cmb.DropDownButton.Visible = true;
                     cmb.Buttons.Add(new EditButton(Resources.BCMWebPublic.captionButtonNew));
                 };
+                set.Properties.ClientSideEvents.SelectedIndexChanged = "ResponsableChange";
             });
         });
-        gi.Items.Add(m => m.Responsable.Cargo, i =>
+        gi.Items.Add(m => m.Responsable.Cargo.NombreCargo, i =>
         {
             i.NestedExtension().TextBox(set =>
             {
+                set.Name = "Cargo";
                 set.Width = Unit.Percentage(100);
-                set.Enabled = false;
+                set.ReadOnly = true;
             });
         });
-        gi.Items.Add(m => m.Responsable.UnidadOrganizativa, i =>
+        gi.Items.Add(m => m.Responsable.UnidadOrganizativa.NombreCompleto, i =>
         {
             i.NestedExtension().TextBox(set =>
             {
+                set.Name = "UnidadOrganizativa";
                 set.Width = Unit.Percentage(100);
-                set.Enabled = false;
+                set.ReadOnly = true;
             });
+        });
+    });
+    s.Items.Add(i =>
+    {
+        i.Width = Unit.Percentage(100);
+        i.ColSpan = 3;
+        i.ShowCaption = DefaultBoolean.False;
+        i.ClientVisible = Model.Entrevistas.Count() == 0;
+        i.NestedExtension().Label(lb =>
+        {
+            lb.Text = Resources.ErrorResource.ErrorEntrevistas;
+            lb.ControlStyle.ForeColor = System.Drawing.Color.Red;
         });
     });
     s.Items.AddGroupItem(gi =>
     {
         gi.Caption = Resources.FichaResource.captionGrupo2;
         gi.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        gi.Width = Unit.Percentage(100);
+        gi.ColSpan = 3;
         gi.ColCount = 1;
         gi.Items.Add(m => m.Entrevistas, i =>
         {
@@ -93,10 +403,24 @@
             });
         });
     });
+    s.Items.Add(i =>
+    {
+        i.ShowCaption = DefaultBoolean.False;
+        i.ClientVisible = Model.Aprobaciones.Count() == 0;
+        i.Width = Unit.Percentage(100);
+        i.ColSpan = 3;
+        i.NestedExtension().Label(lb =>
+        {
+            lb.Text = Resources.ErrorResource.ErrorAprobaciones;
+            lb.ControlStyle.ForeColor = System.Drawing.Color.Red;
+        });
+    });
     s.Items.AddGroupItem(gi =>
     {
         gi.Caption = Resources.FichaResource.captionGrupo3;
         gi.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        gi.Width = Unit.Percentage(100);
+        gi.ColSpan = 3;
         gi.ColCount = 1;
         gi.Items.Add(m => m.Aprobaciones, i =>
         {
@@ -110,10 +434,26 @@
     s.Items.Add(m => m.RequiereCertificacion, i =>
     {
         i.Caption = Resources.FichaResource.captionRequiereCertificacion;
-        i.NestedExtension().CheckBox(set =>
+        i.Width = Unit.Percentage(100);
+        i.ColSpan = 3;
+        i.SetNestedContent(() =>
         {
-            set.Name = "cbxRequiereCertificacion";
-            set.Properties.ClientSideEvents.CheckedChanged = "function (s,e) {  if (s.GetChecked() == true) { fichaLayout.GetItemByName(\"gbCertificacion\").SetVisible(true); } else { fichaLayout.GetItemByName(\"gbCertificacion\").SetVisible(false);  } }";
+            Html.DevExpress().CheckBoxFor(f => f.RequiereCertificacion, set =>
+            {
+                set.Properties.ClientSideEvents.CheckedChanged = "CheckedChange";
+            }).Render();
+        });
+    });
+    s.Items.Add(i =>
+    {
+        i.ShowCaption = DefaultBoolean.False;
+        i.Width = Unit.Percentage(100);
+        i.ColSpan = 3;
+        i.ClientVisible = Model.RequiereCertificacion && Model.Certificaciones.Count() == 0;
+        i.NestedExtension().Label(lb =>
+        {
+            lb.Text = Resources.ErrorResource.ErrorCertificaciones;
+            lb.ControlStyle.ForeColor = System.Drawing.Color.Red;
         });
     });
     s.Items.AddGroupItem(gi =>
@@ -121,8 +461,10 @@
         gi.Name = "gbCertificacion";
         gi.Caption = Resources.FichaResource.captionGrupo4;
         gi.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        gi.Width = Unit.Percentage(100);
+        gi.ColSpan = 3;
         gi.ColCount = 1;
-        gi.Visible = Model.RequiereCertificacion;
+        gi.ClientVisible = Model.RequiereCertificacion;
         gi.Items.Add(m => m.Certificaciones, i =>
         {
             i.Caption = string.Empty;
@@ -132,13 +474,27 @@
             });
         });
     });
+    s.Items.Add(i =>
+    {
+        i.ShowCaption = DefaultBoolean.False;
+        i.Width = Unit.Percentage(100);
+        i.ColSpan = 3;
+        i.ClientVisible = (Session["IdTipoDocumento"].ToString() != "4" && Session["IdTipoDocumento"].ToString() != "7" && Model.PersonasClave.Count() == 0);
+        i.NestedExtension().Label(lb =>
+        {
+            lb.Text = Resources.ErrorResource.ErrorPersonasClaves;
+            lb.ControlStyle.ForeColor = System.Drawing.Color.Red;
+        });
+    });
     s.Items.AddGroupItem(gi =>
     {
         gi.Name = "gbPersonasClaves";
         gi.Caption = Resources.FichaResource.captionGrupo5;
         gi.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        gi.Width = Unit.Percentage(100);
+        gi.ColSpan = 3;
         gi.ColCount = 1;
-        gi.Visible = (Session["IdTipoDocumento"].ToString() != "4" && Session["IdTipoDocumento"].ToString() != "7");
+        gi.ClientVisible = (Session["IdTipoDocumento"].ToString() != "4" && Session["IdTipoDocumento"].ToString() != "7");
         gi.Items.Add(m => m.PersonasClave, i =>
         {
             i.Caption = string.Empty;
@@ -148,13 +504,27 @@
             });
         });
     });
+    s.Items.Add(i =>
+    {
+        i.ShowCaption = DefaultBoolean.False;
+        i.ClientVisible = (Session["IdTipoDocumento"].ToString() == "4" && Model.Procesos.Count() == 0);
+        i.Width = Unit.Percentage(100);
+        i.ColSpan = 3;
+        i.NestedExtension().Label(lb =>
+        {
+            lb.Text = Resources.ErrorResource.ErrorProcesos;
+            lb.ControlStyle.ForeColor = System.Drawing.Color.Red;
+        });
+    });
     s.Items.AddGroupItem(gi =>
     {
         gi.Name = "gbProcesos";
         gi.Caption = Resources.FichaResource.captionGrupo6;
         gi.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        gi.Width = Unit.Percentage(100);
+        gi.ColSpan = 3;
         gi.ColCount = 1;
-        gi.Visible = (Session["IdTipoDocumento"].ToString() == "4");
+        gi.ClientVisible = (Session["IdTipoDocumento"].ToString() == "4");
         gi.Items.Add(m => m.Procesos, i =>
         {
             i.Caption = string.Empty;
@@ -164,15 +534,35 @@
             });
         });
     });
-    s.Items.Add(i =>
+    s.Items.AddEmptyItem();
+    s.Items.AddEmptyItem();
+    s.Items.AddGroupItem(gi =>
     {
-        i.ShowCaption = DefaultBoolean.False;
-        i.HorizontalAlign = FormLayoutHorizontalAlign.Right;
-        i.NestedExtension().Button(bt =>
+        gi.Name = "gbButtons";
+        gi.ShowCaption = DefaultBoolean.False;
+        gi.ColCount = 2;
+        gi.Items.Add(i =>
         {
-            bt.Name = "botSaveFicha";
-            bt.Text = Resources.BCMWebPublic.captionButtonSave;
-            bt.UseSubmitBehavior = true;
+            i.ShowCaption = DefaultBoolean.False;
+            i.HorizontalAlign = FormLayoutHorizontalAlign.Center;
+            i.NestedExtension().Button(bt =>
+            {
+                bt.Name = "botSaveFicha";
+                bt.Text = Resources.BCMWebPublic.captionButtonSave;
+                bt.ClientSideEvents.Click = "SendData";
+
+            });
+        });
+        gi.Items.Add(i =>
+        {
+            i.ShowCaption = DefaultBoolean.False;
+            i.HorizontalAlign = FormLayoutHorizontalAlign.Center;
+            i.NestedExtension().Button(bt =>
+            {
+                bt.Name = "botCancelFicha";
+                bt.Text = Resources.BCMWebPublic.captionButtonCancel;
+                bt.ClientSideEvents.Click = "CancelEdition";
+            });
         });
     });
 
@@ -195,9 +585,10 @@
     s.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
     s.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
     s.ScrollBars = ScrollBars.Vertical;
+    s.ClientSideEvents.Shown = "function (s,e) { lp.Hide(); }";
     s.SetContent(() =>
     {
         Html.RenderPartial("PersonaPartialView", new PersonaModel());
     });
-}).GetHtml();
+}).GetHtml()
 

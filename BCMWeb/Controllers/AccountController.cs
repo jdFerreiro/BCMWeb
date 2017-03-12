@@ -12,7 +12,7 @@ using BCMWeb.Security;
 
 namespace BCMWeb.Controllers {
     [Authorize]
-    [InitializeSimpleMembership]
+    //[InitializeSimpleMembership]
     public class AccountController : Controller {
 
         //

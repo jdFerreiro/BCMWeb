@@ -1,6 +1,6 @@
 @using BCMWeb.Models
 
-@model DocumentosModel
+@model ModulosUserModel
 
 <div class="leftPanel">
     <table>
@@ -10,7 +10,7 @@
                 {
                     b.Name = "botReturn";
                     b.Text = Resources.BCMWebPublic.botReturnText;
-                    b.ClientSideEvents.Click = "function(s, e) { lp.Show(); document.location='" + DevExpressHelper.GetUrl(new { Controller = "Documento", Action = "Index" }) + "?IdModulo=" + Model.IdModulo.ToString() + "' }";
+                    b.ClientSideEvents.Click = "function(s, e) { lp.Show(); document.location='" + Model.returnPage + "' }";
 
                 }).GetHtml()
             </td>

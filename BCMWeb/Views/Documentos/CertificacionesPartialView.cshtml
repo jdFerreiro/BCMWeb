@@ -21,7 +21,7 @@ settings =>
     settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
 
     settings.SettingsPager.PageSize = 20;
-    settings.SettingsPager.Position = PagerPosition.TopAndBottom;
+    settings.SettingsPager.Position = PagerPosition.Bottom;
     settings.SettingsPager.FirstPageButton.Visible = true;
     settings.SettingsPager.LastPageButton.Visible = true;
     settings.SettingsPager.PageSizeItemSettings.Visible = true;
@@ -38,7 +38,7 @@ settings =>
             ViewContext.Writer.Write(
                 Html.ActionLink(Resources.BCMWebPublic.captionButtonEdit, "EditarCertificacion", new { IdCertificacion = DataBinder.Eval(c.DataItem, "IdCertificacion") }) + "&nbsp;" +
                 Html.ActionLink(Resources.BCMWebPublic.captionButtonDelete, "EliminarCertificacion", new { IdCertificacion = DataBinder.Eval(c.DataItem, "IdCertificacion") },
-                    new { onclick = "return confirm('" + string.Format(Resources.BCMWebPublic.ConfirmDeleteMessage, DataBinder.Eval(c.DataItem, "NroDocumento")) + "')" })
+                    new { onclick = "return confirm('" + string.Format(Resources.BCMWebPublic.ConfirmDeleteMessage, DataBinder.Eval(c.DataItem, "Persona.Nombre")) + "')" })
             );
         });
         column.SetHeaderTemplateContent(c =>
@@ -50,7 +50,7 @@ settings =>
         column.CellStyle.HorizontalAlign = HorizontalAlign.Center;
         column.Settings.AllowDragDrop = DefaultBoolean.False;
         column.Settings.AllowSort = DefaultBoolean.False;
-        column.Width = Unit.Percentage(10);
+        column.Width = Unit.Percentage(15);
     });
 
     settings.Columns.Add(c =>
@@ -69,7 +69,7 @@ settings =>
     {
         c.Settings.AllowSort = DefaultBoolean.True;
         c.FieldName = "Persona.Nombre";
-        c.Width = Unit.Percentage(45);
+        c.Width = Unit.Percentage(40);
         c.Caption = Resources.DocumentoResource.captionCertificador;
         c.PropertiesEdit.DisplayFormatString = "{0}";
         c.HeaderStyle.Wrap = DefaultBoolean.True;
@@ -82,6 +82,7 @@ settings =>
         c.FieldName = "Procesado";
         c.Width = Unit.Percentage(10);
         c.Caption = Resources.DocumentoResource.captionProcesado;
+        c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
         c.PropertiesEdit.DisplayFormatString = "{0}";
         c.HeaderStyle.Wrap = DefaultBoolean.True;
         c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
@@ -93,6 +94,7 @@ settings =>
         c.FieldName = "Certificado";
         c.Width = Unit.Percentage(10);
         c.Caption = Resources.DocumentoResource.captionCertificado;
+        c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
         c.PropertiesEdit.DisplayFormatString = "{0}";
         c.HeaderStyle.Wrap = DefaultBoolean.True;
         c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;

@@ -78,8 +78,8 @@ namespace BCMWeb
 
                     if (IdNivelUsuario != null)
                     {
-                        Data = (from m in db.tblModulo_NivelUsuario
-                                where m.IdEmpresa == IdEmpresa && m.IdNivelUsuario == IdNivelUsuario && m.tblModulo.IdModuloPadre == 0
+                        Data = (from m in db.tblModulo_Usuario
+                                where m.IdEmpresa == IdEmpresa && m.tblModulo.IdModuloPadre == 0 && m.IdUsuario == UserId && m.IdModulo < 99000000
                                 select new ModuloModel
                                 {
                                     Action = m.tblModulo.Accion,
@@ -209,6 +209,7 @@ namespace BCMWeb
                                   Certificaciones = docCertificaciones,
                                   Contenido = docContenido,
                                   Entrevistas = docEntrevistas,
+                                  Estatus = d.tblEstadoDocumento.tblCultura_EstadoDocumento.Where(x => x.Culture == Culture || x.Culture == "es-VE").FirstOrDefault().Descripcion,
                                   FechaCreacion = d.FechaCreacion,
                                   FechaEstadoDocumento = d.FechaEstadoDocumento,
                                   FechaUltimaModificacion = (DateTime)d.FechaUltimaModificacion,
@@ -499,8 +500,8 @@ namespace BCMWeb
             using (Entities db = new Entities())
             {
                 long IdNivelUsuario = db.tblEmpresaUsuario.Where(x => x.IdEmpresa == IdEmpresa && x.IdUsuario == IdUsuario).FirstOrDefault().IdNivelUsuario;
-                SubModulos = db.tblModulo_NivelUsuario
-                    .Where(x => x.IdEmpresa == IdEmpresa && x.IdNivelUsuario == IdNivelUsuario && x.tblModulo.IdModuloPadre == IdModuloPadre)
+                SubModulos = db.tblModulo_Usuario
+                    .Where(x => x.IdEmpresa == IdEmpresa && x.IdUsuario == IdUsuario && x.tblModulo.IdModuloPadre == IdModuloPadre)
                     .Select(x => x.tblModulo).ToList();
             }
 
@@ -518,8 +519,8 @@ namespace BCMWeb
             {
                 long IdNivelUsuario = db.tblEmpresaUsuario.Where(x => x.IdEmpresa == IdEmpresa && x.IdUsuario == IdUsuario).FirstOrDefault().IdNivelUsuario;
 
-                firstModulo = db.tblModulo_NivelUsuario
-                    .Where(x => x.IdEmpresa == IdEmpresa && x.IdNivelUsuario == IdNivelUsuario && x.tblModulo.IdCodigoModulo == _IdCodigoModulo && x.tblModulo.IdTipoElemento == 4)
+                firstModulo = db.tblModulo_Usuario
+                    .Where(x => x.IdEmpresa == IdEmpresa && x.IdUsuario == IdUsuario && x.tblModulo.IdCodigoModulo == _IdCodigoModulo && x.tblModulo.IdTipoElemento == 4)
                     .OrderBy(x => x.IdModulo)
                     .Select(x => new FirstModuloSelected
                     {
@@ -595,6 +596,30 @@ namespace BCMWeb
 
             return Persona;
         }
+
+        public static string GetNombreUnidadCompleto(long idUnidadOrganizativa)
+        {
+            string NombreCompleto = string.Empty;
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+
+            using (Entities db = new Entities())
+            {
+                tblUnidadOrganizativa unidad = db.tblUnidadOrganizativa.Where(x => x.IdEmpresa == IdEmpresa && x.IdUnidadOrganizativa == idUnidadOrganizativa).FirstOrDefault();
+                NombreCompleto = unidad.Nombre;
+
+                while (unidad.IdUnidadPadre != unidad.IdUnidadOrganizativa)
+                {
+                    unidad = db.tblUnidadOrganizativa.Where(x => x.IdEmpresa == IdEmpresa && x.IdUnidadOrganizativa == unidad.IdUnidadPadre).FirstOrDefault();
+                    if (unidad != null)
+                    {
+                        NombreCompleto = unidad.Nombre + " / " + NombreCompleto;
+                    }
+                }
+            }
+
+            return NombreCompleto;
+        }
+
         public static IList<PersonaModel> GetPersonasConUsuario()
         {
             long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());

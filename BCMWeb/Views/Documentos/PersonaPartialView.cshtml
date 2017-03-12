@@ -66,14 +66,13 @@
 {
     s.Name = "personaLayout";
     s.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
-    s.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 800;
+    s.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 400;
     s.ControlStyle.CssClass = "fromLayout";
 
     s.Items.AddGroupItem(gi =>
     {
         gi.Caption = Resources.FichaResource.personaGrupoDatos;
         gi.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
-        gi.ColCount = 1;
         gi.Items.Add(m => m.Nombre, i =>
         {
             i.NestedExtension().TextBox(tb =>
@@ -82,6 +81,8 @@
                 tb.ShowModelErrors = true;
                 tb.Properties.ValidationSettings.Display = Display.Dynamic;
                 tb.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                tb.Properties.HelpTextSettings.Position = HelpTextPosition.Bottom;
+                //tb.Properties.HelpText = Resources.LoginResource.helpTextEmail;
             });
         });
         gi.Items.Add(m => m.Identificacion, i =>
@@ -92,6 +93,8 @@
                 tb.ShowModelErrors = true;
                 tb.Properties.ValidationSettings.Display = Display.Dynamic;
                 tb.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                tb.Properties.HelpTextSettings.Position = HelpTextPosition.Bottom;
+                tb.Properties.HelpText = Resources.DocumentoResource.helpTextIdentificacion;
             });
         });
         gi.Items.Add(m => m.IdUnidadOrganizativaPersona, i =>
@@ -101,7 +104,7 @@
                 cb.Width = Unit.Percentage(100);
                 cb.ShowModelErrors = true;
 
-                //set.Properties.ClientSideEvents.ValueChanged = "UpdatePersona";
+                cb.Properties.DropDownStyle = DropDownStyle.DropDownList;
                 cb.Properties.ValueType = typeof(long);
                 cb.Properties.DataSource = BCMWeb.Metodos.GetUnidades();
                 cb.Properties.TextField = "NombreUnidadOrganizativa";
@@ -109,6 +112,7 @@
                 cb.Properties.ValidationSettings.Display = Display.Dynamic;
                 cb.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                 cb.Properties.ClientSideEvents.ButtonClick = "botUO_Click";
+                cb.Properties.HelpTextSettings.Position = HelpTextPosition.Bottom;
                 cb.PreRender = (sender, e) =>
                 {
                     ASPxComboBox cmb = (ASPxComboBox)sender;
@@ -123,15 +127,17 @@
             i.NestedExtension().ComboBox(cb =>
             {
                 cb.Width = Unit.Percentage(100);
-                cb.ShowModelErrors = true;
+                //cb.ShowModelErrors = true;
 
                 cb.Properties.ValueType = typeof(long);
                 cb.Properties.DataSource = BCMWeb.Metodos.GetCargos();
                 cb.Properties.TextField = "NombreCargo";
                 cb.Properties.ValueField = "IdCargo";
                 cb.Properties.ValidationSettings.Display = Display.Dynamic;
+                cb.Properties.DropDownStyle = DropDownStyle.DropDownList;
                 cb.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                 cb.Properties.ClientSideEvents.ButtonClick = "botCargo_Click";
+                cb.Properties.HelpTextSettings.Position = HelpTextPosition.Bottom;
                 cb.PreRender = (sender, e) =>
                 {
                     ASPxComboBox cmb = (ASPxComboBox)sender;
@@ -142,11 +148,20 @@
             });
         });
     });
+    s.Items.Add(i =>
+    {
+        i.ShowCaption = DefaultBoolean.False;
+        i.ClientVisible = (Model.CorreosElectronicos.Count == 0);
+        i.NestedExtension().Label(lb =>
+        {
+            lb.Text = Resources.ErrorResource.RemoteEmail;
+            lb.ControlStyle.ForeColor = System.Drawing.Color.Red;
+        });
+    });
     s.Items.AddGroupItem(gi =>
     {
         gi.Caption = Resources.FichaResource.personaGrupoCorreos;
         gi.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
-        gi.ColCount = 1;
         gi.Items.Add(m => m.CorreosElectronicos, i =>
         {
             i.Caption = string.Empty;
@@ -156,11 +171,20 @@
             });
         });
     });
+    s.Items.Add(i =>
+    {
+        i.ShowCaption = DefaultBoolean.False;
+        i.ClientVisible = (Model.Telefonos.Count == 0);
+        i.NestedExtension().Label(lb =>
+        {
+            lb.Text = Resources.ErrorResource.RemoteTelefono;
+            lb.ControlStyle.ForeColor = System.Drawing.Color.Red;
+        });
+    });
     s.Items.AddGroupItem(gi =>
     {
         gi.Caption = Resources.FichaResource.personaGrupoTelefono;
         gi.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
-        gi.ColCount = 1;
         gi.Items.Add(m => m.Telefonos, i =>
         {
             i.Caption = string.Empty;
@@ -170,18 +194,34 @@
             });
         });
     });
-    s.Items.Add(i =>
+    s.Items.AddGroupItem(gi =>
     {
-        i.ShowCaption = DefaultBoolean.False;
-        i.HorizontalAlign = FormLayoutHorizontalAlign.Right;
-        i.NestedExtension().Button(bt =>
+        gi.ShowCaption = DefaultBoolean.False;
+        gi.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        gi.Width = Unit.Percentage(25);
+        gi.ColCount = 2;
+        gi.Items.Add(i =>
         {
-            bt.Name = "botSavePersona";
-            bt.Text = Resources.BCMWebPublic.captionButtonSave;
-            bt.UseSubmitBehavior = true;
+            i.ShowCaption = DefaultBoolean.False;
+            i.NestedExtension().Button(bt =>
+            {
+                bt.Name = "botSavePersona";
+                bt.Text = Resources.BCMWebPublic.captionButtonSave;
+                bt.UseSubmitBehavior = true;
+            });
+        });
+        gi.Items.Add(i =>
+        {
+            i.ShowCaption = DefaultBoolean.False;
+            i.NestedExtension().Button(bt =>
+            {
+                bt.Name = "botCancelPersona";
+                bt.Text = Resources.BCMWebPublic.captionButtonCancel;
+                bt.ClientSideEvents.Click = "function(s, e) { lp.Show(); document.location='" + Model.returnPage + "' }";
+            });
         });
     });
-}).GetHtml();
+}).GetHtml()
 }
 
 @Html.DevExpress().PopupControl(s =>
@@ -203,7 +243,7 @@
     {
         Html.RenderPartial("NuevaUnidadOrganizativaPartialView", new UnidadOrganizativaModel());
     });
-}).GetHtml();
+}).GetHtml()
 @Html.DevExpress().PopupControl(s =>
 {
     s.Name = "modalCargo";
@@ -223,4 +263,4 @@
     {
         Html.RenderPartial("NuevoCargoPartialView", new CargoModel());
     });
-}).GetHtml();
+}).GetHtml()

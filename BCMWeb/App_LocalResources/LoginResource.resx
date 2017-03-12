@@ -141,6 +141,12 @@
   <data name="captionUsername" xml:space="preserve">
     <value>Correo electrónico</value>
   </data>
+  <data name="helpTextEmail" xml:space="preserve">
+    <value>Indique su correo electrónico</value>
+  </data>
+  <data name="helpTextPassword" xml:space="preserve">
+    <value>Indique su contraseña</value>
+  </data>
   <data name="loginTextoLinea1" xml:space="preserve">
     <value>Por favor, registre su código de usuario y su contraseña</value>
   </data>
