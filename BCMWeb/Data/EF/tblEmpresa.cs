@@ -28,7 +28,6 @@ namespace BCMWeb.Data.EF
             this.tblBIAUnidadTrabajo = new HashSet<tblBIAUnidadTrabajo>();
             this.tblCargo = new HashSet<tblCargo>();
             this.tblDocumento = new HashSet<tblDocumento>();
-            this.tblDocumentoAuditoria = new HashSet<tblDocumentoAuditoria>();
             this.tblDocumentoPersonaClave = new HashSet<tblDocumentoPersonaClave>();
             this.tblEscala = new HashSet<tblEscala>();
             this.tblLocalidad = new HashSet<tblLocalidad>();
@@ -51,6 +50,7 @@ namespace BCMWeb.Data.EF
             this.tblPMTResponsableUpdate = new HashSet<tblPMTResponsableUpdate>();
             this.tblProducto = new HashSet<tblProducto>();
             this.tblUsuarioUnidadOrganizativa = new HashSet<tblUsuarioUnidadOrganizativa>();
+            this.tblAuditoria = new HashSet<tblAuditoria>();
         }
     
         public long IdEmpresa { get; set; }
@@ -90,8 +90,6 @@ namespace BCMWeb.Data.EF
         public virtual ICollection<tblCargo> tblCargo { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblDocumento> tblDocumento { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblDocumentoAuditoria> tblDocumentoAuditoria { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblDocumentoPersonaClave> tblDocumentoPersonaClave { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -137,5 +135,7 @@ namespace BCMWeb.Data.EF
         public virtual ICollection<tblProducto> tblProducto { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblUsuarioUnidadOrganizativa> tblUsuarioUnidadOrganizativa { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblAuditoria> tblAuditoria { get; set; }
     }
 }

@@ -218,3 +218,40 @@ h4 {
 .text-center {
     text-align: center;
 }
+
+.PageTitle {
+    text-align: center;
+    font-weight: bold;
+    padding: 5px;
+}
+
+.imgWrap {
+    width: 95%;
+    text-align: center;
+    margin: auto;
+}
+
+.editable {
+    padding: 5px;
+    text-align:center;
+    font-weight: bold;
+    color: #fff;
+    background-color: #1a6b2f;
+}
+
+.noEditable {
+    padding: 5px;
+    text-align: center;
+    font-weight: bold;
+    color: #fff;
+    background-color: #6b1a1a;
+}
+
+.generarPDF {
+    width: 70%;
+    padding: 5px;
+    border: solid 1px #000;
+    border-radius: 5px;
+    margin: auto;
+    font-size: 12pt;
+}

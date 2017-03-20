@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using WebMatrix.WebData;
 using BCMWeb.Models;
 
-namespace BCMWeb.Filters {
+namespace BCMWeb {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
     public sealed class InitializeSimpleMembershipAttribute : ActionFilterAttribute {
         private static SimpleMembershipInitializer _initializer;

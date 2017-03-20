@@ -133,6 +133,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ver.
+        /// </summary>
+        public static string captionButtonVer {
+            get {
+                return ResourceManager.GetString("captionButtonVer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Políticas de Confidencialidad.
         /// </summary>
         public static string ConfidencialidadPageTitle {
@@ -237,6 +246,15 @@ namespace Resources {
         public static string ProcedimientoBIAPageTitle {
             get {
                 return ResourceManager.GetString("ProcedimientoBIAPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UEsDBBQAAgAIAG2TbkrYMAaQRAEAAJMCAAARAAAAZG9jUHJvcHMvY29yZS54bWydkktuwjAQhq9ieZ84CRVUUQgSRSyqIlUqUqvuLHsAq/FDtiFwpJ6hiy56oF6hiSERqKiLLmfm++f9/fFZTPayQjuwTmg1xmmcYASKaS7Ueoy3fhXd4klZMJMzbeHRagPWC3CokSmXczbGG+9NTojZ2irWdk04I1CBBOUdSeOU4J71YKW7KgiRM1IKfzBwFe2CPb13ogfruo7rQUCzJEnJy+LhiW1A0kgo56li0KmY6UUuEC5uZlNNcKWtpN6FJIayN7qGNtmQSPCUU09Ju4rI9LvAZcFZzixQr215r93XO5rRneBoDtaCsBpNq6a2LsgZV5z2cXQAR80c+XHqLvI8uJst57jMknQUJYMovVlmWZ6N8mz42ua60IcjVdT5RXO8lQA+Pfzdy2+8b0mefP/uqUsQmrKwE+17lWko2pvBunyr8gdQSwMEFAACAAgAbZNu [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string stringEmptyContenido {
+            get {
+                return ResourceManager.GetString("stringEmptyContenido", resourceCulture);
             }
         }
     }

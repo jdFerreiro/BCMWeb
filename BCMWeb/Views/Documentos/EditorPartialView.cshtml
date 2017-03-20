@@ -1,0 +1,60 @@
+﻿@using DevExpress.XtraRichEdit
+
+@Html.DevExpress().RichEdit(settings =>
+{
+    settings.Name = "RichEdit";
+    settings.CallbackRouteValues = new { Controller = "Documentos", Action = "EditorPartialView" };
+
+    settings.Width = Unit.Percentage(100);
+    settings.Height = Unit.Pixel(520);
+    settings.ShowConfirmOnLosingChanges = true;
+    settings.ActiveTabIndex = 0;
+
+    settings.ShowStatusBar = false;
+    settings.ReadOnly = !((bool)Session["Editable"]);
+
+    settings.Settings.DocumentCapabilities.HeadersFooters = DocumentCapability.Enabled;
+    settings.RibbonMode = RichEditRibbonMode.Ribbon;
+    settings.EnableClientSideAPI = true;
+    settings.SettingsDocumentSelector.UploadSettings.Enabled = true;
+    settings.ClientSideEvents.CustomCommandExecuted = "OnCustomCommandExecuted";
+    settings.ClientSideEvents.BeginCallback = "onBeginRichEditCallback";
+    settings.ClientSideEvents.EndCallback = "function (s,e) { lp.Hide(); }";
+    //settings.ClientSideEvents.DocumentChanged = "docChange";
+
+    settings.CustomActionRouteValues = new { Controller = "Documentos", Action = "Open" };
+
+    settings.PreRender = (s, e) =>
+    {
+        MVCxRichEdit richEdit = (MVCxRichEdit)s;
+        richEdit.CreateDefaultRibbonTabs(false);
+
+        //Custom Open button
+        richEdit.RibbonTabs[0].Groups[0].Items.RemoveAll(x => x is RERNewCommand);
+        richEdit.RibbonTabs[0].Groups[0].Items.RemoveAll(x => x is REROpenCommand);
+        richEdit.RibbonTabs[0].Groups[0].Items.RemoveAll(x => x is RERSaveAsCommand);
+        richEdit.RibbonTabs[0].Groups[0].Items.RemoveAll(x => x is RERSaveCommand);
+
+        richEdit.RibbonTabs[0].Groups[0].Items.Insert(1, new RibbonButtonItem
+        {
+            Size = RibbonItemSize.Large,
+            LargeImage = { IconID = IconID.ActionsOpen32x32 },
+            Text = Resources.EditorResources.OpenCustomText,
+            Name = "open"
+        });
+        richEdit.RibbonTabs[0].Groups[0].Items.Insert(1, new RibbonButtonItem
+        {
+            Size = RibbonItemSize.Large,
+            LargeImage = { IconID = IconID.ActionsSave32x32devav },
+            Text = Resources.EditorResources.SaveCustomText,
+            Name = "botSave"
+        });
+
+        richEdit.Focus();
+    };
+
+}).Open((string)Session["UniqueId"], DocumentFormat.OpenXml, () =>
+{
+    return (Convert.FromBase64String(Session["Contenido"].ToString()));
+}
+).GetHtml()

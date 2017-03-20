@@ -2,6 +2,14 @@
 
 @model ModulosUserModel
 
+<script type="text/javascript">
+    function itemMenuClick(s, e) {
+        if (e.item.items.length == 0) {
+            lp.Show();
+        }
+    }
+</script>
+
 <div class="leftPanel">
     <table>
         <tr>
@@ -11,14 +19,11 @@
                     b.Name = "botReturn";
                     b.Text = Resources.BCMWebPublic.botReturnText;
                     b.ClientSideEvents.Click = "function(s, e) { lp.Show(); document.location='" + Model.returnPage + "' }";
-
                 }).GetHtml()
             </td>
         </tr>
         <tr>
-            <td>
-                &nbsp;
-            </td>
+            <td>&nbsp;</td>
         </tr>
         <tr>
             <td>
@@ -29,21 +34,34 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>
-                            &nbsp;
-                        </td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        @if ((bool)Session["Editable"] == true)
+                        {
+
+                            @Html.Raw("<td class=\"editable\">" + Resources.EditorResources.EditableText + "</td>");
+                        }
+                        else
+                        {
+                            @Html.Raw("<td class=\"noEditable\">" + Resources.EditorResources.NoEditableText + "</td>");
+                        }
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
                     </tr>
                     <tr>
                         <td>
                             @Html.DevExpress().Menu(s =>
-                                {
-                                    s.Name = "menuOpciones";
-                                    s.Width = Unit.Percentage(100);
-                                    s.Orientation = Orientation.Vertical;
-                                    s.ShowPopOutImages = DefaultBoolean.True;
-                                    s.ControlStyle.HorizontalAlign = HorizontalAlign.Center;
-                                    s.EnableAdaptivity = true;
-                                }).Bind(Model.SubModulos).GetHtml()
+                            {
+                                s.Name = "menuOpciones";
+                                s.Width = Unit.Percentage(100);
+                                s.Orientation = Orientation.Vertical;
+                                s.ShowPopOutImages = DefaultBoolean.True;
+                                s.ControlStyle.HorizontalAlign = HorizontalAlign.Center;
+                                s.EnableAdaptivity = true;
+                                s.ClientSideEvents.ItemClick = "itemMenuClick";
+                            }).Bind(Model.SubModulos).GetHtml()
                         </td>
                     </tr>
                 </table>
@@ -51,3 +69,4 @@
         </tr>
     </table>
 </div>
+

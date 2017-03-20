@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DevExpress.XtraRichEdit;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -57,16 +58,17 @@ namespace BCMWeb.Models
         }
         [Display(Name = "captionRequiereCertificacion", ResourceType = typeof(Resources.DocumentoResource))]
         public bool RequiereCertificacion { get; set; }
-        public IEnumerable<DocumentoAnexoModel> Anexos { get; set; }
-        public IEnumerable<DocumentoAprobacionModel> Aprobaciones { get; set; }
-        public IEnumerable<DocumentoAuditoriaModel> Auditoria { get; set; }
-        public IEnumerable<DocumentoCertificacionModel> Certificaciones { get; set; }
-        public IEnumerable<DocumentoContenidoModel> Contenido { get; set; }
-        public IEnumerable<DocumentoEntrevistaModel> Entrevistas { get; set; }
-        public IEnumerable<DocumentoPersonaClaveModel> PersonasClave { get; set; }
-        public IEnumerable<DocumentoProcesoModel> Procesos { get; set; }
+        public List<DocumentoAnexoModel> Anexos { get; set; }
+        public List<DocumentoAprobacionModel> Aprobaciones { get; set; }
+        public List<DocumentoAuditoriaModel> Auditoria { get; set; }
+        public List<DocumentoCertificacionModel> Certificaciones { get; set; }
+        public List<DocumentoContenidoModel> Contenido { get; set; }
+        public List<DocumentoEntrevistaModel> Entrevistas { get; set; }
+        public List<DocumentoPersonaClaveModel> PersonasClave { get; set; }
+        public List<DocumentoProcesoModel> Procesos { get; set; }
         public bool Updated { get; set; }
-
+        public bool Editable { get; set; }
+        public bool Eliminable { get; set; }
         public DocumentoModel()
         {
             this.Anexos = new List<DocumentoAnexoModel>();
@@ -152,17 +154,46 @@ namespace BCMWeb.Models
         public bool Procesado { get; set; }
         public bool Responsable { get; set; }
     }
-    public class DocumentoContenidoModel
+    public class DocumentoContenidoModel : ModulosUserModel
     {
-        public long IdEmpresa { get; set; }
         public long IdDocumento { get; set; }
         public long IdTipoDocumento { get; set; }
-        public long IdModulo { get; set; }
         public byte[] Contenido { get; set; }
         [Display(Name = "captionFechaCreacion", ResourceType = typeof(Resources.DocumentoResource))]
         public DateTime FechaCreacion { get; set; }
         [Display(Name = "captionFechaUltimaModificacion", ResourceType = typeof(Resources.DocumentoResource))]
         public DateTime FechaUltimaModificacion { get; set; }
+        public string UniqueId
+        {
+            get
+            {
+                string uId = this.IdDocumento.ToString().Trim() + this.IdModulo.ToString().Trim();
+                return uId;
+            }
+        }
+        public string DocExtension { get; set; }
+        public DocumentFormat docFormat
+        {
+            get
+            {
+                switch (this.DocExtension)
+                {
+                    case "docx":
+                        return DocumentFormat.OpenXml;
+                    case "doc":
+                        return DocumentFormat.Doc;
+                    case "html":
+                        return DocumentFormat.Html;
+                    case "rtf":
+                        return DocumentFormat.Rtf;
+                    default:
+                        return DocumentFormat.PlainText;
+                }
+            }
+        }
+        public bool Saved { get; set; }
+        public string Accion { get; set; }
+        public bool CanSave { get; set; }
     }
     public class DocumentoEntrevistaModel
     {
@@ -179,7 +210,7 @@ namespace BCMWeb.Models
         [DataType(DataType.DateTime, ErrorMessageResourceName = "InvalidoErrorFemale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
         public DateTime Final { get; set; }
         [Display(Name = "captionParticipantes", ResourceType = typeof(Resources.DocumentoResource))]
-        public IEnumerable<DocumentoEntrevistaPersonaModel> Personas { get; set; }
+        public List<DocumentoEntrevistaPersonaModel> Personas { get; set; }
 
         public DocumentoEntrevistaModel()
         {

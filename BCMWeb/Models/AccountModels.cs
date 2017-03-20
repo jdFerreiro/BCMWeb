@@ -7,7 +7,8 @@ using System.Globalization;
 using System.Web.Mvc;
 using System.Web.Security;
 
-namespace BCMWeb.Models {
+namespace BCMWeb.Models
+{
     public class UsersContext : DbContext
     {
         public UsersContext()
@@ -17,13 +18,15 @@ namespace BCMWeb.Models {
         public DbSet<UserProfile> UserProfiles { get; set; }
     }
     [Table("UserProfile")]
-    public class UserProfile {
+    public class UserProfile
+    {
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int UserId { get; set; }
         public string UserName { get; set; }
     }
-    public class ChangePasswordModel {
+    public class ChangePasswordModel
+    {
         [Required(ErrorMessageResourceName = "RequiredErrorFemale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
         [DataType(DataType.Password)]
         [Display(Name = "captionOldPassword", ResourceType = typeof(Resources.LoginResource))]
@@ -41,7 +44,8 @@ namespace BCMWeb.Models {
         [System.ComponentModel.DataAnnotations.Compare("NewPassword", ErrorMessageResourceType = typeof(Resources.ErrorResource), ErrorMessageResourceName = "CompareErrorFemalevsFemale")]
         public string ConfirmPassword { get; set; }
     }
-    public class LoginModel {
+    public class LoginModel : ModulosUserModel
+    {
         [Required(ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
         [Display(Name = "captionUsername", ResourceType = typeof(Resources.LoginResource))]
         public string UserName { get; set; }
@@ -51,7 +55,8 @@ namespace BCMWeb.Models {
         [Display(Name = "captionPassword", ResourceType = typeof(Resources.LoginResource))]
         public string Password { get; set; }
     }
-    public class RegisterModel {
+    public class RegisterModel
+    {
         [Required(ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
         [Display(Name = "captionUsername", ResourceType = typeof(Resources.LoginResource))]
         public string UserName { get; set; }

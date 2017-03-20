@@ -1,7 +1,4 @@
 ﻿@using BCMWeb
-@using BCMWeb.Models
-
-@model IEnumerable<PersonaDireccion>
 
 <script type="text/javascript">
     function OnSelectedPaisChange() {
@@ -16,7 +13,7 @@
 settings =>
 {
     settings.Name = "gvDireccion";
-    settings.KeyFieldName = "IdDireccion";
+    settings.KeyFieldName = "IdPersonaDireccion";
     settings.Width = Unit.Percentage(100);
     settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
     settings.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
@@ -174,6 +171,6 @@ settings =>
         c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
     });
 
-}).Bind(Model).GetHtml()
+}).Bind(Metodos.GetDirecciones()).GetHtml()
 
 

@@ -96,7 +96,6 @@ namespace BCMWeb.Data.EF
         public virtual DbSet<tblDocumento> tblDocumento { get; set; }
         public virtual DbSet<tblDocumentoAnexo> tblDocumentoAnexo { get; set; }
         public virtual DbSet<tblDocumentoAprobacion> tblDocumentoAprobacion { get; set; }
-        public virtual DbSet<tblDocumentoAuditoria> tblDocumentoAuditoria { get; set; }
         public virtual DbSet<tblDocumentoCertificacion> tblDocumentoCertificacion { get; set; }
         public virtual DbSet<tblDocumentoContenido> tblDocumentoContenido { get; set; }
         public virtual DbSet<tblDocumentoEntrevista> tblDocumentoEntrevista { get; set; }
@@ -166,5 +165,6 @@ namespace BCMWeb.Data.EF
         public virtual DbSet<tblUsuario> tblUsuario { get; set; }
         public virtual DbSet<tblUsuarioUnidadOrganizativa> tblUsuarioUnidadOrganizativa { get; set; }
         public virtual DbSet<tblVicepresidencia> tblVicepresidencia { get; set; }
+        public virtual DbSet<tblAuditoria> tblAuditoria { get; set; }
     }
 }

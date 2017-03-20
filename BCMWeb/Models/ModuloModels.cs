@@ -13,11 +13,14 @@ namespace BCMWeb.Models
         public int IdClaseDocumento { get; set; }
         public long IdModulo { get; set; }
         public bool EditDocumento { get; set; }
+        public long IdModuloActual { get; set; }
         public string ModuloActual
         {
             get
             {
-                return Metodos.GetNombreModulo(IdModulo);
+                if (IdModuloActual > 0)
+                    return Metodos.GetNombreModulo(IdModuloActual);
+                return string.Empty;
             }
         }
         public IList<ModuloModel> ModulosPrincipales { get; set; }
@@ -29,6 +32,7 @@ namespace BCMWeb.Models
             }
         }
         public string returnPage { get; set; }
+        public string PageTitle { get; set; }
     }
    public class ModuloModel
     {

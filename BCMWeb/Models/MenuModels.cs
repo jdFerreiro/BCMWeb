@@ -4,10 +4,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.SessionState;
 using System.Web.UI;
 
 namespace BCMWeb.Models
 {
+
 
     #region ClasesPrimarias
     public abstract class ItemsData : ModuloModel, IHierarchicalEnumerable, IEnumerable
@@ -29,13 +31,18 @@ namespace BCMWeb.Models
     }
     public class ItemData : ModuloModel, IHierarchyData
     {
+        private readonly System.Web.Mvc.UrlHelper urlHelper = new System.Web.Mvc.UrlHelper(HttpContext.Current.Request.RequestContext);
         public string Text { get; protected set; }
         public string NavigateUrl { get; protected set; }
 
-        public ItemData(string text, string navigateUrl)
+        public ItemData(string text, string Accion, string Controler, long IdModulo)
         {
             Text = text;
-            NavigateUrl = navigateUrl;
+            NavigateUrl = null;
+            if (!string.IsNullOrEmpty(Accion))
+            {
+                NavigateUrl = urlHelper.Action(Accion, Controler, new { modId = IdModulo });
+            }
         }
 
         // IHierarchyData
@@ -86,8 +93,17 @@ namespace BCMWeb.Models
         {
             get
             {
-                return Metodos.GetSubModulos(IdModulo).Select(x => new ModuloData(x));
-                // return NorthwindDataProvider.DB.Categories.ToList().Select(c => new CategoryData(c));
+                List<tblModulo> Modulos = new List<tblModulo>();
+                if (IdModulo < 13000000)
+                {
+                    Modulos = Metodos.GetSubModulos(IdModulo).ToList();
+                    Modulos.AddRange(Metodos.GetSubModulos(99000000).ToList());
+                }
+                else
+                {
+                    Modulos = Metodos.GetSubModulos(IdModulo).ToList();
+                }
+                return Modulos.Select(x => new ModuloData(x));
             }
         }
     }
@@ -96,7 +112,7 @@ namespace BCMWeb.Models
         public tblModulo Modulo { get; protected set; }
 
         public ModuloData(tblModulo modulo)
-            : base(modulo.Nombre, string.Empty)
+            : base(modulo.Nombre, string.Empty, string.Empty, 0)
         {
             Modulo = modulo;
         }
@@ -132,7 +148,7 @@ namespace BCMWeb.Models
     public class ChildData : ItemData
     {
         public ChildData(tblModulo modulo)
-            : base(modulo.Nombre, "?modId=" + modulo.IdModulo.ToString())
+            : base(modulo.Nombre, modulo.Accion, modulo.Controller, modulo.IdModulo)
         {
         }
     }

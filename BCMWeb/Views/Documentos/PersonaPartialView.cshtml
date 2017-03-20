@@ -58,21 +58,40 @@
             }
         });
     }
+    function SaveData(s, e)
+    {
+        lp.Show();
+        document.forms["frmPersona"].submit();
+    }
 </script>
 
 @using (Html.BeginForm("PersonaPartialView", "Documentos", FormMethod.Post, htmlAttributes: new { id = "frmPersona" }))
 {
-    @Html.DevExpress().FormLayout(s =>
+    @Html.HiddenFor(m => m.IdPersona)
+    @Html.HiddenFor(m => m.IdUsuario)
+    @Html.HiddenFor(m => m.UnidadOrganizativa.IdUnidad)
+    @Html.HiddenFor(m => m.UnidadOrganizativa.IdUnidadPadre)
+    @Html.HiddenFor(m => m.UnidadOrganizativa.NombreCompleto)
+    @Html.HiddenFor(m => m.UnidadOrganizativa.NombreUnidadOrganizativa)
+    @Html.HiddenFor(m => m.Cargo.IdCargo)
+    @Html.HiddenFor(m => m.Cargo.NombreCargo)
+    @Html.HiddenFor(m => m.PageTitle)
+    @Html.HiddenFor(m => m.returnPage)
+
+@Html.DevExpress().FormLayout(s =>
 {
     s.Name = "personaLayout";
     s.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
     s.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 400;
     s.ControlStyle.CssClass = "fromLayout";
+    s.ColCount = 3;
 
     s.Items.AddGroupItem(gi =>
     {
         gi.Caption = Resources.FichaResource.personaGrupoDatos;
         gi.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        gi.Width = Unit.Percentage(100);
+        gi.ColSpan = 3;
         gi.Items.Add(m => m.Nombre, i =>
         {
             i.NestedExtension().TextBox(tb =>
@@ -103,7 +122,7 @@
             {
                 cb.Width = Unit.Percentage(100);
                 cb.ShowModelErrors = true;
-
+                cb.Name = "IdUnidadOrganizativaPersona";
                 cb.Properties.DropDownStyle = DropDownStyle.DropDownList;
                 cb.Properties.ValueType = typeof(long);
                 cb.Properties.DataSource = BCMWeb.Metodos.GetUnidades();
@@ -127,8 +146,8 @@
             i.NestedExtension().ComboBox(cb =>
             {
                 cb.Width = Unit.Percentage(100);
-                //cb.ShowModelErrors = true;
-
+                cb.ShowModelErrors = true;
+                cb.Name = "IdCargoPersona";
                 cb.Properties.ValueType = typeof(long);
                 cb.Properties.DataSource = BCMWeb.Metodos.GetCargos();
                 cb.Properties.TextField = "NombreCargo";
@@ -151,7 +170,9 @@
     s.Items.Add(i =>
     {
         i.ShowCaption = DefaultBoolean.False;
-        i.ClientVisible = (Model.CorreosElectronicos.Count == 0);
+        i.ClientVisible = (Model.IdPersona > 0 && Model.CorreosElectronicos.Count == 0);
+        i.Width = Unit.Percentage(100);
+        i.ColSpan = 3;
         i.NestedExtension().Label(lb =>
         {
             lb.Text = Resources.ErrorResource.RemoteEmail;
@@ -162,6 +183,9 @@
     {
         gi.Caption = Resources.FichaResource.personaGrupoCorreos;
         gi.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        gi.Width = Unit.Percentage(100);
+        gi.ColSpan = 3;
+        gi.ClientVisible = (Model.IdPersona > 0);
         gi.Items.Add(m => m.CorreosElectronicos, i =>
         {
             i.Caption = string.Empty;
@@ -175,6 +199,9 @@
     {
         i.ShowCaption = DefaultBoolean.False;
         i.ClientVisible = (Model.Telefonos.Count == 0);
+        i.Width = Unit.Percentage(100);
+        i.ColSpan = 3;
+        i.ClientVisible = (Model.IdPersona > 0 && Model.Telefonos.Count == 0);
         i.NestedExtension().Label(lb =>
         {
             lb.Text = Resources.ErrorResource.RemoteTelefono;
@@ -185,6 +212,9 @@
     {
         gi.Caption = Resources.FichaResource.personaGrupoTelefono;
         gi.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
+        gi.Width = Unit.Percentage(100);
+        gi.ColSpan = 3;
+        gi.ClientVisible = (Model.IdPersona > 0);
         gi.Items.Add(m => m.Telefonos, i =>
         {
             i.Caption = string.Empty;
@@ -194,11 +224,12 @@
             });
         });
     });
+    s.Items.AddEmptyItem();
+    s.Items.AddEmptyItem();
     s.Items.AddGroupItem(gi =>
     {
         gi.ShowCaption = DefaultBoolean.False;
         gi.SettingsItemHelpTexts.Position = HelpTextPosition.Bottom;
-        gi.Width = Unit.Percentage(25);
         gi.ColCount = 2;
         gi.Items.Add(i =>
         {
@@ -207,7 +238,7 @@
             {
                 bt.Name = "botSavePersona";
                 bt.Text = Resources.BCMWebPublic.captionButtonSave;
-                bt.UseSubmitBehavior = true;
+                bt.ClientSideEvents.Click = "SaveData";
             });
         });
         gi.Items.Add(i =>
@@ -264,3 +295,41 @@
         Html.RenderPartial("NuevoCargoPartialView", new CargoModel());
     });
 }).GetHtml()
+@*@Html.DevExpress().PopupControl(s =>
+{
+    s.Name = "modalCorreo";
+    s.CallbackRouteValues = new { Controller = "Documentos", Action = "newCorreoPartialView" };
+    s.Width = 600;
+    s.AllowDragging = true;
+    s.CloseAction = CloseAction.CloseButton;
+    s.CloseOnEscape = true;
+    s.PopupAnimationType = AnimationType.Slide;
+    s.HeaderText = Resources.FichaResource.headerPopupCargo;
+    s.Modal = true;
+    s.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    s.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    s.ScrollBars = ScrollBars.None;
+    s.SetContent(() =>
+    {
+        Html.RenderPartial("newCorreoPartialView", Model);
+    });
+}).GetHtml()
+@Html.DevExpress().PopupControl(s =>
+{
+    s.Name = "modalTelefono";
+    s.CallbackRouteValues = new { Controller = "Documentos", Action = "newTelefonoPartialView" };
+    s.Width = 600;
+    s.AllowDragging = true;
+    s.CloseAction = CloseAction.CloseButton;
+    s.CloseOnEscape = true;
+    s.PopupAnimationType = AnimationType.Slide;
+    s.HeaderText = Resources.FichaResource.headerPopupCargo;
+    s.Modal = true;
+    s.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    s.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    s.ScrollBars = ScrollBars.None;
+    s.SetContent(() =>
+    {
+        Html.RenderPartial("newTelefonoPartialView", Model);
+    });
+}).GetHtml()*@

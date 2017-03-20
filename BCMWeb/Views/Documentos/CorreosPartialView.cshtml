@@ -1,22 +1,10 @@
 ﻿@using BCMWeb
-@using BCMWeb.Models
-
-@model IEnumerable<PersonaEmail>
-
-<script type="text/javascript">
-    function OnSelectedPaisChange() {
-        gvDireccion.GetEditor("cbPais").PerformCallback();
-    }
-    function CiudadComboBox_BeginCallback(s, e) {
-        e.customArgs["IdPais"] = GridView.GetEditor("cbPais").GetValue();
-    }
-</script>
 
 @Html.DevExpress().GridView(
 settings =>
 {
     settings.Name = "gvCorreo";
-    settings.KeyFieldName = "IdCorreo";
+    settings.KeyFieldName = "IdPersonaEmail";
     settings.CallbackRouteValues = new { Controller = "Documentos", Action = "CorreosPartialView" };
 
     settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
@@ -26,21 +14,21 @@ settings =>
     settings.ControlStyle.BorderBottom.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
     settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Hidden;
     settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
-    settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+    //settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
     settings.ClientSideEvents.BeginCallback = "OnBeginGridCallback";
     settings.ClientSideEvents.EndCallback = "OnEndGridCallback";
 
     settings.SettingsPager.PageSize = 20;
-    settings.SettingsPager.Position = PagerPosition.TopAndBottom;
+    settings.SettingsPager.Position = PagerPosition.Bottom;
     settings.SettingsPager.FirstPageButton.Visible = true;
     settings.SettingsPager.LastPageButton.Visible = true;
     settings.SettingsPager.PageSizeItemSettings.Visible = true;
     settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20", "50", "100" };
 
     settings.SettingsEditing.Mode = GridViewEditingMode.Batch;
-    //settings.SettingsEditing.BatchUpdateRouteValues = new { Controller = "Documentos", Action = "BatchEditingUpdateCorreo" };
+    settings.SettingsEditing.BatchUpdateRouteValues = new { Controller = "Documentos", Action = "BatchEditingUpdateCorreo" };
     settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
-    settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.DblClick;
+    settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
     settings.SettingsEditing.BatchEditSettings.HighlightDeletedRows = true;
     settings.SettingsBehavior.ConfirmDelete = true;
     settings.SettingsEditing.BatchEditSettings.ShowConfirmOnLosingChanges = false;
@@ -85,7 +73,7 @@ settings =>
         c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
         c.ColumnType = MVCxGridViewColumnType.TextBox;
     });
-}).Bind(Model).GetHtml()
+}).Bind(Metodos.GetCorreos()).GetHtml()
 
 
 

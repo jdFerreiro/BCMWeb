@@ -6,7 +6,6 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
 using WebMatrix.WebData;
-using BCMWeb.Filters;
 using BCMWeb.Models;
 using BCMWeb.Security;
 
@@ -28,41 +27,52 @@ namespace BCMWeb.Controllers {
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult Login(LoginModel model, string returnUrl) {
-            if(ModelState.IsValid) {
+        public ActionResult Login(LoginModel model, string returnUrl)
+        {
+            if (ModelState.IsValid)
+            {
                 User _User = Repository.GetUserDetails(model.UserName, model.Password);
                 if (_User != null)
                 {
 
-                    FormsAuthentication.SetAuthCookie(_User.Email, true);
-                    string UserId = _User.Id.ToString();
-                    var authTicket = new FormsAuthenticationTicket(1, _User.Name, DateTime.Now, DateTime.Now.AddMinutes(20), false, UserId);
-                    string encriptedTicket = FormsAuthentication.Encrypt(authTicket);
-                    var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encriptedTicket);
-                    HttpContext.Response.Cookies.Add(authCookie);
-                    Session["UserId"] = UserId;
-                    Session["IdEmpresa"] = Metodos.GetEmpresasUsuario().FirstOrDefault().IdEmpresa;
-                    return RedirectToAction("Index", "Menu");
+                    eEstadoUsuario EstatusActual = (eEstadoUsuario)_User.Estatus;
 
+                    switch (EstatusActual)
+                    {
+                        case eEstadoUsuario.Activo:
+                            FormsAuthentication.SetAuthCookie(_User.Email, true);
+                            string UserId = _User.Id.ToString();
+                            var authTicket = new FormsAuthenticationTicket(1, _User.Name, DateTime.Now, DateTime.Now.AddMinutes(20), false, UserId);
+                            string encriptedTicket = FormsAuthentication.Encrypt(authTicket);
+                            var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encriptedTicket);
+                            HttpContext.Response.Cookies.Add(authCookie);
+                            Session["UserId"] = UserId;
+                            Session["IdEmpresa"] = Metodos.GetEmpresasUsuario().FirstOrDefault().IdEmpresa;
+                            Metodos.LoginUsuario(long.Parse(UserId));
+                            return RedirectToAction("Index", "Menu");
+                        case eEstadoUsuario.Bloqueado:
+                            ViewBag.ErrorMessage = Resources.ErrorResource.BloqueadoErrorMessage;
+                            return View(model);
+                        case eEstadoUsuario.Conectado:
+                            ViewBag.ErrorMessage = Resources.ErrorResource.ConectadoErrorMessage;
+                            return View(model);
+                        case eEstadoUsuario.Eliminado:
+                            ViewBag.ErrorMessage = Resources.ErrorResource.EliminadoErrorMessage;
+                            return View(model);
+                    }
                 }
-                ViewBag.ErrorMessage = Resources.ErrorResource.LoginFailError;
+                else
+                {
+                    ViewBag.ErrorMessage = Resources.ErrorResource.LoginFailError;
+                }
             }
-
-            // If we got this far, something failed, redisplay form
             return View(model);
         }
-
-        //
-        // GET: /Account/LogOff
-
         public ActionResult LogOff() {
+            Auditoria.RegistrarLogout();
             FormsAuthentication.SignOut();
             return RedirectToAction("Index", "Home");
         }
-
-        //
-        // GET: /Account/Register
-
         [AllowAnonymous]
         public ActionResult Register() {
             return View();

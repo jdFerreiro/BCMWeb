@@ -1,13 +1,10 @@
 ﻿@using BCMWeb
-@using BCMWeb.Models
-
-@model IEnumerable<PersonaTelefono>
 
 @Html.DevExpress().GridView(
 settings =>
 {
     settings.Name = "gvTelefono";
-    settings.KeyFieldName = "IdTelefono";
+    settings.KeyFieldName = "IdPersonaTelefono";
     settings.CallbackRouteValues = new { Controller = "Documentos", Action = "TelefonosPartialView" };
     settings.ClientSideEvents.BeginCallback = "OnBeginGridCallback";
     settings.ClientSideEvents.EndCallback = "OnEndGridCallback";
@@ -28,12 +25,12 @@ settings =>
     settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20", "50", "100" };
 
     settings.SettingsEditing.Mode = GridViewEditingMode.Batch;
-    //settings.SettingsEditing.BatchUpdateRouteValues = new { Controller = "Documentos", Action = "BatchEditingUpdateTelefonos" };
+    settings.SettingsEditing.BatchUpdateRouteValues = new { Controller = "Documentos", Action = "BatchEditingUpdateTelefono" };
     settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
     settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.DblClick;
     settings.SettingsEditing.BatchEditSettings.HighlightDeletedRows = true;
     settings.SettingsBehavior.ConfirmDelete = true;
-    settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
+    //settings.Settings.ShowStatusBar = GridViewStatusBarMode.Hidden;
     settings.SettingsEditing.BatchEditSettings.ShowConfirmOnLosingChanges = false;
 
     settings.CommandColumn.Visible = true;
@@ -140,7 +137,7 @@ settings =>
             p.MaxLength = 5;
         });
     });
-}).Bind(Model).GetHtml()
+}).Bind(Metodos.GetTelefonos()).GetHtml()
 
 
 

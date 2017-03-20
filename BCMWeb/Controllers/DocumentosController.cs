@@ -1,9 +1,14 @@
 ﻿using BCMWeb.Data.EF;
 using BCMWeb.Models;
+using DevExpress.Web;
 using DevExpress.Web.Mvc;
+using DevExpress.Web.Office;
+using DevExpress.XtraRichEdit;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -12,6 +17,7 @@ namespace BCMWeb.Controllers
     [Authorize]
     public class DocumentosController : Controller
     {
+        [SessionExpire]
         public ActionResult Ficha(long modId)
         {
 
@@ -29,7 +35,7 @@ namespace BCMWeb.Controllers
 
             long IdResponsable = (Session["IdResponsable"] != null ? long.Parse(Session["IdResponsable"].ToString()) : 0);
 
-            if (IdDocumento == -1)
+            if (IdDocumento == 0)
             {
                 model = new DocumentoModel
                 {
@@ -48,13 +54,14 @@ namespace BCMWeb.Controllers
                     IdEmpresa = long.Parse(Session["IdEmpresa"].ToString()),
                     IdEstatus = 1,
                     IdModulo = IdModulo,
+                    IdModuloActual = modId,
                     IdPersonaResponsable = IdResponsable,
                     NroDocumento = Metodos.GetNextNroDocumento(IdClaseDocumento, IdTipoDocumento),
                     NroVersion = Metodos.GetNextVersion(IdClaseDocumento, IdTipoDocumento, IdVersion),
                     PersonasClave = new List<DocumentoPersonaClaveModel>(),
                     RequiereCertificacion = true,
                     returnPage = Url.Action("Index", "Documento", new { IdModulo }),
-                    
+
                     VersionOriginal = IdVersion
                 };
 
@@ -66,10 +73,11 @@ namespace BCMWeb.Controllers
 
             model.Negocios = (IdClaseDocumento == 1);
             model.IdTipoDocumento = IdTipoDocumento;
-
+            model.PageTitle = Metodos.GetModuloName(firstModulo.IdModulo);
             return View(model);
         }
         [HttpPost]
+        [SessionExpire]
         public ActionResult Ficha(DocumentoModel model)
         {
             if (model.IdPersonaResponsable > 0)
@@ -111,7 +119,7 @@ namespace BCMWeb.Controllers
                     Cédula = persona.Identificacion,
                     DireccionHabitacion = Direccion,
                     Email = Email,
-                    IdEmpresa= model.IdEmpresa,
+                    IdEmpresa = model.IdEmpresa,
                     IdPersona = persona.IdPersona,
                     IdTipoDocumento = model.IdTipoDocumento,
                     Nombre = persona.Nombre,
@@ -119,7 +127,7 @@ namespace BCMWeb.Controllers
                     Responsable = true,
                     TelefonoCelular = Movil,
                     TelefonoHabitacion = Habitacion,
-                    TelefonoOficina = Oficina 
+                    TelefonoOficina = Oficina
                 });
 
                 model.PersonasClave = PersonasClave;
@@ -144,6 +152,7 @@ namespace BCMWeb.Controllers
             }
             return View(model);
         }
+        [SessionExpire]
         public ActionResult PersonaPartialView(long modId)
         {
             string _modId = modId.ToString();
@@ -161,7 +170,7 @@ namespace BCMWeb.Controllers
                 Cargo = new CargoModel(),
                 CorreosElectronicos = new List<PersonaEmail>(),
                 Direcciones = new List<PersonaDireccion>(),
-                EditDocumento= true,
+                EditDocumento = true,
                 IdClaseDocumento = int.Parse(Session["IdClaseDocumento"].ToString()),
                 IdCargoPersona = 0,
                 IdEmpresa = long.Parse(Session["IdEmpresa"].ToString()),
@@ -175,39 +184,85 @@ namespace BCMWeb.Controllers
                 Telefonos = new List<PersonaTelefono>(),
                 UnidadOrganizativa = new UnidadOrganizativaModel()
             };
-            //return PartialView(model);
+            model.PageTitle = "Registro de Personas";
+
+            Session["IdPersona"] = model.IdPersona;
+            Session["Persona"] = model;
             return View(model);
         }
         [HttpPost]
+        [SessionExpire]
         public ActionResult PersonaPartialView(PersonaModel model)
         {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+
+            ModelState.Remove("UnidadOrganizativa.NombreUnidadOrganizativa");
+            ModelState.Remove("Cargo.NombreCargo");
             if (ModelState.IsValid)
             {
+                if (Session["IdPersona"] != null && long.Parse(Session["IdPersona"].ToString()) > 0)
+                    model.IdPersona = long.Parse(Session["IdPersona"].ToString());
 
+                using (Entities db = new Entities())
+                {
+                    tblPersona Persona;
+                    if (model.IdPersona == 0)
+                    {
+                        Persona = new tblPersona
+                        {
+                            IdCargo = model.IdCargoPersona,
+                            IdEmpresa = IdEmpresa,
+                            Identificacion = model.Identificacion,
+                            IdUnidadOrganizativa = model.IdUnidadOrganizativaPersona,
+                            Nombre = model.Nombre
+                        };
+                        db.tblPersona.Add(Persona);
+                    }
+                    else
+                    {
+                        Persona = db.tblPersona.Where(x => x.IdEmpresa == IdEmpresa && x.IdPersona == model.IdPersona).FirstOrDefault();
+                        Persona.IdCargo = model.IdCargoPersona;
+                        Persona.Identificacion = model.Identificacion;
+                        Persona.IdUnidadOrganizativa = model.IdUnidadOrganizativaPersona;
+                        Persona.Nombre = model.Nombre;
+                    }
+
+                    db.SaveChanges();
+                    model.IdPersona = Persona.IdPersona;
+                }
             }
-            return PartialView(model);
+            Session["IdPersona"] = model.IdPersona;
+            Session["Persona"] = model;
+
+            return View(model);
         }
+        [SessionExpire]
         public ActionResult DireccionesPartialView()
         {
             return PartialView();
         }
+        [SessionExpire]
         public ActionResult CorreosPartialView()
         {
             return PartialView();
         }
+        [SessionExpire]
         public ActionResult TelefonosPartialView()
         {
             return PartialView();
         }
+        [SessionExpire]
         public ActionResult NuevoCargoPartialView()
         {
             return PartialView();
         }
+        [SessionExpire]
         public ActionResult NuevaUnidadOrganizativaPartialView()
         {
             return PartialView();
         }
         [HttpPost]
+        [SessionExpire]
         public JsonResult NuevoCargo(string Texto)
         {
             string IdCargo = string.Empty;
@@ -234,6 +289,7 @@ namespace BCMWeb.Controllers
             return Json(new { success, IdCargo });
         }
         [HttpPost]
+        [SessionExpire]
         public JsonResult NuevaUnidad(string Texto, long idUnidadPadre)
         {
             string IdUnidad = string.Empty;
@@ -260,16 +316,19 @@ namespace BCMWeb.Controllers
             }
             return Json(new { success, IdUnidad });
         }
+        [SessionExpire]
         public JsonResult CheckEmails(IList<PersonaEmail> data)
         {
             bool isValid = data.Count() > 0;
             return Json(isValid, JsonRequestBehavior.AllowGet);
         }
+        [SessionExpire]
         public JsonResult CheckTelefonos(IList<PersonaTelefono> data)
         {
             bool isValid = data.Count() > 0;
             return Json(isValid, JsonRequestBehavior.AllowGet);
         }
+        [SessionExpire]
         public JsonResult GetDatosPersonaSelected(long IdPersona)
         {
             bool success = false;
@@ -284,29 +343,199 @@ namespace BCMWeb.Controllers
             }
             return Json(new { success, Cargo, UnidadOrganizativa });
         }
-        //[ValidateInput(false)]
-        //public ActionResult BatchEditingUpdateCorreo(MVCxGridViewBatchUpdateValues<PersonaEmail, long> updateValues)
-        //{
-        //foreach (var product in updateValues.Insert)
-        //{
-        //    if (updateValues.IsValid(product))
-        //        InsertProduct(product, updateValues);
-        //}
-        //foreach (var product in updateValues.Update)
-        //{
-        //    if (updateValues.IsValid(product))
-        //        UpdateProduct(product, updateValues);
-        //}
-        //foreach (var productID in updateValues.DeleteKeys)
-        //{
-        //    DeleteProduct(productID, updateValues);
-        //}
-        //return PartialView("CorreosPartialView", NorthwindDataProvider.GetEditableProducts());
-        //}
-        //[ValidateInput(false)]
-        //public ActionResult BatchEditingUpdateTelefono(MVCxGridViewBatchUpdateValues<PersonaTelefono, long> updateValues)
-        //{
-        //return PartialView("BatchEditingPartial", NorthwindDataProvider.GetEditableProducts());
-        //}
+        [ValidateInput(false)]
+        [SessionExpire]
+        public ActionResult BatchEditingUpdateCorreo(MVCxGridViewBatchUpdateValues<PersonaEmail, long> updateValues)
+        {
+
+            foreach (var product in updateValues.Insert)
+            {
+                //if (updateValues.IsValid(product))
+                //InsertProduct(product, updateValues);
+            }
+            foreach (var product in updateValues.Update)
+            {
+                //if (updateValues.IsValid(product))
+                //UpdateProduct(product, updateValues);
+            }
+            foreach (var productID in updateValues.DeleteKeys)
+            {
+                //DeleteProduct(productID, updateValues);
+            }
+            return PartialView("CorreosPartialView");
+        }
+        [ValidateInput(false)]
+        [SessionExpire]
+        public ActionResult BatchEditingUpdateTelefono(MVCxGridViewBatchUpdateValues<PersonaTelefono, long> updateValues)
+        {
+            foreach (var product in updateValues.Insert)
+            {
+                //if (updateValues.IsValid(product))
+                //InsertProduct(product, updateValues);
+            }
+            foreach (var product in updateValues.Update)
+            {
+                //if (updateValues.IsValid(product))
+                //UpdateProduct(product, updateValues);
+            }
+            foreach (var productID in updateValues.DeleteKeys)
+            {
+                //DeleteProduct(productID, updateValues);
+            }
+            return PartialView("TelefonosPartialView");
+        }
+        [SessionExpire]
+        public ActionResult Editor(long modId)
+        {
+            string _modId = modId.ToString();
+            int IdTipoDocumento = int.Parse(_modId.Substring(0, (_modId.Length == 7 ? 1 : 2)));
+            Session["IdTipoDocumento"] = IdTipoDocumento;
+            Session["modId"] = modId;
+
+            long IdModulo = IdTipoDocumento * 1000000;
+            long IdDocumento = long.Parse(Session["IdDocumento"].ToString());
+            int IdClaseDocumento = int.Parse(Session["IdClaseDocumento"].ToString());
+            int IdVersion = int.Parse(Session["IdVersion"].ToString());
+
+            DocumentoModel model = Metodos.GetDocumento(IdDocumento, IdTipoDocumento);
+            if (model == null)
+                model = new DocumentoModel();
+            byte[] Contenido = Metodos.GetContenidoDocumento(modId);
+
+            model.returnPage = Url.Action("Index", "Documento", new { IdModulo });
+            model.IdModulo = IdModulo;
+            model.IdModuloActual = modId;
+            model.PageTitle = Metodos.GetModuloName(modId);
+
+            string uniqueId = model.IdDocumento.ToString().Trim() + model.IdModuloActual.ToString().Trim();
+
+            Session["Editable"] = (model.IdEstatus != 6) && (Session["OnlyVisible"] != null && ((bool)Session["OnlyVisible"] == false));
+            Session["Saved"] = true;
+            if (Contenido == null)
+            {
+                Session["Contenido"] = Resources.BCMWebPublic.stringEmptyContenido;
+            }
+            else
+            {
+                Session["Contenido"] = Convert.ToBase64String(Contenido);
+            }
+            Session["UniqueId"] = uniqueId;
+            DocumentManager.CloseDocument(uniqueId);
+            Auditoria.RegistarAccion(eTipoAccion.Mostrar);
+
+            return View(model);
+        }
+        [HttpPost]
+        [SessionExpire]
+        public ActionResult Editor(DocumentoContenidoModel model)
+        {
+            return View();
+        }
+        [SessionExpire]
+        public ActionResult EditorPartialView()
+        {
+            return PartialView("EditorPartialView");
+        }
+        [HttpGet]
+        [SessionExpire]
+        public ActionResult GetOpenDialog(long currentDocumentId)
+        {
+            var viewModel = new DocumentoModel
+            {
+                IdDocumento = currentDocumentId
+            };
+            return PartialView("OpenDialog", viewModel);
+        }
+        [SessionExpire]
+        public ActionResult UploadControlCallback(long currentDocumentId)
+        {
+            Session["uploadedFile"] = UploadControlExtension.GetUploadedFiles("UploadControl").First();
+
+            return new EmptyResult();
+        }
+        [SessionExpire]
+        public ActionResult Open()
+        {
+
+            long currentDocumentId = (long)Session["IdDocumento"];
+            long IdModulo = long.Parse(Session["modId"].ToString());
+
+            UploadedFile uploadedFile = (UploadedFile)Session["uploadedFile"];
+            string currentId = Session["UniqueId"].ToString();
+
+            DocumentManager.CloseDocument(currentId);
+            string[] spltFile = uploadedFile.FileName.Split('.');
+            string fileExtension = spltFile.Last();
+            byte[] Contenido = uploadedFile.FileBytes;
+
+            Metodos.UpdateContenidoDocumento(IdModulo, Contenido);
+
+            Session["Contenido"] = Convert.ToBase64String(Contenido);
+
+            return PartialView("EditorPartialView");
+        }
+        [SessionExpire]
+        public JsonResult SaveDocument()
+        {
+            bool success = false;
+
+            long IdModulo = long.Parse(Session["modId"].ToString());
+            byte[] Contenido = RichEditExtension.SaveCopy("RichEdit", DocumentFormat.OpenXml);
+            var reString = Encoding.Default.GetString(Contenido);
+            success = Metodos.UpdateContenidoDocumento(IdModulo, Contenido);
+
+            return Json(new { success });
+        }
+        [SessionExpire]
+        public JsonResult docChange()
+        {
+            Session["Saved"] = false;
+            bool success = true;
+            return Json(new { success });
+        }
+        public ActionResult GenerarPDF()
+        {
+            long IdTipoDocumento = long.Parse(Session["IdTipoDocumento"].ToString());
+            long IdModulo = IdTipoDocumento * 1000000;
+            long IdDocumento = long.Parse(Session["IdDocumento"].ToString());
+            int IdClaseDocumento = int.Parse(Session["IdClaseDocumento"].ToString());
+            int IdVersion = int.Parse(Session["IdVersion"].ToString());
+
+            ModulosUserModel model = new ModulosUserModel();
+            model.returnPage = Url.Action("Index", "Documento", new { IdModulo });
+            model.IdModulo = IdTipoDocumento * 1000000;
+            model.IdModuloActual = 0;
+            model.PageTitle = Metodos.GetModuloName(99010300);
+            return View(model);
+        }
+        [HttpPost]
+        public JsonResult Start()
+        {
+            Auditoria.RegistarAccion(eTipoAccion.GenerarPDF);
+            PDFManager _pdfManager = new PDFManager();
+            string _rutaDocumento = _pdfManager.GenerarPDF_Documento(true);
+            return Json( new { _rutaDocumento });
+        }
+        public ActionResult ControlCambios(long modId)
+        {
+            string _modId = modId.ToString();
+            int IdTipoDocumento = int.Parse(Session["IdTipoDocumento"].ToString());
+            long IdModulo = IdTipoDocumento * 1000000;
+            long IdDocumento = long.Parse(Session["IdDocumento"].ToString());
+            int IdClaseDocumento = int.Parse(Session["IdClaseDocumento"].ToString());
+            int IdVersion = int.Parse(Session["IdVersion"].ToString());
+
+            AuditoriaModels model = new AuditoriaModels();
+            model.IdModulo = IdModulo;
+            model.Auditoria = Metodos.GetControlCambios();
+            model.returnPage = Url.Action("Index", "Documento", new { IdModulo });
+
+            return View(model);
+        }
+        public ActionResult ControlCambiosGridPartialView()
+        {
+
+            return PartialView();
+        }
     }
 }

@@ -17,13 +17,13 @@ namespace BCMWeb.Data.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public tblUsuario()
         {
-            this.tblDocumentoAuditoria = new HashSet<tblDocumentoAuditoria>();
             this.tblEmpresaUsuario = new HashSet<tblEmpresaUsuario>();
             this.tblModulo_Usuario = new HashSet<tblModulo_Usuario>();
             this.tblPersona = new HashSet<tblPersona>();
             this.tblPlanTrabajoAuditoria = new HashSet<tblPlanTrabajoAuditoria>();
             this.tblPMTResponsableUpdate_Correo = new HashSet<tblPMTResponsableUpdate_Correo>();
             this.tblUsuarioUnidadOrganizativa = new HashSet<tblUsuarioUnidadOrganizativa>();
+            this.tblAuditoria = new HashSet<tblAuditoria>();
         }
     
         public long IdUsuario { get; set; }
@@ -37,8 +37,6 @@ namespace BCMWeb.Data.EF
         public string Email { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblDocumentoAuditoria> tblDocumentoAuditoria { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblEmpresaUsuario> tblEmpresaUsuario { get; set; }
         public virtual tblEstadoUsuario tblEstadoUsuario { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -51,5 +49,7 @@ namespace BCMWeb.Data.EF
         public virtual ICollection<tblPMTResponsableUpdate_Correo> tblPMTResponsableUpdate_Correo { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblUsuarioUnidadOrganizativa> tblUsuarioUnidadOrganizativa { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblAuditoria> tblAuditoria { get; set; }
     }
 }

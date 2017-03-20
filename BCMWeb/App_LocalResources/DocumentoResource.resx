@@ -267,4 +267,10 @@
   <data name="helpTextIdentificacion" xml:space="preserve">
     <value>Registre su número de cédula</value>
   </data>
+  <data name="MensajeActualizado" xml:space="preserve">
+    <value>El documento ha sido actualizado satisfactoriamente</value>
+  </data>
+  <data name="MensajeNoActualizado" xml:space="preserve">
+    <value>El documento no pudo ser actualizado. Si el problema persiste comuniquese con el administrador de la aplicación.</value>
+  </data>
 </root>

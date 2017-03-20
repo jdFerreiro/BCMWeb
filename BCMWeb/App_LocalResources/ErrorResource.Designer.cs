@@ -61,6 +61,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to El usuario ha sido bloqueado. Por favor comuníquese con el administrador..
+        /// </summary>
+        public static string BloqueadoErrorMessage {
+            get {
+                return ResourceManager.GetString("BloqueadoErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to La contraseña actual es inocrrecta o la nueva contraseña es inválida.
         /// </summary>
         public static string ChangePasswordFailError {
@@ -106,6 +115,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to El usuario se encuentra conectado. Por favor comuníquese con el administrador..
+        /// </summary>
+        public static string ConectadoErrorMessage {
+            get {
+                return ResourceManager.GetString("ConectadoErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Un error desconocido ocurrió. Verifique su entrada e inténtelo de nuevo. Si el problema persiste, póngase en contacto con el administrador del sistema.
         /// </summary>
         public static string defaultError {
@@ -129,6 +147,15 @@ namespace Resources {
         public static string DuplicateUserNameError {
             get {
                 return ResourceManager.GetString("DuplicateUserNameError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to El usuario ha sido Eliminado. Por favor comuníquese con el administrador..
+        /// </summary>
+        public static string EliminadoErrorMessage {
+            get {
+                return ResourceManager.GetString("EliminadoErrorMessage", resourceCulture);
             }
         }
         

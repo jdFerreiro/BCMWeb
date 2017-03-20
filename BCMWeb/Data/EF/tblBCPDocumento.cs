@@ -27,14 +27,15 @@ namespace BCMWeb.Data.EF
             this.tblBCPRestauracionMobiliario = new HashSet<tblBCPRestauracionMobiliario>();
             this.tblBCPRestauracionOtro = new HashSet<tblBCPRestauracionOtro>();
             this.tblBCPRespuestaAccion = new HashSet<tblBCPRespuestaAccion>();
-            this.tblDocumento = new HashSet<tblDocumento>();
         }
     
         public long IdEmpresa { get; set; }
         public long IdDocumentoBCP { get; set; }
-        public long IdDocumentoBIA { get; set; }
-        public long IdProceso { get; set; }
-        public long IdUnidadOrganizativa { get; set; }
+        public Nullable<long> IdDocumento { get; set; }
+        public Nullable<long> IdTipoDocumento { get; set; }
+        public Nullable<long> IdDocumentoBIA { get; set; }
+        public Nullable<long> IdProceso { get; set; }
+        public Nullable<long> IdUnidadOrganizativa { get; set; }
         public string Proceso { get; set; }
         public string SubProceso { get; set; }
         public string Responsable { get; set; }
@@ -58,10 +59,9 @@ namespace BCMWeb.Data.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBCPRestauracionOtro> tblBCPRestauracionOtro { get; set; }
         public virtual tblBIAProceso tblBIAProceso { get; set; }
+        public virtual tblDocumento tblDocumento { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBCPRespuestaAccion> tblBCPRespuestaAccion { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblDocumento> tblDocumento { get; set; }
         public virtual tblEmpresa tblEmpresa { get; set; }
     }
 }

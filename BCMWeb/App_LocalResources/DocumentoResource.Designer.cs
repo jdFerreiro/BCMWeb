@@ -493,6 +493,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to El documento ha sido actualizado satisfactoriamente.
+        /// </summary>
+        public static string MensajeActualizado {
+            get {
+                return ResourceManager.GetString("MensajeActualizado", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to El documento no pudo ser actualizado. Si el problema persiste comuniquese con el administrador de la aplicación..
+        /// </summary>
+        public static string MensajeNoActualizado {
+            get {
+                return ResourceManager.GetString("MensajeNoActualizado", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tecnología.
         /// </summary>
         public static string TipoDRP {

@@ -100,6 +100,10 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="itextsharp, Version=5.5.10.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\iTextSharp.5.5.10\lib\itextsharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -317,7 +321,6 @@
     <Content Include="Views\Menu\ComboBoxEmpresaPartial.cshtml" />
     <Content Include="Views\Documento\Index.cshtml" />
     <Content Include="Views\Documento\DocumentoPartialView.cshtml" />
-    <Content Include="Views\Documento\EditarDocumento.cshtml" />
     <Content Include="Views\Documentos\Ficha.cshtml" />
     <Content Include="Views\Documentos\ContentLeftPartialView.cshtml" />
     <Content Include="Views\Documentos\FichaPartialView.cshtml" />
@@ -333,6 +336,15 @@
     <Content Include="Views\Documentos\TelefonosPartialView.cshtml" />
     <Content Include="Views\Documentos\NuevaUnidadOrganizativaPartialView.cshtml" />
     <Content Include="Views\Documentos\NuevoCargoPartialView.cshtml" />
+    <Content Include="Views\Documentos\newCorreoPartialView.cshtml" />
+    <Content Include="Views\Documentos\Editor.cshtml" />
+    <Content Include="Views\Documentos\OpenDialog.cshtml" />
+    <Content Include="Views\Upload\Index.cshtml" />
+    <Content Include="Views\Shared\ModalMode.cshtml" />
+    <Content Include="Views\Documentos\EditorPartialView.cshtml" />
+    <Content Include="Views\Documentos\GenerarPDF.cshtml" />
+    <Content Include="Views\Documentos\ControlCambios.cshtml" />
+    <Content Include="Views\Documentos\ControlCambiosGridPartialView.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -350,6 +362,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>AboutResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_LocalResources\AuditoriaResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AuditoriaResource.resx</DependentUpon>
     </Compile>
     <Compile Include="App_LocalResources\BCMWebPublic.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -375,6 +392,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DocumentoResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_LocalResources\EditorResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditorResources.resx</DependentUpon>
     </Compile>
     <Compile Include="App_LocalResources\EmpresaResource.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -406,6 +428,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>LoginResource.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_LocalResources\PDFResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PDFResource.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_LocalResources\ProcedimientoBCPResource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -425,11 +452,14 @@
     <Compile Include="Controllers\DocumentosController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
+    <Compile Include="Controllers\UploadController.cs" />
     <Compile Include="DAL\EmpresaUsuario.cs" />
     <Compile Include="DAL\Encriptador.cs" />
+    <Compile Include="DAL\Enumeradores.cs" />
     <Compile Include="DAL\FirstModuloSelected.cs" />
     <Compile Include="DAL\Repository.cs" />
     <Compile Include="DAL\User.cs" />
+    <Compile Include="Data\Auditoria.cs" />
     <Compile Include="Data\EF\BCMWebEntities.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -444,6 +474,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>BCMWebEntities.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Data\EF\tblAuditoria.cs">
+      <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\EF\tblAuditoriaProcesoCritico.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
@@ -658,9 +691,6 @@
     <Compile Include="Data\EF\tblDocumentoAprobacion.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Data\EF\tblDocumentoAuditoria.cs">
-      <DependentUpon>BCMWebEntities.tt</DependentUpon>
-    </Compile>
     <Compile Include="Data\EF\tblDocumentoCertificacion.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
@@ -869,11 +899,14 @@
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\Metodos.cs" />
+    <Compile Include="Data\PDFManager.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
+    <Compile Include="Filters\RequestExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\AuditoriaModels.cs" />
     <Compile Include="Models\DocumentoModels.cs" />
     <Compile Include="Models\EmpresaModels.cs" />
     <Compile Include="Models\MenuModels.cs" />
@@ -882,9 +915,13 @@
     <Compile Include="Models\TablaModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Validators\EnsureOneElementAttribute.cs" />
+    <Compile Include="Filters\SessionExpireFilterAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\DocsFolder\" />
+    <Folder Include="PDFDocs\" />
+    <Folder Include="Views\AdminDoc\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -899,6 +936,11 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AboutResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App_LocalResources\AuditoriaResource.resx">
+      <CustomToolNamespace>Resources</CustomToolNamespace>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AuditoriaResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="App_LocalResources\BCMWebPublic.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -923,6 +965,11 @@
     <EmbeddedResource Include="App_LocalResources\DocumentoResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>DocumentoResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App_LocalResources\EditorResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EditorResources.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Resources</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="App_LocalResources\EmpresaResource.resx">
@@ -954,6 +1001,11 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>LoginResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App_LocalResources\PDFResource.resx">
+      <CustomToolNamespace>Resources</CustomToolNamespace>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PDFResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="App_LocalResources\ProcedimientoBCPResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

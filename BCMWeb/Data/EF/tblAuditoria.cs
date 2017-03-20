@@ -12,17 +12,17 @@ namespace BCMWeb.Data.EF
     using System;
     using System.Collections.Generic;
     
-    public partial class tblDocumentoAuditoria
+    public partial class tblAuditoria
     {
-        public long IdEmpresa { get; set; }
-        public long IdDocumento { get; set; }
-        public long IdTipoDocumento { get; set; }
         public long IdAuditoria { get; set; }
+        public Nullable<long> IdEmpresa { get; set; }
+        public Nullable<long> IdDocumento { get; set; }
+        public Nullable<long> IdTipoDocumento { get; set; }
         public System.DateTime FechaRegistro { get; set; }
         public string DireccionIP { get; set; }
         public string Mensaje { get; set; }
         public string Accion { get; set; }
-        public long IdUsuario { get; set; }
+        public Nullable<long> IdUsuario { get; set; }
         public bool Negocios { get; set; }
     
         public virtual tblDocumento tblDocumento { get; set; }

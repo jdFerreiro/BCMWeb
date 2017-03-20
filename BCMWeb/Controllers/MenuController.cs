@@ -11,6 +11,7 @@ namespace BCMWeb.Controllers
     public class MenuController : Controller
     {
         // GET: Menu
+        [SessionExpire]
         public ActionResult Index()
         {
             ModulosUserModel model = new ModulosUserModel();
@@ -20,13 +21,15 @@ namespace BCMWeb.Controllers
         }
 
         [HttpPost]
+        [SessionExpire]
         public ActionResult Index(ModulosUserModel model) 
         {
             Session["IdEmpresa"] = model.IdEmpresa;
             model.ModulosPrincipales = Metodos.GetModulosPrincipalesEmpresaUsuario();
             return View(model);
         }
-        
+
+        [SessionExpire]
         public ActionResult ComboBoxEmpresaPartial()
         {
             return PartialView();

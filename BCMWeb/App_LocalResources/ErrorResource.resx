@@ -216,4 +216,13 @@
   <data name="ErrorCertificaciones" xml:space="preserve">
     <value>Por favor registre al menos un certificador</value>
   </data>
+  <data name="BloqueadoErrorMessage" xml:space="preserve">
+    <value>El usuario ha sido bloqueado. Por favor comuníquese con el administrador.</value>
+  </data>
+  <data name="ConectadoErrorMessage" xml:space="preserve">
+    <value>El usuario se encuentra conectado. Por favor comuníquese con el administrador.</value>
+  </data>
+  <data name="EliminadoErrorMessage" xml:space="preserve">
+    <value>El usuario ha sido Eliminado. Por favor comuníquese con el administrador.</value>
+  </data>
 </root>

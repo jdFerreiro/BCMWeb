@@ -1,0 +1,99 @@
+﻿@using BCMWeb.Models
+
+@model DocumentoModel
+
+@section Scripts {
+<script type="text/javascript">
+    function OnCustomCommandExecuted(s, e) {
+        //debugger;
+        var command = e.commandName;
+        if (command.indexOf("open") > -1) {
+            pcModalMode.Show();
+        }
+        if (command.indexOf("botSave") > -1) {
+            lp.Show();
+
+            var IdModulo = $("#IdModulo").val();
+            $.ajax({
+                type: 'POST',
+                url: '/Documentos/SaveDocument',
+                dataType: 'json',
+                data: {
+                    IdModulo: IdModulo
+                },
+                success: function (data) {
+                    $("#Saved").val(true);
+                    lp.Hide()
+                    if (!data.success) {
+                        alert('@Resources.DocumentoResource.MensajeNoActualizado');
+                    }
+                    else {
+                        close = true;
+                        RichEdit.PerformCallback();
+                        alert('@Resources.DocumentoResource.MensajeActualizado');
+                    }
+                },
+                error: function () {
+                    lp.Hide();
+                    alert("error");
+                }
+            });
+            
+        }
+    };
+    function docChange(s, e) {
+        $.ajax({
+            type: 'POST',
+            url: '/Documentos/docChange',
+            dataType: 'json',
+            data: {},
+            success: function (data) {
+                if (data.success) {
+                    RichEdit.RibbonTabs[0].Groups[0].Items["botSave"].ClientEnabled = true;
+                }
+            },
+            error: function () {
+                alert("error");
+            }
+        });
+    }
+    function onBeginRichEditCallback(s,e) {
+        lp.Show();
+    }
+</script>
+}
+
+@section LeftPanel {
+    @Html.DevExpress().Panel(settings =>
+   {
+       settings.Name = "LeftPane";
+       settings.FixedPosition = PanelFixedPosition.WindowLeft;
+       settings.Collapsible = true;
+       settings.SettingsAdaptivity.CollapseAtWindowInnerWidth = 1023;
+       settings.ControlStyle.CssClass = "leftPane";
+       settings.Styles.Panel.CssClass = "panel";
+       settings.SetContent(() =>
+       {
+           Html.RenderPartial("ContentLeftPartialView");
+       });
+   }).GetHtml()
+}
+
+@using (Html.BeginForm("Editor", "Documentos", FormMethod.Post))
+{
+    <div class="right">
+        @if ((bool)Session["Editable"])
+        {
+            @Html.Display(Resources.EditorResources.EditableText);
+        }
+        else
+        {
+            @Html.Display(Resources.EditorResources.NoEditableText);
+        }
+    </div>
+
+    @Html.Partial("EditorPartialView")
+}
+
+
+    @Html.Partial("ModalMode")

@@ -20,13 +20,14 @@ namespace BCMWeb.Data.EF
             this.tblBIAComentario = new HashSet<tblBIAComentario>();
             this.tblBIAImpactoFinanciero = new HashSet<tblBIAImpactoFinanciero>();
             this.tblBIAProceso = new HashSet<tblBIAProceso>();
-            this.tblDocumento = new HashSet<tblDocumento>();
         }
     
         public long IdEmpresa { get; set; }
-        public long IdDocumento { get; set; }
-        public long IdUnidadOrganizativa { get; set; }
+        public long IdDocumentoBIA { get; set; }
+        public Nullable<long> IdDocumento { get; set; }
+        public Nullable<long> IdUnidadOrganizativa { get; set; }
         public Nullable<long> IdCadenaServicio { get; set; }
+        public Nullable<long> IdTipoDocumento { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIAComentario> tblBIAComentario { get; set; }
@@ -35,8 +36,7 @@ namespace BCMWeb.Data.EF
         public virtual ICollection<tblBIAImpactoFinanciero> tblBIAImpactoFinanciero { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIAProceso> tblBIAProceso { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblDocumento> tblDocumento { get; set; }
+        public virtual tblDocumento tblDocumento { get; set; }
         public virtual tblEmpresa tblEmpresa { get; set; }
     }
 }

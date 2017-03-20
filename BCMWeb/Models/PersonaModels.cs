@@ -31,10 +31,10 @@ namespace BCMWeb.Models
         public CargoModel Cargo { get; set; }
         public long IdUsuario { get; set; }
         [Remote("CheckEmails", "Documentos", ErrorMessageResourceType = typeof(Resources.ErrorResource), ErrorMessageResourceName = "RemoteEmail")]
-        public IList<PersonaEmail> CorreosElectronicos { get; set; }
-        public IList<PersonaDireccion> Direcciones { get; set; }
+        public List<PersonaEmail> CorreosElectronicos { get; set; }
+        public List<PersonaDireccion> Direcciones { get; set; }
         [Remote("CheckTelefonos", "Documentos", ErrorMessageResourceType = typeof(Resources.ErrorResource), ErrorMessageResourceName = "RemoteEmail")]
-        public IList<PersonaTelefono> Telefonos { get; set; }
+        public List<PersonaTelefono> Telefonos { get; set; }
 
         public PersonaModel()
         {
