@@ -28,11 +28,19 @@ namespace BCMWeb.Models
         {
             get
             {
-                return new SubModulosData(this.IdModulo);
+                if (this.IdModulo.ToString().StartsWith("99"))
+                {
+                    return new SubModulosData(this.IdModuloActual);
+                }
+                else
+                {
+                    return new SubModulosData(this.IdModulo);
+                }
             }
         }
         public string returnPage { get; set; }
         public string PageTitle { get; set; }
+        public string UserTimezone { get; set; }
     }
    public class ModuloModel
     {

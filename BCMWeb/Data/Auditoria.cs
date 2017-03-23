@@ -30,12 +30,15 @@ namespace BCMWeb
 
                 db.tblAuditoria.Add(regAuditoria);
                 usuario.FechaUltimaConexion = DateTime.UtcNow;
+                usuario.EstadoUsuario = 2;
                 db.SaveChanges();
             }
         }
-        public static void RegistrarLogout()
+        public static void RegistrarLogout(long IdUser = 0)
         {
-            long IdUser = long.Parse(Session["UserId"].ToString());
+            if (IdUser == 0)
+                IdUser = long.Parse(Session["UserId"].ToString());
+
             using (Entities db = new Entities())
             {
                 tblUsuario usuario = db.tblUsuario.Where(x => x.IdUsuario == IdUser).FirstOrDefault();
@@ -51,6 +54,7 @@ namespace BCMWeb
 
                 db.tblAuditoria.Add(regAuditoria);
                 usuario.FechaUltimaConexion = DateTime.UtcNow;
+                usuario.EstadoUsuario = 2;
                 db.SaveChanges();
             }
         }
@@ -63,6 +67,7 @@ namespace BCMWeb
             long IdModuloActivo = (Session["modId"] != null ? long.Parse(Session["modId"].ToString()) : 0);
             long IdModuloPrincipal = IdTipoDocumento * 1000000;
             int IdClaseDocumento = (Session["IdClaseDocumento"] != null ? int.Parse(Session["IdClaseDocumento"].ToString()) : 0);
+            string NombreAnexo = (Session["Anexo"] != null ? Session["Anexo"].ToString() : string.Empty);
             string AccionMessage = string.Empty;
 
             using (Entities db = new Entities())
@@ -75,9 +80,14 @@ namespace BCMWeb
                 string docVersion = string.Empty;
                 string NroDocumento = string.Empty;
                 string NombreModulo = string.Empty;
+                string VersionActual = (Documento != null ? Documento.VersionOriginal.ToString() : string.Empty);
 
                 switch (Accion)
                 {
+                    case eTipoAccion.AbrirDocumento:
+                        AccionMessage = Resources.AuditoriaResource.AbrirDocumentoMessage;
+                        NombreModulo = moduloPrincipal.Nombre;
+                        break;
                     case eTipoAccion.AbrirPDFMovil:
                         AccionMessage = Resources.AuditoriaResource.AbrirPDFMovilMessage;
                         NombreModulo = moduloPrincipal.Nombre;
@@ -98,8 +108,40 @@ namespace BCMWeb
                         AccionMessage = Resources.AuditoriaResource.ActualizarAccionMessage;
                         NombreModulo = moduloActivo.Nombre;
                         break;
+                    case eTipoAccion.AgregarAnexoDocumento:
+                        AccionMessage = Resources.AuditoriaResource.AgregarAnexoDocumentoMessage;
+                        NombreModulo = moduloPrincipal.Nombre;
+                        break;
+                    case eTipoAccion.AgregarAnexoModulo:
+                        AccionMessage = Resources.AuditoriaResource.AgregarAnexoModuloMessage;
+                        NombreModulo = moduloPrincipal.Nombre;
+                        break;
+                    case eTipoAccion.AprobarDocumento:
+                        AccionMessage = Resources.AuditoriaResource.AprobarDocumentoMessage;
+                        NombreModulo = moduloPrincipal.Nombre;
+                        break;
+                    case eTipoAccion.CertificarDocumento:
+                        AccionMessage = Resources.AuditoriaResource.CertificarDocumentoMessage;
+                        NombreModulo = moduloPrincipal.Nombre;
+                        break;
+                    case eTipoAccion.ConsultarCambios:
+                        AccionMessage = Resources.AuditoriaResource.ConsultarCambiosMessage;
+                        NombreModulo = moduloPrincipal.Nombre;
+                        break;
                     case eTipoAccion.Eliminar:
                         AccionMessage = Resources.AuditoriaResource.EliminarAccionMessage;
+                        NombreModulo = moduloActivo.Nombre;
+                        break;
+                    case eTipoAccion.EliminarAnexoDocumento:
+                        AccionMessage = Resources.AuditoriaResource.EliminarAnexoDocumentoMessage;
+                        NombreModulo = moduloPrincipal.Nombre;
+                        break;
+                    case eTipoAccion.EliminarAnexoModulo:
+                        AccionMessage = Resources.AuditoriaResource.EliminarAnexoModuloMessage;
+                        NombreModulo = moduloPrincipal.Nombre;
+                        break;
+                    case eTipoAccion.GenearCopiaDocumento:
+                        AccionMessage = Resources.AuditoriaResource.GenerarCopiaDocumentoMessage;
                         NombreModulo = moduloPrincipal.Nombre;
                         break;
                     case eTipoAccion.GenerarPDF:
@@ -122,7 +164,7 @@ namespace BCMWeb
                     NroDocumento = Documento.NroDocumento.ToString();
                 }
 
-                string _Accion = string.Format(AccionMessage, NombreModulo, NroDocumento, docVersion);
+                string _Accion = string.Format(AccionMessage, NombreModulo, NroDocumento, docVersion, NombreAnexo, VersionActual);
 
                 tblAuditoria regAuditoria = new tblAuditoria
                 {
@@ -139,6 +181,7 @@ namespace BCMWeb
 
                 db.tblAuditoria.Add(regAuditoria);
                 usuario.FechaUltimaConexion = DateTime.UtcNow;
+                usuario.EstadoUsuario = 2;
                 db.SaveChanges();
             }
         }

@@ -16,10 +16,11 @@ settings =>
     settings.ControlStyle.BorderBottom.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
     settings.ClientSideEvents.SelectionChanged = "function (s, e) { lp.Show(); }";
     settings.ClientSideEvents.BeginCallback = "function (s, e) { lp.Show(); }";
-    settings.ClientSideEvents.EndCallback = "function (s, e) { lp.Hide(); }";
+    //settings.ClientSideEvents.EndCallback = "function (s, e) { lp.Hide(); }";
 
     settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Hidden;
     settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+    settings.Settings.VerticalScrollableHeight = 400;
 
     settings.SettingsPager.PageSize = 20;
     settings.SettingsPager.Position = PagerPosition.Bottom;
@@ -28,7 +29,10 @@ settings =>
     settings.SettingsPager.PageSizeItemSettings.Visible = true;
     settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20", "50", "100" };
 
-
+    settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+    settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
+    settings.EditFormLayoutProperties.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+    settings.EditFormLayoutProperties.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
 
     settings.Columns.Add(column =>
     {
@@ -36,6 +40,11 @@ settings =>
         column.HeaderStyle.Wrap = DefaultBoolean.True;
         column.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
         column.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+        column.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        column.CellStyle.Wrap = DefaultBoolean.True;
+        column.Settings.AllowDragDrop = DefaultBoolean.False;
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.Width = Unit.Percentage(15);
         column.SetDataItemTemplateContent(c =>
         {
             if ((bool)DataBinder.Eval(c.DataItem, "Editable") && (bool)DataBinder.Eval(c.DataItem, "Eliminable"))
@@ -78,12 +87,7 @@ settings =>
             );
             //}
         });
-        column.CellStyle.HorizontalAlign = HorizontalAlign.Center;
-        column.Settings.AllowDragDrop = DefaultBoolean.False;
-        column.Settings.AllowSort = DefaultBoolean.False;
-        column.Width = Unit.Percentage(10);
     });
-
     settings.Columns.Add(c =>
     {
         c.Settings.AllowSort = DefaultBoolean.True;
@@ -95,6 +99,18 @@ settings =>
         c.HeaderStyle.Wrap = DefaultBoolean.True;
         c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
         c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+    });
+    settings.Columns.Add(c =>
+    {
+        c.Settings.AllowSort = DefaultBoolean.True;
+        c.FieldName = "Version";
+        c.Width = Unit.Percentage(5);
+        c.Caption = Resources.DocumentoResource.captionVersion;
+        c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        c.PropertiesEdit.DisplayFormatString = "{0}";
+        c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+        c.HeaderStyle.Wrap = DefaultBoolean.True;
     });
     settings.Columns.Add(c =>
     {
@@ -145,33 +161,55 @@ settings =>
     });
     settings.Columns.Add(c =>
     {
-        c.Settings.AllowSort = DefaultBoolean.True;
-        c.FieldName = "NroVersion";
+        c.Settings.AllowSort = DefaultBoolean.False;
         c.Width = Unit.Percentage(5);
-        c.Caption = Resources.DocumentoResource.captionVersion;
+        c.Caption = string.Empty;
         c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
-        c.PropertiesEdit.DisplayFormatString = "#,##0";
         c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
         c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
         c.HeaderStyle.Wrap = DefaultBoolean.True;
+        c.SetDataItemTemplateContent(tc =>
+        {
+
+            ViewContext.Writer.Write(
+                Html.DevExpress().HyperLink(i =>
+                {
+                    i.ClientVisible = (DataBinder.Eval(tc.DataItem, "RutaDocumentoPDF") != null);
+                    i.Name = String.Format("hlPDF_{0}", DataBinder.Eval(tc.DataItem, "IdDocumento"));
+                    i.NavigateUrl = (DataBinder.Eval(tc.DataItem, "RutaDocumentoPDF") == null ? string.Empty : DataBinder.Eval(tc.DataItem, "RutaDocumentoPDF").ToString());
+                    i.Properties.ImageUrl = "~/Content/Images/Internal/icono-pdf.jpg";
+                    i.Properties.ImageHeight = Unit.Pixel(32);
+                    i.Width = Unit.Pixel(50);
+                }).GetHtml()
+            );
+        });
     });
     settings.Columns.Add(c =>
     {
         c.Settings.AllowSort = DefaultBoolean.False;
         c.Width = Unit.Percentage(10);
         c.Caption = string.Empty;
+        c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
         c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
         c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
         c.HeaderStyle.Wrap = DefaultBoolean.True;
         c.SetDataItemTemplateContent(tc =>
         {
-            @Html.DevExpress().Image(i =>
+            if (int.Parse( DataBinder.Eval(tc.DataItem, "IdEstatus").ToString()) == 6 && (bool)DataBinder.Eval(tc.DataItem, "HasVersion") == false)
             {
-                i.ImageUrl = "~/Content/Images/Internal/icono-pdf.jpg";
-                i.Width = Unit.Pixel(50);
-            });
+                ViewContext.Writer.Write(
+                    Html.ActionLink(Resources.DocumentoResource.NuevaVersionText, "NuevaVersionDocumento",
+                        new
+                        {
+                            IdDocumento = DataBinder.Eval(tc.DataItem, "IdDocumento"),
+                            IdClaseDocumento = Model.IdClaseDocumento,
+                            IdModulo = Model.IdModulo,
+                            IdVersionActual = DataBinder.Eval(tc.DataItem, "VersionOriginal"),
+                            NroVersion = DataBinder.Eval(tc.DataItem, "NroVersion")
+                        })
+                );
+            }
         });
-        c.Visible = System.IO.File.Exists("~/Content/Images/Internal/icono-pdf.jpg");
     });
 
 }).Bind(Model.Documentos).GetHtml()

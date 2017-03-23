@@ -10,35 +10,9 @@
         if (command.indexOf("open") > -1) {
             pcModalMode.Show();
         }
-        if (command.indexOf("botSave") > -1) {
+        if (command.indexOf("Save") > -1) {
             lp.Show();
-
-            var IdModulo = $("#IdModulo").val();
-            $.ajax({
-                type: 'POST',
-                url: '/Documentos/SaveDocument',
-                dataType: 'json',
-                data: {
-                    IdModulo: IdModulo
-                },
-                success: function (data) {
-                    $("#Saved").val(true);
-                    lp.Hide()
-                    if (!data.success) {
-                        alert('@Resources.DocumentoResource.MensajeNoActualizado');
-                    }
-                    else {
-                        close = true;
-                        RichEdit.PerformCallback();
-                        alert('@Resources.DocumentoResource.MensajeActualizado');
-                    }
-                },
-                error: function () {
-                    lp.Hide();
-                    alert("error");
-                }
-            });
-            
+            RichEdit.PerformCallback({ Accion: "Save" });
         }
     };
     function docChange(s, e) {

@@ -180,4 +180,31 @@
   <data name="CaptionUsuario" xml:space="preserve">
     <value>Usuario</value>
   </data>
+  <data name="AbrirDocumentoMessage" xml:space="preserve">
+    <value>Abrir documento {1} versión {2} del módulo {0}</value>
+  </data>
+  <data name="AgregarAnexoDocumentoMessage" xml:space="preserve">
+    <value>Agregar anexo {4} al documento {1} versión {2} del módulo {0}</value>
+  </data>
+  <data name="AgregarAnexoModuloMessage" xml:space="preserve">
+    <value>Agregar anexo {4} al módulo {0}</value>
+  </data>
+  <data name="AprobarDocumentoMessage" xml:space="preserve">
+    <value>Aprueba el documento {1} versión {2} del módulo {0}</value>
+  </data>
+  <data name="CertificarDocumentoMessage" xml:space="preserve">
+    <value>Certifica el documento {1} versión {2} del módulo {0}</value>
+  </data>
+  <data name="ConsultarCambiosMessage" xml:space="preserve">
+    <value>Consulta control de cambios en el documento {1} versión {2} del módulo {0}</value>
+  </data>
+  <data name="EliminarAnexoDocumentoMessage" xml:space="preserve">
+    <value>Elimina anexo {4} del documento {1} versión {2} del módulo {0}</value>
+  </data>
+  <data name="EliminarAnexoModuloMessage" xml:space="preserve">
+    <value>Elimina anexo {4} del módulo {0}</value>
+  </data>
+  <data name="GenerarCopiaDocumentoMessage" xml:space="preserve">
+    <value>Generar versión {5} del documento {1} versión {2} del módulo {0}</value>
+  </data>
 </root>

@@ -480,8 +480,8 @@ namespace BCMWeb
 
                         eEstadoDocumento EstadoDocumento = (eEstadoDocumento)dataDocumento.IdEstadoDocumento;
 
-                        string _CodigoInforme = string.Format("{0} {1}-{2}", TipoDocumento, dataDocumento.NroDocumento.ToString("#000"), (EstadoDocumento == eEstadoDocumento.Certificado ? dataDocumento.FechaEstadoDocumento.ToString("MM-yyyy") : DateTime.Now.ToString("MM-yyyy")));
-                        _FileName = string.Format("{0}.pdf", _CodigoInforme.Replace("-", "_").Replace(" ", "_"));
+                        string _CodigoInforme = string.Format("{0}_{1}_{2}_{3}.{4}", TipoDocumento, dataDocumento.NroDocumento.ToString("#000"), (EstadoDocumento == eEstadoDocumento.Certificado ? dataDocumento.FechaEstadoDocumento.ToString("MM-yyyy") : DateTime.Now.ToString("MM-yyyy")), dataDocumento.VersionOriginal, dataDocumento.NroVersion);
+                        _FileName = string.Format("{0}.pdf", _CodigoInforme.Replace("-", "_"));
                         _pathFile = String.Format("{0}\\PDFDocs\\{1}", _ServerPath, _FileName);
                         _strDocURL = String.Format("{0}/PDFDocs/{1}", _AppUrl, _FileName);
                         string _LogoEmpresaPath = string.Format("{0}{1}", _ServerPath, dataDocumento.tblEmpresa.LogoURL.Replace("/","\\"));

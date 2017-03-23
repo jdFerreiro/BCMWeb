@@ -24,7 +24,10 @@ namespace BCMWeb.Data.EF
         public long IdUnidadTrabajo { get; set; }
         public long IdUnidadTrabajoProceso { get; set; }
         public string Nombre { get; set; }
+        public long IdDocumentoBIA { get; set; }
+        public long IdProceso { get; set; }
     
+        public virtual tblBIAProceso tblBIAProceso { get; set; }
         public virtual tblBIAUnidadTrabajo tblBIAUnidadTrabajo { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIAUnidadTrabajoPersonas> tblBIAUnidadTrabajoPersonas { get; set; }

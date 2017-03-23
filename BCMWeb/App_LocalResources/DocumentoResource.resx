@@ -273,4 +273,13 @@
   <data name="MensajeNoActualizado" xml:space="preserve">
     <value>El documento no pudo ser actualizado. Si el problema persiste comuniquese con el administrador de la aplicación.</value>
   </data>
+  <data name="textButtonAprobar" xml:space="preserve">
+    <value>Aprobar</value>
+  </data>
+  <data name="textButtonCertificar" xml:space="preserve">
+    <value>Certificar</value>
+  </data>
+  <data name="NuevaVersionText" xml:space="preserve">
+    <value>Nueva versión</value>
+  </data>
 </root>

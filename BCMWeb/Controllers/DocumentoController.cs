@@ -83,5 +83,14 @@ namespace BCMWeb.Controllers
             return RedirectToAction(firstModulo.Action, firstModulo.Controller, new { modId = firstModulo.IdModulo });
 
         }
+        public ActionResult NuevaVersionDocumento(long IdDocumento, int IdClaseDocumento, long IdModulo, int IdVersionActual, int NroVersion)
+        {
+            int IdVersion = NroVersion++;
+            string _IdModulo = IdModulo.ToString();
+            Session["IdTipoDocumento"] = _IdModulo.Substring(0, (_IdModulo.Length == 7 ? 1 : 2));
+            long IdNuevoDocumento = Metodos.GenerarNuevaVersionDocumento(IdDocumento, IdVersionActual, NroVersion);
+
+            return RedirectToAction("EditarDocumento", new { IdDocumento = IdNuevoDocumento, IdClaseDocumento, IdModulo, IdVersion });
+        }
     }
-}
+}   

@@ -16,13 +16,14 @@ namespace BCMWeb.Data.EF
     {
         public long IdPMTProgramación { get; set; }
         public long IdEmpresa { get; set; }
-        public long IdModulo { get; set; }
         public long IdDocumento { get; set; }
+        public long IdModulo { get; set; }
         public System.DateTime FechaInicio { get; set; }
         public System.DateTime FechaFinal { get; set; }
         public long IdEstado { get; set; }
         public bool Negocios { get; set; }
     
+        public virtual tblDocumento tblDocumento { get; set; }
         public virtual tblEmpresa tblEmpresa { get; set; }
     }
 }

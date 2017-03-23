@@ -20,7 +20,7 @@ namespace BCMWeb.Data.EF
             this.tblBCPDocumento = new HashSet<tblBCPDocumento>();
             this.tblBIAAmenaza = new HashSet<tblBIAAmenaza>();
             this.tblBIAAplicacion = new HashSet<tblBIAAplicacion>();
-            this.tblBIAClienteProducto = new HashSet<tblBIAClienteProducto>();
+            this.tblBIAClienteProceso = new HashSet<tblBIAClienteProceso>();
             this.tblBIADocumentacion = new HashSet<tblBIADocumentacion>();
             this.tblBIAEntrada = new HashSet<tblBIAEntrada>();
             this.tblBIAGranImpacto = new HashSet<tblBIAGranImpacto>();
@@ -35,6 +35,7 @@ namespace BCMWeb.Data.EF
             this.tblBIARespaldoSecundario = new HashSet<tblBIARespaldoSecundario>();
             this.tblBIARPO = new HashSet<tblBIARPO>();
             this.tblBIARTO = new HashSet<tblBIARTO>();
+            this.tblBIAUnidadTrabajoProceso = new HashSet<tblBIAUnidadTrabajoProceso>();
             this.tblBIAWRT = new HashSet<tblBIAWRT>();
         }
     
@@ -57,7 +58,7 @@ namespace BCMWeb.Data.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIAAplicacion> tblBIAAplicacion { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblBIAClienteProducto> tblBIAClienteProducto { get; set; }
+        public virtual ICollection<tblBIAClienteProceso> tblBIAClienteProceso { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIADocumentacion> tblBIADocumentacion { get; set; }
         public virtual tblBIADocumento tblBIADocumento { get; set; }
@@ -89,6 +90,8 @@ namespace BCMWeb.Data.EF
         public virtual ICollection<tblBIARPO> tblBIARPO { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIARTO> tblBIARTO { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblBIAUnidadTrabajoProceso> tblBIAUnidadTrabajoProceso { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIAWRT> tblBIAWRT { get; set; }
     }

@@ -21,6 +21,7 @@ namespace BCMWeb.Data.EF
         public System.DateTime FechaUltimaActualizacion { get; set; }
         public long IdUsuarioActuailiza { get; set; }
     
+        public virtual tblDocumento tblDocumento { get; set; }
         public virtual tblEmpresa tblEmpresa { get; set; }
     }
 }

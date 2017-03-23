@@ -6,7 +6,7 @@
         if (e.callbackData !== "") {
             pcModalMode.Hide();
             lp.Show();
-            RichEdit.PerformCallback();
+            RichEdit.PerformCallback({Accion: "Open"});
         }
         else {
             alert("The selected file was not uploaded.");

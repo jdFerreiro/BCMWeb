@@ -61,6 +61,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Abrir documento {1} versión {2} del módulo {0}.
+        /// </summary>
+        public static string AbrirDocumentoMessage {
+            get {
+                return ResourceManager.GetString("AbrirDocumentoMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Abrir el archivo PDF del documento {1} versión {2} desde un dispositivo móvil.
         /// </summary>
         public static string AbrirPDFMovilMessage {
@@ -102,6 +111,33 @@ namespace Resources {
         public static string ActualizarAccionMessage {
             get {
                 return ResourceManager.GetString("ActualizarAccionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Agregar anexo {4} al documento {1} versión {2} del módulo {0}.
+        /// </summary>
+        public static string AgregarAnexoDocumentoMessage {
+            get {
+                return ResourceManager.GetString("AgregarAnexoDocumentoMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Agregar anexo {4} al módulo {0}.
+        /// </summary>
+        public static string AgregarAnexoModuloMessage {
+            get {
+                return ResourceManager.GetString("AgregarAnexoModuloMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aprueba el documento {1} versión {2} del módulo {0}.
+        /// </summary>
+        public static string AprobarDocumentoMessage {
+            get {
+                return ResourceManager.GetString("AprobarDocumentoMessage", resourceCulture);
             }
         }
         
@@ -196,11 +232,56 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Certifica el documento {1} versión {2} del módulo {0}.
+        /// </summary>
+        public static string CertificarDocumentoMessage {
+            get {
+                return ResourceManager.GetString("CertificarDocumentoMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Consulta control de cambios en el documento {1} versión {2} del módulo {0}.
+        /// </summary>
+        public static string ConsultarCambiosMessage {
+            get {
+                return ResourceManager.GetString("ConsultarCambiosMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Eliminar el documento {1} versión {2}.
         /// </summary>
         public static string EliminarAccionMessage {
             get {
                 return ResourceManager.GetString("EliminarAccionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Elimina anexo {4} del documento {1} versión {2} del módulo {0}.
+        /// </summary>
+        public static string EliminarAnexoDocumentoMessage {
+            get {
+                return ResourceManager.GetString("EliminarAnexoDocumentoMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Elimina anexo {4} del módulo {0}.
+        /// </summary>
+        public static string EliminarAnexoModuloMessage {
+            get {
+                return ResourceManager.GetString("EliminarAnexoModuloMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Generar versión {5} del documento {1} versión {2} del módulo {0}.
+        /// </summary>
+        public static string GenerarCopiaDocumentoMessage {
+            get {
+                return ResourceManager.GetString("GenerarCopiaDocumentoMessage", resourceCulture);
             }
         }
         

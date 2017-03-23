@@ -58,6 +58,11 @@ namespace BCMWeb.Models
         }
         [Display(Name = "captionRequiereCertificacion", ResourceType = typeof(Resources.DocumentoResource))]
         public bool RequiereCertificacion { get; set; }
+        public bool Editable { get; set; }
+        public bool Eliminable { get; set; }
+        public string RutaDocumentoPDF { get; set; }
+        public string Version { get; set; }
+        public bool HasVersion { get; set; }
         public List<DocumentoAnexoModel> Anexos { get; set; }
         public List<DocumentoAprobacionModel> Aprobaciones { get; set; }
         public List<DocumentoAuditoriaModel> Auditoria { get; set; }
@@ -67,8 +72,6 @@ namespace BCMWeb.Models
         public List<DocumentoPersonaClaveModel> PersonasClave { get; set; }
         public List<DocumentoProcesoModel> Procesos { get; set; }
         public bool Updated { get; set; }
-        public bool Editable { get; set; }
-        public bool Eliminable { get; set; }
         public DocumentoModel()
         {
             this.Anexos = new List<DocumentoAnexoModel>();
@@ -81,6 +84,7 @@ namespace BCMWeb.Models
             this.Procesos = new List<DocumentoProcesoModel>();
             this.Updated = false;
     }
+
 }
     public class DocumentoAnexoModel
     {
@@ -91,21 +95,31 @@ namespace BCMWeb.Models
         public string NombreArchivo { get; set; }
         public string RutaArchivo { get; set; }
     }
-    public class DocumentoAprobacionModel
+    public class DocumentoAprobacionModel : ModulosUserModel
     {
-        public long IdEmpresa { get; set; }
         public long IdDocumento { get; set; }
         public long IdTipoDocumento { get; set; }
         public long IdAprobacion { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
         [Display(Name = "captionFechaAprobacion", ResourceType = typeof(Resources.DocumentoResource))]
         [DataType(DataType.DateTime, ErrorMessageResourceName = "InvalidoErrorFemale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
-        public DateTime FechaAprobacion { get; set; }
+        public Nullable<DateTime> FechaAprobacion { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "RequiredErrorFemale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
         [Display(Name = "captionAprobador", ResourceType = typeof(Resources.DocumentoResource))]
         public long IdPersona { get; set; }
         [Display(Name = "captionAprobador", ResourceType = typeof(Resources.DocumentoResource))]
-        public PersonaModel Persona { get; set; }
+        public PersonaModel Persona
+        {
+            get
+            {
+                PersonaModel _persona =  Metodos.GetPersonaById(this.IdPersona);
+                if ((_persona == null || string.IsNullOrEmpty(_persona.Nombre)) && this.IdPersona > 0)
+                {
+                    _persona = Metodos.ConvertUsuarioToPersona(this.IdPersona);
+                }
+                return _persona;
+            }
+        }
         [Display(Name = "captionAprobado", ResourceType = typeof(Resources.DocumentoResource))]
         public bool Aprobado { get; set; }
         [Display(Name = "captionProcesado", ResourceType = typeof(Resources.DocumentoResource))]
@@ -133,21 +147,31 @@ namespace BCMWeb.Models
         public bool Negocios { get; set; }
 
     }
-    public class DocumentoCertificacionModel
+    public class DocumentoCertificacionModel : ModulosUserModel
     {
-        public long IdEmpresa { get; set; }
         public long IdDocumento { get; set; }
         public long IdTipoDocumento { get; set; }
         public long IdCertificacion { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
         [Display(Name = "captionFechaCertificacion", ResourceType = typeof(Resources.DocumentoResource))]
         [DataType(DataType.DateTime, ErrorMessageResourceName = "InvalidoErrorFemale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
-        public DateTime FechaCertificacion { get; set; }
+        public DateTime? FechaCertificacion { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
         [Display(Name = "captionCertificador", ResourceType = typeof(Resources.DocumentoResource))]
         public long IdPersona { get; set; }
         [Display(Name = "captionCertificador", ResourceType = typeof(Resources.DocumentoResource))]
-        public PersonaModel Persona { get; set; }
+        public PersonaModel Persona
+        {
+            get
+            {
+                PersonaModel _persona = Metodos.GetPersonaById(this.IdPersona);
+                if ((_persona == null || string.IsNullOrEmpty(_persona.Nombre)) && this.IdPersona > 0)
+                {
+                    _persona = Metodos.ConvertUsuarioToPersona(this.IdPersona);
+                }
+                return _persona;
+            }
+        }
         [Display(Name = "captionCertificado", ResourceType = typeof(Resources.DocumentoResource))]
         public bool Certificado { get; set; }
         [Display(Name = "captionProcesado", ResourceType = typeof(Resources.DocumentoResource))]

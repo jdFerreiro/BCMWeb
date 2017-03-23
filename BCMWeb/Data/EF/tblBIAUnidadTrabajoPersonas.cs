@@ -20,7 +20,10 @@ namespace BCMWeb.Data.EF
         public long IdUnidadPersona { get; set; }
         public long IdClienteProceso { get; set; }
         public string Nombre { get; set; }
+        public long IdDocumentoBIA { get; set; }
+        public long IdProceso { get; set; }
     
+        public virtual tblBIAClienteProceso tblBIAClienteProceso { get; set; }
         public virtual tblBIAUnidadTrabajoProceso tblBIAUnidadTrabajoProceso { get; set; }
     }
 }

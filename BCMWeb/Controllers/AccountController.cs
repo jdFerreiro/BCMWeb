@@ -48,6 +48,7 @@ namespace BCMWeb.Controllers {
                             HttpContext.Response.Cookies.Add(authCookie);
                             Session["UserId"] = UserId;
                             Session["IdEmpresa"] = Metodos.GetEmpresasUsuario().FirstOrDefault().IdEmpresa;
+                            Session["UserTimeZone"] = model.UserTimezone;
                             Metodos.LoginUsuario(long.Parse(UserId));
                             return RedirectToAction("Index", "Menu");
                         case eEstadoUsuario.Bloqueado:

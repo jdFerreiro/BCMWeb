@@ -273,6 +273,7 @@
     <Content Include="Data\EF\BCMWebEntities.edmx.diagram">
       <DependentUpon>BCMWebEntities.edmx</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\BCMWeb2.pubxml" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\MicrosoftAjax.debug.js" />
     <Content Include="Scripts\MicrosoftAjax.js" />
@@ -345,6 +346,10 @@
     <Content Include="Views\Documentos\GenerarPDF.cshtml" />
     <Content Include="Views\Documentos\ControlCambios.cshtml" />
     <Content Include="Views\Documentos\ControlCambiosGridPartialView.cshtml" />
+    <Content Include="Views\Documentos\Aprobacion.cshtml" />
+    <Content Include="Views\Documentos\Certificacion.cshtml" />
+    <Content Include="Views\Documentos\AprobacionGridPartialView.cshtml" />
+    <Content Include="Views\Documentos\CertificacionGridPartialView.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -529,7 +534,7 @@
     <Compile Include="Data\EF\tblBIACadenaServicio.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Data\EF\tblBIAClienteProducto.cs">
+    <Compile Include="Data\EF\tblBIAClienteProceso.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\EF\tblBIAComentario.cs">

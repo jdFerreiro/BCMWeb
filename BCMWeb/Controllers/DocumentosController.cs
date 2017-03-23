@@ -93,7 +93,6 @@ namespace BCMWeb.Controllers
                     Aprobado = false,
                     IdEmpresa = model.IdEmpresa,
                     IdPersona = model.IdPersonaResponsable,
-                    Persona = persona,
                     Procesado = false,
                     Responsable = true
                 });
@@ -103,7 +102,6 @@ namespace BCMWeb.Controllers
                     Certificado = false,
                     IdEmpresa = model.IdEmpresa,
                     IdPersona = model.IdPersonaResponsable,
-                    Persona = persona,
                     Procesado = false,
                     Responsable = true
                 });
@@ -454,25 +452,38 @@ namespace BCMWeb.Controllers
             return new EmptyResult();
         }
         [SessionExpire]
-        public ActionResult Open()
+        public ActionResult Open(string Accion)
         {
-
             long currentDocumentId = (long)Session["IdDocumento"];
             long IdModulo = long.Parse(Session["modId"].ToString());
+            byte[] Contenido;
 
-            UploadedFile uploadedFile = (UploadedFile)Session["uploadedFile"];
-            string currentId = Session["UniqueId"].ToString();
+            switch (Accion)
+            {
+                case "Open":
 
-            DocumentManager.CloseDocument(currentId);
-            string[] spltFile = uploadedFile.FileName.Split('.');
-            string fileExtension = spltFile.Last();
-            byte[] Contenido = uploadedFile.FileBytes;
+                    UploadedFile uploadedFile = (UploadedFile)Session["uploadedFile"];
+                    string currentId = Session["UniqueId"].ToString();
 
-            Metodos.UpdateContenidoDocumento(IdModulo, Contenido);
+                    DocumentManager.CloseDocument(currentId);
+                    string[] spltFile = uploadedFile.FileName.Split('.');
+                    string fileExtension = spltFile.Last();
+                    Contenido = uploadedFile.FileBytes;
 
-            Session["Contenido"] = Convert.ToBase64String(Contenido);
+                    Metodos.UpdateContenidoDocumento(IdModulo, Contenido, eTipoAccion.AbrirDocumento);
 
-            return PartialView("EditorPartialView");
+                    Session["Contenido"] = Convert.ToBase64String(Contenido);
+                    break;
+                case "Save":
+                    Contenido = RichEditExtension.SaveCopy("RichEdit", DocumentFormat.OpenXml);
+                    var reString = Encoding.Default.GetString(Contenido);
+                    Metodos.UpdateContenidoDocumento(IdModulo, Contenido, eTipoAccion.Actualizar);
+                    long IdDocumento = long.Parse(Session["IdDocumento"].ToString());
+                    break;
+
+            }
+            // return PartialView("EditorPartialView");
+            return RedirectToAction("Editor", new { modId = IdModulo });
         }
         [SessionExpire]
         public JsonResult SaveDocument()
@@ -482,7 +493,7 @@ namespace BCMWeb.Controllers
             long IdModulo = long.Parse(Session["modId"].ToString());
             byte[] Contenido = RichEditExtension.SaveCopy("RichEdit", DocumentFormat.OpenXml);
             var reString = Encoding.Default.GetString(Contenido);
-            success = Metodos.UpdateContenidoDocumento(IdModulo, Contenido);
+            success = Metodos.UpdateContenidoDocumento(IdModulo, Contenido, eTipoAccion.Actualizar);
 
             return Json(new { success });
         }
@@ -495,13 +506,13 @@ namespace BCMWeb.Controllers
         }
         public ActionResult GenerarPDF()
         {
-            long IdTipoDocumento = long.Parse(Session["IdTipoDocumento"].ToString());
+            int IdTipoDocumento = int.Parse(Session["IdTipoDocumento"].ToString());
             long IdModulo = IdTipoDocumento * 1000000;
             long IdDocumento = long.Parse(Session["IdDocumento"].ToString());
             int IdClaseDocumento = int.Parse(Session["IdClaseDocumento"].ToString());
             int IdVersion = int.Parse(Session["IdVersion"].ToString());
 
-            ModulosUserModel model = new ModulosUserModel();
+            DocumentoModel model = Metodos.GetDocumento(IdDocumento, IdTipoDocumento);
             model.returnPage = Url.Action("Index", "Documento", new { IdModulo });
             model.IdModulo = IdTipoDocumento * 1000000;
             model.IdModuloActual = 0;
@@ -525,10 +536,12 @@ namespace BCMWeb.Controllers
             int IdClaseDocumento = int.Parse(Session["IdClaseDocumento"].ToString());
             int IdVersion = int.Parse(Session["IdVersion"].ToString());
 
-            AuditoriaModels model = new AuditoriaModels();
+            DocumentoModel model = Metodos.GetDocumento(IdDocumento, IdTipoDocumento);
+            model.PageTitle = Metodos.GetModuloName(modId);
             model.IdModulo = IdModulo;
-            model.Auditoria = Metodos.GetControlCambios();
+            //model.Auditoria = Metodos.GetControlCambios();
             model.returnPage = Url.Action("Index", "Documento", new { IdModulo });
+            Auditoria.RegistarAccion(eTipoAccion.ConsultarCambios);
 
             return View(model);
         }
@@ -537,5 +550,66 @@ namespace BCMWeb.Controllers
 
             return PartialView();
         }
+        public ActionResult IniciarAprobacion(long modId)
+        {
+            int IdTipoDocumento = int.Parse(Session["IdTipoDocumento"].ToString());
+            long IdModulo = IdTipoDocumento * 1000000;
+            Metodos.IniciarAprobacion();
+
+            return RedirectToAction("Index","Documento",new { IdModulo });
+        }
+        public ActionResult Aprobacion(long modId)
+        {
+            int IdTipoDocumento = int.Parse(Session["IdTipoDocumento"].ToString());
+            long IdModulo = IdTipoDocumento * 1000000;
+            long IdDocumento = long.Parse(Session["IdDocumento"].ToString());
+            long IdPersona = Metodos.GetUser_IdPersona();
+
+            Session["IdPersona"] = IdPersona;
+
+            DocumentoModel model = Metodos.GetDocumento(IdDocumento, IdTipoDocumento);
+            model.PageTitle = Metodos.GetModuloName(modId);
+            model.IdModulo = modId;
+            model.IdModuloActual = IdModulo;
+            model.returnPage = Url.Action("Index", "Documento", new { IdModulo });
+
+            return View(model);
+        }
+        public ActionResult AprobacionGridPartialView()
+        {
+            return PartialView();
+        }
+        public ActionResult Certificacion(long modId)
+        {
+            int IdTipoDocumento = int.Parse(Session["IdTipoDocumento"].ToString());
+            long IdModulo = IdTipoDocumento * 1000000;
+            long IdDocumento = long.Parse(Session["IdDocumento"].ToString());
+            long IdPersona = Metodos.GetUser_IdPersona();
+
+            Session["IdPersona"] = IdPersona;
+
+            DocumentoModel model = Metodos.GetDocumento(IdDocumento, IdTipoDocumento);
+            model.PageTitle = Metodos.GetModuloName(modId);
+            model.IdModulo = modId;
+            model.IdModuloActual = IdModulo;
+            model.returnPage = Url.Action("Index", "Documento", new { IdModulo });
+
+            return View(model);
+        }
+        public ActionResult CertificacionGridPartialView()
+        {
+            return PartialView();
+        }
+        public ActionResult AprobarDocumento(long IdDocumento, long IdTipoDocumento, long IdModulo)
+        {
+            Metodos.AprobarDocumento(IdDocumento, IdTipoDocumento);
+            return RedirectToAction("Aprobacion", new { modId = IdModulo });
+        }
+        public ActionResult CertificarDocumento(long IdDocumento, long IdTipoDocumento, long IdModulo)
+        {
+            Metodos.CertificarDocumento(IdDocumento, IdTipoDocumento);
+            return RedirectToAction("Certificacion", new { modId = IdModulo });
+        }
+
     }
 }

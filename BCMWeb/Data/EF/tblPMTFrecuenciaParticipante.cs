@@ -20,7 +20,7 @@ namespace BCMWeb.Data.EF
         public long IdFrecuencia { get; set; }
         public long IdCargo { get; set; }
     
-        public virtual tblCargo tblCargo { get; set; }
+        public virtual tblDocumento tblDocumento { get; set; }
         public virtual tblPMTFrecuencia tblPMTFrecuencia { get; set; }
     }
 }

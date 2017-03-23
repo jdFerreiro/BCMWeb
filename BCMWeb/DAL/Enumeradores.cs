@@ -8,7 +8,8 @@ using System.Web;
 namespace BCMWeb
 {
     [DataContract(Name = "TipoDirección")]
-    public enum eTipoDireccion : int {
+    public enum eTipoDireccion : int
+    {
         [EnumMember()]
         [Description("Oficina")]
         Oficina = 1,
@@ -17,7 +18,8 @@ namespace BCMWeb
         Habitacion = 2,
     }
     [DataContract(Name = "MesesGranImpacto")]
-    public enum eMesesGI : int {
+    public enum eMesesGI : int
+    {
         [EnumMember()]
         [Description("Enero")]
         Enero = 1,
@@ -59,7 +61,8 @@ namespace BCMWeb
         Anual = 13,
     }
     [DataContract(Name = "TipoTeléfono")]
-    public enum eTipoTelefono : int {
+    public enum eTipoTelefono : int
+    {
         [EnumMember()]
         [Description("Corporativo")]
         Corporativo = 1,
@@ -71,7 +74,8 @@ namespace BCMWeb
         Movil = 3,
     }
     [DataContract(Name = "TipoEmail")]
-    public enum eTipoEmail : int {
+    public enum eTipoEmail : int
+    {
         [EnumMember()]
         [Description("Corporativo")]
         Corporativo = 1,
@@ -80,7 +84,8 @@ namespace BCMWeb
         Personal = 2,
     }
     [DataContract(Name = "EstadoDocumento")]
-    public enum eEstadoDocumento : int {
+    public enum eEstadoDocumento : int
+    {
         [EnumMember()]
         [Description("Cargando")]
         Cargando = 1,
@@ -101,7 +106,8 @@ namespace BCMWeb
         Certificado = 6,
     }
     [DataContract(Name = "EstadoEmpresa")]
-    public enum eEstadoEmpresa : int {
+    public enum eEstadoEmpresa : int
+    {
         [EnumMember()]
         [Description("Activa")]
         Activa = 1,
@@ -110,7 +116,8 @@ namespace BCMWeb
         Bloqueada = 2,
     }
     [DataContract(Name = "EstadoUsuario")]
-    public enum eEstadoUsuario : int {
+    public enum eEstadoUsuario : int
+    {
         [EnumMember()]
         [Description("Activo")]
         Activo = 1,
@@ -125,7 +132,8 @@ namespace BCMWeb
         Eliminado = 4,
     }
     [DataContract(Name = "Leyenda")]
-    public enum eLeyenda : int {
+    public enum eLeyenda : int
+    {
         [EnumMember()]
         [Description("Impacto Financiero")]
         Impacto_Financiero = 1,
@@ -146,7 +154,8 @@ namespace BCMWeb
         WRT = 6,
     }
     [DataContract(Name = "Modo_Actualizacion")]
-    public enum eModoActualizacion : int {
+    public enum eModoActualizacion : int
+    {
         [EnumMember()]
         [Description("Tabla")]
         Tabla = -1,
@@ -155,7 +164,8 @@ namespace BCMWeb
         Texto = 0
     }
     [DataContract(Name = "NivelUsuario")]
-    public enum eNivelUsuario : int {
+    public enum eNivelUsuario : int
+    {
         [EnumMember()]
         [Description("Super Admninistrador")]
         SuperAdministrador = 0,
@@ -194,7 +204,8 @@ namespace BCMWeb
         CertificaPlanPruebasEjercicios = 11,
     }
     [DataContract(Name = "Tipo_Elemento")]
-    public enum eTipoElemento : int {
+    public enum eTipoElemento : int
+    {
         [EnumMember()]
         [Description("Título")]
         Header = 1,
@@ -209,7 +220,8 @@ namespace BCMWeb
         Elemento = 4,
     }
     [DataContract(Name = "TipoImpacto")]
-    public enum eTipoImpacto : int {
+    public enum eTipoImpacto : int
+    {
         [EnumMember()]
         [Description("Financiero")]
         Financiero = 1,
@@ -218,7 +230,8 @@ namespace BCMWeb
         Operacional = 2,
     }
     [DataContract(Name = "TipoPersona")]
-    public enum eTipoPersona : int {
+    public enum eTipoPersona : int
+    {
         [EnumMember()]
         [Description("Empleado")]
         Empleado = 1,
@@ -236,14 +249,16 @@ namespace BCMWeb
         PersonalClaveBIA = 5,
     }
     [DataContract(Name = "TipoProceso")]
-    public enum eTipoProceso : int {
+    public enum eTipoProceso : int
+    {
         [EnumMember()]
         Normal = 1,
         [EnumMember()]
         Crítico = 2,
     }
     [DataContract(Name = "TipoUbicacionInformacion")]
-    public enum eTipoUbicacionInformacion : int {
+    public enum eTipoUbicacionInformacion : int
+    {
         [EnumMember()]
         [Description("Física")]
         Fisica = 1,
@@ -252,7 +267,8 @@ namespace BCMWeb
         Electrónica = 2,
     }
     [DataContract(Name = "UnidadTiempo")]
-    public enum eUnidadTiempo : int {
+    public enum eUnidadTiempo : int
+    {
         [EnumMember()]
         [Description("Hora")]
         Hora = 1,
@@ -282,7 +298,8 @@ namespace BCMWeb
         Anual = 9,
     }
     [DataContract(Name = "NivelImpacto")]
-    public enum eNivelImpacto : int {
+    public enum eNivelImpacto : int
+    {
         [EnumMember()]
         [Description("Bajo")]
         Bajo = 1,
@@ -294,7 +311,8 @@ namespace BCMWeb
         Alto = 3,
     }
     [DataContract(Name = "TipoRespaldo")]
-    public enum eTipoRespaldo : int {
+    public enum eTipoRespaldo : int
+    {
         [EnumMember()]
         [Description("Principal")]
         Principal = 1,
@@ -303,7 +321,8 @@ namespace BCMWeb
         Secundario = 2,
     }
     [DataContract(Name = "TipoInterdependencia")]
-    public enum eTipoInterdependencia : int {
+    public enum eTipoInterdependencia : int
+    {
         [EnumMember()]
         [Description("Unidad Organizativa")]
         UnidadOrganizativa = 1,
@@ -312,7 +331,8 @@ namespace BCMWeb
         Vicepresidencia = 2,
     }
     [DataContract(Name = "TipoEscala")]
-    public enum eTipoEscala : int {
+    public enum eTipoEscala : int
+    {
         [EnumMember()]
         [Description("Impacto Financiero")]
         ImpactoFinanciero = 1,
@@ -333,7 +353,8 @@ namespace BCMWeb
         WRT = 6,
     }
     [DataContract(Name = "Módulos")]
-    public enum eSystemModules : int {
+    public enum eSystemModules : int
+    {
         [EnumMember()]
         [Description("Políticas de Continuidad")]
         PLC = 1,
@@ -378,7 +399,8 @@ namespace BCMWeb
         PBE = 14,
     }
     [DataContract(Name = "TipoResultadoPrueba")]
-    public enum eTipoResultadoPrueba : int {
+    public enum eTipoResultadoPrueba : int
+    {
         [EnumMember()]
         [Description("Hallazgos")]
         Hallazgo = 1,
@@ -387,7 +409,8 @@ namespace BCMWeb
         Accion = 2,
     }
     [DataContract(Name = "TipoTablaContenido")]
-    public enum eTipoTablaContenido {
+    public enum eTipoTablaContenido
+    {
         [EnumMember()]
         [Description("Entradas")]
         Entradas,
@@ -438,11 +461,40 @@ namespace BCMWeb
         [Description("Generar versión")]
         GenerarVersion,
         [EnumMember()]
-        [Description("Generar versión")]
+        [Description("Accesar al Módulo desde la Web")]
         AccesoModuloWeb,
         [EnumMember()]
-        [Description("Generar versión")]
+        [Description("Accesar al Módulo desde el Móvil")]
         AccesoModuloMovil,
+        [EnumMember()]
+        [Description("Iniciar proceso de Aprobación")]
+        IniciarAprobacion,
+        [EnumMember()]
+        [Description("Aprobar Documento")]
+        AprobarDocumento,
+        [EnumMember()]
+        [Description("Certificar Documento")]
+        CertificarDocumento,
+        [EnumMember()]
+        [Description("Consultar Cambios")]
+        ConsultarCambios,
+        [EnumMember()]
+        [Description("Generar Copia del Documento")]
+        GenearCopiaDocumento,
+        [EnumMember()]
+        [Description("Agregar Anexo al documento")]
+        AgregarAnexoDocumento,
+        [EnumMember()]
+        [Description("Agregar Anexo al módulo")]
+        AgregarAnexoModulo,
+        [EnumMember()]
+        [Description("Abrir Documento")]
+        AbrirDocumento,
+        [EnumMember()]
+        [Description("Eliminar Anexo Documento")]
+        EliminarAnexoDocumento,
+        [EnumMember()]
+        [Description("Eliminar Anexo Módulo")]
+        EliminarAnexoModulo
     }
-
 }

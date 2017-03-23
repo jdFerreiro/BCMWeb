@@ -12,8 +12,14 @@ namespace BCMWeb.Data.EF
     using System;
     using System.Collections.Generic;
     
-    public partial class tblBIAClienteProducto
+    public partial class tblBIAClienteProceso
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public tblBIAClienteProceso()
+        {
+            this.tblBIAUnidadTrabajoPersonas = new HashSet<tblBIAUnidadTrabajoPersonas>();
+        }
+    
         public long IdEmpresa { get; set; }
         public long IdDocumentoBIA { get; set; }
         public long IdProceso { get; set; }
@@ -24,5 +30,7 @@ namespace BCMWeb.Data.EF
         public string Producto { get; set; }
     
         public virtual tblBIAProceso tblBIAProceso { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblBIAUnidadTrabajoPersonas> tblBIAUnidadTrabajoPersonas { get; set; }
     }
 }

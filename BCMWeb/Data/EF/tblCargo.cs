@@ -18,7 +18,6 @@ namespace BCMWeb.Data.EF
         public tblCargo()
         {
             this.tblPersona = new HashSet<tblPersona>();
-            this.tblPMTFrecuenciaParticipante = new HashSet<tblPMTFrecuenciaParticipante>();
         }
     
         public long IdEmpresa { get; set; }
@@ -28,7 +27,5 @@ namespace BCMWeb.Data.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblPersona> tblPersona { get; set; }
         public virtual tblEmpresa tblEmpresa { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblPMTFrecuenciaParticipante> tblPMTFrecuenciaParticipante { get; set; }
     }
 }

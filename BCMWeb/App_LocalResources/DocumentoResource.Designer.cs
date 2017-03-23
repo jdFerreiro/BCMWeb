@@ -511,6 +511,33 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nueva versión.
+        /// </summary>
+        public static string NuevaVersionText {
+            get {
+                return ResourceManager.GetString("NuevaVersionText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aprobar.
+        /// </summary>
+        public static string textButtonAprobar {
+            get {
+                return ResourceManager.GetString("textButtonAprobar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Certificar.
+        /// </summary>
+        public static string textButtonCertificar {
+            get {
+                return ResourceManager.GetString("textButtonCertificar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tecnología.
         /// </summary>
         public static string TipoDRP {

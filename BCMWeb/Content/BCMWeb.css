@@ -111,6 +111,7 @@ h4 {
 #Panel {
     width: 100%;
 }
+
 .panel-width30 {
     width: 30%;
     font-family: inherit;
@@ -189,7 +190,7 @@ h4 {
 
         .AppList ul li {
             font-weight: lighter;
-    line-height: 1.5em;
+            line-height: 1.5em;
         }
 
 .login {
@@ -211,8 +212,8 @@ h4 {
     text-align: center;
     font-size: 12pt;
     font-weight: bold;
-    color: white; text-shadow: black 0.1em 0.1em 0.2em
-
+    color: white;
+    text-shadow: black 0.1em 0.1em 0.2em;
 }
 
 .text-center {
@@ -231,22 +232,6 @@ h4 {
     margin: auto;
 }
 
-.editable {
-    padding: 5px;
-    text-align:center;
-    font-weight: bold;
-    color: #fff;
-    background-color: #1a6b2f;
-}
-
-.noEditable {
-    padding: 5px;
-    text-align: center;
-    font-weight: bold;
-    color: #fff;
-    background-color: #6b1a1a;
-}
-
 .generarPDF {
     width: 70%;
     padding: 5px;
@@ -255,3 +240,32 @@ h4 {
     margin: auto;
     font-size: 12pt;
 }
+
+.docData {
+    font-size: 8pt;
+    width: 75%;
+    border: 1px solid #000;
+    border-radius: 5px;
+    margin: auto;
+    padding: 5px;
+}
+
+    .docData table tr td {
+        margin: 5px;
+    }
+
+    .docData .editable {
+        padding: 5px;
+        text-align: center;
+        font-weight: bold;
+        color: #fff;
+        background-color: #1a6b2f;
+    }
+
+    .docData .noEditable {
+        padding: 5px;
+        text-align: center;
+        font-weight: bold;
+        color: #fff;
+        background-color: #6b1a1a;
+    }

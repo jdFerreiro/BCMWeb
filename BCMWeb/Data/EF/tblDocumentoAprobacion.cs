@@ -19,7 +19,7 @@ namespace BCMWeb.Data.EF
         public long IdTipoDocumento { get; set; }
         public long IdAprobacion { get; set; }
         public Nullable<System.DateTime> Fecha { get; set; }
-        public long IdPersona { get; set; }
+        public Nullable<long> IdPersona { get; set; }
         public bool Procesado { get; set; }
         public Nullable<bool> Aprobado { get; set; }
     

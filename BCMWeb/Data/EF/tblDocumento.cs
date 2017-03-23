@@ -17,6 +17,7 @@ namespace BCMWeb.Data.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public tblDocumento()
         {
+            this.tblAuditoria = new HashSet<tblAuditoria>();
             this.tblBCPDocumento = new HashSet<tblBCPDocumento>();
             this.tblBIADocumento = new HashSet<tblBIADocumento>();
             this.tblDocumentoAprobacion = new HashSet<tblDocumentoAprobacion>();
@@ -26,8 +27,10 @@ namespace BCMWeb.Data.EF
             this.tblDocumentoEntrevista = new HashSet<tblDocumentoEntrevista>();
             this.tblDocumentoPersonaClave = new HashSet<tblDocumentoPersonaClave>();
             this.tblPMTFrecuencia = new HashSet<tblPMTFrecuencia>();
+            this.tblPMTFrecuenciaParticipante = new HashSet<tblPMTFrecuenciaParticipante>();
+            this.tblPMTProgramacion = new HashSet<tblPMTProgramacion>();
+            this.tblPMTProgramacionAuditoria = new HashSet<tblPMTProgramacionAuditoria>();
             this.tblPPEFrecuencia = new HashSet<tblPPEFrecuencia>();
-            this.tblAuditoria = new HashSet<tblAuditoria>();
         }
     
         public long IdEmpresa { get; set; }
@@ -44,6 +47,8 @@ namespace BCMWeb.Data.EF
         public long IdPersonaResponsable { get; set; }
         public bool RequiereCertificacion { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblAuditoria> tblAuditoria { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBCPDocumento> tblBCPDocumento { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -65,8 +70,12 @@ namespace BCMWeb.Data.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblPMTFrecuencia> tblPMTFrecuencia { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblPPEFrecuencia> tblPPEFrecuencia { get; set; }
+        public virtual ICollection<tblPMTFrecuenciaParticipante> tblPMTFrecuenciaParticipante { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblAuditoria> tblAuditoria { get; set; }
+        public virtual ICollection<tblPMTProgramacion> tblPMTProgramacion { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblPMTProgramacionAuditoria> tblPMTProgramacionAuditoria { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblPPEFrecuencia> tblPPEFrecuencia { get; set; }
     }
 }

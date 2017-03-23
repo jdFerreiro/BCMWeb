@@ -25,6 +25,7 @@ namespace BCMWeb.Data.EF
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<tblAuditoria> tblAuditoria { get; set; }
         public virtual DbSet<tblAuditoriaProcesoCritico> tblAuditoriaProcesoCritico { get; set; }
         public virtual DbSet<tblBCPDocumento> tblBCPDocumento { get; set; }
         public virtual DbSet<tblBCPReanudacionPersonaClave> tblBCPReanudacionPersonaClave { get; set; }
@@ -42,7 +43,7 @@ namespace BCMWeb.Data.EF
         public virtual DbSet<tblBIAAmenazaEvento> tblBIAAmenazaEvento { get; set; }
         public virtual DbSet<tblBIAAplicacion> tblBIAAplicacion { get; set; }
         public virtual DbSet<tblBIACadenaServicio> tblBIACadenaServicio { get; set; }
-        public virtual DbSet<tblBIAClienteProducto> tblBIAClienteProducto { get; set; }
+        public virtual DbSet<tblBIAClienteProceso> tblBIAClienteProceso { get; set; }
         public virtual DbSet<tblBIAComentario> tblBIAComentario { get; set; }
         public virtual DbSet<tblBIAControlRiesgo> tblBIAControlRiesgo { get; set; }
         public virtual DbSet<tblBIADocumentacion> tblBIADocumentacion { get; set; }
@@ -165,6 +166,5 @@ namespace BCMWeb.Data.EF
         public virtual DbSet<tblUsuario> tblUsuario { get; set; }
         public virtual DbSet<tblUsuarioUnidadOrganizativa> tblUsuarioUnidadOrganizativa { get; set; }
         public virtual DbSet<tblVicepresidencia> tblVicepresidencia { get; set; }
-        public virtual DbSet<tblAuditoria> tblAuditoria { get; set; }
     }
 }

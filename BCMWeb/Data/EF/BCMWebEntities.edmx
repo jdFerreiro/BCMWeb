@@ -56,7 +56,7 @@
           </Key>
           <Property Name="IdEmpresa" Type="bigint" Nullable="false" />
           <Property Name="IdDocumentoBCP" Type="bigint" Nullable="false" />
-          <Property Name="IdPersona" Type="bigint" Nullable="false" />
+          <Property Name="IdPersona" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Actividad" Type="nvarchar" MaxLength="450" Nullable="false" />
           <Property Name="Nombre" Type="nvarchar" MaxLength="450" Nullable="false" />
           <Property Name="Cedula" Type="nvarchar" MaxLength="450" Nullable="false" />
@@ -100,7 +100,7 @@
           </Key>
           <Property Name="IdEmpresa" Type="bigint" Nullable="false" />
           <Property Name="IdDocumentoBCP" Type="bigint" Nullable="false" />
-          <Property Name="IdPersona" Type="bigint" Nullable="false" />
+          <Property Name="IdPersona" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Actividad" Type="nvarchar" MaxLength="450" Nullable="false" />
           <Property Name="Nombre" Type="nvarchar" MaxLength="450" Nullable="false" />
           <Property Name="Cedula" Type="nvarchar" MaxLength="450" Nullable="false" />
@@ -119,7 +119,7 @@
           </Key>
           <Property Name="IdEmpresa" Type="bigint" Nullable="false" />
           <Property Name="IdDocumentoBCP" Type="bigint" Nullable="false" />
-          <Property Name="IdRecuperacionRecurso" Type="bigint" Nullable="false" />
+          <Property Name="IdRecuperacionRecurso" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Cantidad" Type="smallint" Nullable="false" />
           <Property Name="Nombre" Type="nvarchar" MaxLength="250" Nullable="false" />
         </EntityType>
@@ -248,7 +248,7 @@
           <Property Name="IdCadenaServicio" Type="bigint" Nullable="false" />
           <Property Name="Descripcion" Type="nvarchar" MaxLength="500" Nullable="false" />
         </EntityType>
-        <EntityType Name="tblBIAClienteProducto">
+        <EntityType Name="tblBIAClienteProceso">
           <Key>
             <PropertyRef Name="IdEmpresa" />
             <PropertyRef Name="IdDocumentoBIA" />
@@ -604,6 +604,8 @@
           <Property Name="IdUnidadPersona" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IdClienteProceso" Type="bigint" Nullable="false" />
           <Property Name="Nombre" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="IdDocumentoBIA" Type="bigint" Nullable="false" />
+          <Property Name="IdProceso" Type="bigint" Nullable="false" />
         </EntityType>
         <EntityType Name="tblBIAUnidadTrabajoProceso">
           <Key>
@@ -615,6 +617,8 @@
           <Property Name="IdUnidadTrabajo" Type="bigint" Nullable="false" />
           <Property Name="IdUnidadTrabajoProceso" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Nombre" Type="nvarchar" MaxLength="450" Nullable="false" />
+          <Property Name="IdDocumentoBIA" Type="bigint" Nullable="false" />
+          <Property Name="IdProceso" Type="bigint" Nullable="false" />
         </EntityType>
         <EntityType Name="tblBIAWRT">
           <Key>
@@ -891,7 +895,7 @@
           <Property Name="IdTipoDocumento" Type="bigint" Nullable="false" />
           <Property Name="IdAprobacion" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Fecha" Type="datetime" />
-          <Property Name="IdPersona" Type="bigint" Nullable="false" />
+          <Property Name="IdPersona" Type="bigint" />
           <Property Name="Procesado" Type="bit" Nullable="false" />
           <Property Name="Aprobado" Type="bit" />
         </EntityType>
@@ -907,7 +911,7 @@
           <Property Name="IdTipoDocumento" Type="bigint" Nullable="false" />
           <Property Name="IdCertificacion" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Fecha" Type="datetime" />
-          <Property Name="IdPersona" Type="bigint" Nullable="false" />
+          <Property Name="IdPersona" Type="bigint" />
           <Property Name="Procesado" Type="bit" Nullable="false" />
           <Property Name="Certificado" Type="bit" />
         </EntityType>
@@ -966,7 +970,7 @@
           <Property Name="IdEmpresa" Type="bigint" Nullable="false" />
           <Property Name="IdDocumento" Type="bigint" Nullable="false" />
           <Property Name="IdTipoDocumento" Type="bigint" Nullable="false" />
-          <Property Name="IdPersona" Type="bigint" Nullable="false" />
+          <Property Name="IdPersona" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Nombre" Type="nvarchar" MaxLength="450" Nullable="false" />
           <Property Name="Cedula" Type="nvarchar" MaxLength="450" Nullable="false" />
           <Property Name="TelefonoOficina" Type="nvarchar" MaxLength="450" Nullable="false" />
@@ -1489,8 +1493,8 @@
           </Key>
           <Property Name="IdPMTProgramación" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IdEmpresa" Type="bigint" Nullable="false" />
-          <Property Name="IdModulo" Type="bigint" Nullable="false" />
           <Property Name="IdDocumento" Type="bigint" Nullable="false" />
+          <Property Name="IdModulo" Type="bigint" Nullable="false" />
           <Property Name="FechaInicio" Type="datetime" Nullable="false" />
           <Property Name="FechaFinal" Type="datetime" Nullable="false" />
           <Property Name="IdEstado" Type="bigint" Nullable="false" />
@@ -1986,14 +1990,14 @@
         </Association>
         <Association Name="FK_tblBIAClienteProducto_tblBIAProceso">
           <End Role="tblBIAProceso" Type="Self.tblBIAProceso" Multiplicity="1" />
-          <End Role="tblBIAClienteProducto" Type="Self.tblBIAClienteProducto" Multiplicity="*" />
+          <End Role="tblBIAClienteProceso" Type="Self.tblBIAClienteProceso" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="tblBIAProceso">
               <PropertyRef Name="IdEmpresa" />
               <PropertyRef Name="IdDocumentoBia" />
               <PropertyRef Name="IdProceso" />
             </Principal>
-            <Dependent Role="tblBIAClienteProducto">
+            <Dependent Role="tblBIAClienteProceso">
               <PropertyRef Name="IdEmpresa" />
               <PropertyRef Name="IdDocumentoBIA" />
               <PropertyRef Name="IdProceso" />
@@ -2586,6 +2590,24 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_tblBIAUnidadTrabajoPersonas_tblBIAClienteProceso">
+          <End Role="tblBIAClienteProceso" Type="Self.tblBIAClienteProceso" Multiplicity="1" />
+          <End Role="tblBIAUnidadTrabajoPersonas" Type="Self.tblBIAUnidadTrabajoPersonas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblBIAClienteProceso">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumentoBIA" />
+              <PropertyRef Name="IdProceso" />
+              <PropertyRef Name="IdClienteProceso" />
+            </Principal>
+            <Dependent Role="tblBIAUnidadTrabajoPersonas">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumentoBIA" />
+              <PropertyRef Name="IdProceso" />
+              <PropertyRef Name="IdClienteProceso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_tblBIAUnidadTrabajoPersonas_tblBIAUnidadTrabajoProceso">
           <End Role="tblBIAUnidadTrabajoProceso" Type="Self.tblBIAUnidadTrabajoProceso" Multiplicity="1" />
           <End Role="tblBIAUnidadTrabajoPersonas" Type="Self.tblBIAUnidadTrabajoPersonas" Multiplicity="*" />
@@ -2599,6 +2621,22 @@
               <PropertyRef Name="IdEmpresa" />
               <PropertyRef Name="IdUnidadTrabajo" />
               <PropertyRef Name="IdUnidadTrabajoProceso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblBIAUnidadTrabajoProceso_tblBIAProceso">
+          <End Role="tblBIAProceso" Type="Self.tblBIAProceso" Multiplicity="1" />
+          <End Role="tblBIAUnidadTrabajoProceso" Type="Self.tblBIAUnidadTrabajoProceso" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblBIAProceso">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumentoBia" />
+              <PropertyRef Name="IdProceso" />
+            </Principal>
+            <Dependent Role="tblBIAUnidadTrabajoProceso">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumentoBIA" />
+              <PropertyRef Name="IdProceso" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2689,7 +2727,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tblCertificacion_tblPersona">
-          <End Role="tblPersona" Type="Self.tblPersona" Multiplicity="1" />
+          <End Role="tblPersona" Type="Self.tblPersona" Multiplicity="0..1" />
           <End Role="tblDocumentoCertificacion" Type="Self.tblDocumentoCertificacion" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="tblPersona">
@@ -3043,7 +3081,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tblDocumentoAprobacion_tblPersona">
-          <End Role="tblPersona" Type="Self.tblPersona" Multiplicity="1" />
+          <End Role="tblPersona" Type="Self.tblPersona" Multiplicity="0..1" />
           <End Role="tblDocumentoAprobacion" Type="Self.tblDocumentoAprobacion" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="tblPersona">
@@ -3293,7 +3331,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tblEmpresaModulo_tblModulo">
-          <End Role="tblModulo" Type="Self.tblModulo" Multiplicity="1" />
+          <End Role="tblModulo" Type="Self.tblModulo" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="tblEmpresaModulo" Type="Self.tblEmpresaModulo" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="tblModulo">
@@ -3453,7 +3493,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tblModulo_Usuario_tblModulo">
-          <End Role="tblModulo" Type="Self.tblModulo" Multiplicity="1" />
+          <End Role="tblModulo" Type="Self.tblModulo" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="tblModulo_Usuario" Type="Self.tblModulo_Usuario" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="tblModulo">
@@ -3727,7 +3769,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tblPersona_tblBCPRecuperacionPersonaClave_FK1">
-          <End Role="tblPersona" Type="Self.tblPersona" Multiplicity="1" />
+          <End Role="tblPersona" Type="Self.tblPersona" Multiplicity="0..1" />
           <End Role="tblBCPRecuperacionPersonaClave" Type="Self.tblBCPRecuperacionPersonaClave" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="tblPersona">
@@ -3736,7 +3778,7 @@
             </Principal>
             <Dependent Role="tblBCPRecuperacionPersonaClave">
               <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdPersona" />
+              <PropertyRef Name="IdPersonaClavePrincipal" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3773,7 +3815,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tblPersona_tblReanudacionPersonaClave_FK1">
-          <End Role="tblPersona" Type="Self.tblPersona" Multiplicity="1" />
+          <End Role="tblPersona" Type="Self.tblPersona" Multiplicity="0..1" />
           <End Role="tblBCPReanudacionPersonaClave" Type="Self.tblBCPReanudacionPersonaClave" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="tblPersona">
@@ -3782,7 +3824,7 @@
             </Principal>
             <Dependent Role="tblBCPReanudacionPersonaClave">
               <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdPersona" />
+              <PropertyRef Name="IdPersonaClavePrincipal" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4041,16 +4083,18 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tblPMTFrecuenciaParticipante_tblCargo">
-          <End Role="tblCargo" Type="Self.tblCargo" Multiplicity="1" />
+          <End Role="tblDocumento" Type="Self.tblDocumento" Multiplicity="1" />
           <End Role="tblPMTFrecuenciaParticipante" Type="Self.tblPMTFrecuenciaParticipante" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="tblCargo">
+            <Principal Role="tblDocumento">
               <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdCargo" />
+              <PropertyRef Name="IdDocumento" />
+              <PropertyRef Name="IdTipoDocumento" />
             </Principal>
             <Dependent Role="tblPMTFrecuenciaParticipante">
               <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdCargo" />
+              <PropertyRef Name="IdDocumento" />
+              <PropertyRef Name="IdTipoDocumento" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4100,6 +4144,22 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_tblPMTProgramacion_tblDocumento">
+          <End Role="tblDocumento" Type="Self.tblDocumento" Multiplicity="1" />
+          <End Role="tblPMTProgramacion" Type="Self.tblPMTProgramacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblDocumento">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumento" />
+              <PropertyRef Name="IdTipoDocumento" />
+            </Principal>
+            <Dependent Role="tblPMTProgramacion">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumento" />
+              <PropertyRef Name="IdModulo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_tblPMTProgramacion_tblEmpresa">
           <End Role="tblEmpresa" Type="Self.tblEmpresa" Multiplicity="1" />
           <End Role="tblPMTProgramacion" Type="Self.tblPMTProgramacion" Multiplicity="*" />
@@ -4109,6 +4169,22 @@
             </Principal>
             <Dependent Role="tblPMTProgramacion">
               <PropertyRef Name="IdEmpresa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPMTProgramacionAuditoria_tblDocumento">
+          <End Role="tblDocumento" Type="Self.tblDocumento" Multiplicity="1" />
+          <End Role="tblPMTProgramacionAuditoria" Type="Self.tblPMTProgramacionAuditoria" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblDocumento">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumento" />
+              <PropertyRef Name="IdTipoDocumento" />
+            </Principal>
+            <Dependent Role="tblPMTProgramacionAuditoria">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumento" />
+              <PropertyRef Name="IdModulo" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4325,7 +4401,7 @@
           <EntitySet Name="tblBIAAmenazaEvento" EntityType="Self.tblBIAAmenazaEvento" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblBIAAplicacion" EntityType="Self.tblBIAAplicacion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblBIACadenaServicio" EntityType="Self.tblBIACadenaServicio" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="tblBIAClienteProducto" EntityType="Self.tblBIAClienteProducto" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblBIAClienteProceso" EntityType="Self.tblBIAClienteProceso" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblBIAComentario" EntityType="Self.tblBIAComentario" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblBIAControlRiesgo" EntityType="Self.tblBIAControlRiesgo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblBIADocumentacion" EntityType="Self.tblBIADocumentacion" Schema="dbo" store:Type="Tables" />
@@ -4530,7 +4606,7 @@
           </AssociationSet>
           <AssociationSet Name="FK_tblBIAClienteProducto_tblBIAProceso" Association="Self.FK_tblBIAClienteProducto_tblBIAProceso">
             <End Role="tblBIAProceso" EntitySet="tblBIAProceso" />
-            <End Role="tblBIAClienteProducto" EntitySet="tblBIAClienteProducto" />
+            <End Role="tblBIAClienteProceso" EntitySet="tblBIAClienteProceso" />
           </AssociationSet>
           <AssociationSet Name="FK_tblBIAComentario_tblBIADocumento" Association="Self.FK_tblBIAComentario_tblBIADocumento">
             <End Role="tblBIADocumento" EntitySet="tblBIADocumento" />
@@ -4696,9 +4772,17 @@
             <End Role="tblUnidadOrganizativa" EntitySet="tblUnidadOrganizativa" />
             <End Role="tblBIAUnidadTrabajo" EntitySet="tblBIAUnidadTrabajo" />
           </AssociationSet>
+          <AssociationSet Name="FK_tblBIAUnidadTrabajoPersonas_tblBIAClienteProceso" Association="Self.FK_tblBIAUnidadTrabajoPersonas_tblBIAClienteProceso">
+            <End Role="tblBIAClienteProceso" EntitySet="tblBIAClienteProceso" />
+            <End Role="tblBIAUnidadTrabajoPersonas" EntitySet="tblBIAUnidadTrabajoPersonas" />
+          </AssociationSet>
           <AssociationSet Name="FK_tblBIAUnidadTrabajoPersonas_tblBIAUnidadTrabajoProceso" Association="Self.FK_tblBIAUnidadTrabajoPersonas_tblBIAUnidadTrabajoProceso">
             <End Role="tblBIAUnidadTrabajoProceso" EntitySet="tblBIAUnidadTrabajoProceso" />
             <End Role="tblBIAUnidadTrabajoPersonas" EntitySet="tblBIAUnidadTrabajoPersonas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblBIAUnidadTrabajoProceso_tblBIAProceso" Association="Self.FK_tblBIAUnidadTrabajoProceso_tblBIAProceso">
+            <End Role="tblBIAProceso" EntitySet="tblBIAProceso" />
+            <End Role="tblBIAUnidadTrabajoProceso" EntitySet="tblBIAUnidadTrabajoProceso" />
           </AssociationSet>
           <AssociationSet Name="FK_tblBIAUnidadTrabajoProceso_tblBIAUnidadTrabajo" Association="Self.FK_tblBIAUnidadTrabajoProceso_tblBIAUnidadTrabajo">
             <End Role="tblBIAUnidadTrabajo" EntitySet="tblBIAUnidadTrabajo" />
@@ -5129,7 +5213,7 @@
             <End Role="tblPMTFrecuencia" EntitySet="tblPMTFrecuencia" />
           </AssociationSet>
           <AssociationSet Name="FK_tblPMTFrecuenciaParticipante_tblCargo" Association="Self.FK_tblPMTFrecuenciaParticipante_tblCargo">
-            <End Role="tblCargo" EntitySet="tblCargo" />
+            <End Role="tblDocumento" EntitySet="tblDocumento" />
             <End Role="tblPMTFrecuenciaParticipante" EntitySet="tblPMTFrecuenciaParticipante" />
           </AssociationSet>
           <AssociationSet Name="FK_tblPMTFrecuenciaParticipante_tblPMTFrecuencia" Association="Self.FK_tblPMTFrecuenciaParticipante_tblPMTFrecuencia">
@@ -5144,9 +5228,17 @@
             <End Role="tblModulo" EntitySet="tblModulo" />
             <End Role="tblPMTMensajeActualizacion" EntitySet="tblPMTMensajeActualizacion" />
           </AssociationSet>
+          <AssociationSet Name="FK_tblPMTProgramacion_tblDocumento" Association="Self.FK_tblPMTProgramacion_tblDocumento">
+            <End Role="tblDocumento" EntitySet="tblDocumento" />
+            <End Role="tblPMTProgramacion" EntitySet="tblPMTProgramacion" />
+          </AssociationSet>
           <AssociationSet Name="FK_tblPMTProgramacion_tblEmpresa" Association="Self.FK_tblPMTProgramacion_tblEmpresa">
             <End Role="tblEmpresa" EntitySet="tblEmpresa" />
             <End Role="tblPMTProgramacion" EntitySet="tblPMTProgramacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPMTProgramacionAuditoria_tblDocumento" Association="Self.FK_tblPMTProgramacionAuditoria_tblDocumento">
+            <End Role="tblDocumento" EntitySet="tblDocumento" />
+            <End Role="tblPMTProgramacionAuditoria" EntitySet="tblPMTProgramacionAuditoria" />
           </AssociationSet>
           <AssociationSet Name="FK_tblPMTProgramacionAuditoria_tblEmpresa" Association="Self.FK_tblPMTProgramacionAuditoria_tblEmpresa">
             <End Role="tblEmpresa" EntitySet="tblEmpresa" />
@@ -5214,6 +5306,7 @@
     <edmx:ConceptualModels>
       <Schema Namespace="BCMWeb" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tblAuditoria" EntityType="BCMWeb.tblAuditoria" />
           <EntitySet Name="tblAuditoriaProcesoCritico" EntityType="BCMWeb.tblAuditoriaProcesoCritico" />
           <EntitySet Name="tblBCPDocumento" EntityType="BCMWeb.tblBCPDocumento" />
           <EntitySet Name="tblBCPReanudacionPersonaClave" EntityType="BCMWeb.tblBCPReanudacionPersonaClave" />
@@ -5231,7 +5324,7 @@
           <EntitySet Name="tblBIAAmenazaEvento" EntityType="BCMWeb.tblBIAAmenazaEvento" />
           <EntitySet Name="tblBIAAplicacion" EntityType="BCMWeb.tblBIAAplicacion" />
           <EntitySet Name="tblBIACadenaServicio" EntityType="BCMWeb.tblBIACadenaServicio" />
-          <EntitySet Name="tblBIAClienteProducto" EntityType="BCMWeb.tblBIAClienteProducto" />
+          <EntitySet Name="tblBIAClienteProceso" EntityType="BCMWeb.tblBIAClienteProceso" />
           <EntitySet Name="tblBIAComentario" EntityType="BCMWeb.tblBIAComentario" />
           <EntitySet Name="tblBIAControlRiesgo" EntityType="BCMWeb.tblBIAControlRiesgo" />
           <EntitySet Name="tblBIADocumentacion" EntityType="BCMWeb.tblBIADocumentacion" />
@@ -5354,6 +5447,18 @@
           <EntitySet Name="tblUsuario" EntityType="BCMWeb.tblUsuario" />
           <EntitySet Name="tblUsuarioUnidadOrganizativa" EntityType="BCMWeb.tblUsuarioUnidadOrganizativa" />
           <EntitySet Name="tblVicepresidencia" EntityType="BCMWeb.tblVicepresidencia" />
+          <AssociationSet Name="FK_tblAuditoria_tblDocumento" Association="BCMWeb.FK_tblAuditoria_tblDocumento">
+            <End Role="tblDocumento" EntitySet="tblDocumento" />
+            <End Role="tblAuditoria" EntitySet="tblAuditoria" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblEmpresa_tblAuditoria_FK1" Association="BCMWeb.FK_tblEmpresa_tblAuditoria_FK1">
+            <End Role="tblEmpresa" EntitySet="tblEmpresa" />
+            <End Role="tblAuditoria" EntitySet="tblAuditoria" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblUsuario_tblAuditoria_FK1" Association="BCMWeb.FK_tblUsuario_tblAuditoria_FK1">
+            <End Role="tblUsuario" EntitySet="tblUsuario" />
+            <End Role="tblAuditoria" EntitySet="tblAuditoria" />
+          </AssociationSet>
           <AssociationSet Name="FK_tblAuditoriaProcesoCritico_tblEmpresa" Association="BCMWeb.FK_tblAuditoriaProcesoCritico_tblEmpresa">
             <End Role="tblEmpresa" EntitySet="tblEmpresa" />
             <End Role="tblAuditoriaProcesoCritico" EntitySet="tblAuditoriaProcesoCritico" />
@@ -5444,7 +5549,11 @@
           </AssociationSet>
           <AssociationSet Name="FK_tblBIAClienteProducto_tblBIAProceso" Association="BCMWeb.FK_tblBIAClienteProducto_tblBIAProceso">
             <End Role="tblBIAProceso" EntitySet="tblBIAProceso" />
-            <End Role="tblBIAClienteProducto" EntitySet="tblBIAClienteProducto" />
+            <End Role="tblBIAClienteProceso" EntitySet="tblBIAClienteProceso" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblBIAUnidadTrabajoPersonas_tblBIAClienteProceso" Association="BCMWeb.FK_tblBIAUnidadTrabajoPersonas_tblBIAClienteProceso">
+            <End Role="tblBIAClienteProceso" EntitySet="tblBIAClienteProceso" />
+            <End Role="tblBIAUnidadTrabajoPersonas" EntitySet="tblBIAUnidadTrabajoPersonas" />
           </AssociationSet>
           <AssociationSet Name="FK_tblBIAComentario_tblBIADocumento" Association="BCMWeb.FK_tblBIAComentario_tblBIADocumento">
             <End Role="tblBIADocumento" EntitySet="tblBIADocumento" />
@@ -5594,6 +5703,10 @@
             <End Role="tblBIAProceso" EntitySet="tblBIAProceso" />
             <End Role="tblBIARTO" EntitySet="tblBIARTO" />
           </AssociationSet>
+          <AssociationSet Name="FK_tblBIAUnidadTrabajoProceso_tblBIAProceso" Association="BCMWeb.FK_tblBIAUnidadTrabajoProceso_tblBIAProceso">
+            <End Role="tblBIAProceso" EntitySet="tblBIAProceso" />
+            <End Role="tblBIAUnidadTrabajoProceso" EntitySet="tblBIAUnidadTrabajoProceso" />
+          </AssociationSet>
           <AssociationSet Name="FK_tblBIAWRT_tblBIAProceso" Association="BCMWeb.FK_tblBIAWRT_tblBIAProceso">
             <End Role="tblBIAProceso" EntitySet="tblBIAProceso" />
             <End Role="tblBIAWRT" EntitySet="tblBIAWRT" />
@@ -5645,10 +5758,6 @@
           <AssociationSet Name="FK_tblEmpresa_tblCargo_FK1" Association="BCMWeb.FK_tblEmpresa_tblCargo_FK1">
             <End Role="tblEmpresa" EntitySet="tblEmpresa" />
             <End Role="tblCargo" EntitySet="tblCargo" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tblPMTFrecuenciaParticipante_tblCargo" Association="BCMWeb.FK_tblPMTFrecuenciaParticipante_tblCargo">
-            <End Role="tblCargo" EntitySet="tblCargo" />
-            <End Role="tblPMTFrecuenciaParticipante" EntitySet="tblPMTFrecuenciaParticipante" />
           </AssociationSet>
           <AssociationSet Name="FK_tblCiudad_tblEstado" Association="BCMWeb.FK_tblCiudad_tblEstado">
             <End Role="tblEstado" EntitySet="tblEstado" />
@@ -5785,6 +5894,18 @@
           <AssociationSet Name="FK_tblPMTFrecuencia_tblDocumento" Association="BCMWeb.FK_tblPMTFrecuencia_tblDocumento">
             <End Role="tblDocumento" EntitySet="tblDocumento" />
             <End Role="tblPMTFrecuencia" EntitySet="tblPMTFrecuencia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPMTFrecuenciaParticipante_tblCargo" Association="BCMWeb.FK_tblPMTFrecuenciaParticipante_tblCargo">
+            <End Role="tblDocumento" EntitySet="tblDocumento" />
+            <End Role="tblPMTFrecuenciaParticipante" EntitySet="tblPMTFrecuenciaParticipante" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPMTProgramacion_tblDocumento" Association="BCMWeb.FK_tblPMTProgramacion_tblDocumento">
+            <End Role="tblDocumento" EntitySet="tblDocumento" />
+            <End Role="tblPMTProgramacion" EntitySet="tblPMTProgramacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPMTProgramacionAuditoria_tblDocumento" Association="BCMWeb.FK_tblPMTProgramacionAuditoria_tblDocumento">
+            <End Role="tblDocumento" EntitySet="tblDocumento" />
+            <End Role="tblPMTProgramacionAuditoria" EntitySet="tblPMTProgramacionAuditoria" />
           </AssociationSet>
           <AssociationSet Name="FK_tblPPEFrecuencia_tblDocumento" Association="BCMWeb.FK_tblPPEFrecuencia_tblDocumento">
             <End Role="tblDocumento" EntitySet="tblDocumento" />
@@ -6102,20 +6223,25 @@
             <End Role="tblUsuario" EntitySet="tblUsuario" />
             <End Role="tblUsuarioUnidadOrganizativa" EntitySet="tblUsuarioUnidadOrganizativa" />
           </AssociationSet>
-          <EntitySet Name="tblAuditoria" EntityType="BCMWeb.tblAuditoria" />
-          <AssociationSet Name="FK_tblAuditoria_tblDocumento" Association="BCMWeb.FK_tblAuditoria_tblDocumento">
-            <End Role="tblDocumento" EntitySet="tblDocumento" />
-            <End Role="tblAuditoria" EntitySet="tblAuditoria" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tblEmpresa_tblAuditoria_FK1" Association="BCMWeb.FK_tblEmpresa_tblAuditoria_FK1">
-            <End Role="tblEmpresa" EntitySet="tblEmpresa" />
-            <End Role="tblAuditoria" EntitySet="tblAuditoria" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tblUsuario_tblAuditoria_FK1" Association="BCMWeb.FK_tblUsuario_tblAuditoria_FK1">
-            <End Role="tblUsuario" EntitySet="tblUsuario" />
-            <End Role="tblAuditoria" EntitySet="tblAuditoria" />
-          </AssociationSet>
-          </EntityContainer>
+        </EntityContainer>
+        <EntityType Name="tblAuditoria">
+          <Key>
+            <PropertyRef Name="IdAuditoria" />
+          </Key>
+          <Property Name="IdAuditoria" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdEmpresa" Type="Int64" />
+          <Property Name="IdDocumento" Type="Int64" />
+          <Property Name="IdTipoDocumento" Type="Int64" />
+          <Property Name="FechaRegistro" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DireccionIP" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Mensaje" Type="String" Nullable="false" MaxLength="450" FixedLength="false" Unicode="true" />
+          <Property Name="Accion" Type="String" Nullable="false" MaxLength="450" FixedLength="false" Unicode="true" />
+          <Property Name="IdUsuario" Type="Int64" />
+          <Property Name="Negocios" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="tblDocumento" Relationship="BCMWeb.FK_tblAuditoria_tblDocumento" FromRole="tblAuditoria" ToRole="tblDocumento" />
+          <NavigationProperty Name="tblEmpresa" Relationship="BCMWeb.FK_tblEmpresa_tblAuditoria_FK1" FromRole="tblAuditoria" ToRole="tblEmpresa" />
+          <NavigationProperty Name="tblUsuario" Relationship="BCMWeb.FK_tblUsuario_tblAuditoria_FK1" FromRole="tblAuditoria" ToRole="tblUsuario" />
+        </EntityType>
         <EntityType Name="tblAuditoriaProcesoCritico">
           <Key>
             <PropertyRef Name="IdProceso" />
@@ -6166,7 +6292,7 @@
           </Key>
           <Property Name="IdEmpresa" Type="Int64" Nullable="false" />
           <Property Name="IdDocumentoBCP" Type="Int64" Nullable="false" />
-          <Property Name="IdPersona" Type="Int64" Nullable="false" />
+          <Property Name="IdPersona" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Actividad" Type="String" Nullable="false" MaxLength="450" FixedLength="false" Unicode="true" />
           <Property Name="Nombre" Type="String" Nullable="false" MaxLength="450" FixedLength="false" Unicode="true" />
           <Property Name="Cedula" Type="String" Nullable="false" MaxLength="450" FixedLength="false" Unicode="true" />
@@ -6215,7 +6341,7 @@
           </Key>
           <Property Name="IdEmpresa" Type="Int64" Nullable="false" />
           <Property Name="IdDocumentoBCP" Type="Int64" Nullable="false" />
-          <Property Name="IdPersona" Type="Int64" Nullable="false" />
+          <Property Name="IdPersona" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Actividad" Type="String" Nullable="false" MaxLength="450" FixedLength="false" Unicode="true" />
           <Property Name="Nombre" Type="String" Nullable="false" MaxLength="450" FixedLength="false" Unicode="true" />
           <Property Name="Cedula" Type="String" Nullable="false" MaxLength="450" FixedLength="false" Unicode="true" />
@@ -6236,7 +6362,7 @@
           </Key>
           <Property Name="IdEmpresa" Type="Int64" Nullable="false" />
           <Property Name="IdDocumentoBCP" Type="Int64" Nullable="false" />
-          <Property Name="IdRecuperacionRecurso" Type="Int64" Nullable="false" />
+          <Property Name="IdRecuperacionRecurso" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Cantidad" Type="Int16" Nullable="false" />
           <Property Name="Nombre" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="tblBCPDocumento" Relationship="BCMWeb.FK_tblBCPDocumento_tblBCPRecuperacionRecurso_FK1" FromRole="tblBCPRecuperacionRecurso" ToRole="tblBCPDocumento" />
@@ -6378,7 +6504,7 @@
           <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="tblEmpresa" Relationship="BCMWeb.FK_tblBIACadenaServicio_tblEmpresa" FromRole="tblBIACadenaServicio" ToRole="tblEmpresa" />
         </EntityType>
-        <EntityType Name="tblBIAClienteProducto">
+        <EntityType Name="tblBIAClienteProceso">
           <Key>
             <PropertyRef Name="IdEmpresa" />
             <PropertyRef Name="IdDocumentoBIA" />
@@ -6393,7 +6519,8 @@
           <Property Name="Responsable" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Proceso" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Producto" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="tblBIAProceso" Relationship="BCMWeb.FK_tblBIAClienteProducto_tblBIAProceso" FromRole="tblBIAClienteProducto" ToRole="tblBIAProceso" />
+          <NavigationProperty Name="tblBIAProceso" Relationship="BCMWeb.FK_tblBIAClienteProducto_tblBIAProceso" FromRole="tblBIAClienteProceso" ToRole="tblBIAProceso" />
+          <NavigationProperty Name="tblBIAUnidadTrabajoPersonas" Relationship="BCMWeb.FK_tblBIAUnidadTrabajoPersonas_tblBIAClienteProceso" FromRole="tblBIAClienteProceso" ToRole="tblBIAUnidadTrabajoPersonas" />
         </EntityType>
         <EntityType Name="tblBIAComentario">
           <Key>
@@ -6664,7 +6791,7 @@
           <NavigationProperty Name="tblBCPDocumento" Relationship="BCMWeb.FK_tblBCPDocumento_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBCPDocumento" />
           <NavigationProperty Name="tblBIAAmenaza" Relationship="BCMWeb.FK_tblBIAAmenaza_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIAAmenaza" />
           <NavigationProperty Name="tblBIAAplicacion" Relationship="BCMWeb.FK_tblBIAAplicacion_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIAAplicacion" />
-          <NavigationProperty Name="tblBIAClienteProducto" Relationship="BCMWeb.FK_tblBIAClienteProducto_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIAClienteProducto" />
+          <NavigationProperty Name="tblBIAClienteProceso" Relationship="BCMWeb.FK_tblBIAClienteProducto_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIAClienteProceso" />
           <NavigationProperty Name="tblBIADocumentacion" Relationship="BCMWeb.FK_tblBIADocumentacion_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIADocumentacion" />
           <NavigationProperty Name="tblBIADocumento" Relationship="BCMWeb.FK_tblBIAProceso_tblBIADocumento" FromRole="tblBIAProceso" ToRole="tblBIADocumento" />
           <NavigationProperty Name="tblBIAEntrada" Relationship="BCMWeb.FK_tblBIAEntrada_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIAEntrada" />
@@ -6682,6 +6809,7 @@
           <NavigationProperty Name="tblBIARespaldoSecundario" Relationship="BCMWeb.FK_tblBIARespaldoSecundario_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIARespaldoSecundario" />
           <NavigationProperty Name="tblBIARPO" Relationship="BCMWeb.FK_tblBIARPO_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIARPO" />
           <NavigationProperty Name="tblBIARTO" Relationship="BCMWeb.FK_tblBIARTO_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIARTO" />
+          <NavigationProperty Name="tblBIAUnidadTrabajoProceso" Relationship="BCMWeb.FK_tblBIAUnidadTrabajoProceso_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIAUnidadTrabajoProceso" />
           <NavigationProperty Name="tblBIAWRT" Relationship="BCMWeb.FK_tblBIAWRT_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIAWRT" />
         </EntityType>
         <EntityType Name="tblBIAProcesoAlterno">
@@ -6805,6 +6933,9 @@
           <Property Name="IdUnidadPersona" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="IdClienteProceso" Type="Int64" Nullable="false" />
           <Property Name="Nombre" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="IdDocumentoBIA" Type="Int64" Nullable="false" />
+          <Property Name="IdProceso" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="tblBIAClienteProceso" Relationship="BCMWeb.FK_tblBIAUnidadTrabajoPersonas_tblBIAClienteProceso" FromRole="tblBIAUnidadTrabajoPersonas" ToRole="tblBIAClienteProceso" />
           <NavigationProperty Name="tblBIAUnidadTrabajoProceso" Relationship="BCMWeb.FK_tblBIAUnidadTrabajoPersonas_tblBIAUnidadTrabajoProceso" FromRole="tblBIAUnidadTrabajoPersonas" ToRole="tblBIAUnidadTrabajoProceso" />
         </EntityType>
         <EntityType Name="tblBIAUnidadTrabajoProceso">
@@ -6817,6 +6948,9 @@
           <Property Name="IdUnidadTrabajo" Type="Int64" Nullable="false" />
           <Property Name="IdUnidadTrabajoProceso" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Nombre" Type="String" Nullable="false" MaxLength="450" FixedLength="false" Unicode="true" />
+          <Property Name="IdDocumentoBIA" Type="Int64" Nullable="false" />
+          <Property Name="IdProceso" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="tblBIAProceso" Relationship="BCMWeb.FK_tblBIAUnidadTrabajoProceso_tblBIAProceso" FromRole="tblBIAUnidadTrabajoProceso" ToRole="tblBIAProceso" />
           <NavigationProperty Name="tblBIAUnidadTrabajo" Relationship="BCMWeb.FK_tblBIAUnidadTrabajoProceso_tblBIAUnidadTrabajo" FromRole="tblBIAUnidadTrabajoProceso" ToRole="tblBIAUnidadTrabajo" />
           <NavigationProperty Name="tblBIAUnidadTrabajoPersonas" Relationship="BCMWeb.FK_tblBIAUnidadTrabajoPersonas_tblBIAUnidadTrabajoProceso" FromRole="tblBIAUnidadTrabajoProceso" ToRole="tblBIAUnidadTrabajoPersonas" />
         </EntityType>
@@ -6848,7 +6982,6 @@
           <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="tblPersona" Relationship="BCMWeb.FK_tblCargo_tblPersona_FK1" FromRole="tblCargo" ToRole="tblPersona" />
           <NavigationProperty Name="tblEmpresa" Relationship="BCMWeb.FK_tblEmpresa_tblCargo_FK1" FromRole="tblCargo" ToRole="tblEmpresa" />
-          <NavigationProperty Name="tblPMTFrecuenciaParticipante" Relationship="BCMWeb.FK_tblPMTFrecuenciaParticipante_tblCargo" FromRole="tblCargo" ToRole="tblPMTFrecuenciaParticipante" />
         </EntityType>
         <EntityType Name="tblCiudad">
           <Key>
@@ -7100,6 +7233,7 @@
           <Property Name="VersionOriginal" Type="Int32" />
           <Property Name="IdPersonaResponsable" Type="Int64" Nullable="false" />
           <Property Name="RequiereCertificacion" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="tblAuditoria" Relationship="BCMWeb.FK_tblAuditoria_tblDocumento" FromRole="tblDocumento" ToRole="tblAuditoria" />
           <NavigationProperty Name="tblBCPDocumento" Relationship="BCMWeb.FK_tblBCPDocumento_tblDocumento" FromRole="tblDocumento" ToRole="tblBCPDocumento" />
           <NavigationProperty Name="tblBIADocumento" Relationship="BCMWeb.FK_tblDocumento_tblBIADocumento" FromRole="tblDocumento" ToRole="tblBIADocumento" />
           <NavigationProperty Name="tblDocumentoAprobacion" Relationship="BCMWeb.FK_tblAprobacion_tblDocumento" FromRole="tblDocumento" ToRole="tblDocumentoAprobacion" />
@@ -7111,8 +7245,10 @@
           <NavigationProperty Name="tblDocumentoEntrevista" Relationship="BCMWeb.FK_tblDocumentoEntrevista_tblDocumento" FromRole="tblDocumento" ToRole="tblDocumentoEntrevista" />
           <NavigationProperty Name="tblDocumentoPersonaClave" Relationship="BCMWeb.FK_tblDocumentoPersonaClave_tblDocumento" FromRole="tblDocumento" ToRole="tblDocumentoPersonaClave" />
           <NavigationProperty Name="tblPMTFrecuencia" Relationship="BCMWeb.FK_tblPMTFrecuencia_tblDocumento" FromRole="tblDocumento" ToRole="tblPMTFrecuencia" />
+          <NavigationProperty Name="tblPMTFrecuenciaParticipante" Relationship="BCMWeb.FK_tblPMTFrecuenciaParticipante_tblCargo" FromRole="tblDocumento" ToRole="tblPMTFrecuenciaParticipante" />
+          <NavigationProperty Name="tblPMTProgramacion" Relationship="BCMWeb.FK_tblPMTProgramacion_tblDocumento" FromRole="tblDocumento" ToRole="tblPMTProgramacion" />
+          <NavigationProperty Name="tblPMTProgramacionAuditoria" Relationship="BCMWeb.FK_tblPMTProgramacionAuditoria_tblDocumento" FromRole="tblDocumento" ToRole="tblPMTProgramacionAuditoria" />
           <NavigationProperty Name="tblPPEFrecuencia" Relationship="BCMWeb.FK_tblPPEFrecuencia_tblDocumento" FromRole="tblDocumento" ToRole="tblPPEFrecuencia" />
-          <NavigationProperty Name="tblAuditoria" Relationship="BCMWeb.FK_tblAuditoria_tblDocumento" FromRole="tblDocumento" ToRole="tblAuditoria" />
         </EntityType>
         <EntityType Name="tblDocumentoAnexo">
           <Key>
@@ -7141,7 +7277,7 @@
           <Property Name="IdTipoDocumento" Type="Int64" Nullable="false" />
           <Property Name="IdAprobacion" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Fecha" Type="DateTime" Precision="3" />
-          <Property Name="IdPersona" Type="Int64" Nullable="false" />
+          <Property Name="IdPersona" Type="Int64" />
           <Property Name="Procesado" Type="Boolean" Nullable="false" />
           <Property Name="Aprobado" Type="Boolean" />
           <NavigationProperty Name="tblDocumento" Relationship="BCMWeb.FK_tblAprobacion_tblDocumento" FromRole="tblDocumentoAprobacion" ToRole="tblDocumento" />
@@ -7159,7 +7295,7 @@
           <Property Name="IdTipoDocumento" Type="Int64" Nullable="false" />
           <Property Name="IdCertificacion" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Fecha" Type="DateTime" Precision="3" />
-          <Property Name="IdPersona" Type="Int64" Nullable="false" />
+          <Property Name="IdPersona" Type="Int64" />
           <Property Name="Procesado" Type="Boolean" Nullable="false" />
           <Property Name="Certificado" Type="Boolean" />
           <NavigationProperty Name="tblDocumento" Relationship="BCMWeb.FK_tblCertificacion_tblDocumento" FromRole="tblDocumentoCertificacion" ToRole="tblDocumento" />
@@ -7224,7 +7360,7 @@
           <Property Name="IdEmpresa" Type="Int64" Nullable="false" />
           <Property Name="IdDocumento" Type="Int64" Nullable="false" />
           <Property Name="IdTipoDocumento" Type="Int64" Nullable="false" />
-          <Property Name="IdPersona" Type="Int64" Nullable="false" />
+          <Property Name="IdPersona" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Nombre" Type="String" Nullable="false" MaxLength="450" FixedLength="false" Unicode="true" />
           <Property Name="Cedula" Type="String" Nullable="false" MaxLength="450" FixedLength="false" Unicode="true" />
           <Property Name="TelefonoOficina" Type="String" Nullable="false" MaxLength="450" FixedLength="false" Unicode="true" />
@@ -7255,6 +7391,7 @@
           <Property Name="CrearUnidadTrabajo" Type="Boolean" />
           <Property Name="CrearAplicaciones" Type="Boolean" />
           <Property Name="CrearDocumento" Type="Boolean" />
+          <NavigationProperty Name="tblAuditoria" Relationship="BCMWeb.FK_tblEmpresa_tblAuditoria_FK1" FromRole="tblEmpresa" ToRole="tblAuditoria" />
           <NavigationProperty Name="tblAuditoriaProcesoCritico" Relationship="BCMWeb.FK_tblAuditoriaProcesoCritico_tblEmpresa" FromRole="tblEmpresa" ToRole="tblAuditoriaProcesoCritico" />
           <NavigationProperty Name="tblBCPDocumento" Relationship="BCMWeb.FK_tblEmpresa_tblBCPDocumento_FK1" FromRole="tblEmpresa" ToRole="tblBCPDocumento" />
           <NavigationProperty Name="tblBIACadenaServicio" Relationship="BCMWeb.FK_tblBIACadenaServicio_tblEmpresa" FromRole="tblEmpresa" ToRole="tblBIACadenaServicio" />
@@ -7289,7 +7426,6 @@
           <NavigationProperty Name="tblPMTResponsableUpdate" Relationship="BCMWeb.FK_tblPMTResponsableUpdate_tblEmpresa" FromRole="tblEmpresa" ToRole="tblPMTResponsableUpdate" />
           <NavigationProperty Name="tblProducto" Relationship="BCMWeb.FK_tblProducto_tblEmpresa" FromRole="tblEmpresa" ToRole="tblProducto" />
           <NavigationProperty Name="tblUsuarioUnidadOrganizativa" Relationship="BCMWeb.FK_tblUsuarioUnidadOrganizativa_tblEmpresa" FromRole="tblEmpresa" ToRole="tblUsuarioUnidadOrganizativa" />
-          <NavigationProperty Name="tblAuditoria" Relationship="BCMWeb.FK_tblEmpresa_tblAuditoria_FK1" FromRole="tblEmpresa" ToRole="tblAuditoria" />
         </EntityType>
         <EntityType Name="tblEmpresaModulo">
           <Key>
@@ -7887,7 +8023,7 @@
           <Property Name="IdTipoDocumento" Type="Int64" Nullable="false" />
           <Property Name="IdFrecuencia" Type="Int64" Nullable="false" />
           <Property Name="IdCargo" Type="Int64" Nullable="false" />
-          <NavigationProperty Name="tblCargo" Relationship="BCMWeb.FK_tblPMTFrecuenciaParticipante_tblCargo" FromRole="tblPMTFrecuenciaParticipante" ToRole="tblCargo" />
+          <NavigationProperty Name="tblDocumento" Relationship="BCMWeb.FK_tblPMTFrecuenciaParticipante_tblCargo" FromRole="tblPMTFrecuenciaParticipante" ToRole="tblDocumento" />
           <NavigationProperty Name="tblPMTFrecuencia" Relationship="BCMWeb.FK_tblPMTFrecuenciaParticipante_tblPMTFrecuencia" FromRole="tblPMTFrecuenciaParticipante" ToRole="tblPMTFrecuencia" />
         </EntityType>
         <EntityType Name="tblPMTMensajeActualizacion">
@@ -7910,12 +8046,13 @@
           </Key>
           <Property Name="IdPMTProgramación" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="IdEmpresa" Type="Int64" Nullable="false" />
-          <Property Name="IdModulo" Type="Int64" Nullable="false" />
           <Property Name="IdDocumento" Type="Int64" Nullable="false" />
+          <Property Name="IdModulo" Type="Int64" Nullable="false" />
           <Property Name="FechaInicio" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="FechaFinal" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="IdEstado" Type="Int64" Nullable="false" />
           <Property Name="Negocios" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="tblDocumento" Relationship="BCMWeb.FK_tblPMTProgramacion_tblDocumento" FromRole="tblPMTProgramacion" ToRole="tblDocumento" />
           <NavigationProperty Name="tblEmpresa" Relationship="BCMWeb.FK_tblPMTProgramacion_tblEmpresa" FromRole="tblPMTProgramacion" ToRole="tblEmpresa" />
         </EntityType>
         <EntityType Name="tblPMTProgramacionAuditoria">
@@ -7931,6 +8068,7 @@
           <Property Name="FechaInicioActualizacion" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="FechaUltimaActualizacion" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="IdUsuarioActuailiza" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="tblDocumento" Relationship="BCMWeb.FK_tblPMTProgramacionAuditoria_tblDocumento" FromRole="tblPMTProgramacionAuditoria" ToRole="tblDocumento" />
           <NavigationProperty Name="tblEmpresa" Relationship="BCMWeb.FK_tblPMTProgramacionAuditoria_tblEmpresa" FromRole="tblPMTProgramacionAuditoria" ToRole="tblEmpresa" />
         </EntityType>
         <EntityType Name="tblPMTResponsableUpdate">
@@ -8120,6 +8258,7 @@
           <Property Name="FechaUltimaConexion" Type="DateTime" Precision="3" />
           <Property Name="PrimeraVez" Type="Boolean" />
           <Property Name="Email" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblAuditoria" Relationship="BCMWeb.FK_tblUsuario_tblAuditoria_FK1" FromRole="tblUsuario" ToRole="tblAuditoria" />
           <NavigationProperty Name="tblEmpresaUsuario" Relationship="BCMWeb.FK_tblEmpresaUsuario_tblUsuario" FromRole="tblUsuario" ToRole="tblEmpresaUsuario" />
           <NavigationProperty Name="tblEstadoUsuario" Relationship="BCMWeb.FK_tblUsuario_tblEstadoUsuario" FromRole="tblUsuario" ToRole="tblEstadoUsuario" />
           <NavigationProperty Name="tblModulo_Usuario" Relationship="BCMWeb.FK_tblModulo_Usuario_tblUsuario" FromRole="tblUsuario" ToRole="tblModulo_Usuario" />
@@ -8127,7 +8266,6 @@
           <NavigationProperty Name="tblPlanTrabajoAuditoria" Relationship="BCMWeb.FK_tblPlanTrabajoAuditoria_tblUsuario" FromRole="tblUsuario" ToRole="tblPlanTrabajoAuditoria" />
           <NavigationProperty Name="tblPMTResponsableUpdate_Correo" Relationship="BCMWeb.FK_tblPMTResponsableUpdate_Correo_tblUsuario" FromRole="tblUsuario" ToRole="tblPMTResponsableUpdate_Correo" />
           <NavigationProperty Name="tblUsuarioUnidadOrganizativa" Relationship="BCMWeb.FK_tblUsuarioUnidadOrganizativa_tblUsuario" FromRole="tblUsuario" ToRole="tblUsuarioUnidadOrganizativa" />
-          <NavigationProperty Name="tblAuditoria" Relationship="BCMWeb.FK_tblUsuario_tblAuditoria_FK1" FromRole="tblUsuario" ToRole="tblAuditoria" />
         </EntityType>
         <EntityType Name="tblUsuarioUnidadOrganizativa">
           <Key>
@@ -8163,6 +8301,46 @@
           <NavigationProperty Name="tblEmpresa" Relationship="BCMWeb.FK_tblEmpresa_tblVicepresidencia_FK1" FromRole="tblVicepresidencia" ToRole="tblEmpresa" />
           <NavigationProperty Name="tblPais" Relationship="BCMWeb.FK_tblVicepresidencia_tblPais" FromRole="tblVicepresidencia" ToRole="tblPais" />
         </EntityType>
+        <Association Name="FK_tblAuditoria_tblDocumento">
+          <End Type="BCMWeb.tblDocumento" Role="tblDocumento" Multiplicity="0..1" />
+          <End Type="BCMWeb.tblAuditoria" Role="tblAuditoria" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblDocumento">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumento" />
+              <PropertyRef Name="IdTipoDocumento" />
+            </Principal>
+            <Dependent Role="tblAuditoria">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumento" />
+              <PropertyRef Name="IdTipoDocumento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblEmpresa_tblAuditoria_FK1">
+          <End Type="BCMWeb.tblEmpresa" Role="tblEmpresa" Multiplicity="0..1" />
+          <End Type="BCMWeb.tblAuditoria" Role="tblAuditoria" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblEmpresa">
+              <PropertyRef Name="IdEmpresa" />
+            </Principal>
+            <Dependent Role="tblAuditoria">
+              <PropertyRef Name="IdEmpresa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblUsuario_tblAuditoria_FK1">
+          <End Type="BCMWeb.tblUsuario" Role="tblUsuario" Multiplicity="0..1" />
+          <End Type="BCMWeb.tblAuditoria" Role="tblAuditoria" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUsuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="tblAuditoria">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_tblAuditoriaProcesoCritico_tblEmpresa">
           <End Type="BCMWeb.tblEmpresa" Role="tblEmpresa" Multiplicity="1" />
           <End Type="BCMWeb.tblAuditoriaProcesoCritico" Role="tblAuditoriaProcesoCritico" Multiplicity="*" />
@@ -8360,7 +8538,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tblPersona_tblReanudacionPersonaClave_FK1">
-          <End Type="BCMWeb.tblPersona" Role="tblPersona" Multiplicity="1" />
+          <End Type="BCMWeb.tblPersona" Role="tblPersona" Multiplicity="0..1" />
           <End Type="BCMWeb.tblBCPReanudacionPersonaClave" Role="tblBCPReanudacionPersonaClave" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="tblPersona">
@@ -8369,7 +8547,7 @@
             </Principal>
             <Dependent Role="tblBCPReanudacionPersonaClave">
               <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdPersona" />
+              <PropertyRef Name="IdPersonaClavePrincipal" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -8390,7 +8568,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tblPersona_tblBCPRecuperacionPersonaClave_FK1">
-          <End Type="BCMWeb.tblPersona" Role="tblPersona" Multiplicity="1" />
+          <End Type="BCMWeb.tblPersona" Role="tblPersona" Multiplicity="0..1" />
           <End Type="BCMWeb.tblBCPRecuperacionPersonaClave" Role="tblBCPRecuperacionPersonaClave" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="tblPersona">
@@ -8399,7 +8577,7 @@
             </Principal>
             <Dependent Role="tblBCPRecuperacionPersonaClave">
               <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdPersona" />
+              <PropertyRef Name="IdPersonaClavePrincipal" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -8487,17 +8665,35 @@
         </Association>
         <Association Name="FK_tblBIAClienteProducto_tblBIAProceso">
           <End Type="BCMWeb.tblBIAProceso" Role="tblBIAProceso" Multiplicity="1" />
-          <End Type="BCMWeb.tblBIAClienteProducto" Role="tblBIAClienteProducto" Multiplicity="*" />
+          <End Type="BCMWeb.tblBIAClienteProceso" Role="tblBIAClienteProceso" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="tblBIAProceso">
               <PropertyRef Name="IdEmpresa" />
               <PropertyRef Name="IdDocumentoBia" />
               <PropertyRef Name="IdProceso" />
             </Principal>
-            <Dependent Role="tblBIAClienteProducto">
+            <Dependent Role="tblBIAClienteProceso">
               <PropertyRef Name="IdEmpresa" />
               <PropertyRef Name="IdDocumentoBIA" />
               <PropertyRef Name="IdProceso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblBIAUnidadTrabajoPersonas_tblBIAClienteProceso">
+          <End Type="BCMWeb.tblBIAClienteProceso" Role="tblBIAClienteProceso" Multiplicity="1" />
+          <End Type="BCMWeb.tblBIAUnidadTrabajoPersonas" Role="tblBIAUnidadTrabajoPersonas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblBIAClienteProceso">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumentoBIA" />
+              <PropertyRef Name="IdProceso" />
+              <PropertyRef Name="IdClienteProceso" />
+            </Principal>
+            <Dependent Role="tblBIAUnidadTrabajoPersonas">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumentoBIA" />
+              <PropertyRef Name="IdProceso" />
+              <PropertyRef Name="IdClienteProceso" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -9029,6 +9225,22 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_tblBIAUnidadTrabajoProceso_tblBIAProceso">
+          <End Type="BCMWeb.tblBIAProceso" Role="tblBIAProceso" Multiplicity="1" />
+          <End Type="BCMWeb.tblBIAUnidadTrabajoProceso" Role="tblBIAUnidadTrabajoProceso" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblBIAProceso">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumentoBia" />
+              <PropertyRef Name="IdProceso" />
+            </Principal>
+            <Dependent Role="tblBIAUnidadTrabajoProceso">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumentoBIA" />
+              <PropertyRef Name="IdProceso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_tblBIAWRT_tblBIAProceso">
           <End Type="BCMWeb.tblBIAProceso" Role="tblBIAProceso" Multiplicity="1" />
           <End Type="BCMWeb.tblBIAWRT" Role="tblBIAWRT" Multiplicity="*" />
@@ -9202,20 +9414,6 @@
             </Principal>
             <Dependent Role="tblCargo">
               <PropertyRef Name="IdEmpresa" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_tblPMTFrecuenciaParticipante_tblCargo">
-          <End Type="BCMWeb.tblCargo" Role="tblCargo" Multiplicity="1" />
-          <End Type="BCMWeb.tblPMTFrecuenciaParticipante" Role="tblPMTFrecuenciaParticipante" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblCargo">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdCargo" />
-            </Principal>
-            <Dependent Role="tblPMTFrecuenciaParticipante">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdCargo" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -9671,6 +9869,54 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_tblPMTFrecuenciaParticipante_tblCargo">
+          <End Type="BCMWeb.tblDocumento" Role="tblDocumento" Multiplicity="1" />
+          <End Type="BCMWeb.tblPMTFrecuenciaParticipante" Role="tblPMTFrecuenciaParticipante" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblDocumento">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumento" />
+              <PropertyRef Name="IdTipoDocumento" />
+            </Principal>
+            <Dependent Role="tblPMTFrecuenciaParticipante">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumento" />
+              <PropertyRef Name="IdTipoDocumento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPMTProgramacion_tblDocumento">
+          <End Type="BCMWeb.tblDocumento" Role="tblDocumento" Multiplicity="1" />
+          <End Type="BCMWeb.tblPMTProgramacion" Role="tblPMTProgramacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblDocumento">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumento" />
+              <PropertyRef Name="IdTipoDocumento" />
+            </Principal>
+            <Dependent Role="tblPMTProgramacion">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumento" />
+              <PropertyRef Name="IdModulo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPMTProgramacionAuditoria_tblDocumento">
+          <End Type="BCMWeb.tblDocumento" Role="tblDocumento" Multiplicity="1" />
+          <End Type="BCMWeb.tblPMTProgramacionAuditoria" Role="tblPMTProgramacionAuditoria" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblDocumento">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumento" />
+              <PropertyRef Name="IdTipoDocumento" />
+            </Principal>
+            <Dependent Role="tblPMTProgramacionAuditoria">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumento" />
+              <PropertyRef Name="IdModulo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_tblPPEFrecuencia_tblDocumento">
           <End Type="BCMWeb.tblDocumento" Role="tblDocumento" Multiplicity="1" />
           <End Type="BCMWeb.tblPPEFrecuencia" Role="tblPPEFrecuencia" Multiplicity="*" />
@@ -9688,7 +9934,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tblDocumentoAprobacion_tblPersona">
-          <End Type="BCMWeb.tblPersona" Role="tblPersona" Multiplicity="1" />
+          <End Type="BCMWeb.tblPersona" Role="tblPersona" Multiplicity="0..1" />
           <End Type="BCMWeb.tblDocumentoAprobacion" Role="tblDocumentoAprobacion" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="tblPersona">
@@ -9702,7 +9948,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tblCertificacion_tblPersona">
-          <End Type="BCMWeb.tblPersona" Role="tblPersona" Multiplicity="1" />
+          <End Type="BCMWeb.tblPersona" Role="tblPersona" Multiplicity="0..1" />
           <End Type="BCMWeb.tblDocumentoCertificacion" Role="tblDocumentoCertificacion" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="tblPersona">
@@ -10026,7 +10272,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tblEmpresaModulo_tblModulo">
-          <End Type="BCMWeb.tblModulo" Role="tblModulo" Multiplicity="1" />
+          <End Type="BCMWeb.tblModulo" Role="tblModulo" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Type="BCMWeb.tblEmpresaModulo" Role="tblEmpresaModulo" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="tblModulo">
@@ -10158,7 +10406,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tblModulo_Usuario_tblModulo">
-          <End Type="BCMWeb.tblModulo" Role="tblModulo" Multiplicity="1" />
+          <End Type="BCMWeb.tblModulo" Role="tblModulo" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Type="BCMWeb.tblModulo_Usuario" Role="tblModulo_Usuario" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="tblModulo">
@@ -10739,70 +10989,28 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="tblAuditoria">
-          <Key>
-            <PropertyRef Name="IdAuditoria" />
-          </Key>
-          <Property Name="IdAuditoria" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IdEmpresa" Type="Int64" />
-          <Property Name="IdDocumento" Type="Int64" />
-          <Property Name="IdTipoDocumento" Type="Int64" />
-          <Property Name="FechaRegistro" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DireccionIP" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="Mensaje" Type="String" Nullable="false" MaxLength="450" FixedLength="false" Unicode="true" />
-          <Property Name="Accion" Type="String" Nullable="false" MaxLength="450" FixedLength="false" Unicode="true" />
-          <Property Name="IdUsuario" Type="Int64" />
-          <Property Name="Negocios" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="tblDocumento" Relationship="BCMWeb.FK_tblAuditoria_tblDocumento" FromRole="tblAuditoria" ToRole="tblDocumento" />
-          <NavigationProperty Name="tblEmpresa" Relationship="BCMWeb.FK_tblEmpresa_tblAuditoria_FK1" FromRole="tblAuditoria" ToRole="tblEmpresa" />
-          <NavigationProperty Name="tblUsuario" Relationship="BCMWeb.FK_tblUsuario_tblAuditoria_FK1" FromRole="tblAuditoria" ToRole="tblUsuario" />
-        </EntityType>
-        <Association Name="FK_tblAuditoria_tblDocumento">
-          <End Type="BCMWeb.tblDocumento" Role="tblDocumento" Multiplicity="0..1" />
-          <End Type="BCMWeb.tblAuditoria" Role="tblAuditoria" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblDocumento">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdDocumento" />
-              <PropertyRef Name="IdTipoDocumento" />
-            </Principal>
-            <Dependent Role="tblAuditoria">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdDocumento" />
-              <PropertyRef Name="IdTipoDocumento" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_tblEmpresa_tblAuditoria_FK1">
-          <End Type="BCMWeb.tblEmpresa" Role="tblEmpresa" Multiplicity="0..1" />
-          <End Type="BCMWeb.tblAuditoria" Role="tblAuditoria" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblEmpresa">
-              <PropertyRef Name="IdEmpresa" />
-            </Principal>
-            <Dependent Role="tblAuditoria">
-              <PropertyRef Name="IdEmpresa" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_tblUsuario_tblAuditoria_FK1">
-          <End Type="BCMWeb.tblUsuario" Role="tblUsuario" Multiplicity="0..1" />
-          <End Type="BCMWeb.tblAuditoria" Role="tblAuditoria" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblUsuario">
-              <PropertyRef Name="IdUsuario" />
-            </Principal>
-            <Dependent Role="tblAuditoria">
-              <PropertyRef Name="IdUsuario" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
     <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="BCMWebStoreContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="tblAuditoria">
+            <EntityTypeMapping TypeName="BCMWeb.tblAuditoria">
+              <MappingFragment StoreEntitySet="tblAuditoria">
+                <ScalarProperty Name="Negocios" ColumnName="Negocios" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="Accion" ColumnName="Accion" />
+                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
+                <ScalarProperty Name="DireccionIP" ColumnName="DireccionIP" />
+                <ScalarProperty Name="FechaRegistro" ColumnName="FechaRegistro" />
+                <ScalarProperty Name="IdTipoDocumento" ColumnName="IdTipoDocumento" />
+                <ScalarProperty Name="IdDocumento" ColumnName="IdDocumento" />
+                <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
+                <ScalarProperty Name="IdAuditoria" ColumnName="IdAuditoria" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="tblAuditoriaProcesoCritico">
             <EntityTypeMapping TypeName="BCMWeb.tblAuditoriaProcesoCritico">
               <MappingFragment StoreEntitySet="tblAuditoriaProcesoCritico">
@@ -11012,9 +11220,9 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="tblBIAClienteProducto">
-            <EntityTypeMapping TypeName="BCMWeb.tblBIAClienteProducto">
-              <MappingFragment StoreEntitySet="tblBIAClienteProducto">
+          <EntitySetMapping Name="tblBIAClienteProceso">
+            <EntityTypeMapping TypeName="BCMWeb.tblBIAClienteProceso">
+              <MappingFragment StoreEntitySet="tblBIAClienteProceso">
                 <ScalarProperty Name="Producto" ColumnName="Producto" />
                 <ScalarProperty Name="Proceso" ColumnName="Proceso" />
                 <ScalarProperty Name="Responsable" ColumnName="Responsable" />
@@ -11320,6 +11528,8 @@
           <EntitySetMapping Name="tblBIAUnidadTrabajoPersonas">
             <EntityTypeMapping TypeName="BCMWeb.tblBIAUnidadTrabajoPersonas">
               <MappingFragment StoreEntitySet="tblBIAUnidadTrabajoPersonas">
+                <ScalarProperty Name="IdProceso" ColumnName="IdProceso" />
+                <ScalarProperty Name="IdDocumentoBIA" ColumnName="IdDocumentoBIA" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="IdClienteProceso" ColumnName="IdClienteProceso" />
                 <ScalarProperty Name="IdUnidadPersona" ColumnName="IdUnidadPersona" />
@@ -11332,6 +11542,8 @@
           <EntitySetMapping Name="tblBIAUnidadTrabajoProceso">
             <EntityTypeMapping TypeName="BCMWeb.tblBIAUnidadTrabajoProceso">
               <MappingFragment StoreEntitySet="tblBIAUnidadTrabajoProceso">
+                <ScalarProperty Name="IdProceso" ColumnName="IdProceso" />
+                <ScalarProperty Name="IdDocumentoBIA" ColumnName="IdDocumentoBIA" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="IdUnidadTrabajoProceso" ColumnName="IdUnidadTrabajoProceso" />
                 <ScalarProperty Name="IdUnidadTrabajo" ColumnName="IdUnidadTrabajo" />
@@ -12166,8 +12378,8 @@
                 <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
                 <ScalarProperty Name="FechaFinal" ColumnName="FechaFinal" />
                 <ScalarProperty Name="FechaInicio" ColumnName="FechaInicio" />
-                <ScalarProperty Name="IdDocumento" ColumnName="IdDocumento" />
                 <ScalarProperty Name="IdModulo" ColumnName="IdModulo" />
+                <ScalarProperty Name="IdDocumento" ColumnName="IdDocumento" />
                 <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
                 <ScalarProperty Name="IdPMTProgramación" ColumnName="IdPMTProgramación" />
               </MappingFragment>
@@ -12367,22 +12579,6 @@
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="IdVicepresidencia" ColumnName="IdVicepresidencia" />
                 <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblAuditoria">
-            <EntityTypeMapping TypeName="BCMWeb.tblAuditoria">
-              <MappingFragment StoreEntitySet="tblAuditoria">
-                <ScalarProperty Name="Negocios" ColumnName="Negocios" />
-                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
-                <ScalarProperty Name="Accion" ColumnName="Accion" />
-                <ScalarProperty Name="Mensaje" ColumnName="Mensaje" />
-                <ScalarProperty Name="DireccionIP" ColumnName="DireccionIP" />
-                <ScalarProperty Name="FechaRegistro" ColumnName="FechaRegistro" />
-                <ScalarProperty Name="IdTipoDocumento" ColumnName="IdTipoDocumento" />
-                <ScalarProperty Name="IdDocumento" ColumnName="IdDocumento" />
-                <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
-                <ScalarProperty Name="IdAuditoria" ColumnName="IdAuditoria" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
