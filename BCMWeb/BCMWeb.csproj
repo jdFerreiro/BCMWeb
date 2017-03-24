@@ -196,14 +196,15 @@
     <Content Include="Content\Images\Menu\Administration.jpg" />
     <Content Include="Content\Images\Menu\BCP.jpg" />
     <Content Include="Content\Images\Menu\BIA.jpg" />
+    <Content Include="Content\Images\Menu\Criticos.jpg" />
     <Content Include="Content\Images\Menu\Estrategia.jpg" />
     <Content Include="Content\Images\Menu\Estructura.jpg" />
     <Content Include="Content\Images\Menu\Mantenimiento.jpg" />
     <Content Include="Content\Images\Menu\no_disponible.jpg" />
     <Content Include="Content\Images\Menu\PMI.jpg" />
     <Content Include="Content\Images\Menu\Politicas.jpg" />
-    <Content Include="Content\Images\Menu\PPE.png" />
-    <Content Include="Content\Images\Menu\Reportes y Gráficos.png" />
+    <Content Include="Content\Images\Menu\PPE.jpg" />
+    <Content Include="Content\Images\Menu\Reportes y Gráficos.jpg" />
     <Content Include="Content\Images\Menu\Riesgo.png" />
     <Content Include="Content\Images\PlasticBlueHeader.jpg" />
     <Content Include="Content\Images\RedWineHeader.jpg" />
@@ -242,6 +243,7 @@
     <Content Include="LogosEmpresa\LogoBandes.png" />
     <Content Include="LogosEmpresa\logoBanesco.jpg" />
     <Content Include="LogosEmpresa\logo_bangente.jpg" />
+    <Content Include="LogosEmpresa\logo_Credicard.png" />
     <Content Include="Scripts\ace.js" />
     <Content Include="Scripts\cldr.event.js" />
     <Content Include="Scripts\cldr.js" />
@@ -350,6 +352,7 @@
     <Content Include="Views\Documentos\Certificacion.cshtml" />
     <Content Include="Views\Documentos\AprobacionGridPartialView.cshtml" />
     <Content Include="Views\Documentos\CertificacionGridPartialView.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -408,6 +411,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>EmpresaResource.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_LocalResources\ErrorPageResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ErrorPageResource.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_LocalResources\ErrorResource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -455,6 +463,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\DocumentoController.cs" />
     <Compile Include="Controllers\DocumentosController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
     <Compile Include="Controllers\UploadController.cs" />
@@ -927,6 +936,7 @@
     <Folder Include="Content\DocsFolder\" />
     <Folder Include="PDFDocs\" />
     <Folder Include="Views\AdminDoc\" />
+    <Folder Include="Views\Error\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -980,6 +990,11 @@
     <EmbeddedResource Include="App_LocalResources\EmpresaResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>EmpresaResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App_LocalResources\ErrorPageResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ErrorPageResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Resources</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="App_LocalResources\ErrorResource.resx">

@@ -484,6 +484,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Relación de Documentos.
+        /// </summary>
+        public static string DocumentosPageTitle {
+            get {
+                return ResourceManager.GetString("DocumentosPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Registre su número de cédula.
         /// </summary>
         public static string helpTextIdentificacion {

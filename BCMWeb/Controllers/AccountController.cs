@@ -8,6 +8,7 @@ using System.Web.Security;
 using WebMatrix.WebData;
 using BCMWeb.Models;
 using BCMWeb.Security;
+using System.Security.Principal;
 
 namespace BCMWeb.Controllers {
     [Authorize]
@@ -18,6 +19,7 @@ namespace BCMWeb.Controllers {
         // GET: /Account/Login
         [AllowAnonymous]
         public ActionResult Login() {
+            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, Resources.LoginResource.accountHeader);
             return View();
         }
 
@@ -67,9 +69,33 @@ namespace BCMWeb.Controllers {
                     ViewBag.ErrorMessage = Resources.ErrorResource.LoginFailError;
                 }
             }
+            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, Resources.LoginResource.accountHeader);
             return View(model);
         }
+        [SessionExpire]
+        [HandleError]
         public ActionResult LogOff() {
+            long UserId = 0;
+
+            if (Session["UserId"] != null)
+            {
+                UserId = long.Parse(Session["UserId"].ToString());
+            }
+            else
+            {
+                IPrincipal user = HttpContext.User;
+                IIdentity userIdentity = user.Identity;
+
+                FormsIdentity id = (FormsIdentity)user.Identity;
+                FormsAuthenticationTicket ticket = id.Ticket;
+
+                if (ticket != null)
+                {
+                    UserId = long.Parse(ticket.UserData);
+                }
+            }
+
+            Metodos.Logout(UserId);
             Auditoria.RegistrarLogout();
             FormsAuthentication.SignOut();
             return RedirectToAction("Index", "Home");
@@ -105,6 +131,8 @@ namespace BCMWeb.Controllers {
         //
         // GET: /Account/ChangePassword
 
+        [SessionExpire]
+        [HandleError]
         public ActionResult ChangePassword() {
             return View();
         }
@@ -114,6 +142,7 @@ namespace BCMWeb.Controllers {
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [HandleError]
         public ActionResult ChangePassword(ChangePasswordModel model) {
             if(ModelState.IsValid) {
                 bool changePasswordSucceeded;
@@ -139,6 +168,7 @@ namespace BCMWeb.Controllers {
         //
         // GET: /Account/ChangePasswordSuccess
 
+        [HandleError]
         public ActionResult ChangePasswordSuccess() {
             return View();
         }

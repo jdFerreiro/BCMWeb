@@ -282,4 +282,7 @@
   <data name="NuevaVersionText" xml:space="preserve">
     <value>Nueva versión</value>
   </data>
+  <data name="DocumentosPageTitle" xml:space="preserve">
+    <value>Relación de Documentos</value>
+  </data>
 </root>

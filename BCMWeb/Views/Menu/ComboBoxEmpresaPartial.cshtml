@@ -20,7 +20,7 @@
         settings.Properties.TextField = "NombreComercial";
         settings.Properties.ValueField = "IdEmpresa";
         settings.Properties.ValueType = typeof(System.Int64);
-        settings.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.OnHover;
+        settings.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.Never;
         settings.Properties.ClientSideEvents.BeginCallback = "function (s,e) { lp.Show();}";
         settings.Properties.ClientSideEvents.SelectedIndexChanged = "function (s,e) { lp.Show(); $(\"#IdEmpresa\").val(cbxEmpresa.GetValue()); document.forms[\"frmMenu\"].submit(); }";
     }

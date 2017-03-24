@@ -14,20 +14,29 @@ namespace BCMWeb.Controllers
     public class UploadController : Controller
     {
         // GET: Upload
+        [SessionExpire]
+        [HandleError]
         public ActionResult Index()
         {
+            ViewBag.Title = "Upload";
             return View();
         }
+        [SessionExpire]
+        [HandleError]
         public ActionResult ImageUploadControlCallbackAction()
         {
             UploadControlExtension.GetUploadedFiles("uc", UploadControlHelper.LogoValidationSettings, UploadControlHelper.logoFileUploadComplete);
             return null;
         }
+        [SessionExpire]
+        [HandleError]
         public ActionResult DocsUploadControlCallbackAction()
         {
             UploadControlExtension.GetUploadedFiles("uc", UploadControlHelper.DocsValidationSettings, UploadControlHelper.docFileUploadComplete);
             return null;
         }
+        [SessionExpire]
+        [HandleError]
         public ActionResult ModalMode()
         {
             return View("ModalMode");

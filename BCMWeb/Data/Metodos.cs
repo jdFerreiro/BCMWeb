@@ -1017,7 +1017,6 @@ namespace BCMWeb
                     {
                         FechaCreacion = DateTime.UtcNow,
                         FechaEstadoDocumento = DateTime.UtcNow,
-                        FechaUltimaModificacion = DateTime.UtcNow,
                         IdDocumento = 0,
                         IdEmpresa = IdEmpresa,
                         IdEstadoDocumento = 1,
@@ -1062,6 +1061,8 @@ namespace BCMWeb
                     docContenido.ContenidoBin = Contenido;
                 }
 
+                dataDocumento.FechaUltimaModificacion = DateTime.UtcNow;
+
                 db.SaveChanges();
                 Updated = true;
             }
@@ -1089,6 +1090,7 @@ namespace BCMWeb
                 tblUsuario usuario = db.tblUsuario.Where(x => x.IdUsuario == UserId).FirstOrDefault();
                 usuario.EstadoUsuario = (int)eEstadoUsuario.Activo;
                 usuario.FechaEstado = DateTime.UtcNow;
+                usuario.FechaUltimaConexion = DateTime.UtcNow;
                 db.SaveChanges();
             }
 
@@ -1123,28 +1125,34 @@ namespace BCMWeb
 
             using (Entities db = new Entities())
             {
-                data = (from d in db.tblAuditoria
-                        where d.IdEmpresa == IdEmpresa && d.IdDocumento == IdDocumento
-                        select new AuditoriaModel
-                        {
-                            Accion = d.Accion,
-                            DireccionIP = d.DireccionIP,
-                            Empresa = d.tblEmpresa.NombreComercial,
-                            FechaRegistro = (DateTime)DbFunctions.AddMinutes(d.FechaRegistro, Minutos),
-                            Id = d.IdAuditoria,
-                            EditDocumento = false,
-                            IdClaseDocumento = (d.tblDocumento.Negocios ? 1 : 2),
-                            IdDocumento = (long)d.IdDocumento,
-                            IdEmpresa = (long)d.IdEmpresa,
-                            IdModulo = 0,
-                            IdModuloActual = 0,
-                            IdTipoDocumento = (long)d.IdTipoDocumento,
-                            IdUsuario = (long)d.IdUsuario,
-                            Mensaje = d.Mensaje,
-                            NombreUsuario = d.tblUsuario.Nombre,
-                            NroDocumento = d.tblDocumento.NroDocumento,
-                            TipoDocumento = string.Empty,
-                        }).OrderByDescending(x => x.FechaRegistro).ToList();
+                List<tblAuditoria> regAuditoria = (from d in db.tblAuditoria
+                                                   where d.IdEmpresa == IdEmpresa && d.IdDocumento == IdDocumento
+                                                   select d).OrderByDescending(x => x.FechaRegistro).ToList();
+
+                tblDocumento tblDocumento = db.tblDocumento.Where(x => x.IdEmpresa == IdEmpresa && x.IdTipoDocumento == IdTipoDocumento && x.IdDocumento == IdDocumento).FirstOrDefault();
+
+                foreach (tblAuditoria d in regAuditoria)
+                {
+                    data.Add(new AuditoriaModel
+                            {
+                                Accion = d.Accion,
+                                DireccionIP = d.DireccionIP,
+                                Empresa = d.tblEmpresa.NombreComercial,
+                                FechaRegistro = (DateTime)((DateTime)d.FechaRegistro).AddMinutes(Minutos),
+                                Id = d.IdAuditoria,
+                                EditDocumento = false,
+                                IdDocumento = (long)d.IdDocumento,
+                                IdEmpresa = (long)d.IdEmpresa,
+                                IdModulo = 0,
+                                IdModuloActual = 0,
+                                IdTipoDocumento = (long)d.IdTipoDocumento,
+                                IdUsuario = (long)d.IdUsuario,
+                                Mensaje = d.Mensaje,
+                                NombreUsuario = d.tblUsuario.Nombre,
+                                NroDocumento = tblDocumento.NroDocumento,
+                                TipoDocumento = string.Empty,
+                            });
+                }
             }
             return data;
         }

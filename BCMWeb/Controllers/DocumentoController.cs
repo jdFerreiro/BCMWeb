@@ -12,6 +12,7 @@ namespace BCMWeb.Controllers
     {
         // GET: Documento
         [SessionExpire]
+        [HandleError]
         public ActionResult Index(long IdModulo)
         {
 
@@ -29,7 +30,8 @@ namespace BCMWeb.Controllers
             model.IdModuloActual = IdModulo;
             model.Documentos = Metodos.GetDocumentosModulo(IdTipoDocumento, (model.IdClaseDocumento == 1));
             model.ModulosPrincipales = Metodos.GetModulosPrincipalesEmpresaUsuario();
-            model.PageTitle = "Relación de Documentos";
+            model.PageTitle = Resources.DocumentoResource.DocumentosPageTitle;
+            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
 
             Auditoria.RegistarAccion(eTipoAccion.AccesoModuloWeb);
 
@@ -37,16 +39,19 @@ namespace BCMWeb.Controllers
         }
         [HttpPost]
         [SessionExpire]
+        [HandleError]
         public ActionResult Index(DocumentosModel model)
         {
             string _IdModulo = model.IdModulo.ToString();
             int IdTipoDocumento = int.Parse(_IdModulo.Substring(0, (_IdModulo.Length == 7 ? 1 : 2)));
             model.Documentos = Metodos.GetDocumentosModulo(IdTipoDocumento, (model.IdClaseDocumento == 1));
-            model.PageTitle = "Relación de Documentos";
+            model.PageTitle = Resources.DocumentoResource.DocumentosPageTitle;
+            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
 
             return View(model);
         }
         [SessionExpire]
+        [HandleError]
         public ActionResult EditarDocumento(long IdDocumento, int IdClaseDocumento, long IdModulo, int IdVersion = 0)
         {
 
@@ -61,6 +66,7 @@ namespace BCMWeb.Controllers
 
         }
         [SessionExpire]
+        [HandleError]
         public ActionResult EliminarDocumento(long IdDocumento, long IdModulo)
         {
             string _IdModulo = IdModulo.ToString();
@@ -70,6 +76,7 @@ namespace BCMWeb.Controllers
             return RedirectToAction("Index", new { IdModulo = IdModulo });
         }
         [SessionExpire]
+        [HandleError]
         public ActionResult VerDocumento(long IdDocumento, int IdClaseDocumento, long IdModulo, int IdVersion = 0)
         {
 
@@ -83,6 +90,8 @@ namespace BCMWeb.Controllers
             return RedirectToAction(firstModulo.Action, firstModulo.Controller, new { modId = firstModulo.IdModulo });
 
         }
+        [SessionExpire]
+        [HandleError]
         public ActionResult NuevaVersionDocumento(long IdDocumento, int IdClaseDocumento, long IdModulo, int IdVersionActual, int NroVersion)
         {
             int IdVersion = NroVersion++;

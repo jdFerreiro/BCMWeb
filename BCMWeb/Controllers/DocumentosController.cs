@@ -18,6 +18,7 @@ namespace BCMWeb.Controllers
     public class DocumentosController : Controller
     {
         [SessionExpire]
+        [HandleError]
         public ActionResult Ficha(long modId)
         {
 
@@ -78,6 +79,7 @@ namespace BCMWeb.Controllers
         }
         [HttpPost]
         [SessionExpire]
+        [HandleError]
         public ActionResult Ficha(DocumentoModel model)
         {
             if (model.IdPersonaResponsable > 0)
@@ -151,6 +153,7 @@ namespace BCMWeb.Controllers
             return View(model);
         }
         [SessionExpire]
+        [HandleError]
         public ActionResult PersonaPartialView(long modId)
         {
             string _modId = modId.ToString();
@@ -190,6 +193,7 @@ namespace BCMWeb.Controllers
         }
         [HttpPost]
         [SessionExpire]
+        [HandleError]
         public ActionResult PersonaPartialView(PersonaModel model)
         {
             long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
@@ -235,32 +239,38 @@ namespace BCMWeb.Controllers
             return View(model);
         }
         [SessionExpire]
+        [HandleError]
         public ActionResult DireccionesPartialView()
         {
             return PartialView();
         }
         [SessionExpire]
+        [HandleError]
         public ActionResult CorreosPartialView()
         {
             return PartialView();
         }
         [SessionExpire]
+        [HandleError]
         public ActionResult TelefonosPartialView()
         {
             return PartialView();
         }
         [SessionExpire]
+        [HandleError]
         public ActionResult NuevoCargoPartialView()
         {
             return PartialView();
         }
         [SessionExpire]
+        [HandleError]
         public ActionResult NuevaUnidadOrganizativaPartialView()
         {
             return PartialView();
         }
         [HttpPost]
         [SessionExpire]
+        [HandleError]
         public JsonResult NuevoCargo(string Texto)
         {
             string IdCargo = string.Empty;
@@ -288,6 +298,7 @@ namespace BCMWeb.Controllers
         }
         [HttpPost]
         [SessionExpire]
+        [HandleError]
         public JsonResult NuevaUnidad(string Texto, long idUnidadPadre)
         {
             string IdUnidad = string.Empty;
@@ -315,18 +326,21 @@ namespace BCMWeb.Controllers
             return Json(new { success, IdUnidad });
         }
         [SessionExpire]
+        [HandleError]
         public JsonResult CheckEmails(IList<PersonaEmail> data)
         {
             bool isValid = data.Count() > 0;
             return Json(isValid, JsonRequestBehavior.AllowGet);
         }
         [SessionExpire]
+        [HandleError]
         public JsonResult CheckTelefonos(IList<PersonaTelefono> data)
         {
             bool isValid = data.Count() > 0;
             return Json(isValid, JsonRequestBehavior.AllowGet);
         }
         [SessionExpire]
+        [HandleError]
         public JsonResult GetDatosPersonaSelected(long IdPersona)
         {
             bool success = false;
@@ -343,6 +357,7 @@ namespace BCMWeb.Controllers
         }
         [ValidateInput(false)]
         [SessionExpire]
+        [HandleError]
         public ActionResult BatchEditingUpdateCorreo(MVCxGridViewBatchUpdateValues<PersonaEmail, long> updateValues)
         {
 
@@ -364,6 +379,7 @@ namespace BCMWeb.Controllers
         }
         [ValidateInput(false)]
         [SessionExpire]
+        [HandleError]
         public ActionResult BatchEditingUpdateTelefono(MVCxGridViewBatchUpdateValues<PersonaTelefono, long> updateValues)
         {
             foreach (var product in updateValues.Insert)
@@ -383,6 +399,7 @@ namespace BCMWeb.Controllers
             return PartialView("TelefonosPartialView");
         }
         [SessionExpire]
+        [HandleError]
         public ActionResult Editor(long modId)
         {
             string _modId = modId.ToString();
@@ -404,6 +421,7 @@ namespace BCMWeb.Controllers
             model.IdModulo = IdModulo;
             model.IdModuloActual = modId;
             model.PageTitle = Metodos.GetModuloName(modId);
+            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
 
             string uniqueId = model.IdDocumento.ToString().Trim() + model.IdModuloActual.ToString().Trim();
 
@@ -425,17 +443,20 @@ namespace BCMWeb.Controllers
         }
         [HttpPost]
         [SessionExpire]
+        [HandleError]
         public ActionResult Editor(DocumentoContenidoModel model)
         {
             return View();
         }
         [SessionExpire]
+        [HandleError]
         public ActionResult EditorPartialView()
         {
             return PartialView("EditorPartialView");
         }
         [HttpGet]
         [SessionExpire]
+        [HandleError]
         public ActionResult GetOpenDialog(long currentDocumentId)
         {
             var viewModel = new DocumentoModel
@@ -445,6 +466,7 @@ namespace BCMWeb.Controllers
             return PartialView("OpenDialog", viewModel);
         }
         [SessionExpire]
+        [HandleError]
         public ActionResult UploadControlCallback(long currentDocumentId)
         {
             Session["uploadedFile"] = UploadControlExtension.GetUploadedFiles("UploadControl").First();
@@ -452,6 +474,7 @@ namespace BCMWeb.Controllers
             return new EmptyResult();
         }
         [SessionExpire]
+        [HandleError]
         public ActionResult Open(string Accion)
         {
             long currentDocumentId = (long)Session["IdDocumento"];
@@ -498,12 +521,15 @@ namespace BCMWeb.Controllers
             return Json(new { success });
         }
         [SessionExpire]
+        [HandleError]
         public JsonResult docChange()
         {
             Session["Saved"] = false;
             bool success = true;
             return Json(new { success });
         }
+        [SessionExpire]
+        [HandleError]
         public ActionResult GenerarPDF()
         {
             int IdTipoDocumento = int.Parse(Session["IdTipoDocumento"].ToString());
@@ -517,9 +543,12 @@ namespace BCMWeb.Controllers
             model.IdModulo = IdTipoDocumento * 1000000;
             model.IdModuloActual = 0;
             model.PageTitle = Metodos.GetModuloName(99010300);
+            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
             return View(model);
         }
         [HttpPost]
+        [SessionExpire]
+        [HandleError]
         public JsonResult Start()
         {
             Auditoria.RegistarAccion(eTipoAccion.GenerarPDF);
@@ -527,6 +556,8 @@ namespace BCMWeb.Controllers
             string _rutaDocumento = _pdfManager.GenerarPDF_Documento(true);
             return Json( new { _rutaDocumento });
         }
+        [SessionExpire]
+        [HandleError]
         public ActionResult ControlCambios(long modId)
         {
             string _modId = modId.ToString();
@@ -538,18 +569,22 @@ namespace BCMWeb.Controllers
 
             DocumentoModel model = Metodos.GetDocumento(IdDocumento, IdTipoDocumento);
             model.PageTitle = Metodos.GetModuloName(modId);
+            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
             model.IdModulo = IdModulo;
-            //model.Auditoria = Metodos.GetControlCambios();
             model.returnPage = Url.Action("Index", "Documento", new { IdModulo });
             Auditoria.RegistarAccion(eTipoAccion.ConsultarCambios);
 
             return View(model);
         }
+        [SessionExpire]
+        [HandleError]
         public ActionResult ControlCambiosGridPartialView()
         {
 
             return PartialView();
         }
+        [SessionExpire]
+        [HandleError]
         public ActionResult IniciarAprobacion(long modId)
         {
             int IdTipoDocumento = int.Parse(Session["IdTipoDocumento"].ToString());
@@ -558,6 +593,8 @@ namespace BCMWeb.Controllers
 
             return RedirectToAction("Index","Documento",new { IdModulo });
         }
+        [SessionExpire]
+        [HandleError]
         public ActionResult Aprobacion(long modId)
         {
             int IdTipoDocumento = int.Parse(Session["IdTipoDocumento"].ToString());
@@ -569,16 +606,21 @@ namespace BCMWeb.Controllers
 
             DocumentoModel model = Metodos.GetDocumento(IdDocumento, IdTipoDocumento);
             model.PageTitle = Metodos.GetModuloName(modId);
+            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
             model.IdModulo = modId;
             model.IdModuloActual = IdModulo;
             model.returnPage = Url.Action("Index", "Documento", new { IdModulo });
 
             return View(model);
         }
+        [SessionExpire]
+        [HandleError]
         public ActionResult AprobacionGridPartialView()
         {
             return PartialView();
         }
+        [SessionExpire]
+        [HandleError]
         public ActionResult Certificacion(long modId)
         {
             int IdTipoDocumento = int.Parse(Session["IdTipoDocumento"].ToString());
@@ -590,21 +632,28 @@ namespace BCMWeb.Controllers
 
             DocumentoModel model = Metodos.GetDocumento(IdDocumento, IdTipoDocumento);
             model.PageTitle = Metodos.GetModuloName(modId);
+            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
             model.IdModulo = modId;
             model.IdModuloActual = IdModulo;
             model.returnPage = Url.Action("Index", "Documento", new { IdModulo });
 
             return View(model);
         }
+        [SessionExpire]
+        [HandleError]
         public ActionResult CertificacionGridPartialView()
         {
             return PartialView();
         }
+        [SessionExpire]
+        [HandleError]
         public ActionResult AprobarDocumento(long IdDocumento, long IdTipoDocumento, long IdModulo)
         {
             Metodos.AprobarDocumento(IdDocumento, IdTipoDocumento);
             return RedirectToAction("Aprobacion", new { modId = IdModulo });
         }
+        [SessionExpire]
+        [HandleError]
         public ActionResult CertificarDocumento(long IdDocumento, long IdTipoDocumento, long IdModulo)
         {
             Metodos.CertificarDocumento(IdDocumento, IdTipoDocumento);

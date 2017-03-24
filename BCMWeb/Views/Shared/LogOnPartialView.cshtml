@@ -8,5 +8,5 @@ else {
     @: Welcome <b>@User.Identity.Name</b>!
  
     @: |
-    @Html.ActionLink("Logout", "LogOff", "Account", routeValues: null, htmlAttributes: new { onclick = "lp.Show();" })
+    @Html.ActionLink(Resources.LoginResource.LogOutString, "LogOff", "Account", routeValues: null, htmlAttributes: new { onclick = "lp.Show();" })
 }

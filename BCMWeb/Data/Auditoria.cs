@@ -54,7 +54,6 @@ namespace BCMWeb
 
                 db.tblAuditoria.Add(regAuditoria);
                 usuario.FechaUltimaConexion = DateTime.UtcNow;
-                usuario.EstadoUsuario = 2;
                 db.SaveChanges();
             }
         }

@@ -158,5 +158,14 @@ namespace Resources {
                 return ResourceManager.GetString("loginTextoLinea1", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cerrar sesión.
+        /// </summary>
+        public static string LogOutString {
+            get {
+                return ResourceManager.GetString("LogOutString", resourceCulture);
+            }
+        }
     }
 }
