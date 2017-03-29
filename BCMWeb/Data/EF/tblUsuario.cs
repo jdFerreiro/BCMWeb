@@ -30,7 +30,7 @@ namespace BCMWeb.Data.EF
         public string CodigoUsuario { get; set; }
         public string ClaveUsuario { get; set; }
         public string Nombre { get; set; }
-        public Nullable<short> EstadoUsuario { get; set; }
+        public short EstadoUsuario { get; set; }
         public Nullable<System.DateTime> FechaEstado { get; set; }
         public Nullable<System.DateTime> FechaUltimaConexion { get; set; }
         public Nullable<bool> PrimeraVez { get; set; }

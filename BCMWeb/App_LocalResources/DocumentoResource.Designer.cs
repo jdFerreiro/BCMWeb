@@ -133,7 +133,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DireccionIP.
+        ///   Looks up a localized string similar to Dirección IP.
         /// </summary>
         public static string captionDireccionIP {
             get {
@@ -178,7 +178,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Estado del Documento.
+        ///   Looks up a localized string similar to Estatus.
         /// </summary>
         public static string captionEstatus {
             get {
@@ -241,7 +241,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fecha del Último Estatus.
+        ///   Looks up a localized string similar to Último Estado.
         /// </summary>
         public static string captionFechaEstatusProceso {
             get {
@@ -277,7 +277,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fecha de la Última Modificación.
+        ///   Looks up a localized string similar to Última Modificación.
         /// </summary>
         public static string captionFechaUltimaModificacion {
             get {

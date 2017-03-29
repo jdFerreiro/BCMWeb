@@ -1,12 +1,21 @@
+@using BCMWeb
+
 @if(!Request.IsAuthenticated) {
     @*@Html.ActionLink("Register", "Register", "Account") 
     @: |*@ 
     @Html.ActionLink(Resources.LoginResource.accountHeader, "Login", "Account", routeValues: null, htmlAttributes: new { onclick="lp.Show();" })
 }
-else {
- 
-    @: Welcome <b>@User.Identity.Name</b>!
+else
+{
+
+    @: Welcome <b>@User.Identity.Name</b>
  
     @: |
     @Html.ActionLink(Resources.LoginResource.LogOutString, "LogOff", "Account", routeValues: null, htmlAttributes: new { onclick = "lp.Show();" })
+
+    @: <br/><br/>
+    @: @if (Session["IdEmpresa"] != null)
+    { 
+        <span style="font-weight: bold; font-size: 12pt;">@Html.Raw(String.Format("Empresa: {0}", Metodos.GetNombreEmpresa()).ToUpperInvariant())</span> 
+    }
 }

@@ -20,6 +20,7 @@ namespace BCMWeb.Data.EF
             this.tblAuditoria = new HashSet<tblAuditoria>();
             this.tblBCPDocumento = new HashSet<tblBCPDocumento>();
             this.tblBIADocumento = new HashSet<tblBIADocumento>();
+            this.tblBIAPersonaClave = new HashSet<tblBIAPersonaClave>();
             this.tblDocumentoAprobacion = new HashSet<tblDocumentoAprobacion>();
             this.tblDocumentoCertificacion = new HashSet<tblDocumentoCertificacion>();
             this.tblDocumentoAnexo = new HashSet<tblDocumentoAnexo>();
@@ -53,6 +54,8 @@ namespace BCMWeb.Data.EF
         public virtual ICollection<tblBCPDocumento> tblBCPDocumento { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIADocumento> tblBIADocumento { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblBIAPersonaClave> tblBIAPersonaClave { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblDocumentoAprobacion> tblDocumentoAprobacion { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

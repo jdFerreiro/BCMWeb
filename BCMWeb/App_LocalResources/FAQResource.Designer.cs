@@ -124,7 +124,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Preguntas Frecuentes.
+        ///   Looks up a localized string similar to Información General.
         /// </summary>
         public static string PageHeader {
             get {

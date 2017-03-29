@@ -127,7 +127,7 @@
     <value>Negocios</value>
   </data>
   <data name="captionEstatus" xml:space="preserve">
-    <value>Estado del Documento</value>
+    <value>Estatus</value>
   </data>
   <data name="captionFechaCreacion" xml:space="preserve">
     <value>Fecha de Creación</value>
@@ -136,7 +136,7 @@
     <value>Fecha del Estatus</value>
   </data>
   <data name="captionFechaUltimaModificacion" xml:space="preserve">
-    <value>Fecha de la Última Modificación</value>
+    <value>Última Modificación</value>
   </data>
   <data name="captionNroDocumento" xml:space="preserve">
     <value>Número de Documento</value>
@@ -163,7 +163,7 @@
     <value>Dirección</value>
   </data>
   <data name="captionDireccionIP" xml:space="preserve">
-    <value>DireccionIP</value>
+    <value>Dirección IP</value>
   </data>
   <data name="captionDocumento" xml:space="preserve">
     <value>Documento</value>
@@ -250,7 +250,7 @@
     <value>Fecha de Creación</value>
   </data>
   <data name="captionFechaEstatusProceso" xml:space="preserve">
-    <value>Fecha del Último Estatus</value>
+    <value>Último Estado</value>
   </data>
   <data name="captionNombreProceso" xml:space="preserve">
     <value>Nombre</value>

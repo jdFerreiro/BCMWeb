@@ -34,9 +34,9 @@ namespace BCMWeb.Data.EF
         public long IdPersona { get; set; }
         public string Nombre { get; set; }
         public string Identificacion { get; set; }
-        public long IdUnidadOrganizativa { get; set; }
-        public long IdCargo { get; set; }
-        public long IdUsuario { get; set; }
+        public Nullable<long> IdUnidadOrganizativa { get; set; }
+        public Nullable<long> IdCargo { get; set; }
+        public Nullable<long> IdUsuario { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBCPReanudacionPersonaClave> tblBCPReanudacionPersonaClave { get; set; }

@@ -216,7 +216,7 @@ namespace BCMWeb
             FileStream _fileStream = new FileStream(_tempFile, FileMode.Create);
             MemoryStream _msData = new MemoryStream(contenido.ContenidoBin.ToArray());
 
-            _reServer.Document.LoadDocument(_msData, DocumentFormat.OpenXml);
+            _reServer.Document.LoadDocument(_msData, DevExpress.XtraRichEdit.DocumentFormat.OpenXml);
             _reServer.ExportToPdf(_ms);
             _reServer.EndUpdate();
 

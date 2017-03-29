@@ -54,10 +54,9 @@ namespace BCMWeb.Data.EF
         public virtual DbSet<tblBIAEventoRiesgo> tblBIAEventoRiesgo { get; set; }
         public virtual DbSet<tblBIAFuenteRiesgo> tblBIAFuenteRiesgo { get; set; }
         public virtual DbSet<tblBIAGranImpacto> tblBIAGranImpacto { get; set; }
-        public virtual DbSet<tblBIAImpactoFinanciero> tblBIAImpactoFinanciero { get; set; }
-        public virtual DbSet<tblBIAImpactoOperacional> tblBIAImpactoOperacional { get; set; }
         public virtual DbSet<tblBIAInterdependencia> tblBIAInterdependencia { get; set; }
         public virtual DbSet<tblBIAMTD> tblBIAMTD { get; set; }
+        public virtual DbSet<tblBIAPersonaClave> tblBIAPersonaClave { get; set; }
         public virtual DbSet<tblBIAPersonaRespaldoProceso> tblBIAPersonaRespaldoProceso { get; set; }
         public virtual DbSet<tblBIAProbabilidadRiesgo> tblBIAProbabilidadRiesgo { get; set; }
         public virtual DbSet<tblBIAProceso> tblBIAProceso { get; set; }
@@ -105,7 +104,6 @@ namespace BCMWeb.Data.EF
         public virtual DbSet<tblEmpresa> tblEmpresa { get; set; }
         public virtual DbSet<tblEmpresaModulo> tblEmpresaModulo { get; set; }
         public virtual DbSet<tblEmpresaUsuario> tblEmpresaUsuario { get; set; }
-        public virtual DbSet<tblEscala> tblEscala { get; set; }
         public virtual DbSet<tblEstado> tblEstado { get; set; }
         public virtual DbSet<tblEstadoDocumento> tblEstadoDocumento { get; set; }
         public virtual DbSet<tblEstadoEmpresa> tblEstadoEmpresa { get; set; }
@@ -166,5 +164,8 @@ namespace BCMWeb.Data.EF
         public virtual DbSet<tblUsuario> tblUsuario { get; set; }
         public virtual DbSet<tblUsuarioUnidadOrganizativa> tblUsuarioUnidadOrganizativa { get; set; }
         public virtual DbSet<tblVicepresidencia> tblVicepresidencia { get; set; }
+        public virtual DbSet<tblBIAImpactoFinanciero> tblBIAImpactoFinanciero { get; set; }
+        public virtual DbSet<tblBIAImpactoOperacional> tblBIAImpactoOperacional { get; set; }
+        public virtual DbSet<tblEscala> tblEscala { get; set; }
     }
 }

@@ -18,6 +18,7 @@ namespace BCMWeb.Data.EF
         public tblCiudad()
         {
             this.tblCultura_Ciudad = new HashSet<tblCultura_Ciudad>();
+            this.tblEmpresa = new HashSet<tblEmpresa>();
             this.tblLocalidad = new HashSet<tblLocalidad>();
             this.tblPersonaDireccion = new HashSet<tblPersonaDireccion>();
         }
@@ -30,6 +31,8 @@ namespace BCMWeb.Data.EF
         public virtual tblPais tblPais { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblCultura_Ciudad> tblCultura_Ciudad { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblEmpresa> tblEmpresa { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblLocalidad> tblLocalidad { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

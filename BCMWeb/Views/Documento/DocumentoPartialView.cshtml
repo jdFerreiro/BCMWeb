@@ -50,31 +50,31 @@ settings =>
             if ((bool)DataBinder.Eval(c.DataItem, "Editable") && (bool)DataBinder.Eval(c.DataItem, "Eliminable"))
             {
                 ViewContext.Writer.Write(
-                    Html.ActionLink(Resources.BCMWebPublic.captionButtonVer, "VerDocumento", new { IdDocumento = DataBinder.Eval(c.DataItem, "IdDocumento"), IdClaseDocumento = Model.IdClaseDocumento, IdModulo = Model.IdModulo }) + "&nbsp;" +
-                    Html.ActionLink(Resources.BCMWebPublic.captionButtonEdit, "EditarDocumento", new { IdDocumento = DataBinder.Eval(c.DataItem, "IdDocumento"), IdClaseDocumento = Model.IdClaseDocumento, IdModulo = Model.IdModulo }) + "&nbsp;" +
+                    Html.ActionLink(Resources.BCMWebPublic.captionButtonVer, "VerDocumento", new { IdDocumento = DataBinder.Eval(c.DataItem, "IdDocumento"), IdClaseDocumento = Model.IdClaseDocumento, IdModulo = Model.IdModulo }, new { onclick = "lp.Show();" }) + "&nbsp;" +
+                    Html.ActionLink(Resources.BCMWebPublic.captionButtonEdit, "EditarDocumento", new { IdDocumento = DataBinder.Eval(c.DataItem, "IdDocumento"), IdClaseDocumento = Model.IdClaseDocumento, IdModulo = Model.IdModulo }, new { onclick = "lp.Show();" }) + "&nbsp;" +
                     Html.ActionLink(Resources.BCMWebPublic.captionButtonDelete, "EliminarDocumento", new { IdDocumento = DataBinder.Eval(c.DataItem, "IdDocumento"), IdModulo = Model.IdModulo },
-                        new { onclick = "return confirm('" + string.Format(Resources.BCMWebPublic.ConfirmDeleteMessage, DataBinder.Eval(c.DataItem, "NroDocumento")) + "')" })
+                        new { onclick = "return confirm('" + string.Format(Resources.BCMWebPublic.ConfirmDeleteMessage, DataBinder.Eval(c.DataItem, "NroDocumento")) + "'); lp.Show();" })
                 );
             }
             else if ((bool)DataBinder.Eval(c.DataItem, "Editable"))
             {
                 ViewContext.Writer.Write(
-                    Html.ActionLink(Resources.BCMWebPublic.captionButtonVer, "VerDocumento", new { IdDocumento = DataBinder.Eval(c.DataItem, "IdDocumento"), IdClaseDocumento = Model.IdClaseDocumento, IdModulo = Model.IdModulo }) + "&nbsp;" +
-                    Html.ActionLink(Resources.BCMWebPublic.captionButtonEdit, "EditarDocumento", new { IdDocumento = DataBinder.Eval(c.DataItem, "IdDocumento"), IdClaseDocumento = Model.IdClaseDocumento, IdModulo = Model.IdModulo })
+                    Html.ActionLink(Resources.BCMWebPublic.captionButtonVer, "VerDocumento", new { IdDocumento = DataBinder.Eval(c.DataItem, "IdDocumento"), IdClaseDocumento = Model.IdClaseDocumento, IdModulo = Model.IdModulo }, new { onclick = "lp.Show();" }) + "&nbsp;" +
+                    Html.ActionLink(Resources.BCMWebPublic.captionButtonEdit, "EditarDocumento", new { IdDocumento = DataBinder.Eval(c.DataItem, "IdDocumento"), IdClaseDocumento = Model.IdClaseDocumento, IdModulo = Model.IdModulo }, new { onclick = "lp.Show();" })
                 );
             }
             else if ((bool)DataBinder.Eval(c.DataItem, "Eliminable"))
             {
                 ViewContext.Writer.Write(
-                    Html.ActionLink(Resources.BCMWebPublic.captionButtonVer, "VerDocumento", new { IdDocumento = DataBinder.Eval(c.DataItem, "IdDocumento"), IdClaseDocumento = Model.IdClaseDocumento, IdModulo = Model.IdModulo }) + "&nbsp;" +
+                    Html.ActionLink(Resources.BCMWebPublic.captionButtonVer, "VerDocumento", new { IdDocumento = DataBinder.Eval(c.DataItem, "IdDocumento"), IdClaseDocumento = Model.IdClaseDocumento, IdModulo = Model.IdModulo }, new { onclick = "lp.Show();" }) + "&nbsp;" +
                     Html.ActionLink(Resources.BCMWebPublic.captionButtonDelete, "EliminarDocumento", new { IdDocumento = DataBinder.Eval(c.DataItem, "IdDocumento"), IdModulo = Model.IdModulo },
-                        new { onclick = "return confirm('" + string.Format(Resources.BCMWebPublic.ConfirmDeleteMessage, DataBinder.Eval(c.DataItem, "NroDocumento")) + "')" })
+                        new { onclick = "return confirm('" + string.Format(Resources.BCMWebPublic.ConfirmDeleteMessage, DataBinder.Eval(c.DataItem, "NroDocumento")) + "'); lp.Show();" })
                 );
             }
             else
             {
                 ViewContext.Writer.Write(
-                    Html.ActionLink(Resources.BCMWebPublic.captionButtonVer, "VerDocumento", new { IdDocumento = DataBinder.Eval(c.DataItem, "IdDocumento"), IdClaseDocumento = Model.IdClaseDocumento, IdModulo = Model.IdModulo })
+                    Html.ActionLink(Resources.BCMWebPublic.captionButtonVer, "VerDocumento", new { IdDocumento = DataBinder.Eval(c.DataItem, "IdDocumento"), IdClaseDocumento = Model.IdClaseDocumento, IdModulo = Model.IdModulo }, new { onclick = "lp.Show();" })
                 );
             }
         });

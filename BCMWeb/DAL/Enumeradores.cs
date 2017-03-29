@@ -183,25 +183,25 @@ namespace BCMWeb
         ComiteContinuidad = 4,
         [EnumMember()]
         [Description("Certificador")]
-        CertificaBIA = 5,
+        Certificador = 5,
         [EnumMember()]
         [Description("Consultor Administrador")]
         ConsultorAdministrador = 6,
         [EnumMember()]
         [Description("Aprobador")]
-        CertificaEstructura = 7,
+        Aprobador = 7,
         [EnumMember()]
         [Description("Entrevistado")]
-        CertificaEstrategias = 8,
+        Entrevistado = 8,
         [EnumMember()]
         [Description("Persona Clave")]
-        CertificaPlanContinuidad = 9,
+        PersonaClave = 9,
         [EnumMember()]
         [Description("Solo Consulta")]
-        CertificaPlanManejoIncidentes = 10,
+        Solo_Consulta = 10,
         [EnumMember()]
         [Description("Actualizador")]
-        CertificaPlanPruebasEjercicios = 11,
+        Actualizador = 11,
     }
     [DataContract(Name = "Tipo_Elemento")]
     public enum eTipoElemento : int
@@ -497,4 +497,43 @@ namespace BCMWeb
         [Description("Eliminar Anexo Módulo")]
         EliminarAnexoModulo
     }
+    [DataContract(Name = "Secciones de Ficha")]
+    public enum eSeccionFicha
+    {
+        [EnumMember()]
+        [Description("Información General")]
+        InformacionGeneral,
+        [EnumMember()]
+        [Description("Empresas y Unidades")]
+        Empresas_Unidades,
+        [EnumMember()]
+        [Description("Responsable")]
+        Responsable,
+        [EnumMember()]
+        [Description("Certificador")]
+        Certificador,
+        [EnumMember()]
+        [Description("Uso")]
+        UsoDocumento,
+        [EnumMember()]
+        [Description("Control")]
+        Control,
+        [EnumMember()]
+        [Description("Sin Definir")]
+        SinDefinir,
+    }
+    [DataContract(Name = "Estado Proceso")]
+    public enum eEstadoProceso : int
+    {
+        [EnumMember()]
+        [Description("Activo")]
+        Activo = 1,
+        [EnumMember()]
+        [Description("Inactivo")]
+        Inactivo = 2,
+        [EnumMember()]
+        [Description("Inactivo")]
+        Eliminado = 3,
+    }
+
 }

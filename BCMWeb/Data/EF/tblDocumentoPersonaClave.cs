@@ -14,6 +14,12 @@ namespace BCMWeb.Data.EF
     
     public partial class tblDocumentoPersonaClave
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public tblDocumentoPersonaClave()
+        {
+            this.tblBIAPersonaClave = new HashSet<tblBIAPersonaClave>();
+        }
+    
         public long IdEmpresa { get; set; }
         public long IdDocumento { get; set; }
         public long IdTipoDocumento { get; set; }
@@ -27,6 +33,8 @@ namespace BCMWeb.Data.EF
         public string DireccionHabitacion { get; set; }
         public Nullable<bool> Principal { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblBIAPersonaClave> tblBIAPersonaClave { get; set; }
         public virtual tblDocumento tblDocumento { get; set; }
         public virtual tblPersona tblPersona { get; set; }
         public virtual tblEmpresa tblEmpresa { get; set; }

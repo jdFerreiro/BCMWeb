@@ -12,18 +12,17 @@ namespace BCMWeb.Data.EF
     using System;
     using System.Collections.Generic;
     
-    public partial class tblBIAWRT
+    public partial class tblBIAPersonaClave
     {
         public long IdEmpresa { get; set; }
         public long IdDocumentoBIA { get; set; }
         public long IdProceso { get; set; }
-        public long IdWRT { get; set; }
-        public string Observacion { get; set; }
-        public Nullable<long> IdTipoFrecuencia { get; set; }
-        public Nullable<long> IdEscala { get; set; }
+        public long IdPersonaClave { get; set; }
+        public long IdDocumento { get; set; }
+        public long IdTipoDocumento { get; set; }
     
         public virtual tblBIAProceso tblBIAProceso { get; set; }
-        public virtual tblTipoFrecuencia tblTipoFrecuencia { get; set; }
-        public virtual tblEscala tblEscala { get; set; }
+        public virtual tblDocumento tblDocumento { get; set; }
+        public virtual tblDocumentoPersonaClave tblDocumentoPersonaClave { get; set; }
     }
 }

@@ -178,7 +178,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Preguntas Frecuentes.
+        ///   Looks up a localized string similar to Información General.
         /// </summary>
         public static string FAQPageTitle {
             get {
@@ -196,7 +196,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Manejador de Contenido para Continuidad de Negocios.
+        ///   Looks up a localized string similar to MANEJADOR DE CONTENIDOS PARA PLANES DE CONTINUIDAD.
         /// </summary>
         public static string labelAppSlogan {
             get {

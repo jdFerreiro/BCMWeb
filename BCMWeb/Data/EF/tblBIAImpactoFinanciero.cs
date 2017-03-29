@@ -22,6 +22,7 @@ namespace BCMWeb.Data.EF
         public string Descripcion { get; set; }
         public string Impacto { get; set; }
         public long IdEscala { get; set; }
+        public string UnidadTiempo { get; set; }
     
         public virtual tblBIADocumento tblBIADocumento { get; set; }
         public virtual tblBIAProceso tblBIAProceso { get; set; }

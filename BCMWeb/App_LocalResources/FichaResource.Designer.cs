@@ -61,15 +61,6 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Calle o Avenida.
-        /// </summary>
-        public static string captionCalleAvenida {
-            get {
-                return ResourceManager.GetString("captionCalleAvenida", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Cargo.
         /// </summary>
         public static string captionCargo {
@@ -84,24 +75,6 @@ namespace Resources {
         public static string captionCiudad {
             get {
                 return ResourceManager.GetString("captionCiudad", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Código de Área Telefónica.
-        /// </summary>
-        public static string captionCodigoAreaTelefono {
-            get {
-                return ResourceManager.GetString("captionCodigoAreaTelefono", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Edificio o Casa.
-        /// </summary>
-        public static string captionEdificioCasa {
-            get {
-                return ResourceManager.GetString("captionEdificioCasa", resourceCulture);
             }
         }
         
@@ -214,15 +187,6 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Extensión.
-        /// </summary>
-        public static string captionNroExtension {
-            get {
-                return ResourceManager.GetString("captionNroExtension", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Número de Teléfono.
         /// </summary>
         public static string captionNroTelefono {
@@ -237,15 +201,6 @@ namespace Resources {
         public static string captionPais {
             get {
                 return ResourceManager.GetString("captionPais", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Piso o Nivel.
-        /// </summary>
-        public static string captionPisoNivel {
-            get {
-                return ResourceManager.GetString("captionPisoNivel", resourceCulture);
             }
         }
         
@@ -286,11 +241,11 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Torre o Ala.
+        ///   Looks up a localized string similar to Ubicación.
         /// </summary>
-        public static string captionTorreAla {
+        public static string captionUbicacion {
             get {
-                return ResourceManager.GetString("captionTorreAla", resourceCulture);
+                return ResourceManager.GetString("captionUbicacion", resourceCulture);
             }
         }
         
@@ -309,15 +264,6 @@ namespace Resources {
         public static string captionUO {
             get {
                 return ResourceManager.GetString("captionUO", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Urbanización.
-        /// </summary>
-        public static string captionUrbanizacion {
-            get {
-                return ResourceManager.GetString("captionUrbanizacion", resourceCulture);
             }
         }
         

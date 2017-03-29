@@ -18,14 +18,10 @@ namespace BCMWeb.Data.EF
         public long IdPersona { get; set; }
         public long IdPersonaDireccion { get; set; }
         public long IdTipoDireccion { get; set; }
-        public string CalleAvenida { get; set; }
-        public string EdificioCasa { get; set; }
-        public string PisoNivel { get; set; }
-        public string TorreAla { get; set; }
-        public string Urbanizacion { get; set; }
         public long IdPais { get; set; }
         public long IdEstado { get; set; }
         public long IdCiudad { get; set; }
+        public string Ubicacion { get; set; }
     
         public virtual tblCiudad tblCiudad { get; set; }
         public virtual tblEstado tblEstado { get; set; }

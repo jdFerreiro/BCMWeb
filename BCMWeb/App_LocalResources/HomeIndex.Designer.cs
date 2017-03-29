@@ -151,7 +151,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Preguntas Frecuentes.
+        ///   Looks up a localized string similar to Información General.
         /// </summary>
         public static string labelFAQ {
             get {
@@ -232,7 +232,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Análisis de Riesgo.
+        ///   Looks up a localized string similar to Análisis de Riesgos.
         /// </summary>
         public static string moduloName4 {
             get {
@@ -268,7 +268,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Plan para Manejo de Incidentes.
+        ///   Looks up a localized string similar to Plan Integral de Manejo de Incidentes.
         /// </summary>
         public static string moduloName8 {
             get {

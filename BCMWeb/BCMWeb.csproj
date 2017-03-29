@@ -68,6 +68,10 @@
     <Reference Include="DevExpress.XtraCharts.v16.2, Version=16.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.XtraCharts.v16.2.Web, Version=16.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.XtraScheduler.v16.2.Core, Version=16.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DocumentFormat.OpenXml, Version=2.5.5631.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.5\lib\DocumentFormat.OpenXml.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="DotNetOpenAuth.AspNet, Version=4.1.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
       <HintPath>..\packages\DotNetOpenAuth.AspNet.4.1.4.12333\lib\net45-full\DotNetOpenAuth.AspNet.dll</HintPath>
       <Private>True</Private>
@@ -184,6 +188,7 @@
       <HintPath>..\packages\Microsoft.AspNet.WebPages.WebData.3.2.3\lib\net45\WebMatrix.WebData.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\BCMWeb.css" />
@@ -210,6 +215,18 @@
     <Content Include="Content\Images\RedWineHeader.jpg" />
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\jquery-ui.min.css" />
+    <Content Include="Content\LogosEmpresa\biv_logo.jpg" />
+    <Content Include="Content\LogosEmpresa\logo BancaribeCB.jpg" />
+    <Content Include="Content\LogosEmpresa\Logo BancoExterior.jpg" />
+    <Content Include="Content\LogosEmpresa\LogoAplired.png" />
+    <Content Include="Content\LogosEmpresa\LogoBancaribe.jpg" />
+    <Content Include="Content\LogosEmpresa\logoBancoActivo.png" />
+    <Content Include="Content\LogosEmpresa\LogoBancoVenezuela.jpg" />
+    <Content Include="Content\LogosEmpresa\LogoBandes.png" />
+    <Content Include="Content\LogosEmpresa\logoBanesco.jpg" />
+    <Content Include="Content\LogosEmpresa\logoDefault.jpg" />
+    <Content Include="Content\LogosEmpresa\logo_bangente.jpg" />
+    <Content Include="Content\LogosEmpresa\logo_Credicard.png" />
     <Content Include="Content\Site.css" />
     <Content Include="Data\EF\BCMWebEntities.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -242,6 +259,7 @@
     <Content Include="LogosEmpresa\LogoBancoVenezuela.jpg" />
     <Content Include="LogosEmpresa\LogoBandes.png" />
     <Content Include="LogosEmpresa\logoBanesco.jpg" />
+    <Content Include="LogosEmpresa\logoDefault.jpg" />
     <Content Include="LogosEmpresa\logo_bangente.jpg" />
     <Content Include="LogosEmpresa\logo_Credicard.png" />
     <Content Include="Scripts\ace.js" />
@@ -471,24 +489,6 @@
     <Compile Include="DAL\Encriptador.cs" />
     <Compile Include="DAL\Enumeradores.cs" />
     <Compile Include="DAL\FirstModuloSelected.cs" />
-    <Compile Include="DAL\Repository.cs" />
-    <Compile Include="DAL\User.cs" />
-    <Compile Include="Data\Auditoria.cs" />
-    <Compile Include="Data\EF\BCMWebEntities.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>BCMWebEntities.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\EF\BCMWebEntities.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>BCMWebEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\EF\BCMWebEntities.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>BCMWebEntities.edmx</DependentUpon>
-    </Compile>
     <Compile Include="Data\EF\tblAuditoria.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
@@ -586,6 +586,9 @@
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\EF\tblBIAMTD.cs">
+      <DependentUpon>BCMWebEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\EF\tblBIAPersonaClave.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\EF\tblBIAPersonaRespaldoProceso.cs">
@@ -912,6 +915,25 @@
     <Compile Include="Data\EF\tblVicepresidencia.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Data\ProcesarDocumento.cs" />
+    <Compile Include="DAL\Repository.cs" />
+    <Compile Include="DAL\User.cs" />
+    <Compile Include="Data\Auditoria.cs" />
+    <Compile Include="Data\EF\BCMWebEntities.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BCMWebEntities.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\EF\BCMWebEntities.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BCMWebEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\EF\BCMWebEntities.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BCMWebEntities.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Data\Metodos.cs" />
     <Compile Include="Data\PDFManager.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
@@ -922,6 +944,7 @@
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\AuditoriaModels.cs" />
     <Compile Include="Models\DocumentoModels.cs" />
+    <Compile Include="Models\DocumentoWordModels.cs" />
     <Compile Include="Models\EmpresaModels.cs" />
     <Compile Include="Models\MenuModels.cs" />
     <Compile Include="Models\ModuloModels.cs" />

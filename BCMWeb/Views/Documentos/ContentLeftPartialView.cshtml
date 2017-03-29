@@ -41,42 +41,42 @@
                             <div class="docData">
                                 <table cellspacing="5" cellpadding="5">
                                     <tr>
-                                        <td style="width: 25%; padding: 5px;">
-                                            @Html.Raw(Resources.DocumentoResource.captionNroDocumento)
+                                        <td style="width: 40%; padding: 2px 5px;">
+                                            @Html.Raw(Resources.DocumentoResource.captionDocumento)
                                         </td>
-                                        <td style="width: 75%; padding: 5px; text-align: right;">
+                                        <td style="width: 60%; padding: 2px 5px; text-align: right;">
                                             @Html.DisplayFor(m => m.NroDocumento)
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="width: 25%; padding: 5px;">
+                                        <td style="padding: 2px 5px;">
                                             @Html.Raw(Resources.DocumentoResource.captionEstatus)
                                         </td>
-                                        <td style="width: 75%; padding: 5px; text-align: right;">
+                                        <td style="padding: 2px 5px; text-align: right;">
                                             @Html.DisplayFor(m => m.Estatus)
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="width: 25%; padding: 5px;">
+                                        <td style="padding: 2px 5px;">
                                             @Html.Raw(Resources.DocumentoResource.captionFechaEstatus)
                                         </td>
-                                        <td style="width: 75%; padding: 5px; text-align: right;">
+                                        <td style="padding: 2px 5px; text-align: right;">
                                             @Html.DisplayFor(m => m.FechaEstadoDocumento)
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="width: 25%; padding: 5px;">
+                                        <td style="padding: 2px 5px;">
                                             @Html.Raw(Resources.DocumentoResource.captionFechaUltimaModificacion)
                                         </td>
-                                        <td style="width: 75%; padding: 5px; text-align: right;">
+                                        <td style="padding: 2px 5px; text-align: right;">
                                             @Html.DisplayFor(m => m.FechaUltimaModificacion)
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="width: 25%; padding: 5px;">
+                                        <td style="padding: 2px 5px;">
                                             @Html.Raw(Resources.DocumentoResource.captionVersion)
                                         </td>
-                                        <td style="width: 75%; padding: 5px; text-align: right;">
+                                        <td style="padding: 2px 5px; text-align: right;">
                                             @Html.DisplayFor(m => m.Version)
                                         </td>
                                     </tr>
@@ -110,7 +110,7 @@
                                 s.Styles.SubMenuItem.Font.Size = FontUnit.Small;
                                 s.Styles.SubMenuItem.Wrap = DefaultBoolean.True;
                                 s.Orientation = Orientation.Vertical;
-                                s.ShowPopOutImages = DefaultBoolean.True;
+                                s.ShowPopOutImages = DefaultBoolean.False;
                                 s.ControlStyle.HorizontalAlign = HorizontalAlign.Center;
                                 s.EnableAdaptivity = true;
                                 s.ClientSideEvents.ItemClick = "itemMenuClick";

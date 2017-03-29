@@ -196,22 +196,22 @@ namespace BCMWeb.Models
             }
         }
         public string DocExtension { get; set; }
-        public DocumentFormat docFormat
+        public DevExpress.XtraRichEdit.DocumentFormat docFormat
         {
             get
             {
                 switch (this.DocExtension)
                 {
                     case "docx":
-                        return DocumentFormat.OpenXml;
+                        return DevExpress.XtraRichEdit.DocumentFormat.OpenXml;
                     case "doc":
-                        return DocumentFormat.Doc;
+                        return DevExpress.XtraRichEdit.DocumentFormat.Doc;
                     case "html":
-                        return DocumentFormat.Html;
+                        return DevExpress.XtraRichEdit.DocumentFormat.Html;
                     case "rtf":
-                        return DocumentFormat.Rtf;
+                        return DevExpress.XtraRichEdit.DocumentFormat.Rtf;
                     default:
-                        return DocumentFormat.PlainText;
+                        return DevExpress.XtraRichEdit.DocumentFormat.PlainText;
                 }
             }
         }

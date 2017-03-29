@@ -29,6 +29,7 @@ namespace BCMWeb.Data.EF
         public long IdTipoEscala { get; set; }
         public short Valor { get; set; }
         public string Descripcion { get; set; }
+        public Nullable<System.DateTime> FechaRegistro { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIAImpactoOperacional> tblBIAImpactoOperacional { get; set; }

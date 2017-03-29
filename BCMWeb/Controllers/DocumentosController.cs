@@ -109,10 +109,10 @@ namespace BCMWeb.Controllers
                 });
 
                 string Email = (persona.CorreosElectronicos.Where(x => x.IdTipoEmail == 1).FirstOrDefault() != null ? persona.CorreosElectronicos.Where(x => x.IdTipoEmail == 1).FirstOrDefault().Email : string.Empty);
-                string Direccion = (persona.Direcciones.Where(x => x.IdTipoDireccion == 1).FirstOrDefault() != null ? persona.Direcciones.Where(x => x.IdTipoDireccion == 1).FirstOrDefault().Urbanizacion : string.Empty);
-                string Oficina = (persona.Telefonos.Where(x => x.IdTipoTelefono == 1).FirstOrDefault() != null ? persona.Telefonos.Where(x => x.IdTipoTelefono == 1).FirstOrDefault().TelefonoCompleto : string.Empty);
-                string Habitacion = (persona.Telefonos.Where(x => x.IdTipoTelefono == 2).FirstOrDefault() != null ? persona.Telefonos.Where(x => x.IdTipoTelefono == 2).FirstOrDefault().TelefonoCompleto : string.Empty);
-                string Movil = (persona.Telefonos.Where(x => x.IdTipoTelefono == 3).FirstOrDefault() != null ? persona.Telefonos.Where(x => x.IdTipoTelefono == 3).FirstOrDefault().TelefonoCompleto : string.Empty);
+                string Direccion = (persona.Direcciones.Where(x => x.IdTipoDireccion == 1).FirstOrDefault() != null ? persona.Direcciones.Where(x => x.IdTipoDireccion == 1).FirstOrDefault().Ubicación: string.Empty);
+                string Oficina = (persona.Telefonos.Where(x => x.IdTipoTelefono == 1).FirstOrDefault() != null ? persona.Telefonos.Where(x => x.IdTipoTelefono == 1).FirstOrDefault().NroTelefono : string.Empty);
+                string Habitacion = (persona.Telefonos.Where(x => x.IdTipoTelefono == 2).FirstOrDefault() != null ? persona.Telefonos.Where(x => x.IdTipoTelefono == 2).FirstOrDefault().NroTelefono : string.Empty);
+                string Movil = (persona.Telefonos.Where(x => x.IdTipoTelefono == 3).FirstOrDefault() != null ? persona.Telefonos.Where(x => x.IdTipoTelefono == 3).FirstOrDefault().NroTelefono : string.Empty);
 
                 PersonasClave.Add(new DocumentoPersonaClaveModel()
                 {
@@ -446,7 +446,8 @@ namespace BCMWeb.Controllers
         [HandleError]
         public ActionResult Editor(DocumentoContenidoModel model)
         {
-            return View();
+
+            return View(model);
         }
         [SessionExpire]
         [HandleError]
@@ -485,6 +486,8 @@ namespace BCMWeb.Controllers
             {
                 case "Open":
 
+                    string DocUploadDirectory = "~/Content/DocsFolder/";
+
                     UploadedFile uploadedFile = (UploadedFile)Session["uploadedFile"];
                     string currentId = Session["UniqueId"].ToString();
 
@@ -496,9 +499,14 @@ namespace BCMWeb.Controllers
                     Metodos.UpdateContenidoDocumento(IdModulo, Contenido, eTipoAccion.AbrirDocumento);
 
                     Session["Contenido"] = Convert.ToBase64String(Contenido);
+                    string resultFilePath = HttpContext.Request.MapPath(DocUploadDirectory + uploadedFile.FileName);
+
+                    if (System.IO.File.Exists(resultFilePath))
+                        System.IO.File.Delete(resultFilePath);
+
                     break;
                 case "Save":
-                    Contenido = RichEditExtension.SaveCopy("RichEdit", DocumentFormat.OpenXml);
+                    Contenido = RichEditExtension.SaveCopy("RichEdit", DevExpress.XtraRichEdit.DocumentFormat.OpenXml);
                     var reString = Encoding.Default.GetString(Contenido);
                     Metodos.UpdateContenidoDocumento(IdModulo, Contenido, eTipoAccion.Actualizar);
                     long IdDocumento = long.Parse(Session["IdDocumento"].ToString());
@@ -514,7 +522,7 @@ namespace BCMWeb.Controllers
             bool success = false;
 
             long IdModulo = long.Parse(Session["modId"].ToString());
-            byte[] Contenido = RichEditExtension.SaveCopy("RichEdit", DocumentFormat.OpenXml);
+            byte[] Contenido = RichEditExtension.SaveCopy("RichEdit", DevExpress.XtraRichEdit.DocumentFormat.OpenXml);
             var reString = Encoding.Default.GetString(Contenido);
             success = Metodos.UpdateContenidoDocumento(IdModulo, Contenido, eTipoAccion.Actualizar);
 

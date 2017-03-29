@@ -25,6 +25,7 @@ namespace BCMWeb
         {
 
             List<EmpresaModel> Data = new List<EmpresaModel>();
+            string _AppUrl = _ContextUrl.AbsoluteUri.Replace(_ContextUrl.AbsolutePath, string.Empty);
 
             if (Session != null && Session["UserId"] != null)
             {
@@ -32,20 +33,28 @@ namespace BCMWeb
 
                 using (Entities db = new Entities())
                 {
-                    Data = (from eu in db.tblEmpresaUsuario
-                            where eu.IdUsuario == UserId
-                            select new EmpresaModel
+                    List<tblEmpresa> Empresas = (from eu in db.tblEmpresaUsuario
+                                                where eu.IdUsuario == UserId
+                                                select eu.tblEmpresa).ToList();
+
+                    if (Empresas != null && Empresas.Count > 0)
+                    {
+                        foreach (tblEmpresa eu in Empresas)
+                        {
+                            Data.Add(new EmpresaModel
                             {
-                                Direccion = eu.tblEmpresa.DireccionAdministrativa,
-                                FechaInicio = eu.tblEmpresa.FechaInicioActividad,
-                                FechaUltimoEstado = eu.tblEmpresa.FechaUltimoEstado,
-                                IdEmpresa = eu.tblEmpresa.IdEmpresa,
-                                IdEstatus = eu.tblEmpresa.IdEstado,
-                                LogoUrl = eu.tblEmpresa.LogoURL,
-                                NombreComercial = eu.tblEmpresa.NombreComercial,
-                                NombreFiscal = eu.tblEmpresa.NombreFiscal,
-                                RegistroFiscal = eu.tblEmpresa.RegistroFiscal
-                            }).ToList();
+                                Direccion = eu.DireccionAdministrativa,
+                                FechaInicio = eu.FechaInicioActividad,
+                                FechaUltimoEstado = eu.FechaUltimoEstado,
+                                IdEmpresa = eu.IdEmpresa,
+                                IdEstatus = eu.IdEstado,
+                                LogoUrl = eu.LogoURL, //String.Format("{0}/PDFDocs/{1}", _AppUrl, eu.LogoURL),
+                                NombreComercial = eu.NombreComercial.Trim(),
+                                NombreFiscal = eu.NombreFiscal.Trim(),
+                                RegistroFiscal = eu.RegistroFiscal
+                            });
+                        }
+                    }
                 }
 
             }
@@ -65,6 +74,21 @@ namespace BCMWeb
             }
 
             return _NombreModulo;
+        }
+        public static string GetNombreEmpresa()
+        {
+            string _NombreEmpresa = string.Empty;
+
+            if (Session["IdEmpresa"] != null)
+            {
+                using (Entities db = new Entities())
+                {
+                    long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+                    _NombreEmpresa = db.tblEmpresa.Where(x => x.IdEmpresa == IdEmpresa).FirstOrDefault().NombreComercial;
+                }
+            }
+
+            return _NombreEmpresa;
         }
         public static IList<ModuloModel> GetModulosPrincipalesEmpresaUsuario()
         {
@@ -506,25 +530,19 @@ namespace BCMWeb
                            }).ToList()
                            let DireccionesPersona = p.tblPersonaDireccion.Select(x => new PersonaDireccion
                            {
-                               CalleAvenida = x.CalleAvenida,
-                               EdificioCasa = x.EdificioCasa,
                                IdCiudad = x.IdCiudad,
                                IdEstado = x.IdEstado,
                                IdPais = x.IdPais,
                                IdPersonaDireccion = x.IdPersonaDireccion,
                                IdTipoDireccion = x.IdTipoDireccion,
-                               PisoNivel = x.PisoNivel,
                                TipoDireccion = x.tblTipoDireccion.tblCultura_TipoDireccion
                                     .Where(c => c.Culture == Culture || c.Culture == "es-VE")
                                     .FirstOrDefault().Descripcion,
-                                TorreAla = x.TorreAla,
-                                Urbanizacion = x.Urbanizacion
+                                Ubicación = x.Ubicacion
                            }).ToList()
                            let TelefonosPersona = p.tblPersonaTelefono.Select(x => new PersonaTelefono
                            {
-                               CodigoArea = x.CodigoArea,
-                               Extension1 = x.Extension1,
-                               Extension2 = x.Extension2,
+                               NroTelefono = x.Telefono,
                                IdPersonaTelefono = x.IdPersonaTelefono,
                                IdTipoTelefono = x.IdTipoTelefono,
                                TipoTelefono = x.tblTipoTelefono.tblCultura_TipoTelefono
@@ -537,11 +555,11 @@ namespace BCMWeb
                                Cargo = new CargoModel { IdCargo = p.tblCargo.IdCargo, NombreCargo = p.tblCargo.Descripcion },
                                CorreosElectronicos = CorreosPersona,
                                Direcciones = DireccionesPersona,
-                               IdCargoPersona = p.IdCargo,
+                               IdCargoPersona = (long)p.IdCargo,
                                Identificacion = p.Identificacion,
                                IdPersona = p.IdPersona,
-                               IdUnidadOrganizativaPersona = p.IdUnidadOrganizativa,
-                               IdUsuario = p.IdUsuario,
+                               IdUnidadOrganizativaPersona = (long)p.IdUnidadOrganizativa,
+                               IdUsuario = (long)p.IdUsuario,
                                Nombre = p.Nombre,
                                Telefonos = TelefonosPersona,
                                UnidadOrganizativa = new UnidadOrganizativaModel { IdUnidad = p.tblUnidadOrganizativa.IdUnidadOrganizativa, IdUnidadPadre = p.tblUnidadOrganizativa.IdUnidadPadre, NombreUnidadOrganizativa = p.tblUnidadOrganizativa.Nombre }
@@ -593,27 +611,21 @@ namespace BCMWeb
                            }).ToList()
                            let DireccionesPersona = p.tblPersonaDireccion.Select(x => new PersonaDireccion
                            {
-                               CalleAvenida = x.CalleAvenida,
-                               EdificioCasa = x.EdificioCasa,
                                IdCiudad = x.IdCiudad,
                                IdEstado = x.IdEstado,
                                IdPais = x.IdPais,
                                IdPersonaDireccion = x.IdPersonaDireccion,
                                IdTipoDireccion = x.IdTipoDireccion,
-                               PisoNivel = x.PisoNivel,
                                TipoDireccion = x.tblTipoDireccion.tblCultura_TipoDireccion
                                     .Where(c => c.Culture == Culture || c.Culture == "es-VE")
                                     .FirstOrDefault().Descripcion,
-                               TorreAla = x.TorreAla,
-                               Urbanizacion = x.Urbanizacion
+                               Ubicación = x.Ubicacion
                            }).ToList()
                            let TelefonosPersona = p.tblPersonaTelefono.Select(x => new PersonaTelefono
                            {
-                               CodigoArea = x.CodigoArea,
-                               Extension1 = x.Extension1,
-                               Extension2 = x.Extension2,
                                IdPersonaTelefono = x.IdPersonaTelefono,
                                IdTipoTelefono = x.IdTipoTelefono,
+                               NroTelefono = x.Telefono,
                                TipoTelefono = x.tblTipoTelefono.tblCultura_TipoTelefono
                                     .Where(c => c.Culture == Culture || c.Culture == "es-VE")
                                     .FirstOrDefault().Descripcion
@@ -624,11 +636,11 @@ namespace BCMWeb
                                Cargo = new CargoModel { IdCargo = p.tblCargo.IdCargo, NombreCargo = p.tblCargo.Descripcion },
                                CorreosElectronicos = CorreosPersona,
                                Direcciones = DireccionesPersona,
-                               IdCargoPersona = p.IdCargo,
+                               IdCargoPersona = (long)p.IdCargo,
                                Identificacion = p.Identificacion,
                                IdPersona = p.IdPersona,
-                               IdUnidadOrganizativaPersona = p.IdUnidadOrganizativa,
-                               IdUsuario = p.IdUsuario,
+                               IdUnidadOrganizativaPersona = (long)p.IdUnidadOrganizativa,
+                               IdUsuario = (long)p.IdUsuario,
                                Nombre = p.Nombre,
                                Telefonos = TelefonosPersona,
                                UnidadOrganizativa = new UnidadOrganizativaModel { IdUnidad = p.tblUnidadOrganizativa.IdUnidadOrganizativa, IdUnidadPadre = p.tblUnidadOrganizativa.IdUnidadPadre,  NombreUnidadOrganizativa = p.tblUnidadOrganizativa.Nombre }
@@ -922,12 +934,9 @@ namespace BCMWeb
                 Telefonos = db.tblPersonaTelefono.Where(x => x.IdEmpresa == IdEmpresa && x.IdPersona == IdPersona)
                     .Select(x => new PersonaTelefono
                     {
-                        CodigoArea = x.CodigoArea,
-                        Extension1 = x.Extension1,
-                        Extension2 = x.Extension2,
                         IdPersonaTelefono= x.IdPersonaTelefono,
                         IdTipoTelefono = x.IdTipoTelefono,
-                        NroTelefono = x.NroTelefono,
+                        NroTelefono = x.Telefono,
                         TipoTelefono = x.tblTipoTelefono.tblCultura_TipoTelefono.Where(t => t.Culture == Culture || t.Culture == "es-VE").FirstOrDefault().Descripcion
                     }).ToList();
             }
@@ -947,17 +956,13 @@ namespace BCMWeb
                 Direcciones = db.tblPersonaDireccion.Where(x => x.IdEmpresa == IdEmpresa && x.IdPersona == IdPersona)
                     .Select(x => new PersonaDireccion
                     {
-                        CalleAvenida = x.CalleAvenida,
-                        EdificioCasa = x.EdificioCasa,
                         IdCiudad = x.IdCiudad,
                         IdEstado = x.IdEstado,
                         IdPais = x.IdPais,
                         IdPersonaDireccion = x.IdPersonaDireccion,
                         IdTipoDireccion = x.IdTipoDireccion,
-                        PisoNivel = x.PisoNivel,
                         TipoDireccion = x.tblTipoDireccion.tblCultura_TipoDireccion.Where(t => t.Culture == Culture || t.Culture == "es-VE").FirstOrDefault().Descripcion,
-                        TorreAla = x.TorreAla,
-                        Urbanizacion = x.Urbanizacion
+                        Ubicación = x.Ubicacion
                     }).ToList();
             }
 
@@ -1055,6 +1060,51 @@ namespace BCMWeb
                     };
 
                     db.tblDocumentoContenido.Add(docContenido);
+
+                    if (IdTipoDocumento == 4)
+                    {
+                        tblBIADocumento docBia = db.tblBIADocumento.Where(x => x.IdEmpresa == IdEmpresa
+                                                                            && x.IdDocumento == IdDocumento
+                                                                            && x.IdTipoDocumento == IdTipoDocumento).FirstOrDefault();
+                        if (docBia == null)
+                        {
+                            docBia = new tblBIADocumento
+                            {
+                                IdCadenaServicio = 0,
+                                IdDocumento = IdDocumento,
+                                IdEmpresa = IdEmpresa,
+                                IdTipoDocumento = IdTipoDocumento,
+                                IdUnidadOrganizativa = 0,
+                            };
+
+                            db.tblBIADocumento.Add(docBia);
+                        }
+                    }
+                    if (IdTipoDocumento == 7)
+                    {
+
+                        tblBCPDocumento docBCP = db.tblBCPDocumento.Where(x => x.IdEmpresa == IdEmpresa
+                                                                            && x.IdDocumento == IdDocumento
+                                                                            && x.IdTipoDocumento == IdTipoDocumento).FirstOrDefault();
+                        if (docBCP == null)
+                        {
+                            tblBIADocumento docuBIA = db.tblBIADocumento.Where(x => x.IdEmpresa == IdEmpresa
+                                                                                 && x.IdDocumento == IdDocumento
+                                                                                 && x.IdTipoDocumento == IdTipoDocumento).FirstOrDefault();
+                            docBCP = new tblBCPDocumento
+                            {
+                                IdDocumento = IdDocumento,
+                                IdDocumentoBIA = docuBIA.IdDocumentoBIA,
+                                IdEmpresa = IdEmpresa,
+                                IdProceso = null,
+                                IdTipoDocumento = IdTipoDocumento,
+                                IdUnidadOrganizativa = docuBIA.IdUnidadOrganizativa,
+                                Proceso = string.Empty,
+                                Responsable = string.Empty,
+                                SubProceso = string.Empty
+                            };
+                        }
+                    }
                 }
                 else
                 {
@@ -1062,12 +1112,16 @@ namespace BCMWeb
                 }
 
                 dataDocumento.FechaUltimaModificacion = DateTime.UtcNow;
-
+                
                 db.SaveChanges();
                 Updated = true;
             }
 
-            if (Updated) Auditoria.RegistarAccion(Accion);
+            if (Updated)
+            {
+                Auditoria.RegistarAccion(Accion);
+                ProcesarDocumento.ProcesarFicha(IdModulo, Contenido);
+            }
             return Updated;
         }
         public static void LoginUsuario(long UserId)

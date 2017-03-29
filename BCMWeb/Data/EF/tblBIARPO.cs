@@ -23,7 +23,7 @@ namespace BCMWeb.Data.EF
         public long IdEscala { get; set; }
     
         public virtual tblBIAProceso tblBIAProceso { get; set; }
-        public virtual tblEscala tblEscala { get; set; }
         public virtual tblTipoFrecuencia tblTipoFrecuencia { get; set; }
+        public virtual tblEscala tblEscala { get; set; }
     }
 }

@@ -148,7 +148,7 @@
     <value>Contácto</value>
   </data>
   <data name="labelFAQ" xml:space="preserve">
-    <value>Preguntas Frecuentes</value>
+    <value>Información General</value>
   </data>
   <data name="labelHome" xml:space="preserve">
     <value>Inicio</value>
@@ -175,7 +175,7 @@
     <value>Plan de Adiestramiento</value>
   </data>
   <data name="moduloName4" xml:space="preserve">
-    <value>Análisis de Riesgo</value>
+    <value>Análisis de Riesgos</value>
   </data>
   <data name="moduloName5" xml:space="preserve">
     <value>Análisis de Impacto</value>
@@ -187,7 +187,7 @@
     <value>Procedimientos de Continuidad</value>
   </data>
   <data name="moduloName8" xml:space="preserve">
-    <value>Plan para Manejo de Incidentes</value>
+    <value>Plan Integral de Manejo de Incidentes</value>
   </data>
   <data name="moduloName9" xml:space="preserve">
     <value>Plan de Prueba y Ejercicios</value>

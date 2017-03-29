@@ -117,20 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="captionCalleAvenida" xml:space="preserve">
-    <value>Calle o Avenida</value>
+  <data name="captionUbicacion" xml:space="preserve">
+    <value>Ubicación</value>
   </data>
   <data name="captionCargo" xml:space="preserve">
     <value>Cargo</value>
   </data>
   <data name="captionCiudad" xml:space="preserve">
     <value>Ciudad</value>
-  </data>
-  <data name="captionCodigoAreaTelefono" xml:space="preserve">
-    <value>Código de Área Telefónica</value>
-  </data>
-  <data name="captionEdificioCasa" xml:space="preserve">
-    <value>Edificio o Casa</value>
   </data>
   <data name="captionEmail" xml:space="preserve">
     <value>Correo Electrónico</value>
@@ -162,17 +156,11 @@
   <data name="captionNombre" xml:space="preserve">
     <value>Nombre</value>
   </data>
-  <data name="captionNroExtension" xml:space="preserve">
-    <value>Extensión</value>
-  </data>
   <data name="captionNroTelefono" xml:space="preserve">
     <value>Número de Teléfono</value>
   </data>
   <data name="captionPais" xml:space="preserve">
     <value>País</value>
-  </data>
-  <data name="captionPisoNivel" xml:space="preserve">
-    <value>Piso o Nivel</value>
   </data>
   <data name="captionRequiereCertificacion" xml:space="preserve">
     <value>Requiere Certificación</value>
@@ -186,14 +174,8 @@
   <data name="captionTipoTelefono" xml:space="preserve">
     <value>Tipo de Teléfono</value>
   </data>
-  <data name="captionTorreAla" xml:space="preserve">
-    <value>Torre o Ala</value>
-  </data>
   <data name="captionUO" xml:space="preserve">
     <value>Unidad Organizativa</value>
-  </data>
-  <data name="captionUrbanizacion" xml:space="preserve">
-    <value>Urbanización</value>
   </data>
   <data name="MaskIdentificacion" xml:space="preserve">
     <value>A-999,000,000</value>

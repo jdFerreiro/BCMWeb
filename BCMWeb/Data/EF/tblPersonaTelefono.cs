@@ -18,10 +18,6 @@ namespace BCMWeb.Data.EF
         public long IdPersona { get; set; }
         public long IdPersonaTelefono { get; set; }
         public long IdTipoTelefono { get; set; }
-        public int CodigoArea { get; set; }
-        public int NroTelefono { get; set; }
-        public int Extension1 { get; set; }
-        public int Extension2 { get; set; }
         public string Telefono { get; set; }
     
         public virtual tblPersona tblPersona { get; set; }

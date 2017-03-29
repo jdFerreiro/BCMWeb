@@ -409,6 +409,7 @@
           <Property Name="Descripcion" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Impacto" Type="nvarchar(max)" Nullable="false" />
           <Property Name="IdEscala" Type="bigint" Nullable="false" />
+          <Property Name="UnidadTiempo" Type="nvarchar" MaxLength="450" />
         </EntityType>
         <EntityType Name="tblBIAImpactoOperacional">
           <Key>
@@ -425,6 +426,7 @@
           <Property Name="ImpactoOperacional" Type="nvarchar" MaxLength="450" Nullable="false" />
           <Property Name="Descripcion" Type="nvarchar(max)" Nullable="false" />
           <Property Name="IdEscala" Type="bigint" Nullable="false" />
+          <Property Name="UnidadTiempo" Type="nvarchar" MaxLength="450" />
         </EntityType>
         <EntityType Name="tblBIAInterdependencia">
           <Key>
@@ -455,6 +457,20 @@
           <Property Name="Observacion" Type="nvarchar" MaxLength="450" />
           <Property Name="IdTipoFrecuencia" Type="bigint" />
           <Property Name="IdEscala" Type="bigint" />
+        </EntityType>
+        <EntityType Name="tblBIAPersonaClave">
+          <Key>
+            <PropertyRef Name="IdEmpresa" />
+            <PropertyRef Name="IdDocumentoBIA" />
+            <PropertyRef Name="IdProceso" />
+            <PropertyRef Name="IdPersonaClave" />
+          </Key>
+          <Property Name="IdEmpresa" Type="bigint" Nullable="false" />
+          <Property Name="IdDocumentoBIA" Type="bigint" Nullable="false" />
+          <Property Name="IdProceso" Type="bigint" Nullable="false" />
+          <Property Name="IdPersonaClave" Type="bigint" Nullable="false" />
+          <Property Name="IdDocumento" Type="bigint" Nullable="false" />
+          <Property Name="IdTipoDocumento" Type="bigint" Nullable="false" />
         </EntityType>
         <EntityType Name="tblBIAPersonaRespaldoProceso">
           <Key>
@@ -998,6 +1014,9 @@
           <Property Name="CrearUnidadTrabajo" Type="bit" />
           <Property Name="CrearAplicaciones" Type="bit" />
           <Property Name="CrearDocumento" Type="bit" />
+          <Property Name="IdPais" Type="bigint" />
+          <Property Name="IdPaisEstado" Type="bigint" />
+          <Property Name="IdPaisEstadoCiudad" Type="bigint" />
         </EntityType>
         <EntityType Name="tblEmpresaModulo">
           <Key>
@@ -1028,6 +1047,7 @@
           <Property Name="IdTipoEscala" Type="bigint" Nullable="false" />
           <Property Name="Valor" Type="smallint" Nullable="false" />
           <Property Name="Descripcion" Type="nvarchar" MaxLength="450" Nullable="false" />
+          <Property Name="FechaRegistro" Type="datetime" />
         </EntityType>
         <EntityType Name="tblEstado">
           <Key>
@@ -1350,9 +1370,9 @@
           <Property Name="IdPersona" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Nombre" Type="nvarchar" MaxLength="250" Nullable="false" />
           <Property Name="Identificacion" Type="nvarchar" MaxLength="50" />
-          <Property Name="IdUnidadOrganizativa" Type="bigint" Nullable="false" />
-          <Property Name="IdCargo" Type="bigint" Nullable="false" />
-          <Property Name="IdUsuario" Type="bigint" Nullable="false" />
+          <Property Name="IdUnidadOrganizativa" Type="bigint" />
+          <Property Name="IdCargo" Type="bigint" />
+          <Property Name="IdUsuario" Type="bigint" />
         </EntityType>
         <EntityType Name="tblPersonaCorreo">
           <Key>
@@ -1376,14 +1396,10 @@
           <Property Name="IdPersona" Type="bigint" Nullable="false" />
           <Property Name="IdPersonaDireccion" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IdTipoDireccion" Type="bigint" Nullable="false" />
-          <Property Name="CalleAvenida" Type="nvarchar" MaxLength="450" Nullable="false" />
-          <Property Name="EdificioCasa" Type="nvarchar" MaxLength="450" Nullable="false" />
-          <Property Name="PisoNivel" Type="nvarchar" MaxLength="450" Nullable="false" />
-          <Property Name="TorreAla" Type="nvarchar" MaxLength="450" Nullable="false" />
-          <Property Name="Urbanizacion" Type="nvarchar" MaxLength="450" Nullable="false" />
           <Property Name="IdPais" Type="bigint" Nullable="false" />
           <Property Name="IdEstado" Type="bigint" Nullable="false" />
           <Property Name="IdCiudad" Type="bigint" Nullable="false" />
+          <Property Name="Ubicacion" Type="nvarchar" MaxLength="1500" />
         </EntityType>
         <EntityType Name="tblPersonaTelefono">
           <Key>
@@ -1395,10 +1411,6 @@
           <Property Name="IdPersona" Type="bigint" Nullable="false" />
           <Property Name="IdPersonaTelefono" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IdTipoTelefono" Type="bigint" Nullable="false" />
-          <Property Name="CodigoArea" Type="int" Nullable="false" />
-          <Property Name="NroTelefono" Type="int" Nullable="false" />
-          <Property Name="Extension1" Type="int" Nullable="false" />
-          <Property Name="Extension2" Type="int" Nullable="false" />
           <Property Name="Telefono" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="tblPlanTrabajo">
@@ -1660,7 +1672,7 @@
           <Property Name="CodigoUsuario" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="ClaveUsuario" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Nombre" Type="nvarchar" MaxLength="250" Nullable="false" />
-          <Property Name="EstadoUsuario" Type="smallint" />
+          <Property Name="EstadoUsuario" Type="smallint" Nullable="false" />
           <Property Name="FechaEstado" Type="datetime" />
           <Property Name="FechaUltimaConexion" Type="datetime" />
           <Property Name="PrimeraVez" Type="bit" />
@@ -2334,6 +2346,56 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_tblBIAPersonaClave_tblBIAProceso">
+          <End Role="tblBIAProceso" Type="Self.tblBIAProceso" Multiplicity="1" />
+          <End Role="tblBIAPersonaClave" Type="Self.tblBIAPersonaClave" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblBIAProceso">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumentoBia" />
+              <PropertyRef Name="IdProceso" />
+            </Principal>
+            <Dependent Role="tblBIAPersonaClave">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumentoBIA" />
+              <PropertyRef Name="IdProceso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblBIAPersonaClave_tblDocumento">
+          <End Role="tblDocumento" Type="Self.tblDocumento" Multiplicity="1" />
+          <End Role="tblBIAPersonaClave" Type="Self.tblBIAPersonaClave" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblDocumento">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumento" />
+              <PropertyRef Name="IdTipoDocumento" />
+            </Principal>
+            <Dependent Role="tblBIAPersonaClave">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumento" />
+              <PropertyRef Name="IdTipoDocumento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblBIAPersonaClave_tblDocumentoPersonaClave">
+          <End Role="tblDocumentoPersonaClave" Type="Self.tblDocumentoPersonaClave" Multiplicity="1" />
+          <End Role="tblBIAPersonaClave" Type="Self.tblBIAPersonaClave" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblDocumentoPersonaClave">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumento" />
+              <PropertyRef Name="IdTipoDocumento" />
+              <PropertyRef Name="IdPersona" />
+            </Principal>
+            <Dependent Role="tblBIAPersonaClave">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumento" />
+              <PropertyRef Name="IdTipoDocumento" />
+              <PropertyRef Name="IdPersonaClave" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_tblBIAPersonaRespaldoProceso_tblBIAProceso">
           <End Role="tblBIAProceso" Type="Self.tblBIAProceso" Multiplicity="1" />
           <End Role="tblBIAPersonaRespaldoProceso" Type="Self.tblBIAPersonaRespaldoProceso" Multiplicity="*" />
@@ -2697,7 +2759,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tblCargo_tblPersona_FK1">
-          <End Role="tblCargo" Type="Self.tblCargo" Multiplicity="1" />
+          <End Role="tblCargo" Type="Self.tblCargo" Multiplicity="0..1" />
           <End Role="tblPersona" Type="Self.tblPersona" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="tblCargo">
@@ -3234,6 +3296,22 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_tblEmpresa_tblCiudad">
+          <End Role="tblCiudad" Type="Self.tblCiudad" Multiplicity="0..1" />
+          <End Role="tblEmpresa" Type="Self.tblEmpresa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblCiudad">
+              <PropertyRef Name="IdPais" />
+              <PropertyRef Name="IdEstado" />
+              <PropertyRef Name="IdCiudad" />
+            </Principal>
+            <Dependent Role="tblEmpresa">
+              <PropertyRef Name="IdPais" />
+              <PropertyRef Name="IdPaisEstado" />
+              <PropertyRef Name="IdPaisEstadoCiudad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_tblEmpresa_tblEscala_FK1">
           <End Role="tblEmpresa" Type="Self.tblEmpresa" Multiplicity="1" />
           <End Role="tblEscala" Type="Self.tblEscala" Multiplicity="*" />
@@ -3243,6 +3321,20 @@
             </Principal>
             <Dependent Role="tblEscala">
               <PropertyRef Name="IdEmpresa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblEmpresa_tblEstado">
+          <End Role="tblEstado" Type="Self.tblEstado" Multiplicity="0..1" />
+          <End Role="tblEmpresa" Type="Self.tblEmpresa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblEstado">
+              <PropertyRef Name="IdPais" />
+              <PropertyRef Name="IdEstado" />
+            </Principal>
+            <Dependent Role="tblEmpresa">
+              <PropertyRef Name="IdPais" />
+              <PropertyRef Name="IdPaisEstado" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3267,6 +3359,18 @@
             </Principal>
             <Dependent Role="tblLocalidad">
               <PropertyRef Name="IdEmpresa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblEmpresa_tblPais">
+          <End Role="tblPais" Type="Self.tblPais" Multiplicity="0..1" />
+          <End Role="tblEmpresa" Type="Self.tblEmpresa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPais">
+              <PropertyRef Name="IdPais" />
+            </Principal>
+            <Dependent Role="tblEmpresa">
+              <PropertyRef Name="IdPais" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3829,7 +3933,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tblPersona_tblUnidadOrganizativa">
-          <End Role="tblUnidadOrganizativa" Type="Self.tblUnidadOrganizativa" Multiplicity="1" />
+          <End Role="tblUnidadOrganizativa" Type="Self.tblUnidadOrganizativa" Multiplicity="0..1" />
           <End Role="tblPersona" Type="Self.tblPersona" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="tblUnidadOrganizativa">
@@ -3843,7 +3947,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tblPersona_tblUsuario">
-          <End Role="tblUsuario" Type="Self.tblUsuario" Multiplicity="1" />
+          <End Role="tblUsuario" Type="Self.tblUsuario" Multiplicity="0..1" />
           <End Role="tblPersona" Type="Self.tblPersona" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="tblUsuario">
@@ -4309,7 +4413,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tblUsuario_tblEstadoUsuario">
-          <End Role="tblEstadoUsuario" Type="Self.tblEstadoUsuario" Multiplicity="0..1" />
+          <End Role="tblEstadoUsuario" Type="Self.tblEstadoUsuario" Multiplicity="1" />
           <End Role="tblUsuario" Type="Self.tblUsuario" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="tblEstadoUsuario">
@@ -4416,6 +4520,7 @@
           <EntitySet Name="tblBIAImpactoOperacional" EntityType="Self.tblBIAImpactoOperacional" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblBIAInterdependencia" EntityType="Self.tblBIAInterdependencia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblBIAMTD" EntityType="Self.tblBIAMTD" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblBIAPersonaClave" EntityType="Self.tblBIAPersonaClave" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblBIAPersonaRespaldoProceso" EntityType="Self.tblBIAPersonaRespaldoProceso" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblBIAProbabilidadRiesgo" EntityType="Self.tblBIAProbabilidadRiesgo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblBIAProceso" EntityType="Self.tblBIAProceso" Schema="dbo" store:Type="Tables" />
@@ -4700,6 +4805,18 @@
             <End Role="tblTipoFrecuencia" EntitySet="tblTipoFrecuencia" />
             <End Role="tblBIAMTD" EntitySet="tblBIAMTD" />
           </AssociationSet>
+          <AssociationSet Name="FK_tblBIAPersonaClave_tblBIAProceso" Association="Self.FK_tblBIAPersonaClave_tblBIAProceso">
+            <End Role="tblBIAProceso" EntitySet="tblBIAProceso" />
+            <End Role="tblBIAPersonaClave" EntitySet="tblBIAPersonaClave" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblBIAPersonaClave_tblDocumento" Association="Self.FK_tblBIAPersonaClave_tblDocumento">
+            <End Role="tblDocumento" EntitySet="tblDocumento" />
+            <End Role="tblBIAPersonaClave" EntitySet="tblBIAPersonaClave" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblBIAPersonaClave_tblDocumentoPersonaClave" Association="Self.FK_tblBIAPersonaClave_tblDocumentoPersonaClave">
+            <End Role="tblDocumentoPersonaClave" EntitySet="tblDocumentoPersonaClave" />
+            <End Role="tblBIAPersonaClave" EntitySet="tblBIAPersonaClave" />
+          </AssociationSet>
           <AssociationSet Name="FK_tblBIAPersonaRespaldoProceso_tblBIAProceso" Association="Self.FK_tblBIAPersonaRespaldoProceso_tblBIAProceso">
             <End Role="tblBIAProceso" EntitySet="tblBIAProceso" />
             <End Role="tblBIAPersonaRespaldoProceso" EntitySet="tblBIAPersonaRespaldoProceso" />
@@ -4964,9 +5081,17 @@
             <End Role="tblEmpresa" EntitySet="tblEmpresa" />
             <End Role="tblCargo" EntitySet="tblCargo" />
           </AssociationSet>
+          <AssociationSet Name="FK_tblEmpresa_tblCiudad" Association="Self.FK_tblEmpresa_tblCiudad">
+            <End Role="tblCiudad" EntitySet="tblCiudad" />
+            <End Role="tblEmpresa" EntitySet="tblEmpresa" />
+          </AssociationSet>
           <AssociationSet Name="FK_tblEmpresa_tblEscala_FK1" Association="Self.FK_tblEmpresa_tblEscala_FK1">
             <End Role="tblEmpresa" EntitySet="tblEmpresa" />
             <End Role="tblEscala" EntitySet="tblEscala" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblEmpresa_tblEstado" Association="Self.FK_tblEmpresa_tblEstado">
+            <End Role="tblEstado" EntitySet="tblEstado" />
+            <End Role="tblEmpresa" EntitySet="tblEmpresa" />
           </AssociationSet>
           <AssociationSet Name="FK_tblEmpresa_tblEstadoEmpresa" Association="Self.FK_tblEmpresa_tblEstadoEmpresa">
             <End Role="tblEstadoEmpresa" EntitySet="tblEstadoEmpresa" />
@@ -4975,6 +5100,10 @@
           <AssociationSet Name="FK_tblEmpresa_tblLocalidad_FK1" Association="Self.FK_tblEmpresa_tblLocalidad_FK1">
             <End Role="tblEmpresa" EntitySet="tblEmpresa" />
             <End Role="tblLocalidad" EntitySet="tblLocalidad" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblEmpresa_tblPais" Association="Self.FK_tblEmpresa_tblPais">
+            <End Role="tblPais" EntitySet="tblPais" />
+            <End Role="tblEmpresa" EntitySet="tblEmpresa" />
           </AssociationSet>
           <AssociationSet Name="FK_tblEmpresa_tblPersona_FK1" Association="Self.FK_tblEmpresa_tblPersona_FK1">
             <End Role="tblEmpresa" EntitySet="tblEmpresa" />
@@ -5335,10 +5464,9 @@
           <EntitySet Name="tblBIAEventoRiesgo" EntityType="BCMWeb.tblBIAEventoRiesgo" />
           <EntitySet Name="tblBIAFuenteRiesgo" EntityType="BCMWeb.tblBIAFuenteRiesgo" />
           <EntitySet Name="tblBIAGranImpacto" EntityType="BCMWeb.tblBIAGranImpacto" />
-          <EntitySet Name="tblBIAImpactoFinanciero" EntityType="BCMWeb.tblBIAImpactoFinanciero" />
-          <EntitySet Name="tblBIAImpactoOperacional" EntityType="BCMWeb.tblBIAImpactoOperacional" />
           <EntitySet Name="tblBIAInterdependencia" EntityType="BCMWeb.tblBIAInterdependencia" />
           <EntitySet Name="tblBIAMTD" EntityType="BCMWeb.tblBIAMTD" />
+          <EntitySet Name="tblBIAPersonaClave" EntityType="BCMWeb.tblBIAPersonaClave" />
           <EntitySet Name="tblBIAPersonaRespaldoProceso" EntityType="BCMWeb.tblBIAPersonaRespaldoProceso" />
           <EntitySet Name="tblBIAProbabilidadRiesgo" EntityType="BCMWeb.tblBIAProbabilidadRiesgo" />
           <EntitySet Name="tblBIAProceso" EntityType="BCMWeb.tblBIAProceso" />
@@ -5386,7 +5514,6 @@
           <EntitySet Name="tblEmpresa" EntityType="BCMWeb.tblEmpresa" />
           <EntitySet Name="tblEmpresaModulo" EntityType="BCMWeb.tblEmpresaModulo" />
           <EntitySet Name="tblEmpresaUsuario" EntityType="BCMWeb.tblEmpresaUsuario" />
-          <EntitySet Name="tblEscala" EntityType="BCMWeb.tblEscala" />
           <EntitySet Name="tblEstado" EntityType="BCMWeb.tblEstado" />
           <EntitySet Name="tblEstadoDocumento" EntityType="BCMWeb.tblEstadoDocumento" />
           <EntitySet Name="tblEstadoEmpresa" EntityType="BCMWeb.tblEstadoEmpresa" />
@@ -5571,10 +5698,6 @@
             <End Role="tblUnidadOrganizativa" EntitySet="tblUnidadOrganizativa" />
             <End Role="tblBIADocumento" EntitySet="tblBIADocumento" />
           </AssociationSet>
-          <AssociationSet Name="FK_tblBIAImpactoFinanciero_tblEscala" Association="BCMWeb.FK_tblBIAImpactoFinanciero_tblEscala">
-            <End Role="tblBIADocumento" EntitySet="tblBIADocumento" />
-            <End Role="tblBIAImpactoFinanciero" EntitySet="tblBIAImpactoFinanciero" />
-          </AssociationSet>
           <AssociationSet Name="FK_tblBIAProceso_tblBIADocumento" Association="BCMWeb.FK_tblBIAProceso_tblBIADocumento">
             <End Role="tblBIADocumento" EntitySet="tblBIADocumento" />
             <End Role="tblBIAProceso" EntitySet="tblBIAProceso" />
@@ -5623,26 +5746,6 @@
             <End Role="tblMes" EntitySet="tblMes" />
             <End Role="tblBIAGranImpacto" EntitySet="tblBIAGranImpacto" />
           </AssociationSet>
-          <AssociationSet Name="FK_tblBIAImpactoFinanciero_tblBIAProceso" Association="BCMWeb.FK_tblBIAImpactoFinanciero_tblBIAProceso">
-            <End Role="tblBIAProceso" EntitySet="tblBIAProceso" />
-            <End Role="tblBIAImpactoFinanciero" EntitySet="tblBIAImpactoFinanciero" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tblBIAImpactoFinanciero_tblTipoFrecuencia" Association="BCMWeb.FK_tblBIAImpactoFinanciero_tblTipoFrecuencia">
-            <End Role="tblTipoFrecuencia" EntitySet="tblTipoFrecuencia" />
-            <End Role="tblBIAImpactoFinanciero" EntitySet="tblBIAImpactoFinanciero" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tblBIAImpactoOperacional_tblBIAProceso" Association="BCMWeb.FK_tblBIAImpactoOperacional_tblBIAProceso">
-            <End Role="tblBIAProceso" EntitySet="tblBIAProceso" />
-            <End Role="tblBIAImpactoOperacional" EntitySet="tblBIAImpactoOperacional" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tblBIAImpactoOperacional_tblEscala" Association="BCMWeb.FK_tblBIAImpactoOperacional_tblEscala">
-            <End Role="tblEscala" EntitySet="tblEscala" />
-            <End Role="tblBIAImpactoOperacional" EntitySet="tblBIAImpactoOperacional" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tblBIAImpactoOperacional_tblTipoFrecuencia" Association="BCMWeb.FK_tblBIAImpactoOperacional_tblTipoFrecuencia">
-            <End Role="tblTipoFrecuencia" EntitySet="tblTipoFrecuencia" />
-            <End Role="tblBIAImpactoOperacional" EntitySet="tblBIAImpactoOperacional" />
-          </AssociationSet>
           <AssociationSet Name="FK_tblBIAInterdependencia_tblBIAProceso" Association="BCMWeb.FK_tblBIAInterdependencia_tblBIAProceso">
             <End Role="tblBIAProceso" EntitySet="tblBIAProceso" />
             <End Role="tblBIAInterdependencia" EntitySet="tblBIAInterdependencia" />
@@ -5651,13 +5754,21 @@
             <End Role="tblBIAProceso" EntitySet="tblBIAProceso" />
             <End Role="tblBIAMTD" EntitySet="tblBIAMTD" />
           </AssociationSet>
-          <AssociationSet Name="FK_tblBIAMTD_tblEscala" Association="BCMWeb.FK_tblBIAMTD_tblEscala">
-            <End Role="tblEscala" EntitySet="tblEscala" />
-            <End Role="tblBIAMTD" EntitySet="tblBIAMTD" />
-          </AssociationSet>
           <AssociationSet Name="FK_tblBIAMTD_tblTipoFrecuencia" Association="BCMWeb.FK_tblBIAMTD_tblTipoFrecuencia">
             <End Role="tblTipoFrecuencia" EntitySet="tblTipoFrecuencia" />
             <End Role="tblBIAMTD" EntitySet="tblBIAMTD" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblBIAPersonaClave_tblBIAProceso" Association="BCMWeb.FK_tblBIAPersonaClave_tblBIAProceso">
+            <End Role="tblBIAProceso" EntitySet="tblBIAProceso" />
+            <End Role="tblBIAPersonaClave" EntitySet="tblBIAPersonaClave" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblBIAPersonaClave_tblDocumento" Association="BCMWeb.FK_tblBIAPersonaClave_tblDocumento">
+            <End Role="tblDocumento" EntitySet="tblDocumento" />
+            <End Role="tblBIAPersonaClave" EntitySet="tblBIAPersonaClave" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblBIAPersonaClave_tblDocumentoPersonaClave" Association="BCMWeb.FK_tblBIAPersonaClave_tblDocumentoPersonaClave">
+            <End Role="tblDocumentoPersonaClave" EntitySet="tblDocumentoPersonaClave" />
+            <End Role="tblBIAPersonaClave" EntitySet="tblBIAPersonaClave" />
           </AssociationSet>
           <AssociationSet Name="FK_tblBIAPersonaRespaldoProceso_tblBIAProceso" Association="BCMWeb.FK_tblBIAPersonaRespaldoProceso_tblBIAProceso">
             <End Role="tblBIAProceso" EntitySet="tblBIAProceso" />
@@ -5711,17 +5822,9 @@
             <End Role="tblBIAProceso" EntitySet="tblBIAProceso" />
             <End Role="tblBIAWRT" EntitySet="tblBIAWRT" />
           </AssociationSet>
-          <AssociationSet Name="FK_tblBIARPO_tblEscala" Association="BCMWeb.FK_tblBIARPO_tblEscala">
-            <End Role="tblEscala" EntitySet="tblEscala" />
-            <End Role="tblBIARPO" EntitySet="tblBIARPO" />
-          </AssociationSet>
           <AssociationSet Name="FK_tblBIARPO_tblTipoFrecuencia" Association="BCMWeb.FK_tblBIARPO_tblTipoFrecuencia">
             <End Role="tblTipoFrecuencia" EntitySet="tblTipoFrecuencia" />
             <End Role="tblBIARPO" EntitySet="tblBIARPO" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tblBIARTO_tblEscala" Association="BCMWeb.FK_tblBIARTO_tblEscala">
-            <End Role="tblEscala" EntitySet="tblEscala" />
-            <End Role="tblBIARTO" EntitySet="tblBIARTO" />
           </AssociationSet>
           <AssociationSet Name="FK_tblBIARTO_tblTipoFrecuencia" Association="BCMWeb.FK_tblBIARTO_tblTipoFrecuencia">
             <End Role="tblTipoFrecuencia" EntitySet="tblTipoFrecuencia" />
@@ -5742,10 +5845,6 @@
           <AssociationSet Name="FK_tblBIAUnidadTrabajoPersonas_tblBIAUnidadTrabajoProceso" Association="BCMWeb.FK_tblBIAUnidadTrabajoPersonas_tblBIAUnidadTrabajoProceso">
             <End Role="tblBIAUnidadTrabajoProceso" EntitySet="tblBIAUnidadTrabajoProceso" />
             <End Role="tblBIAUnidadTrabajoPersonas" EntitySet="tblBIAUnidadTrabajoPersonas" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tblBIAWRT_tblEscala" Association="BCMWeb.FK_tblBIAWRT_tblEscala">
-            <End Role="tblEscala" EntitySet="tblEscala" />
-            <End Role="tblBIAWRT" EntitySet="tblBIAWRT" />
           </AssociationSet>
           <AssociationSet Name="FK_tblBIAWRT_tblTipoFrecuencia" Association="BCMWeb.FK_tblBIAWRT_tblTipoFrecuencia">
             <End Role="tblTipoFrecuencia" EntitySet="tblTipoFrecuencia" />
@@ -5770,6 +5869,10 @@
           <AssociationSet Name="FK_tblCulture_Ciudad_tblCiudad" Association="BCMWeb.FK_tblCulture_Ciudad_tblCiudad">
             <End Role="tblCiudad" EntitySet="tblCiudad" />
             <End Role="tblCultura_Ciudad" EntitySet="tblCultura_Ciudad" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblEmpresa_tblCiudad" Association="BCMWeb.FK_tblEmpresa_tblCiudad">
+            <End Role="tblCiudad" EntitySet="tblCiudad" />
+            <End Role="tblEmpresa" EntitySet="tblEmpresa" />
           </AssociationSet>
           <AssociationSet Name="FK_tblLocalidad_tblCiudad" Association="BCMWeb.FK_tblLocalidad_tblCiudad">
             <End Role="tblCiudad" EntitySet="tblCiudad" />
@@ -5931,9 +6034,9 @@
             <End Role="tblEmpresa" EntitySet="tblEmpresa" />
             <End Role="tblDocumentoPersonaClave" EntitySet="tblDocumentoPersonaClave" />
           </AssociationSet>
-          <AssociationSet Name="FK_tblEmpresa_tblEscala_FK1" Association="BCMWeb.FK_tblEmpresa_tblEscala_FK1">
+          <AssociationSet Name="FK_tblEmpresa_tblEstado" Association="BCMWeb.FK_tblEmpresa_tblEstado">
+            <End Role="tblEstado" EntitySet="tblEstado" />
             <End Role="tblEmpresa" EntitySet="tblEmpresa" />
-            <End Role="tblEscala" EntitySet="tblEscala" />
           </AssociationSet>
           <AssociationSet Name="FK_tblEmpresa_tblEstadoEmpresa" Association="BCMWeb.FK_tblEmpresa_tblEstadoEmpresa">
             <End Role="tblEstadoEmpresa" EntitySet="tblEstadoEmpresa" />
@@ -5942,6 +6045,10 @@
           <AssociationSet Name="FK_tblEmpresa_tblLocalidad_FK1" Association="BCMWeb.FK_tblEmpresa_tblLocalidad_FK1">
             <End Role="tblEmpresa" EntitySet="tblEmpresa" />
             <End Role="tblLocalidad" EntitySet="tblLocalidad" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblEmpresa_tblPais" Association="BCMWeb.FK_tblEmpresa_tblPais">
+            <End Role="tblPais" EntitySet="tblPais" />
+            <End Role="tblEmpresa" EntitySet="tblEmpresa" />
           </AssociationSet>
           <AssociationSet Name="FK_tblEmpresa_tblPersona_FK1" Association="BCMWeb.FK_tblEmpresa_tblPersona_FK1">
             <End Role="tblEmpresa" EntitySet="tblEmpresa" />
@@ -6030,10 +6137,6 @@
           <AssociationSet Name="FK_tblEmpresaUsuario_tblUsuario" Association="BCMWeb.FK_tblEmpresaUsuario_tblUsuario">
             <End Role="tblUsuario" EntitySet="tblUsuario" />
             <End Role="tblEmpresaUsuario" EntitySet="tblEmpresaUsuario" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tblEscala_tblTipoEscala" Association="BCMWeb.FK_tblEscala_tblTipoEscala">
-            <End Role="tblTipoEscala" EntitySet="tblTipoEscala" />
-            <End Role="tblEscala" EntitySet="tblEscala" />
           </AssociationSet>
           <AssociationSet Name="FK_tblLocalidad_tblEstado" Association="BCMWeb.FK_tblLocalidad_tblEstado">
             <End Role="tblEstado" EntitySet="tblEstado" />
@@ -6222,6 +6325,57 @@
           <AssociationSet Name="FK_tblUsuarioUnidadOrganizativa_tblUsuario" Association="BCMWeb.FK_tblUsuarioUnidadOrganizativa_tblUsuario">
             <End Role="tblUsuario" EntitySet="tblUsuario" />
             <End Role="tblUsuarioUnidadOrganizativa" EntitySet="tblUsuarioUnidadOrganizativa" />
+          </AssociationSet>
+          <EntitySet Name="tblBIAImpactoFinanciero" EntityType="BCMWeb.tblBIAImpactoFinanciero" />
+          <EntitySet Name="tblBIAImpactoOperacional" EntityType="BCMWeb.tblBIAImpactoOperacional" />
+          <AssociationSet Name="FK_tblBIAImpactoFinanciero_tblEscala" Association="BCMWeb.FK_tblBIAImpactoFinanciero_tblEscala">
+            <End Role="tblBIADocumento" EntitySet="tblBIADocumento" />
+            <End Role="tblBIAImpactoFinanciero" EntitySet="tblBIAImpactoFinanciero" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblBIAImpactoFinanciero_tblBIAProceso" Association="BCMWeb.FK_tblBIAImpactoFinanciero_tblBIAProceso">
+            <End Role="tblBIAProceso" EntitySet="tblBIAProceso" />
+            <End Role="tblBIAImpactoFinanciero" EntitySet="tblBIAImpactoFinanciero" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblBIAImpactoFinanciero_tblTipoFrecuencia" Association="BCMWeb.FK_tblBIAImpactoFinanciero_tblTipoFrecuencia">
+            <End Role="tblTipoFrecuencia" EntitySet="tblTipoFrecuencia" />
+            <End Role="tblBIAImpactoFinanciero" EntitySet="tblBIAImpactoFinanciero" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblBIAImpactoOperacional_tblBIAProceso" Association="BCMWeb.FK_tblBIAImpactoOperacional_tblBIAProceso">
+            <End Role="tblBIAProceso" EntitySet="tblBIAProceso" />
+            <End Role="tblBIAImpactoOperacional" EntitySet="tblBIAImpactoOperacional" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblBIAImpactoOperacional_tblTipoFrecuencia" Association="BCMWeb.FK_tblBIAImpactoOperacional_tblTipoFrecuencia">
+            <End Role="tblTipoFrecuencia" EntitySet="tblTipoFrecuencia" />
+            <End Role="tblBIAImpactoOperacional" EntitySet="tblBIAImpactoOperacional" />
+          </AssociationSet>
+          <EntitySet Name="tblEscala" EntityType="BCMWeb.tblEscala" />
+          <AssociationSet Name="FK_tblBIAImpactoOperacional_tblEscala" Association="BCMWeb.FK_tblBIAImpactoOperacional_tblEscala">
+            <End Role="tblEscala" EntitySet="tblEscala" />
+            <End Role="tblBIAImpactoOperacional" EntitySet="tblBIAImpactoOperacional" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblBIAMTD_tblEscala" Association="BCMWeb.FK_tblBIAMTD_tblEscala">
+            <End Role="tblEscala" EntitySet="tblEscala" />
+            <End Role="tblBIAMTD" EntitySet="tblBIAMTD" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblBIARPO_tblEscala" Association="BCMWeb.FK_tblBIARPO_tblEscala">
+            <End Role="tblEscala" EntitySet="tblEscala" />
+            <End Role="tblBIARPO" EntitySet="tblBIARPO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblBIARTO_tblEscala" Association="BCMWeb.FK_tblBIARTO_tblEscala">
+            <End Role="tblEscala" EntitySet="tblEscala" />
+            <End Role="tblBIARTO" EntitySet="tblBIARTO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblBIAWRT_tblEscala" Association="BCMWeb.FK_tblBIAWRT_tblEscala">
+            <End Role="tblEscala" EntitySet="tblEscala" />
+            <End Role="tblBIAWRT" EntitySet="tblBIAWRT" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblEmpresa_tblEscala_FK1" Association="BCMWeb.FK_tblEmpresa_tblEscala_FK1">
+            <End Role="tblEmpresa" EntitySet="tblEmpresa" />
+            <End Role="tblEscala" EntitySet="tblEscala" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblEscala_tblTipoEscala" Association="BCMWeb.FK_tblEscala_tblTipoEscala">
+            <End Role="tblTipoEscala" EntitySet="tblTipoEscala" />
+            <End Role="tblEscala" EntitySet="tblEscala" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="tblAuditoria">
@@ -6573,10 +6727,10 @@
           <Property Name="IdTipoDocumento" Type="Int64" />
           <NavigationProperty Name="tblBIAComentario" Relationship="BCMWeb.FK_tblBIAComentario_tblBIADocumento" FromRole="tblBIADocumento" ToRole="tblBIAComentario" />
           <NavigationProperty Name="tblUnidadOrganizativa" Relationship="BCMWeb.FK_tblBIADocumento_tblUnidadOrganizativa" FromRole="tblBIADocumento" ToRole="tblUnidadOrganizativa" />
-          <NavigationProperty Name="tblBIAImpactoFinanciero" Relationship="BCMWeb.FK_tblBIAImpactoFinanciero_tblEscala" FromRole="tblBIADocumento" ToRole="tblBIAImpactoFinanciero" />
           <NavigationProperty Name="tblBIAProceso" Relationship="BCMWeb.FK_tblBIAProceso_tblBIADocumento" FromRole="tblBIADocumento" ToRole="tblBIAProceso" />
           <NavigationProperty Name="tblDocumento" Relationship="BCMWeb.FK_tblDocumento_tblBIADocumento" FromRole="tblBIADocumento" ToRole="tblDocumento" />
           <NavigationProperty Name="tblEmpresa" Relationship="BCMWeb.FK_tblEmpresa_tblBIADocumento_FK1" FromRole="tblBIADocumento" ToRole="tblEmpresa" />
+          <NavigationProperty Name="tblBIAImpactoFinanciero" Relationship="BCMWeb.FK_tblBIAImpactoFinanciero_tblEscala" FromRole="tblBIADocumento" ToRole="tblBIAImpactoFinanciero" />
         </EntityType>
         <EntityType Name="tblBIAEntrada">
           <Key>
@@ -6673,44 +6827,6 @@
           <NavigationProperty Name="tblBIAProceso" Relationship="BCMWeb.FK_tblBIAGranImpacto_tblBIAProceso" FromRole="tblBIAGranImpacto" ToRole="tblBIAProceso" />
           <NavigationProperty Name="tblMes" Relationship="BCMWeb.FK_tblBIAGranImpacto_tblMes" FromRole="tblBIAGranImpacto" ToRole="tblMes" />
         </EntityType>
-        <EntityType Name="tblBIAImpactoFinanciero">
-          <Key>
-            <PropertyRef Name="IdEmpresa" />
-            <PropertyRef Name="IdDocumentoBIA" />
-            <PropertyRef Name="IdProceso" />
-            <PropertyRef Name="IdImpactoFinanciero" />
-          </Key>
-          <Property Name="IdEmpresa" Type="Int64" Nullable="false" />
-          <Property Name="IdDocumentoBIA" Type="Int64" Nullable="false" />
-          <Property Name="IdProceso" Type="Int64" Nullable="false" />
-          <Property Name="IdImpactoFinanciero" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IdTipoFrecuencia" Type="Int64" Nullable="false" />
-          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Impacto" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="IdEscala" Type="Int64" Nullable="false" />
-          <NavigationProperty Name="tblBIADocumento" Relationship="BCMWeb.FK_tblBIAImpactoFinanciero_tblEscala" FromRole="tblBIAImpactoFinanciero" ToRole="tblBIADocumento" />
-          <NavigationProperty Name="tblBIAProceso" Relationship="BCMWeb.FK_tblBIAImpactoFinanciero_tblBIAProceso" FromRole="tblBIAImpactoFinanciero" ToRole="tblBIAProceso" />
-          <NavigationProperty Name="tblTipoFrecuencia" Relationship="BCMWeb.FK_tblBIAImpactoFinanciero_tblTipoFrecuencia" FromRole="tblBIAImpactoFinanciero" ToRole="tblTipoFrecuencia" />
-        </EntityType>
-        <EntityType Name="tblBIAImpactoOperacional">
-          <Key>
-            <PropertyRef Name="IdEmpresa" />
-            <PropertyRef Name="IdDocumentoBIA" />
-            <PropertyRef Name="IdProceso" />
-            <PropertyRef Name="IdImpactoOperacional" />
-          </Key>
-          <Property Name="IdEmpresa" Type="Int64" Nullable="false" />
-          <Property Name="IdDocumentoBIA" Type="Int64" Nullable="false" />
-          <Property Name="IdProceso" Type="Int64" Nullable="false" />
-          <Property Name="IdImpactoOperacional" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IdTipoFrecuencia" Type="Int64" Nullable="false" />
-          <Property Name="ImpactoOperacional" Type="String" Nullable="false" MaxLength="450" FixedLength="false" Unicode="true" />
-          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="IdEscala" Type="Int64" Nullable="false" />
-          <NavigationProperty Name="tblBIAProceso" Relationship="BCMWeb.FK_tblBIAImpactoOperacional_tblBIAProceso" FromRole="tblBIAImpactoOperacional" ToRole="tblBIAProceso" />
-          <NavigationProperty Name="tblEscala" Relationship="BCMWeb.FK_tblBIAImpactoOperacional_tblEscala" FromRole="tblBIAImpactoOperacional" ToRole="tblEscala" />
-          <NavigationProperty Name="tblTipoFrecuencia" Relationship="BCMWeb.FK_tblBIAImpactoOperacional_tblTipoFrecuencia" FromRole="tblBIAImpactoOperacional" ToRole="tblTipoFrecuencia" />
-        </EntityType>
         <EntityType Name="tblBIAInterdependencia">
           <Key>
             <PropertyRef Name="IdEmpresa" />
@@ -6742,8 +6858,25 @@
           <Property Name="IdTipoFrecuencia" Type="Int64" />
           <Property Name="IdEscala" Type="Int64" />
           <NavigationProperty Name="tblBIAProceso" Relationship="BCMWeb.FK_tblBIAMTD_tblBIAProceso" FromRole="tblBIAMTD" ToRole="tblBIAProceso" />
-          <NavigationProperty Name="tblEscala" Relationship="BCMWeb.FK_tblBIAMTD_tblEscala" FromRole="tblBIAMTD" ToRole="tblEscala" />
           <NavigationProperty Name="tblTipoFrecuencia" Relationship="BCMWeb.FK_tblBIAMTD_tblTipoFrecuencia" FromRole="tblBIAMTD" ToRole="tblTipoFrecuencia" />
+          <NavigationProperty Name="tblEscala" Relationship="BCMWeb.FK_tblBIAMTD_tblEscala" FromRole="tblBIAMTD" ToRole="tblEscala" />
+        </EntityType>
+        <EntityType Name="tblBIAPersonaClave">
+          <Key>
+            <PropertyRef Name="IdEmpresa" />
+            <PropertyRef Name="IdDocumentoBIA" />
+            <PropertyRef Name="IdProceso" />
+            <PropertyRef Name="IdPersonaClave" />
+          </Key>
+          <Property Name="IdEmpresa" Type="Int64" Nullable="false" />
+          <Property Name="IdDocumentoBIA" Type="Int64" Nullable="false" />
+          <Property Name="IdProceso" Type="Int64" Nullable="false" />
+          <Property Name="IdPersonaClave" Type="Int64" Nullable="false" />
+          <Property Name="IdDocumento" Type="Int64" Nullable="false" />
+          <Property Name="IdTipoDocumento" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="tblBIAProceso" Relationship="BCMWeb.FK_tblBIAPersonaClave_tblBIAProceso" FromRole="tblBIAPersonaClave" ToRole="tblBIAProceso" />
+          <NavigationProperty Name="tblDocumento" Relationship="BCMWeb.FK_tblBIAPersonaClave_tblDocumento" FromRole="tblBIAPersonaClave" ToRole="tblDocumento" />
+          <NavigationProperty Name="tblDocumentoPersonaClave" Relationship="BCMWeb.FK_tblBIAPersonaClave_tblDocumentoPersonaClave" FromRole="tblBIAPersonaClave" ToRole="tblDocumentoPersonaClave" />
         </EntityType>
         <EntityType Name="tblBIAPersonaRespaldoProceso">
           <Key>
@@ -6796,10 +6929,9 @@
           <NavigationProperty Name="tblBIADocumento" Relationship="BCMWeb.FK_tblBIAProceso_tblBIADocumento" FromRole="tblBIAProceso" ToRole="tblBIADocumento" />
           <NavigationProperty Name="tblBIAEntrada" Relationship="BCMWeb.FK_tblBIAEntrada_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIAEntrada" />
           <NavigationProperty Name="tblBIAGranImpacto" Relationship="BCMWeb.FK_tblBIAGranImpacto_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIAGranImpacto" />
-          <NavigationProperty Name="tblBIAImpactoFinanciero" Relationship="BCMWeb.FK_tblBIAImpactoFinanciero_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIAImpactoFinanciero" />
-          <NavigationProperty Name="tblBIAImpactoOperacional" Relationship="BCMWeb.FK_tblBIAImpactoOperacional_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIAImpactoOperacional" />
           <NavigationProperty Name="tblBIAInterdependencia" Relationship="BCMWeb.FK_tblBIAInterdependencia_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIAInterdependencia" />
           <NavigationProperty Name="tblBIAMTD" Relationship="BCMWeb.FK_tblBIAMTD_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIAMTD" />
+          <NavigationProperty Name="tblBIAPersonaClave" Relationship="BCMWeb.FK_tblBIAPersonaClave_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIAPersonaClave" />
           <NavigationProperty Name="tblBIAPersonaRespaldoProceso" Relationship="BCMWeb.FK_tblBIAPersonaRespaldoProceso_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIAPersonaRespaldoProceso" />
           <NavigationProperty Name="tblEstadoProceso" Relationship="BCMWeb.FK_tblBIAProceso_tblEstadoProceso" FromRole="tblBIAProceso" ToRole="tblEstadoProceso" />
           <NavigationProperty Name="tblUnidadOrganizativa" Relationship="BCMWeb.FK_tblBIAProceso_tblUnidadOrganizativa" FromRole="tblBIAProceso" ToRole="tblUnidadOrganizativa" />
@@ -6811,6 +6943,8 @@
           <NavigationProperty Name="tblBIARTO" Relationship="BCMWeb.FK_tblBIARTO_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIARTO" />
           <NavigationProperty Name="tblBIAUnidadTrabajoProceso" Relationship="BCMWeb.FK_tblBIAUnidadTrabajoProceso_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIAUnidadTrabajoProceso" />
           <NavigationProperty Name="tblBIAWRT" Relationship="BCMWeb.FK_tblBIAWRT_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIAWRT" />
+          <NavigationProperty Name="tblBIAImpactoFinanciero" Relationship="BCMWeb.FK_tblBIAImpactoFinanciero_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIAImpactoFinanciero" />
+          <NavigationProperty Name="tblBIAImpactoOperacional" Relationship="BCMWeb.FK_tblBIAImpactoOperacional_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIAImpactoOperacional" />
         </EntityType>
         <EntityType Name="tblBIAProcesoAlterno">
           <Key>
@@ -6885,8 +7019,8 @@
           <Property Name="IdTipoFrecuencia" Type="Int64" Nullable="false" />
           <Property Name="IdEscala" Type="Int64" Nullable="false" />
           <NavigationProperty Name="tblBIAProceso" Relationship="BCMWeb.FK_tblBIARPO_tblBIAProceso" FromRole="tblBIARPO" ToRole="tblBIAProceso" />
-          <NavigationProperty Name="tblEscala" Relationship="BCMWeb.FK_tblBIARPO_tblEscala" FromRole="tblBIARPO" ToRole="tblEscala" />
           <NavigationProperty Name="tblTipoFrecuencia" Relationship="BCMWeb.FK_tblBIARPO_tblTipoFrecuencia" FromRole="tblBIARPO" ToRole="tblTipoFrecuencia" />
+          <NavigationProperty Name="tblEscala" Relationship="BCMWeb.FK_tblBIARPO_tblEscala" FromRole="tblBIARPO" ToRole="tblEscala" />
         </EntityType>
         <EntityType Name="tblBIARTO">
           <Key>
@@ -6903,8 +7037,8 @@
           <Property Name="IdTipoFrecuencia" Type="Int64" Nullable="false" />
           <Property Name="IdEscala" Type="Int64" Nullable="false" />
           <NavigationProperty Name="tblBIAProceso" Relationship="BCMWeb.FK_tblBIARTO_tblBIAProceso" FromRole="tblBIARTO" ToRole="tblBIAProceso" />
-          <NavigationProperty Name="tblEscala" Relationship="BCMWeb.FK_tblBIARTO_tblEscala" FromRole="tblBIARTO" ToRole="tblEscala" />
           <NavigationProperty Name="tblTipoFrecuencia" Relationship="BCMWeb.FK_tblBIARTO_tblTipoFrecuencia" FromRole="tblBIARTO" ToRole="tblTipoFrecuencia" />
+          <NavigationProperty Name="tblEscala" Relationship="BCMWeb.FK_tblBIARTO_tblEscala" FromRole="tblBIARTO" ToRole="tblEscala" />
         </EntityType>
         <EntityType Name="tblBIAUnidadTrabajo">
           <Key>
@@ -6969,8 +7103,8 @@
           <Property Name="IdTipoFrecuencia" Type="Int64" />
           <Property Name="IdEscala" Type="Int64" />
           <NavigationProperty Name="tblBIAProceso" Relationship="BCMWeb.FK_tblBIAWRT_tblBIAProceso" FromRole="tblBIAWRT" ToRole="tblBIAProceso" />
-          <NavigationProperty Name="tblEscala" Relationship="BCMWeb.FK_tblBIAWRT_tblEscala" FromRole="tblBIAWRT" ToRole="tblEscala" />
           <NavigationProperty Name="tblTipoFrecuencia" Relationship="BCMWeb.FK_tblBIAWRT_tblTipoFrecuencia" FromRole="tblBIAWRT" ToRole="tblTipoFrecuencia" />
+          <NavigationProperty Name="tblEscala" Relationship="BCMWeb.FK_tblBIAWRT_tblEscala" FromRole="tblBIAWRT" ToRole="tblEscala" />
         </EntityType>
         <EntityType Name="tblCargo">
           <Key>
@@ -6995,6 +7129,7 @@
           <NavigationProperty Name="tblEstado" Relationship="BCMWeb.FK_tblCiudad_tblEstado" FromRole="tblCiudad" ToRole="tblEstado" />
           <NavigationProperty Name="tblPais" Relationship="BCMWeb.FK_tblCiudad_tblPais" FromRole="tblCiudad" ToRole="tblPais" />
           <NavigationProperty Name="tblCultura_Ciudad" Relationship="BCMWeb.FK_tblCulture_Ciudad_tblCiudad" FromRole="tblCiudad" ToRole="tblCultura_Ciudad" />
+          <NavigationProperty Name="tblEmpresa" Relationship="BCMWeb.FK_tblEmpresa_tblCiudad" FromRole="tblCiudad" ToRole="tblEmpresa" />
           <NavigationProperty Name="tblLocalidad" Relationship="BCMWeb.FK_tblLocalidad_tblCiudad" FromRole="tblCiudad" ToRole="tblLocalidad" />
           <NavigationProperty Name="tblPersonaDireccion" Relationship="BCMWeb.FK_tblPersonaDireccion_tblCiudad" FromRole="tblCiudad" ToRole="tblPersonaDireccion" />
         </EntityType>
@@ -7236,6 +7371,7 @@
           <NavigationProperty Name="tblAuditoria" Relationship="BCMWeb.FK_tblAuditoria_tblDocumento" FromRole="tblDocumento" ToRole="tblAuditoria" />
           <NavigationProperty Name="tblBCPDocumento" Relationship="BCMWeb.FK_tblBCPDocumento_tblDocumento" FromRole="tblDocumento" ToRole="tblBCPDocumento" />
           <NavigationProperty Name="tblBIADocumento" Relationship="BCMWeb.FK_tblDocumento_tblBIADocumento" FromRole="tblDocumento" ToRole="tblBIADocumento" />
+          <NavigationProperty Name="tblBIAPersonaClave" Relationship="BCMWeb.FK_tblBIAPersonaClave_tblDocumento" FromRole="tblDocumento" ToRole="tblBIAPersonaClave" />
           <NavigationProperty Name="tblDocumentoAprobacion" Relationship="BCMWeb.FK_tblAprobacion_tblDocumento" FromRole="tblDocumento" ToRole="tblDocumentoAprobacion" />
           <NavigationProperty Name="tblDocumentoCertificacion" Relationship="BCMWeb.FK_tblCertificacion_tblDocumento" FromRole="tblDocumento" ToRole="tblDocumentoCertificacion" />
           <NavigationProperty Name="tblEmpresa" Relationship="BCMWeb.FK_tblDocumento_tblEmpresa" FromRole="tblDocumento" ToRole="tblEmpresa" />
@@ -7369,6 +7505,7 @@
           <Property Name="Correo" Type="String" Nullable="false" MaxLength="450" FixedLength="false" Unicode="true" />
           <Property Name="DireccionHabitacion" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Principal" Type="Boolean" />
+          <NavigationProperty Name="tblBIAPersonaClave" Relationship="BCMWeb.FK_tblBIAPersonaClave_tblDocumentoPersonaClave" FromRole="tblDocumentoPersonaClave" ToRole="tblBIAPersonaClave" />
           <NavigationProperty Name="tblDocumento" Relationship="BCMWeb.FK_tblDocumentoPersonaClave_tblDocumento" FromRole="tblDocumentoPersonaClave" ToRole="tblDocumento" />
           <NavigationProperty Name="tblPersona" Relationship="BCMWeb.FK_tblDocumentoPersonaClave_tblPersona" FromRole="tblDocumentoPersonaClave" ToRole="tblPersona" />
           <NavigationProperty Name="tblEmpresa" Relationship="BCMWeb.FK_tblPersonaClave_tblEmpresa" FromRole="tblDocumentoPersonaClave" ToRole="tblEmpresa" />
@@ -7391,6 +7528,9 @@
           <Property Name="CrearUnidadTrabajo" Type="Boolean" />
           <Property Name="CrearAplicaciones" Type="Boolean" />
           <Property Name="CrearDocumento" Type="Boolean" />
+          <Property Name="IdPais" Type="Int64" />
+          <Property Name="IdPaisEstado" Type="Int64" />
+          <Property Name="IdPaisEstadoCiudad" Type="Int64" />
           <NavigationProperty Name="tblAuditoria" Relationship="BCMWeb.FK_tblEmpresa_tblAuditoria_FK1" FromRole="tblEmpresa" ToRole="tblAuditoria" />
           <NavigationProperty Name="tblAuditoriaProcesoCritico" Relationship="BCMWeb.FK_tblAuditoriaProcesoCritico_tblEmpresa" FromRole="tblEmpresa" ToRole="tblAuditoriaProcesoCritico" />
           <NavigationProperty Name="tblBCPDocumento" Relationship="BCMWeb.FK_tblEmpresa_tblBCPDocumento_FK1" FromRole="tblEmpresa" ToRole="tblBCPDocumento" />
@@ -7402,11 +7542,13 @@
           <NavigationProperty Name="tblBIAProbabilidadRiesgo" Relationship="BCMWeb.FK_tblBIAProbabilidadRiesgo_tblEmpresa" FromRole="tblEmpresa" ToRole="tblBIAProbabilidadRiesgo" />
           <NavigationProperty Name="tblBIAUnidadTrabajo" Relationship="BCMWeb.FK_tblBIAUnidadTrabajo_tblEmpresa" FromRole="tblEmpresa" ToRole="tblBIAUnidadTrabajo" />
           <NavigationProperty Name="tblCargo" Relationship="BCMWeb.FK_tblEmpresa_tblCargo_FK1" FromRole="tblEmpresa" ToRole="tblCargo" />
+          <NavigationProperty Name="tblCiudad" Relationship="BCMWeb.FK_tblEmpresa_tblCiudad" FromRole="tblEmpresa" ToRole="tblCiudad" />
           <NavigationProperty Name="tblDocumento" Relationship="BCMWeb.FK_tblDocumento_tblEmpresa" FromRole="tblEmpresa" ToRole="tblDocumento" />
           <NavigationProperty Name="tblDocumentoPersonaClave" Relationship="BCMWeb.FK_tblPersonaClave_tblEmpresa" FromRole="tblEmpresa" ToRole="tblDocumentoPersonaClave" />
-          <NavigationProperty Name="tblEscala" Relationship="BCMWeb.FK_tblEmpresa_tblEscala_FK1" FromRole="tblEmpresa" ToRole="tblEscala" />
+          <NavigationProperty Name="tblEstado" Relationship="BCMWeb.FK_tblEmpresa_tblEstado" FromRole="tblEmpresa" ToRole="tblEstado" />
           <NavigationProperty Name="tblEstadoEmpresa" Relationship="BCMWeb.FK_tblEmpresa_tblEstadoEmpresa" FromRole="tblEmpresa" ToRole="tblEstadoEmpresa" />
           <NavigationProperty Name="tblLocalidad" Relationship="BCMWeb.FK_tblEmpresa_tblLocalidad_FK1" FromRole="tblEmpresa" ToRole="tblLocalidad" />
+          <NavigationProperty Name="tblPais" Relationship="BCMWeb.FK_tblEmpresa_tblPais" FromRole="tblEmpresa" ToRole="tblPais" />
           <NavigationProperty Name="tblPersona" Relationship="BCMWeb.FK_tblEmpresa_tblPersona_FK1" FromRole="tblEmpresa" ToRole="tblPersona" />
           <NavigationProperty Name="tblProveedor" Relationship="BCMWeb.FK_tblEmpresa_tblProveedor_FK1" FromRole="tblEmpresa" ToRole="tblProveedor" />
           <NavigationProperty Name="tblUnidadOrganizativa" Relationship="BCMWeb.FK_tblEmpresa_tblUnidadOrganizativa_FK1" FromRole="tblEmpresa" ToRole="tblUnidadOrganizativa" />
@@ -7426,6 +7568,7 @@
           <NavigationProperty Name="tblPMTResponsableUpdate" Relationship="BCMWeb.FK_tblPMTResponsableUpdate_tblEmpresa" FromRole="tblEmpresa" ToRole="tblPMTResponsableUpdate" />
           <NavigationProperty Name="tblProducto" Relationship="BCMWeb.FK_tblProducto_tblEmpresa" FromRole="tblEmpresa" ToRole="tblProducto" />
           <NavigationProperty Name="tblUsuarioUnidadOrganizativa" Relationship="BCMWeb.FK_tblUsuarioUnidadOrganizativa_tblEmpresa" FromRole="tblEmpresa" ToRole="tblUsuarioUnidadOrganizativa" />
+          <NavigationProperty Name="tblEscala" Relationship="BCMWeb.FK_tblEmpresa_tblEscala_FK1" FromRole="tblEmpresa" ToRole="tblEscala" />
         </EntityType>
         <EntityType Name="tblEmpresaModulo">
           <Key>
@@ -7451,24 +7594,6 @@
           <NavigationProperty Name="tblNivelUsuario" Relationship="BCMWeb.FK_tblEmpresaUsuario_tblNivelUsuario" FromRole="tblEmpresaUsuario" ToRole="tblNivelUsuario" />
           <NavigationProperty Name="tblUsuario" Relationship="BCMWeb.FK_tblEmpresaUsuario_tblUsuario" FromRole="tblEmpresaUsuario" ToRole="tblUsuario" />
         </EntityType>
-        <EntityType Name="tblEscala">
-          <Key>
-            <PropertyRef Name="IdEmpresa" />
-            <PropertyRef Name="IdEscala" />
-          </Key>
-          <Property Name="IdEmpresa" Type="Int64" Nullable="false" />
-          <Property Name="IdEscala" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IdTipoEscala" Type="Int64" Nullable="false" />
-          <Property Name="Valor" Type="Int16" Nullable="false" />
-          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="450" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="tblBIAImpactoOperacional" Relationship="BCMWeb.FK_tblBIAImpactoOperacional_tblEscala" FromRole="tblEscala" ToRole="tblBIAImpactoOperacional" />
-          <NavigationProperty Name="tblBIAMTD" Relationship="BCMWeb.FK_tblBIAMTD_tblEscala" FromRole="tblEscala" ToRole="tblBIAMTD" />
-          <NavigationProperty Name="tblBIARPO" Relationship="BCMWeb.FK_tblBIARPO_tblEscala" FromRole="tblEscala" ToRole="tblBIARPO" />
-          <NavigationProperty Name="tblBIARTO" Relationship="BCMWeb.FK_tblBIARTO_tblEscala" FromRole="tblEscala" ToRole="tblBIARTO" />
-          <NavigationProperty Name="tblBIAWRT" Relationship="BCMWeb.FK_tblBIAWRT_tblEscala" FromRole="tblEscala" ToRole="tblBIAWRT" />
-          <NavigationProperty Name="tblEmpresa" Relationship="BCMWeb.FK_tblEmpresa_tblEscala_FK1" FromRole="tblEscala" ToRole="tblEmpresa" />
-          <NavigationProperty Name="tblTipoEscala" Relationship="BCMWeb.FK_tblEscala_tblTipoEscala" FromRole="tblEscala" ToRole="tblTipoEscala" />
-        </EntityType>
         <EntityType Name="tblEstado">
           <Key>
             <PropertyRef Name="IdPais" />
@@ -7478,6 +7603,7 @@
           <Property Name="IdEstado" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="tblCiudad" Relationship="BCMWeb.FK_tblCiudad_tblEstado" FromRole="tblEstado" ToRole="tblCiudad" />
           <NavigationProperty Name="tblCultura_Estado" Relationship="BCMWeb.FK_tblCultura_Estado_tblEstado" FromRole="tblEstado" ToRole="tblCultura_Estado" />
+          <NavigationProperty Name="tblEmpresa" Relationship="BCMWeb.FK_tblEmpresa_tblEstado" FromRole="tblEstado" ToRole="tblEmpresa" />
           <NavigationProperty Name="tblLocalidad" Relationship="BCMWeb.FK_tblLocalidad_tblEstado" FromRole="tblEstado" ToRole="tblLocalidad" />
           <NavigationProperty Name="tblPais" Relationship="BCMWeb.FK_tblPais_tblEstado_FK1" FromRole="tblEstado" ToRole="tblPais" />
           <NavigationProperty Name="tblPersonaDireccion" Relationship="BCMWeb.FK_tblPersonaDireccion_tblEstado" FromRole="tblEstado" ToRole="tblPersonaDireccion" />
@@ -7645,6 +7771,7 @@
           <Property Name="IdPais" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="tblCiudad" Relationship="BCMWeb.FK_tblCiudad_tblPais" FromRole="tblPais" ToRole="tblCiudad" />
           <NavigationProperty Name="tblCultura_Pais" Relationship="BCMWeb.FK_tblCulture_Pais_tblPais" FromRole="tblPais" ToRole="tblCultura_Pais" />
+          <NavigationProperty Name="tblEmpresa" Relationship="BCMWeb.FK_tblEmpresa_tblPais" FromRole="tblPais" ToRole="tblEmpresa" />
           <NavigationProperty Name="tblEstado" Relationship="BCMWeb.FK_tblPais_tblEstado_FK1" FromRole="tblPais" ToRole="tblEstado" />
           <NavigationProperty Name="tblLocalidad" Relationship="BCMWeb.FK_tblLocalidad_tblPais" FromRole="tblPais" ToRole="tblLocalidad" />
           <NavigationProperty Name="tblPersonaDireccion" Relationship="BCMWeb.FK_tblPersonaDireccion_tblPais" FromRole="tblPais" ToRole="tblPersonaDireccion" />
@@ -7859,9 +7986,9 @@
           <Property Name="IdPersona" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Nombre" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Identificacion" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="IdUnidadOrganizativa" Type="Int64" Nullable="false" />
-          <Property Name="IdCargo" Type="Int64" Nullable="false" />
-          <Property Name="IdUsuario" Type="Int64" Nullable="false" />
+          <Property Name="IdUnidadOrganizativa" Type="Int64" />
+          <Property Name="IdCargo" Type="Int64" />
+          <Property Name="IdUsuario" Type="Int64" />
           <NavigationProperty Name="tblBCPReanudacionPersonaClave" Relationship="BCMWeb.FK_tblPersona_tblReanudacionPersonaClave_FK1" FromRole="tblPersona" ToRole="tblBCPReanudacionPersonaClave" />
           <NavigationProperty Name="tblBCPRecuperacionPersonaClave" Relationship="BCMWeb.FK_tblPersona_tblBCPRecuperacionPersonaClave_FK1" FromRole="tblPersona" ToRole="tblBCPRecuperacionPersonaClave" />
           <NavigationProperty Name="tblBIAPersonaRespaldoProceso" Relationship="BCMWeb.FK_tblBIAPersonaRespaldoProceso_tblPersona" FromRole="tblPersona" ToRole="tblBIAPersonaRespaldoProceso" />
@@ -7902,14 +8029,10 @@
           <Property Name="IdPersona" Type="Int64" Nullable="false" />
           <Property Name="IdPersonaDireccion" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="IdTipoDireccion" Type="Int64" Nullable="false" />
-          <Property Name="CalleAvenida" Type="String" Nullable="false" MaxLength="450" FixedLength="false" Unicode="true" />
-          <Property Name="EdificioCasa" Type="String" Nullable="false" MaxLength="450" FixedLength="false" Unicode="true" />
-          <Property Name="PisoNivel" Type="String" Nullable="false" MaxLength="450" FixedLength="false" Unicode="true" />
-          <Property Name="TorreAla" Type="String" Nullable="false" MaxLength="450" FixedLength="false" Unicode="true" />
-          <Property Name="Urbanizacion" Type="String" Nullable="false" MaxLength="450" FixedLength="false" Unicode="true" />
           <Property Name="IdPais" Type="Int64" Nullable="false" />
           <Property Name="IdEstado" Type="Int64" Nullable="false" />
           <Property Name="IdCiudad" Type="Int64" Nullable="false" />
+          <Property Name="Ubicacion" Type="String" MaxLength="1500" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="tblCiudad" Relationship="BCMWeb.FK_tblPersonaDireccion_tblCiudad" FromRole="tblPersonaDireccion" ToRole="tblCiudad" />
           <NavigationProperty Name="tblEstado" Relationship="BCMWeb.FK_tblPersonaDireccion_tblEstado" FromRole="tblPersonaDireccion" ToRole="tblEstado" />
           <NavigationProperty Name="tblPais" Relationship="BCMWeb.FK_tblPersonaDireccion_tblPais" FromRole="tblPersonaDireccion" ToRole="tblPais" />
@@ -7926,10 +8049,6 @@
           <Property Name="IdPersona" Type="Int64" Nullable="false" />
           <Property Name="IdPersonaTelefono" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="IdTipoTelefono" Type="Int64" Nullable="false" />
-          <Property Name="CodigoArea" Type="Int32" Nullable="false" />
-          <Property Name="NroTelefono" Type="Int32" Nullable="false" />
-          <Property Name="Extension1" Type="Int32" Nullable="false" />
-          <Property Name="Extension2" Type="Int32" Nullable="false" />
           <Property Name="Telefono" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="tblPersona" Relationship="BCMWeb.FK_tblPersona_tblPersonaTelefono_FK1" FromRole="tblPersonaTelefono" ToRole="tblPersona" />
           <NavigationProperty Name="tblTipoTelefono" Relationship="BCMWeb.FK_tblPersonaTelefono_tblTipoTelefono" FromRole="tblPersonaTelefono" ToRole="tblTipoTelefono" />
@@ -8170,14 +8289,14 @@
             <PropertyRef Name="IdTipoFrecuencia" />
           </Key>
           <Property Name="IdTipoFrecuencia" Type="Int64" Nullable="false" />
-          <NavigationProperty Name="tblBIAImpactoFinanciero" Relationship="BCMWeb.FK_tblBIAImpactoFinanciero_tblTipoFrecuencia" FromRole="tblTipoFrecuencia" ToRole="tblBIAImpactoFinanciero" />
-          <NavigationProperty Name="tblBIAImpactoOperacional" Relationship="BCMWeb.FK_tblBIAImpactoOperacional_tblTipoFrecuencia" FromRole="tblTipoFrecuencia" ToRole="tblBIAImpactoOperacional" />
           <NavigationProperty Name="tblBIAMTD" Relationship="BCMWeb.FK_tblBIAMTD_tblTipoFrecuencia" FromRole="tblTipoFrecuencia" ToRole="tblBIAMTD" />
           <NavigationProperty Name="tblBIARPO" Relationship="BCMWeb.FK_tblBIARPO_tblTipoFrecuencia" FromRole="tblTipoFrecuencia" ToRole="tblBIARPO" />
           <NavigationProperty Name="tblBIARTO" Relationship="BCMWeb.FK_tblBIARTO_tblTipoFrecuencia" FromRole="tblTipoFrecuencia" ToRole="tblBIARTO" />
           <NavigationProperty Name="tblBIAWRT" Relationship="BCMWeb.FK_tblBIAWRT_tblTipoFrecuencia" FromRole="tblTipoFrecuencia" ToRole="tblBIAWRT" />
           <NavigationProperty Name="tblCultura_TipoFrecuencia" Relationship="BCMWeb.FK_tblCultura_TipoFrecuencia_tblTipoFrecuencia" FromRole="tblTipoFrecuencia" ToRole="tblCultura_TipoFrecuencia" />
           <NavigationProperty Name="tblPPEFrecuencia" Relationship="BCMWeb.FK_tblPPEFrecuencia_tblTipoFrecuencia" FromRole="tblTipoFrecuencia" ToRole="tblPPEFrecuencia" />
+          <NavigationProperty Name="tblBIAImpactoFinanciero" Relationship="BCMWeb.FK_tblBIAImpactoFinanciero_tblTipoFrecuencia" FromRole="tblTipoFrecuencia" ToRole="tblBIAImpactoFinanciero" />
+          <NavigationProperty Name="tblBIAImpactoOperacional" Relationship="BCMWeb.FK_tblBIAImpactoOperacional_tblTipoFrecuencia" FromRole="tblTipoFrecuencia" ToRole="tblBIAImpactoOperacional" />
         </EntityType>
         <EntityType Name="tblTipoImpacto">
           <Key>
@@ -8253,7 +8372,7 @@
           <Property Name="CodigoUsuario" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ClaveUsuario" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Nombre" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="EstadoUsuario" Type="Int16" />
+          <Property Name="EstadoUsuario" Type="Int16" Nullable="false" />
           <Property Name="FechaEstado" Type="DateTime" Precision="3" />
           <Property Name="FechaUltimaConexion" Type="DateTime" Precision="3" />
           <Property Name="PrimeraVez" Type="Boolean" />
@@ -8755,20 +8874,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_tblBIAImpactoFinanciero_tblEscala">
-          <End Type="BCMWeb.tblBIADocumento" Role="tblBIADocumento" Multiplicity="1" />
-          <End Type="BCMWeb.tblBIAImpactoFinanciero" Role="tblBIAImpactoFinanciero" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblBIADocumento">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdDocumentoBIA" />
-            </Principal>
-            <Dependent Role="tblBIAImpactoFinanciero">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdDocumentoBIA" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_tblBIAProceso_tblBIADocumento">
           <End Type="BCMWeb.tblBIADocumento" Role="tblBIADocumento" Multiplicity="1" />
           <End Type="BCMWeb.tblBIAProceso" Role="tblBIAProceso" Multiplicity="*" />
@@ -8933,76 +9038,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_tblBIAImpactoFinanciero_tblBIAProceso">
-          <End Type="BCMWeb.tblBIAProceso" Role="tblBIAProceso" Multiplicity="1" />
-          <End Type="BCMWeb.tblBIAImpactoFinanciero" Role="tblBIAImpactoFinanciero" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblBIAProceso">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdDocumentoBia" />
-              <PropertyRef Name="IdProceso" />
-            </Principal>
-            <Dependent Role="tblBIAImpactoFinanciero">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdDocumentoBIA" />
-              <PropertyRef Name="IdProceso" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_tblBIAImpactoFinanciero_tblTipoFrecuencia">
-          <End Type="BCMWeb.tblTipoFrecuencia" Role="tblTipoFrecuencia" Multiplicity="1" />
-          <End Type="BCMWeb.tblBIAImpactoFinanciero" Role="tblBIAImpactoFinanciero" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblTipoFrecuencia">
-              <PropertyRef Name="IdTipoFrecuencia" />
-            </Principal>
-            <Dependent Role="tblBIAImpactoFinanciero">
-              <PropertyRef Name="IdTipoFrecuencia" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_tblBIAImpactoOperacional_tblBIAProceso">
-          <End Type="BCMWeb.tblBIAProceso" Role="tblBIAProceso" Multiplicity="1" />
-          <End Type="BCMWeb.tblBIAImpactoOperacional" Role="tblBIAImpactoOperacional" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblBIAProceso">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdDocumentoBia" />
-              <PropertyRef Name="IdProceso" />
-            </Principal>
-            <Dependent Role="tblBIAImpactoOperacional">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdDocumentoBIA" />
-              <PropertyRef Name="IdProceso" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_tblBIAImpactoOperacional_tblEscala">
-          <End Type="BCMWeb.tblEscala" Role="tblEscala" Multiplicity="1" />
-          <End Type="BCMWeb.tblBIAImpactoOperacional" Role="tblBIAImpactoOperacional" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblEscala">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdEscala" />
-            </Principal>
-            <Dependent Role="tblBIAImpactoOperacional">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdEscala" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_tblBIAImpactoOperacional_tblTipoFrecuencia">
-          <End Type="BCMWeb.tblTipoFrecuencia" Role="tblTipoFrecuencia" Multiplicity="1" />
-          <End Type="BCMWeb.tblBIAImpactoOperacional" Role="tblBIAImpactoOperacional" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblTipoFrecuencia">
-              <PropertyRef Name="IdTipoFrecuencia" />
-            </Principal>
-            <Dependent Role="tblBIAImpactoOperacional">
-              <PropertyRef Name="IdTipoFrecuencia" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_tblBIAInterdependencia_tblBIAProceso">
           <End Type="BCMWeb.tblBIAProceso" Role="tblBIAProceso" Multiplicity="1" />
           <End Type="BCMWeb.tblBIAInterdependencia" Role="tblBIAInterdependencia" Multiplicity="*" />
@@ -9035,20 +9070,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_tblBIAMTD_tblEscala">
-          <End Type="BCMWeb.tblEscala" Role="tblEscala" Multiplicity="0..1" />
-          <End Type="BCMWeb.tblBIAMTD" Role="tblBIAMTD" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblEscala">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdEscala" />
-            </Principal>
-            <Dependent Role="tblBIAMTD">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdEscala" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_tblBIAMTD_tblTipoFrecuencia">
           <End Type="BCMWeb.tblTipoFrecuencia" Role="tblTipoFrecuencia" Multiplicity="0..1" />
           <End Type="BCMWeb.tblBIAMTD" Role="tblBIAMTD" Multiplicity="*" />
@@ -9058,6 +9079,56 @@
             </Principal>
             <Dependent Role="tblBIAMTD">
               <PropertyRef Name="IdTipoFrecuencia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblBIAPersonaClave_tblBIAProceso">
+          <End Type="BCMWeb.tblBIAProceso" Role="tblBIAProceso" Multiplicity="1" />
+          <End Type="BCMWeb.tblBIAPersonaClave" Role="tblBIAPersonaClave" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblBIAProceso">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumentoBia" />
+              <PropertyRef Name="IdProceso" />
+            </Principal>
+            <Dependent Role="tblBIAPersonaClave">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumentoBIA" />
+              <PropertyRef Name="IdProceso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblBIAPersonaClave_tblDocumento">
+          <End Type="BCMWeb.tblDocumento" Role="tblDocumento" Multiplicity="1" />
+          <End Type="BCMWeb.tblBIAPersonaClave" Role="tblBIAPersonaClave" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblDocumento">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumento" />
+              <PropertyRef Name="IdTipoDocumento" />
+            </Principal>
+            <Dependent Role="tblBIAPersonaClave">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumento" />
+              <PropertyRef Name="IdTipoDocumento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblBIAPersonaClave_tblDocumentoPersonaClave">
+          <End Type="BCMWeb.tblDocumentoPersonaClave" Role="tblDocumentoPersonaClave" Multiplicity="1" />
+          <End Type="BCMWeb.tblBIAPersonaClave" Role="tblBIAPersonaClave" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblDocumentoPersonaClave">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumento" />
+              <PropertyRef Name="IdTipoDocumento" />
+              <PropertyRef Name="IdPersona" />
+            </Principal>
+            <Dependent Role="tblBIAPersonaClave">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumento" />
+              <PropertyRef Name="IdTipoDocumento" />
+              <PropertyRef Name="IdPersonaClave" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -9257,20 +9328,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_tblBIARPO_tblEscala">
-          <End Type="BCMWeb.tblEscala" Role="tblEscala" Multiplicity="1" />
-          <End Type="BCMWeb.tblBIARPO" Role="tblBIARPO" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblEscala">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdEscala" />
-            </Principal>
-            <Dependent Role="tblBIARPO">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdEscala" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_tblBIARPO_tblTipoFrecuencia">
           <End Type="BCMWeb.tblTipoFrecuencia" Role="tblTipoFrecuencia" Multiplicity="1" />
           <End Type="BCMWeb.tblBIARPO" Role="tblBIARPO" Multiplicity="*" />
@@ -9280,20 +9337,6 @@
             </Principal>
             <Dependent Role="tblBIARPO">
               <PropertyRef Name="IdTipoFrecuencia" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_tblBIARTO_tblEscala">
-          <End Type="BCMWeb.tblEscala" Role="tblEscala" Multiplicity="1" />
-          <End Type="BCMWeb.tblBIARTO" Role="tblBIARTO" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblEscala">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdEscala" />
-            </Principal>
-            <Dependent Role="tblBIARTO">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdEscala" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -9365,20 +9408,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_tblBIAWRT_tblEscala">
-          <End Type="BCMWeb.tblEscala" Role="tblEscala" Multiplicity="0..1" />
-          <End Type="BCMWeb.tblBIAWRT" Role="tblBIAWRT" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblEscala">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdEscala" />
-            </Principal>
-            <Dependent Role="tblBIAWRT">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdEscala" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_tblBIAWRT_tblTipoFrecuencia">
           <End Type="BCMWeb.tblTipoFrecuencia" Role="tblTipoFrecuencia" Multiplicity="0..1" />
           <End Type="BCMWeb.tblBIAWRT" Role="tblBIAWRT" Multiplicity="*" />
@@ -9392,7 +9421,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tblCargo_tblPersona_FK1">
-          <End Type="BCMWeb.tblCargo" Role="tblCargo" Multiplicity="1" />
+          <End Type="BCMWeb.tblCargo" Role="tblCargo" Multiplicity="0..1" />
           <End Type="BCMWeb.tblPersona" Role="tblPersona" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="tblCargo">
@@ -9456,6 +9485,22 @@
               <PropertyRef Name="IdPais" />
               <PropertyRef Name="IdEstado" />
               <PropertyRef Name="IdCiudad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblEmpresa_tblCiudad">
+          <End Type="BCMWeb.tblCiudad" Role="tblCiudad" Multiplicity="0..1" />
+          <End Type="BCMWeb.tblEmpresa" Role="tblEmpresa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblCiudad">
+              <PropertyRef Name="IdPais" />
+              <PropertyRef Name="IdEstado" />
+              <PropertyRef Name="IdCiudad" />
+            </Principal>
+            <Dependent Role="tblEmpresa">
+              <PropertyRef Name="IdPais" />
+              <PropertyRef Name="IdPaisEstado" />
+              <PropertyRef Name="IdPaisEstadoCiudad" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -10005,15 +10050,17 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_tblEmpresa_tblEscala_FK1">
-          <End Type="BCMWeb.tblEmpresa" Role="tblEmpresa" Multiplicity="1" />
-          <End Type="BCMWeb.tblEscala" Role="tblEscala" Multiplicity="*" />
+        <Association Name="FK_tblEmpresa_tblEstado">
+          <End Type="BCMWeb.tblEstado" Role="tblEstado" Multiplicity="0..1" />
+          <End Type="BCMWeb.tblEmpresa" Role="tblEmpresa" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="tblEmpresa">
-              <PropertyRef Name="IdEmpresa" />
+            <Principal Role="tblEstado">
+              <PropertyRef Name="IdPais" />
+              <PropertyRef Name="IdEstado" />
             </Principal>
-            <Dependent Role="tblEscala">
-              <PropertyRef Name="IdEmpresa" />
+            <Dependent Role="tblEmpresa">
+              <PropertyRef Name="IdPais" />
+              <PropertyRef Name="IdPaisEstado" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -10038,6 +10085,18 @@
             </Principal>
             <Dependent Role="tblLocalidad">
               <PropertyRef Name="IdEmpresa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblEmpresa_tblPais">
+          <End Type="BCMWeb.tblPais" Role="tblPais" Multiplicity="0..1" />
+          <End Type="BCMWeb.tblEmpresa" Role="tblEmpresa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPais">
+              <PropertyRef Name="IdPais" />
+            </Principal>
+            <Dependent Role="tblEmpresa">
+              <PropertyRef Name="IdPais" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -10311,20 +10370,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_tblEscala_tblTipoEscala">
-          <End Type="BCMWeb.tblTipoEscala" Role="tblTipoEscala" Multiplicity="1" />
-          <End Type="BCMWeb.tblEscala" Role="tblEscala" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblTipoEscala">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdTipoEscala" />
-            </Principal>
-            <Dependent Role="tblEscala">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdTipoEscala" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_tblLocalidad_tblEstado">
           <End Type="BCMWeb.tblEstado" Role="tblEstado" Multiplicity="1" />
           <End Type="BCMWeb.tblLocalidad" Role="tblLocalidad" Multiplicity="*" />
@@ -10366,7 +10411,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tblUsuario_tblEstadoUsuario">
-          <End Type="BCMWeb.tblEstadoUsuario" Role="tblEstadoUsuario" Multiplicity="0..1" />
+          <End Type="BCMWeb.tblEstadoUsuario" Role="tblEstadoUsuario" Multiplicity="1" />
           <End Type="BCMWeb.tblUsuario" Role="tblUsuario" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="tblEstadoUsuario">
@@ -10746,7 +10791,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tblPersona_tblUnidadOrganizativa">
-          <End Type="BCMWeb.tblUnidadOrganizativa" Role="tblUnidadOrganizativa" Multiplicity="1" />
+          <End Type="BCMWeb.tblUnidadOrganizativa" Role="tblUnidadOrganizativa" Multiplicity="0..1" />
           <End Type="BCMWeb.tblPersona" Role="tblPersona" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="tblUnidadOrganizativa">
@@ -10760,7 +10805,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tblPersona_tblUsuario">
-          <End Type="BCMWeb.tblUsuario" Role="tblUsuario" Multiplicity="1" />
+          <End Type="BCMWeb.tblUsuario" Role="tblUsuario" Multiplicity="0..1" />
           <End Type="BCMWeb.tblPersona" Role="tblPersona" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="tblUsuario">
@@ -10986,6 +11031,231 @@
             </Principal>
             <Dependent Role="tblUsuarioUnidadOrganizativa">
               <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="tblBIAImpactoFinanciero">
+          <Key>
+            <PropertyRef Name="IdEmpresa" />
+            <PropertyRef Name="IdDocumentoBIA" />
+            <PropertyRef Name="IdProceso" />
+            <PropertyRef Name="IdImpactoFinanciero" />
+          </Key>
+          <Property Name="IdEmpresa" Type="Int64" Nullable="false" />
+          <Property Name="IdDocumentoBIA" Type="Int64" Nullable="false" />
+          <Property Name="IdProceso" Type="Int64" Nullable="false" />
+          <Property Name="IdImpactoFinanciero" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdTipoFrecuencia" Type="Int64" Nullable="false" />
+          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Impacto" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IdEscala" Type="Int64" Nullable="false" />
+          <Property Name="UnidadTiempo" Type="String" MaxLength="450" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblBIADocumento" Relationship="BCMWeb.FK_tblBIAImpactoFinanciero_tblEscala" FromRole="tblBIAImpactoFinanciero" ToRole="tblBIADocumento" />
+          <NavigationProperty Name="tblBIAProceso" Relationship="BCMWeb.FK_tblBIAImpactoFinanciero_tblBIAProceso" FromRole="tblBIAImpactoFinanciero" ToRole="tblBIAProceso" />
+          <NavigationProperty Name="tblTipoFrecuencia" Relationship="BCMWeb.FK_tblBIAImpactoFinanciero_tblTipoFrecuencia" FromRole="tblBIAImpactoFinanciero" ToRole="tblTipoFrecuencia" />
+        </EntityType>
+        <EntityType Name="tblBIAImpactoOperacional">
+          <Key>
+            <PropertyRef Name="IdEmpresa" />
+            <PropertyRef Name="IdDocumentoBIA" />
+            <PropertyRef Name="IdProceso" />
+            <PropertyRef Name="IdImpactoOperacional" />
+          </Key>
+          <Property Name="IdEmpresa" Type="Int64" Nullable="false" />
+          <Property Name="IdDocumentoBIA" Type="Int64" Nullable="false" />
+          <Property Name="IdProceso" Type="Int64" Nullable="false" />
+          <Property Name="IdImpactoOperacional" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdTipoFrecuencia" Type="Int64" Nullable="false" />
+          <Property Name="ImpactoOperacional" Type="String" Nullable="false" MaxLength="450" FixedLength="false" Unicode="true" />
+          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IdEscala" Type="Int64" Nullable="false" />
+          <Property Name="UnidadTiempo" Type="String" MaxLength="450" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblBIAProceso" Relationship="BCMWeb.FK_tblBIAImpactoOperacional_tblBIAProceso" FromRole="tblBIAImpactoOperacional" ToRole="tblBIAProceso" />
+          <NavigationProperty Name="tblTipoFrecuencia" Relationship="BCMWeb.FK_tblBIAImpactoOperacional_tblTipoFrecuencia" FromRole="tblBIAImpactoOperacional" ToRole="tblTipoFrecuencia" />
+          <NavigationProperty Name="tblEscala" Relationship="BCMWeb.FK_tblBIAImpactoOperacional_tblEscala" FromRole="tblBIAImpactoOperacional" ToRole="tblEscala" />
+        </EntityType>
+        <Association Name="FK_tblBIAImpactoFinanciero_tblEscala">
+          <End Type="BCMWeb.tblBIADocumento" Role="tblBIADocumento" Multiplicity="1" />
+          <End Type="BCMWeb.tblBIAImpactoFinanciero" Role="tblBIAImpactoFinanciero" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblBIADocumento">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumentoBIA" />
+            </Principal>
+            <Dependent Role="tblBIAImpactoFinanciero">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumentoBIA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblBIAImpactoFinanciero_tblBIAProceso">
+          <End Type="BCMWeb.tblBIAProceso" Role="tblBIAProceso" Multiplicity="1" />
+          <End Type="BCMWeb.tblBIAImpactoFinanciero" Role="tblBIAImpactoFinanciero" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblBIAProceso">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumentoBia" />
+              <PropertyRef Name="IdProceso" />
+            </Principal>
+            <Dependent Role="tblBIAImpactoFinanciero">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumentoBIA" />
+              <PropertyRef Name="IdProceso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblBIAImpactoFinanciero_tblTipoFrecuencia">
+          <End Type="BCMWeb.tblTipoFrecuencia" Role="tblTipoFrecuencia" Multiplicity="1" />
+          <End Type="BCMWeb.tblBIAImpactoFinanciero" Role="tblBIAImpactoFinanciero" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblTipoFrecuencia">
+              <PropertyRef Name="IdTipoFrecuencia" />
+            </Principal>
+            <Dependent Role="tblBIAImpactoFinanciero">
+              <PropertyRef Name="IdTipoFrecuencia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblBIAImpactoOperacional_tblBIAProceso">
+          <End Type="BCMWeb.tblBIAProceso" Role="tblBIAProceso" Multiplicity="1" />
+          <End Type="BCMWeb.tblBIAImpactoOperacional" Role="tblBIAImpactoOperacional" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblBIAProceso">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumentoBia" />
+              <PropertyRef Name="IdProceso" />
+            </Principal>
+            <Dependent Role="tblBIAImpactoOperacional">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumentoBIA" />
+              <PropertyRef Name="IdProceso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblBIAImpactoOperacional_tblTipoFrecuencia">
+          <End Type="BCMWeb.tblTipoFrecuencia" Role="tblTipoFrecuencia" Multiplicity="1" />
+          <End Type="BCMWeb.tblBIAImpactoOperacional" Role="tblBIAImpactoOperacional" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblTipoFrecuencia">
+              <PropertyRef Name="IdTipoFrecuencia" />
+            </Principal>
+            <Dependent Role="tblBIAImpactoOperacional">
+              <PropertyRef Name="IdTipoFrecuencia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="tblEscala">
+          <Key>
+            <PropertyRef Name="IdEmpresa" />
+            <PropertyRef Name="IdEscala" />
+          </Key>
+          <Property Name="IdEmpresa" Type="Int64" Nullable="false" />
+          <Property Name="IdEscala" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdTipoEscala" Type="Int64" Nullable="false" />
+          <Property Name="Valor" Type="Int16" Nullable="false" />
+          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="450" FixedLength="false" Unicode="true" />
+          <Property Name="FechaRegistro" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="tblBIAImpactoOperacional" Relationship="BCMWeb.FK_tblBIAImpactoOperacional_tblEscala" FromRole="tblEscala" ToRole="tblBIAImpactoOperacional" />
+          <NavigationProperty Name="tblBIAMTD" Relationship="BCMWeb.FK_tblBIAMTD_tblEscala" FromRole="tblEscala" ToRole="tblBIAMTD" />
+          <NavigationProperty Name="tblBIARPO" Relationship="BCMWeb.FK_tblBIARPO_tblEscala" FromRole="tblEscala" ToRole="tblBIARPO" />
+          <NavigationProperty Name="tblBIARTO" Relationship="BCMWeb.FK_tblBIARTO_tblEscala" FromRole="tblEscala" ToRole="tblBIARTO" />
+          <NavigationProperty Name="tblBIAWRT" Relationship="BCMWeb.FK_tblBIAWRT_tblEscala" FromRole="tblEscala" ToRole="tblBIAWRT" />
+          <NavigationProperty Name="tblEmpresa" Relationship="BCMWeb.FK_tblEmpresa_tblEscala_FK1" FromRole="tblEscala" ToRole="tblEmpresa" />
+          <NavigationProperty Name="tblTipoEscala" Relationship="BCMWeb.FK_tblEscala_tblTipoEscala" FromRole="tblEscala" ToRole="tblTipoEscala" />
+        </EntityType>
+        <Association Name="FK_tblBIAImpactoOperacional_tblEscala">
+          <End Type="BCMWeb.tblEscala" Role="tblEscala" Multiplicity="1" />
+          <End Type="BCMWeb.tblBIAImpactoOperacional" Role="tblBIAImpactoOperacional" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblEscala">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdEscala" />
+            </Principal>
+            <Dependent Role="tblBIAImpactoOperacional">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdEscala" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblBIAMTD_tblEscala">
+          <End Type="BCMWeb.tblEscala" Role="tblEscala" Multiplicity="0..1" />
+          <End Type="BCMWeb.tblBIAMTD" Role="tblBIAMTD" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblEscala">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdEscala" />
+            </Principal>
+            <Dependent Role="tblBIAMTD">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdEscala" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblBIARPO_tblEscala">
+          <End Type="BCMWeb.tblEscala" Role="tblEscala" Multiplicity="1" />
+          <End Type="BCMWeb.tblBIARPO" Role="tblBIARPO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblEscala">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdEscala" />
+            </Principal>
+            <Dependent Role="tblBIARPO">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdEscala" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblBIARTO_tblEscala">
+          <End Type="BCMWeb.tblEscala" Role="tblEscala" Multiplicity="1" />
+          <End Type="BCMWeb.tblBIARTO" Role="tblBIARTO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblEscala">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdEscala" />
+            </Principal>
+            <Dependent Role="tblBIARTO">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdEscala" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblBIAWRT_tblEscala">
+          <End Type="BCMWeb.tblEscala" Role="tblEscala" Multiplicity="0..1" />
+          <End Type="BCMWeb.tblBIAWRT" Role="tblBIAWRT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblEscala">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdEscala" />
+            </Principal>
+            <Dependent Role="tblBIAWRT">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdEscala" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblEmpresa_tblEscala_FK1">
+          <End Type="BCMWeb.tblEmpresa" Role="tblEmpresa" Multiplicity="1" />
+          <End Type="BCMWeb.tblEscala" Role="tblEscala" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblEmpresa">
+              <PropertyRef Name="IdEmpresa" />
+            </Principal>
+            <Dependent Role="tblEscala">
+              <PropertyRef Name="IdEmpresa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblEscala_tblTipoEscala">
+          <End Type="BCMWeb.tblTipoEscala" Role="tblTipoEscala" Multiplicity="1" />
+          <End Type="BCMWeb.tblEscala" Role="tblEscala" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblTipoEscala">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdTipoEscala" />
+            </Principal>
+            <Dependent Role="tblEscala">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdTipoEscala" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -11352,34 +11622,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="tblBIAImpactoFinanciero">
-            <EntityTypeMapping TypeName="BCMWeb.tblBIAImpactoFinanciero">
-              <MappingFragment StoreEntitySet="tblBIAImpactoFinanciero">
-                <ScalarProperty Name="IdEscala" ColumnName="IdEscala" />
-                <ScalarProperty Name="Impacto" ColumnName="Impacto" />
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
-                <ScalarProperty Name="IdTipoFrecuencia" ColumnName="IdTipoFrecuencia" />
-                <ScalarProperty Name="IdImpactoFinanciero" ColumnName="IdImpactoFinanciero" />
-                <ScalarProperty Name="IdProceso" ColumnName="IdProceso" />
-                <ScalarProperty Name="IdDocumentoBIA" ColumnName="IdDocumentoBIA" />
-                <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblBIAImpactoOperacional">
-            <EntityTypeMapping TypeName="BCMWeb.tblBIAImpactoOperacional">
-              <MappingFragment StoreEntitySet="tblBIAImpactoOperacional">
-                <ScalarProperty Name="IdEscala" ColumnName="IdEscala" />
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
-                <ScalarProperty Name="ImpactoOperacional" ColumnName="ImpactoOperacional" />
-                <ScalarProperty Name="IdTipoFrecuencia" ColumnName="IdTipoFrecuencia" />
-                <ScalarProperty Name="IdImpactoOperacional" ColumnName="IdImpactoOperacional" />
-                <ScalarProperty Name="IdProceso" ColumnName="IdProceso" />
-                <ScalarProperty Name="IdDocumentoBIA" ColumnName="IdDocumentoBIA" />
-                <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="tblBIAInterdependencia">
             <EntityTypeMapping TypeName="BCMWeb.tblBIAInterdependencia">
               <MappingFragment StoreEntitySet="tblBIAInterdependencia">
@@ -11400,6 +11642,18 @@
                 <ScalarProperty Name="IdTipoFrecuencia" ColumnName="IdTipoFrecuencia" />
                 <ScalarProperty Name="Observacion" ColumnName="Observacion" />
                 <ScalarProperty Name="IdMTD" ColumnName="IdMTD" />
+                <ScalarProperty Name="IdProceso" ColumnName="IdProceso" />
+                <ScalarProperty Name="IdDocumentoBIA" ColumnName="IdDocumentoBIA" />
+                <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblBIAPersonaClave">
+            <EntityTypeMapping TypeName="BCMWeb.tblBIAPersonaClave">
+              <MappingFragment StoreEntitySet="tblBIAPersonaClave">
+                <ScalarProperty Name="IdTipoDocumento" ColumnName="IdTipoDocumento" />
+                <ScalarProperty Name="IdDocumento" ColumnName="IdDocumento" />
+                <ScalarProperty Name="IdPersonaClave" ColumnName="IdPersonaClave" />
                 <ScalarProperty Name="IdProceso" ColumnName="IdProceso" />
                 <ScalarProperty Name="IdDocumentoBIA" ColumnName="IdDocumentoBIA" />
                 <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
@@ -11892,6 +12146,9 @@
           <EntitySetMapping Name="tblEmpresa">
             <EntityTypeMapping TypeName="BCMWeb.tblEmpresa">
               <MappingFragment StoreEntitySet="tblEmpresa">
+                <ScalarProperty Name="IdPaisEstadoCiudad" ColumnName="IdPaisEstadoCiudad" />
+                <ScalarProperty Name="IdPaisEstado" ColumnName="IdPaisEstado" />
+                <ScalarProperty Name="IdPais" ColumnName="IdPais" />
                 <ScalarProperty Name="CrearDocumento" ColumnName="CrearDocumento" />
                 <ScalarProperty Name="CrearAplicaciones" ColumnName="CrearAplicaciones" />
                 <ScalarProperty Name="CrearUnidadTrabajo" ColumnName="CrearUnidadTrabajo" />
@@ -11924,17 +12181,6 @@
                 <ScalarProperty Name="IdNivelUsuario" ColumnName="IdNivelUsuario" />
                 <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
                 <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
-                <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblEscala">
-            <EntityTypeMapping TypeName="BCMWeb.tblEscala">
-              <MappingFragment StoreEntitySet="tblEscala">
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
-                <ScalarProperty Name="Valor" ColumnName="Valor" />
-                <ScalarProperty Name="IdTipoEscala" ColumnName="IdTipoEscala" />
-                <ScalarProperty Name="IdEscala" ColumnName="IdEscala" />
                 <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -12263,14 +12509,10 @@
           <EntitySetMapping Name="tblPersonaDireccion">
             <EntityTypeMapping TypeName="BCMWeb.tblPersonaDireccion">
               <MappingFragment StoreEntitySet="tblPersonaDireccion">
+                <ScalarProperty Name="Ubicacion" ColumnName="Ubicacion" />
                 <ScalarProperty Name="IdCiudad" ColumnName="IdCiudad" />
                 <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
                 <ScalarProperty Name="IdPais" ColumnName="IdPais" />
-                <ScalarProperty Name="Urbanizacion" ColumnName="Urbanizacion" />
-                <ScalarProperty Name="TorreAla" ColumnName="TorreAla" />
-                <ScalarProperty Name="PisoNivel" ColumnName="PisoNivel" />
-                <ScalarProperty Name="EdificioCasa" ColumnName="EdificioCasa" />
-                <ScalarProperty Name="CalleAvenida" ColumnName="CalleAvenida" />
                 <ScalarProperty Name="IdTipoDireccion" ColumnName="IdTipoDireccion" />
                 <ScalarProperty Name="IdPersonaDireccion" ColumnName="IdPersonaDireccion" />
                 <ScalarProperty Name="IdPersona" ColumnName="IdPersona" />
@@ -12282,10 +12524,6 @@
             <EntityTypeMapping TypeName="BCMWeb.tblPersonaTelefono">
               <MappingFragment StoreEntitySet="tblPersonaTelefono">
                 <ScalarProperty Name="Telefono" ColumnName="Telefono" />
-                <ScalarProperty Name="Extension2" ColumnName="Extension2" />
-                <ScalarProperty Name="Extension1" ColumnName="Extension1" />
-                <ScalarProperty Name="NroTelefono" ColumnName="NroTelefono" />
-                <ScalarProperty Name="CodigoArea" ColumnName="CodigoArea" />
                 <ScalarProperty Name="IdTipoTelefono" ColumnName="IdTipoTelefono" />
                 <ScalarProperty Name="IdPersonaTelefono" ColumnName="IdPersonaTelefono" />
                 <ScalarProperty Name="IdPersona" ColumnName="IdPersona" />
@@ -12578,6 +12816,48 @@
                 <ScalarProperty Name="CalleAvenida" ColumnName="CalleAvenida" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="IdVicepresidencia" ColumnName="IdVicepresidencia" />
+                <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblBIAImpactoFinanciero">
+            <EntityTypeMapping TypeName="BCMWeb.tblBIAImpactoFinanciero">
+              <MappingFragment StoreEntitySet="tblBIAImpactoFinanciero">
+                <ScalarProperty Name="UnidadTiempo" ColumnName="UnidadTiempo" />
+                <ScalarProperty Name="IdEscala" ColumnName="IdEscala" />
+                <ScalarProperty Name="Impacto" ColumnName="Impacto" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="IdTipoFrecuencia" ColumnName="IdTipoFrecuencia" />
+                <ScalarProperty Name="IdImpactoFinanciero" ColumnName="IdImpactoFinanciero" />
+                <ScalarProperty Name="IdProceso" ColumnName="IdProceso" />
+                <ScalarProperty Name="IdDocumentoBIA" ColumnName="IdDocumentoBIA" />
+                <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblBIAImpactoOperacional">
+            <EntityTypeMapping TypeName="BCMWeb.tblBIAImpactoOperacional">
+              <MappingFragment StoreEntitySet="tblBIAImpactoOperacional">
+                <ScalarProperty Name="UnidadTiempo" ColumnName="UnidadTiempo" />
+                <ScalarProperty Name="IdEscala" ColumnName="IdEscala" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="ImpactoOperacional" ColumnName="ImpactoOperacional" />
+                <ScalarProperty Name="IdTipoFrecuencia" ColumnName="IdTipoFrecuencia" />
+                <ScalarProperty Name="IdImpactoOperacional" ColumnName="IdImpactoOperacional" />
+                <ScalarProperty Name="IdProceso" ColumnName="IdProceso" />
+                <ScalarProperty Name="IdDocumentoBIA" ColumnName="IdDocumentoBIA" />
+                <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblEscala">
+            <EntityTypeMapping TypeName="BCMWeb.tblEscala">
+              <MappingFragment StoreEntitySet="tblEscala">
+                <ScalarProperty Name="FechaRegistro" ColumnName="FechaRegistro" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Valor" ColumnName="Valor" />
+                <ScalarProperty Name="IdTipoEscala" ColumnName="IdTipoEscala" />
+                <ScalarProperty Name="IdEscala" ColumnName="IdEscala" />
                 <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
               </MappingFragment>
             </EntityTypeMapping>
