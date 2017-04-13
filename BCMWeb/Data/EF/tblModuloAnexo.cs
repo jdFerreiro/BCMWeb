@@ -16,10 +16,13 @@ namespace BCMWeb.Data.EF
     {
         public long IdEmpresa { get; set; }
         public long IdModulo { get; set; }
+        public bool Negocios { get; set; }
         public long IdAnexo { get; set; }
-        public bool Neogocios { get; set; }
+        public Nullable<long> ParentId { get; set; }
         public string Nombre { get; set; }
-        public string Ruta { get; set; }
+        public Nullable<bool> IsFolder { get; set; }
+        public byte[] Data { get; set; }
+        public Nullable<System.DateTime> LastWriteTime { get; set; }
     
         public virtual tblEmpresa tblEmpresa { get; set; }
     }

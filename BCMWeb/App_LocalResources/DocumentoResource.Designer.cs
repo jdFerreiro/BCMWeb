@@ -70,6 +70,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Acción.
+        /// </summary>
+        public static string captionAccionColumn {
+            get {
+                return ResourceManager.GetString("captionAccionColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Aprobado.
         /// </summary>
         public static string captionAprobado {
@@ -367,6 +376,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Documento .PDF.
+        /// </summary>
+        public static string captionPDFColumn {
+            get {
+                return ResourceManager.GetString("captionPDFColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Es Principal.
         /// </summary>
         public static string captionPrincipalPersonaClave {
@@ -480,6 +498,15 @@ namespace Resources {
         public static string captionVersionAnterior {
             get {
                 return ResourceManager.GetString("captionVersionAnterior", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Área:.
+        /// </summary>
+        public static string ClaseDocumentoCaption {
+            get {
+                return ResourceManager.GetString("ClaseDocumentoCaption", resourceCulture);
             }
         }
         

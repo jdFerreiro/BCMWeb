@@ -11,7 +11,7 @@
         margin: 10px;
         border: 1px solid #006bff;
         width: 250px;
-        height: 220px;
+        height: 230px;
         border-radius: 4px;
         -webkit-user-select: none;
         -moz-user-select: none;
@@ -45,8 +45,9 @@
         }
 
         .MenuPrincipal .MenuItem .Descripcion {
-            margin: 5px;
+            margin: 2px 2px 5px 2px;
+            padding-right: 5px;
             text-align: justify;
-            height: 65px;
+            height: 90px;
             overflow-y: auto;
         }

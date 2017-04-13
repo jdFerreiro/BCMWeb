@@ -285,4 +285,13 @@
   <data name="DocumentosPageTitle" xml:space="preserve">
     <value>Relación de Documentos</value>
   </data>
+  <data name="ClaseDocumentoCaption" xml:space="preserve">
+    <value>Área:</value>
+  </data>
+  <data name="captionAccionColumn" xml:space="preserve">
+    <value>Acción</value>
+  </data>
+  <data name="captionPDFColumn" xml:space="preserve">
+    <value>Documento .PDF</value>
+  </data>
 </root>

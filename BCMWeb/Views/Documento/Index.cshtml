@@ -31,24 +31,18 @@
         }).GetHtml()
     }
 
-    @Html.Partial("DocumentoPartialView", Model)
-
-    if (Model.IdDocumentoSelected > 0)
+    <div style="margin-top: -30px;">
+        @Html.DevExpress().Button(b =>
     {
-        @section RightPanel {
-            @Html.DevExpress().Panel(settings =>
-            {
-                settings.Name = "RightPane";
-                settings.FixedPosition = PanelFixedPosition.WindowRight;
-                settings.Collapsible = true;
-                settings.SettingsAdaptivity.CollapseAtWindowInnerWidth = 1023;
-                settings.ControlStyle.CssClass = "rightPane";
-                settings.Styles.Panel.CssClass = "panel";
-                settings.SetContent(() =>
-                {
-                    Html.RenderPartial("ContentRightPartialView");
-                });
-            }).GetHtml()
-        }
-    }
+        b.Name = "botNew";
+        b.Text = Resources.BCMWebPublic.captionButtonNew;
+        b.ClientSideEvents.Click = "function(s, e) { lp.Show(); document.location='"
+            + DevExpressHelper.GetUrl(new { Controller = "Documento", Action = "EditarDocumento" })
+            + "?IdDocumento=0&IdClaseDocumento=" + Model.IdClaseDocumento.ToString() + "&IdModulo=" + Model.IdModulo.ToString()
+            + "' }";
+
+    }).GetHtml()
+    </div>
+   @Html.Partial("DocumentoPartialView", Model)
+
 }

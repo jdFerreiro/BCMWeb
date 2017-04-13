@@ -1,4 +1,5 @@
 ﻿using BCMWeb.Data.EF;
+using DevExpress.Web;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Web;
 namespace BCMWeb.Models
 {
 
-   public class ModulosUserModel
+    public class ModulosUserModel
     {
         public long IdEmpresa { get; set; }
         public int IdClaseDocumento { get; set; }
@@ -41,8 +42,19 @@ namespace BCMWeb.Models
         public string returnPage { get; set; }
         public string PageTitle { get; set; }
         public string UserTimezone { get; set; }
+        private PerfilModelView _Perfil;
+        public PerfilModelView Perfil
+        {
+            get
+            {
+                if (_Perfil == null)
+                    _Perfil = Metodos.GetPerfilData();
+                return _Perfil;
+            }
+            set { _Perfil = value; }
+        }
     }
-   public class ModuloModel
+    public class ModuloModel
     {
         private long _IdModuloPadre;
         private List<ModuloModel> _SubModulos = new List<ModuloModel>();

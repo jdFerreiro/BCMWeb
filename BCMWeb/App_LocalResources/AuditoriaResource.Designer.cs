@@ -115,20 +115,200 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Agregar anexo {4} al documento {1} versión {2} del módulo {0}.
+        ///   Looks up a localized string similar to Ingresa a los anexos del documento {1} version {2} en el módulo {0} desde un dispositivo Móvil.
         /// </summary>
-        public static string AgregarAnexoDocumentoMessage {
+        public static string AnexoAccederDocumentoMovilMessage {
             get {
-                return ResourceManager.GetString("AgregarAnexoDocumentoMessage", resourceCulture);
+                return ResourceManager.GetString("AnexoAccederDocumentoMovilMessage", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Agregar anexo {4} al módulo {0}.
+        ///   Looks up a localized string similar to Ingresa a los anexos del documento {1} version {2} en el módulo {0} desde un pc o laptop.
         /// </summary>
-        public static string AgregarAnexoModuloMessage {
+        public static string AnexoAccederDocumentoWebMessage {
             get {
-                return ResourceManager.GetString("AgregarAnexoModuloMessage", resourceCulture);
+                return ResourceManager.GetString("AnexoAccederDocumentoWebMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ingresa a los anexos del módulo {0} desde un dispositivo Móvil.
+        /// </summary>
+        public static string AnexoAccederModuloMovilMessage {
+            get {
+                return ResourceManager.GetString("AnexoAccederModuloMovilMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ingresa a los anexos del módulo {0} desde un pc o laptop.
+        /// </summary>
+        public static string AnexoAccederModuloWebMessage {
+            get {
+                return ResourceManager.GetString("AnexoAccederModuloWebMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Agregar carpeta {3} a los anexos al documento {1} versión {2} del módulo {0}.
+        /// </summary>
+        public static string AnexoAgregarCarpetaDocumentoMessage {
+            get {
+                return ResourceManager.GetString("AnexoAgregarCarpetaDocumentoMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Agregar carpeta {3} a los anexos del módulo {0}.
+        /// </summary>
+        public static string AnexoAgregarCarpetaModuloMessage {
+            get {
+                return ResourceManager.GetString("AnexoAgregarCarpetaModuloMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Agregar anexo {3} al documento {1} versión {2} del módulo {0}.
+        /// </summary>
+        public static string AnexoAgregarItemDocumentoMessage {
+            get {
+                return ResourceManager.GetString("AnexoAgregarItemDocumentoMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Agregar anexo {3} al módulo {0}.
+        /// </summary>
+        public static string AnexoAgregarItemModuloMessage {
+            get {
+                return ResourceManager.GetString("AnexoAgregarItemModuloMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Carga el anexo {3} del documento {1} version {2} en el módulo {0} desde un pc o laptop.
+        /// </summary>
+        public static string AnexoCargarDocumentoWebMessage {
+            get {
+                return ResourceManager.GetString("AnexoCargarDocumentoWebMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Carga el anexo {3} del módulo {0} desde un dispositivo Móvil.
+        /// </summary>
+        public static string AnexoCargarModuloWebMessage {
+            get {
+                return ResourceManager.GetString("AnexoCargarModuloWebMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copiar anexo {3} al documento {1} versión {2} del módulo {0}.
+        /// </summary>
+        public static string AnexoCopiarItemDocumentoMessage {
+            get {
+                return ResourceManager.GetString("AnexoCopiarItemDocumentoMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copiar anexo {3} al módulo {0}.
+        /// </summary>
+        public static string AnexoCopiarItemModuloMessage {
+            get {
+                return ResourceManager.GetString("AnexoCopiarItemModuloMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Descarga el anexo {3} del documento {1} version {2} en el módulo {0} desde un dispositivo Móvil.
+        /// </summary>
+        public static string AnexoDescargarDocumentoMovilMessage {
+            get {
+                return ResourceManager.GetString("AnexoDescargarDocumentoMovilMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Descarga el anexo {3} del documento {1} version {2} en el módulo {0} desde un pc o laptop.
+        /// </summary>
+        public static string AnexoDescargarDocumentoWebMessage {
+            get {
+                return ResourceManager.GetString("AnexoDescargarDocumentoWebMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Descarga el anexo {3} del módulo {0} desde un dispositivo Móvil.
+        /// </summary>
+        public static string AnexoDescargarModuloMovilMessage {
+            get {
+                return ResourceManager.GetString("AnexoDescargarModuloMovilMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Descarga el anexo {3} del módulo {0} desde un pc o laptop.
+        /// </summary>
+        public static string AnexoDescargarModuloWebMessage {
+            get {
+                return ResourceManager.GetString("AnexoDescargarModuloWebMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Elimina anexo {3} del documento {1} versión {2} del módulo {0}.
+        /// </summary>
+        public static string AnexoEliminarItemDocumentoMessage {
+            get {
+                return ResourceManager.GetString("AnexoEliminarItemDocumentoMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Elimina anexo {3} del módulo {0}.
+        /// </summary>
+        public static string AnexoEliminarItemModuloMessage {
+            get {
+                return ResourceManager.GetString("AnexoEliminarItemModuloMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mover anexo {3} del documento {1} versión {2} del módulo {0}.
+        /// </summary>
+        public static string AnexoMoverItemDocumentoMessage {
+            get {
+                return ResourceManager.GetString("AnexoMoverItemDocumentoMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mover anexo {3} del módulo {0}.
+        /// </summary>
+        public static string AnexoMoverItemModuloMessage {
+            get {
+                return ResourceManager.GetString("AnexoMoverItemModuloMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Renombrar anexo {3} del documento {1} versión {2} del módulo {0}.
+        /// </summary>
+        public static string AnexoRenombrarItemDocumentoMessage {
+            get {
+                return ResourceManager.GetString("AnexoRenombrarItemDocumentoMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Renombar anexo {3} del módulo {0}.
+        /// </summary>
+        public static string AnexoRenombrarItemModuloMessage {
+            get {
+                return ResourceManager.GetString("AnexoRenombrarItemModuloMessage", resourceCulture);
             }
         }
         
@@ -255,24 +435,6 @@ namespace Resources {
         public static string EliminarAccionMessage {
             get {
                 return ResourceManager.GetString("EliminarAccionMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Elimina anexo {4} del documento {1} versión {2} del módulo {0}.
-        /// </summary>
-        public static string EliminarAnexoDocumentoMessage {
-            get {
-                return ResourceManager.GetString("EliminarAnexoDocumentoMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Elimina anexo {4} del módulo {0}.
-        /// </summary>
-        public static string EliminarAnexoModuloMessage {
-            get {
-                return ResourceManager.GetString("EliminarAnexoModuloMessage", resourceCulture);
             }
         }
         

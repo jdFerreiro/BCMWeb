@@ -10,7 +10,7 @@
     }
 </script>
 
-<div class="leftPanel">
+<div class="leftPanel" style="margin-bottom: 50px;">
     <table>
         <tr>
             <td>
@@ -30,7 +30,9 @@
                 <table>
                     <tr>
                         <td class="ModuloHeader">
-                            @Html.DisplayFor(m => m.ModuloActual)
+                            <div>
+                                @Html.DisplayFor(m => m.ModuloActual)
+                            </div>
                         </td>
                     </tr>
                     <tr>
@@ -109,6 +111,7 @@
                                 s.Styles.Item.Wrap = DefaultBoolean.True;
                                 s.Styles.SubMenuItem.Font.Size = FontUnit.Small;
                                 s.Styles.SubMenuItem.Wrap = DefaultBoolean.True;
+                                s.Styles.SubMenuItem.Width = Unit.Pixel(150);
                                 s.Orientation = Orientation.Vertical;
                                 s.ShowPopOutImages = DefaultBoolean.False;
                                 s.ControlStyle.HorizontalAlign = HorizontalAlign.Center;

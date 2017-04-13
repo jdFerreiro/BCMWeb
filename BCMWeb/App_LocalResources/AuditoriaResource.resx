@@ -183,11 +183,11 @@
   <data name="AbrirDocumentoMessage" xml:space="preserve">
     <value>Abrir documento {1} versión {2} del módulo {0}</value>
   </data>
-  <data name="AgregarAnexoDocumentoMessage" xml:space="preserve">
-    <value>Agregar anexo {4} al documento {1} versión {2} del módulo {0}</value>
+  <data name="AnexoAgregarItemDocumentoMessage" xml:space="preserve">
+    <value>Agregar anexo {3} al documento {1} versión {2} del módulo {0}</value>
   </data>
-  <data name="AgregarAnexoModuloMessage" xml:space="preserve">
-    <value>Agregar anexo {4} al módulo {0}</value>
+  <data name="AnexoAgregarItemModuloMessage" xml:space="preserve">
+    <value>Agregar anexo {3} al módulo {0}</value>
   </data>
   <data name="AprobarDocumentoMessage" xml:space="preserve">
     <value>Aprueba el documento {1} versión {2} del módulo {0}</value>
@@ -198,13 +198,67 @@
   <data name="ConsultarCambiosMessage" xml:space="preserve">
     <value>Consulta control de cambios en el documento {1} versión {2} del módulo {0}</value>
   </data>
-  <data name="EliminarAnexoDocumentoMessage" xml:space="preserve">
-    <value>Elimina anexo {4} del documento {1} versión {2} del módulo {0}</value>
+  <data name="AnexoEliminarItemDocumentoMessage" xml:space="preserve">
+    <value>Elimina anexo {3} del documento {1} versión {2} del módulo {0}</value>
   </data>
-  <data name="EliminarAnexoModuloMessage" xml:space="preserve">
-    <value>Elimina anexo {4} del módulo {0}</value>
+  <data name="AnexoEliminarItemModuloMessage" xml:space="preserve">
+    <value>Elimina anexo {3} del módulo {0}</value>
   </data>
   <data name="GenerarCopiaDocumentoMessage" xml:space="preserve">
     <value>Generar versión {5} del documento {1} versión {2} del módulo {0}</value>
+  </data>
+  <data name="AnexoAccederDocumentoMovilMessage" xml:space="preserve">
+    <value>Ingresa a los anexos del documento {1} version {2} en el módulo {0} desde un dispositivo Móvil</value>
+  </data>
+  <data name="AnexoAccederDocumentoWebMessage" xml:space="preserve">
+    <value>Ingresa a los anexos del documento {1} version {2} en el módulo {0} desde un pc o laptop</value>
+  </data>
+  <data name="AnexoAccederModuloMovilMessage" xml:space="preserve">
+    <value>Ingresa a los anexos del módulo {0} desde un dispositivo Móvil</value>
+  </data>
+  <data name="AnexoAccederModuloWebMessage" xml:space="preserve">
+    <value>Ingresa a los anexos del módulo {0} desde un pc o laptop</value>
+  </data>
+  <data name="AnexoAgregarCarpetaDocumentoMessage" xml:space="preserve">
+    <value>Agregar carpeta {3} a los anexos al documento {1} versión {2} del módulo {0}</value>
+  </data>
+  <data name="AnexoAgregarCarpetaModuloMessage" xml:space="preserve">
+    <value>Agregar carpeta {3} a los anexos del módulo {0}</value>
+  </data>
+  <data name="AnexoCargarDocumentoWebMessage" xml:space="preserve">
+    <value>Carga el anexo {3} del documento {1} version {2} en el módulo {0} desde un pc o laptop</value>
+  </data>
+  <data name="AnexoCargarModuloWebMessage" xml:space="preserve">
+    <value>Carga el anexo {3} del módulo {0} desde un dispositivo Móvil</value>
+  </data>
+  <data name="AnexoCopiarItemDocumentoMessage" xml:space="preserve">
+    <value>Copiar anexo {3} al documento {1} versión {2} del módulo {0}</value>
+  </data>
+  <data name="AnexoCopiarItemModuloMessage" xml:space="preserve">
+    <value>Copiar anexo {3} al módulo {0}</value>
+  </data>
+  <data name="AnexoDescargarDocumentoMovilMessage" xml:space="preserve">
+    <value>Descarga el anexo {3} del documento {1} version {2} en el módulo {0} desde un dispositivo Móvil</value>
+  </data>
+  <data name="AnexoDescargarDocumentoWebMessage" xml:space="preserve">
+    <value>Descarga el anexo {3} del documento {1} version {2} en el módulo {0} desde un pc o laptop</value>
+  </data>
+  <data name="AnexoDescargarModuloMovilMessage" xml:space="preserve">
+    <value>Descarga el anexo {3} del módulo {0} desde un dispositivo Móvil</value>
+  </data>
+  <data name="AnexoDescargarModuloWebMessage" xml:space="preserve">
+    <value>Descarga el anexo {3} del módulo {0} desde un pc o laptop</value>
+  </data>
+  <data name="AnexoMoverItemDocumentoMessage" xml:space="preserve">
+    <value>Mover anexo {3} del documento {1} versión {2} del módulo {0}</value>
+  </data>
+  <data name="AnexoMoverItemModuloMessage" xml:space="preserve">
+    <value>Mover anexo {3} del módulo {0}</value>
+  </data>
+  <data name="AnexoRenombrarItemDocumentoMessage" xml:space="preserve">
+    <value>Renombrar anexo {3} del documento {1} versión {2} del módulo {0}</value>
+  </data>
+  <data name="AnexoRenombrarItemModuloMessage" xml:space="preserve">
+    <value>Renombar anexo {3} del módulo {0}</value>
   </data>
 </root>

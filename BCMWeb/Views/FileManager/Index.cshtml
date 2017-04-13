@@ -1,0 +1,48 @@
+﻿@model System.Collections.IEnumerable
+
+<script type="text/javascript">
+    function ProcesarEvento(tipoEvento, nombre) {
+        $.ajax({
+            type: 'POST',
+            url: '/FileManager/RegistrarOperacion',
+            dataType: 'json',
+            data: {
+                Tipo: tipoEvento,
+                nombre: nombre,
+            },
+            success: function (data) {
+            },
+            error: function () {
+                alert("error");
+            }
+
+        })
+    }
+</script>
+
+<table>
+    <tr>
+        <td>
+            @Html.DevExpress().Button(b =>
+                    {
+                        b.Name = "botReturn";
+                        b.Text = Resources.BCMWebPublic.botReturnText;
+                        b.ClientSideEvents.Click = "function(s, e) { lp.Show(); document.location='" + DevExpressHelper.GetUrl(new { Controller = "Documento", Action = "Index" }) + "?IdModulo=" + Session["IdModulo"].ToString() + "' }";
+
+                    }).GetHtml()
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div style="margin-top: 10px;">
+@using (Html.BeginForm())
+{
+    @Html.Action("FileManagerPartial", "FileManager")
+}
+            </div>
+        </td>
+    </tr>
+</table>
+
+
+

@@ -112,7 +112,7 @@ namespace BCMWeb.Models
         public tblModulo Modulo { get; protected set; }
 
         public ModuloData(tblModulo modulo)
-            : base(modulo.Nombre, string.Empty, string.Empty, 0)
+            : base(modulo.Nombre, string.Empty, string.Empty, modulo.IdModuloPadre)
         {
             Modulo = modulo;
         }

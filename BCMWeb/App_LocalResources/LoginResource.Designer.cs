@@ -133,6 +133,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to EMPRESA:.
+        /// </summary>
+        public static string EmpresaLabelString {
+            get {
+                return ResourceManager.GetString("EmpresaLabelString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Indique su correo electrónico.
         /// </summary>
         public static string helpTextEmail {
@@ -165,6 +174,15 @@ namespace Resources {
         public static string LogOutString {
             get {
                 return ResourceManager.GetString("LogOutString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bienvenido:.
+        /// </summary>
+        public static string WelcomeString {
+            get {
+                return ResourceManager.GetString("WelcomeString", resourceCulture);
             }
         }
     }

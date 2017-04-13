@@ -495,7 +495,20 @@ namespace BCMWeb
         EliminarAnexoDocumento,
         [EnumMember()]
         [Description("Eliminar Anexo Módulo")]
-        EliminarAnexoModulo
+        EliminarAnexoModulo,
+        [EnumMember()]
+        [Description("Acceder Anexo Módulo Movil")]
+        AccederAnexoModuloMovil,
+        [EnumMember()]
+        [Description("Acceder Anexo Módulo Web")]
+        AccederAnexoModuloWeb,
+        [EnumMember()]
+        [Description("Acceder Anexo Documento Web")]
+        AccederAnexoDocumentoWeb,
+        [EnumMember()]
+        [Description("Acceder Anexo Documento Movil")]
+        AccederAnexoDocumentoMovil,
+
     }
     [DataContract(Name = "Secciones de Ficha")]
     public enum eSeccionFicha

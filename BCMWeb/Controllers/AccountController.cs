@@ -173,7 +173,71 @@ namespace BCMWeb.Controllers {
             return View();
         }
 
- 
+        [AllowAnonymous]
+        public ActionResult ForgotPasword()
+        {
+            return View();
+        }
+        [AllowAnonymous]
+        [HttpPost]
+        [HandleError]
+        public ActionResult ForgotPasword(ForgotPasswordModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (Metodos.ValidarEmailUsuario(model.Email))
+                {
+                    string _esquema = Request.Url.Scheme;
+                    string _hostName = Request.Url.Host;
+
+                    EmailManager.EnviarEmailConfirmPassword(model.Email, this.ControllerContext, RouteTable.Routes, _esquema, _hostName);
+                    return RedirectToAction("EmailSent");
+                }
+                else
+                {
+                    ModelState.AddModelError("Email", Resources.ErrorResource.EmailError);
+                }
+            }
+            return View(model);
+        }
+        [AllowAnonymous]
+        [HandleError]
+        public ActionResult RecoveryPage(string eui)
+        {
+            return View();
+        }
+        [AllowAnonymous]
+        [HttpPost]
+        [HandleError]
+        public ActionResult RecoveryPage(ResetPasswordModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (Metodos.ValidarEmailUsuario(model.Email))
+                {
+                    Metodos.ChangePassword(model.Email, model.Password);
+                    return RedirectToAction("ConfirmPaswordChange");
+                }
+                else
+                {
+                    ModelState.AddModelError("Email", Resources.ErrorResource.EmailError);
+                }
+            }
+            return View(model);
+        }
+        [AllowAnonymous]
+        [HandleError]
+        public ActionResult EmailSent()
+        {
+            return View();
+        }
+        [AllowAnonymous]
+        [HandleError]
+        public ActionResult ConfirmPaswordChange()
+        {
+            return View();
+        }
+
         #region Status Codes
         private static string ErrorCodeToString(MembershipCreateStatus createStatus) {
             // See http://go.microsoft.com/fwlink/?LinkID=177550 for

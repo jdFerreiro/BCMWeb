@@ -18,8 +18,11 @@ namespace BCMWeb.Data.EF
         public long IdDocumento { get; set; }
         public long IdTipoDocumento { get; set; }
         public long IdAnexo { get; set; }
+        public Nullable<long> ParentId { get; set; }
         public string Nombre { get; set; }
-        public string Ruta { get; set; }
+        public Nullable<bool> IsFolder { get; set; }
+        public byte[] Data { get; set; }
+        public Nullable<System.DateTime> LastWriteTime { get; set; }
     
         public virtual tblDocumento tblDocumento { get; set; }
     }

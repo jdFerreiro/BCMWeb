@@ -70,6 +70,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Anexos.
+        /// </summary>
+        public static string botAnexosText {
+            get {
+                return ResourceManager.GetString("botAnexosText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Regresar.
         /// </summary>
         public static string botReturnText {
@@ -111,6 +120,15 @@ namespace Resources {
         public static string captionButtonEdit {
             get {
                 return ResourceManager.GetString("captionButtonEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enviar.
+        /// </summary>
+        public static string captionButtonEnviar {
+            get {
+                return ResourceManager.GetString("captionButtonEnviar", resourceCulture);
             }
         }
         

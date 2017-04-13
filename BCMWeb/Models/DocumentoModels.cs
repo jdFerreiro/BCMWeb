@@ -328,4 +328,19 @@ namespace BCMWeb.Models
         [Display(Name = "captionFechaEstatusProceso", ResourceType = typeof(Resources.DocumentoResource))]
         public DateTime FechaEstatus { get; set; }
     }
+    public class DocumentoDiagrama : DocumentoModel
+    {
+        [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
+        [Display(Name = "captionNombreProceso", ResourceType = typeof(Resources.DocumentoResource))]
+        public long IdProceso { get; set; }
+        public string NroProceso { get; set; }
+        public string Descripcion { get; set; }
+        public string Nombre { get; set; }
+        public string Interdependencias { get; set; }
+        public string Clientes_Productos { get; set; }
+        public string Entradas { get; set; }
+        public string Proveedores { get; set; }
+        public string PersonalClave { get; set; }
+        public string Tecnologia { get; set; }
+    }
 }

@@ -286,7 +286,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Módulos Contenidos.
+        ///   Looks up a localized string similar to Módulos:.
         /// </summary>
         public static string modulosTitle {
             get {

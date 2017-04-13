@@ -19,6 +19,7 @@ namespace BCMWeb
     public static class ProcesarDocumento
     {
         private static HttpSessionState Session { get { return HttpContext.Current.Session; } }
+        private static string Culture = HttpContext.Current.Request.UserLanguages[0];
         private static Encriptador _Encriptar = new Encriptador();
 
         [SessionExpire]
@@ -129,6 +130,7 @@ namespace BCMWeb
             int _NroProceso = 0;
             long IdProceso = 0;
             string _NombreProceso = string.Empty;
+            int _startRow = 1;
 
             try
             {
@@ -162,7 +164,7 @@ namespace BCMWeb
 
                                 List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
 
-                                for (int _Row = 1; _Row < _tableRows.Count(); _Row++)
+                                for (int _Row = _startRow; _Row < _tableRows.Count(); _Row++)
                                 {
                                     if (_NroTabla == 1) { 
                                         TableRow _tableRow = (TableRow)_tableRows[_Row];
@@ -283,6 +285,7 @@ namespace BCMWeb
                                         } // End if (_tableRow.HasChildren)                                        }
                                     } // End if (_tableCell.HasChildren)
                                 } // End for (_Row = 2; _Row < _tableRows.Count(); _Row++)
+                                _startRow = 0;
                             } // End if (_tableRow.HasChildren)
                         } // End foreach (Table)
                     } // End using wordDocument
@@ -303,6 +306,7 @@ namespace BCMWeb
             int _NroProceso = 0;
             long IdProceso = 0;
             string _NombreProceso = string.Empty;
+            int _startRow = 2;
 
             try
             {
@@ -331,7 +335,7 @@ namespace BCMWeb
                                 int _Row = 0;
                                 List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
 
-                                for (_Row = 2; _Row < _tableRows.Count(); _Row++)
+                                for (_Row = _startRow; _Row < _tableRows.Count(); _Row++)
                                 {
                                     TableRow _tableRow = (TableRow)_tableRows[_Row];
 
@@ -404,6 +408,7 @@ namespace BCMWeb
 
                                     } // End if (_tableCell.HasChildren)
                                 } // End for (_Row = 2; _Row < _tableRows.Count(); _Row++)
+                                _startRow = 0;
                             } // End if (_tableRow.HasChildren)
                         } // End foreach (Table)
                     } // End using wordDocument
@@ -424,6 +429,7 @@ namespace BCMWeb
             int _NroProceso = 0;
             long IdProceso = 0;
             string _NombreProceso = string.Empty;
+            int _startRow = 2;
 
             try
             {
@@ -452,7 +458,7 @@ namespace BCMWeb
                                 int _Row = 0;
                                 List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
 
-                                for (_Row = 2; _Row < _tableRows.Count(); _Row++)
+                                for (_Row = _startRow; _Row < _tableRows.Count(); _Row++)
                                 {
                                     TableRow _tableRow = (TableRow)_tableRows[_Row];
 
@@ -525,6 +531,7 @@ namespace BCMWeb
 
                                     } // End if (_tableCell.HasChildren)
                                 } // End for (_Row = 2; _Row < _tableRows.Count(); _Row++)
+                                _startRow = 0;
                             } // End if (_tableRow.HasChildren)
                         } // End foreach (Table)
                     } // End using wordDocument
@@ -545,6 +552,7 @@ namespace BCMWeb
             int _NroProceso = 0;
             long IdProceso = 0;
             string _NombreProceso = string.Empty;
+            int _startRow = 1;
 
             try
             {
@@ -574,7 +582,7 @@ namespace BCMWeb
                                 int _Row = 0;
                                 List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
 
-                                for (_Row = 1; _Row < _tableRows.Count(); _Row++)
+                                for (_Row = _startRow; _Row < _tableRows.Count(); _Row++)
                                 {
                                     TableRow _tableRow = (TableRow)_tableRows[_Row];
 
@@ -646,6 +654,7 @@ namespace BCMWeb
 
                                     } // End if (_tableCell.HasChildren)
                                 } // End for (_Row = 2; _Row < _tableRows.Count(); _Row++)
+                                _startRow = 0;
                             } // End if (_tableRow.HasChildren)
                         } // End foreach (Table)
                     } // End using wordDocument
@@ -666,6 +675,7 @@ namespace BCMWeb
             int _NroProceso = 0;
             long IdProceso = 0;
             string _NombreProceso = string.Empty;
+            int _startRow = 1;
 
             try
             {
@@ -692,21 +702,22 @@ namespace BCMWeb
                             if (_Table.HasChildren)
                             {
                                 int _Row = 0;
+                                long[] _IdEscala = { };
                                 List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
 
-                                for (_Row = 1; _Row < _tableRows.Count(); _Row++)
+                                for (_Row = _startRow; _Row < _tableRows.Count(); _Row++)
                                 {
+                                    long IdEscala = 0;
                                     TableRow _tableRow = (TableRow)_tableRows[_Row];
 
                                     if (_tableRow.HasChildren)
                                     {
                                         List<OpenXmlElement> _tableCells = _tableRow.ChildElements.Where(x => x.GetType().Name == "TableCell").ToList();
-                                        int _nroCeldas = _tableCells.Count();
-                                        long[] _IdEscala = new long[_tableCells.Count()];
-                                        long IdEscala = 0;
 
                                         if (_Row == 1)
                                         {
+                                            int _nroCeldas = _tableCells.Count();
+                                            _IdEscala = new long[_tableCells.Count()];
                                             for (int _Cell = 2; _Cell < _tableCells.Count(); _Cell++)
                                             {
                                                 string _textoCelda = string.Empty;
@@ -827,6 +838,7 @@ namespace BCMWeb
                                         }
                                     } // End if (_tableCell.HasChildren)
                                 } // End for (_Row = 2; _Row < _tableRows.Count(); _Row++)
+                                _startRow = 0;
                             } // End if (_tableRow.HasChildren)
                         } // End foreach (Table)
                     } // End using wordDocument
@@ -847,6 +859,7 @@ namespace BCMWeb
             int _NroProceso = 0;
             long IdProceso = 0;
             string _NombreProceso = string.Empty;
+            int _startRow = 1;
 
             try
             {
@@ -874,20 +887,21 @@ namespace BCMWeb
                             {
                                 int _Row = 0;
                                 List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
+                                long[] _IdEscala = { };
 
-                                for (_Row = 1; _Row < _tableRows.Count(); _Row++)
+                                for (_Row = _startRow; _Row < _tableRows.Count(); _Row++)
                                 {
                                     TableRow _tableRow = (TableRow)_tableRows[_Row];
 
                                     if (_tableRow.HasChildren)
                                     {
                                         List<OpenXmlElement> _tableCells = _tableRow.ChildElements.Where(x => x.GetType().Name == "TableCell").ToList();
-                                        int _nroCeldas = _tableCells.Count();
-                                        long[] _IdEscala = new long[_tableCells.Count()];
                                         long IdEscala = 0;
 
                                         if (_Row == 1)
                                         {
+                                            int _nroCeldas = _tableCells.Count();
+                                            _IdEscala = new long[_tableCells.Count()];
                                             for (int _Cell = 2; _Cell < _tableCells.Count(); _Cell++)
                                             {
                                                 string _textoCelda = string.Empty;
@@ -1008,6 +1022,7 @@ namespace BCMWeb
                                         }
                                     } // End if (_tableCell.HasChildren)
                                 } // End for (_Row = 2; _Row < _tableRows.Count(); _Row++)
+                                _startRow = 0;
                             } // End if (_tableRow.HasChildren)
                         } // End foreach (Table)
                     } // End using wordDocument
@@ -1028,6 +1043,7 @@ namespace BCMWeb
             int _NroProceso = 0;
             long IdProceso = 0;
             string _NombreProceso = string.Empty;
+            int _startRow = 1;
 
             try
             {
@@ -1054,21 +1070,22 @@ namespace BCMWeb
                             if (_Table.HasChildren)
                             {
                                 int _Row = 0;
+                                long[] _IdEscala = { };
                                 List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
 
-                                for (_Row = 1; _Row < _tableRows.Count(); _Row++)
+                                for (_Row = _startRow; _Row < _tableRows.Count(); _Row++)
                                 {
                                     TableRow _tableRow = (TableRow)_tableRows[_Row];
 
                                     if (_tableRow.HasChildren)
                                     {
                                         List<OpenXmlElement> _tableCells = _tableRow.ChildElements.Where(x => x.GetType().Name == "TableCell").ToList();
-                                        int _nroCeldas = _tableCells.Count();
-                                        long[] _IdEscala = new long[_tableCells.Count()];
                                         long IdEscala = 0;
 
                                         if (_Row == 1)
                                         {
+                                            int _nroCeldas = _tableCells.Count();
+                                            _IdEscala = new long[_tableCells.Count()];
                                             for (int _Cell = 2; _Cell < _tableCells.Count(); _Cell++)
                                             {
                                                 string _textoCelda = string.Empty;
@@ -1189,6 +1206,7 @@ namespace BCMWeb
                                         }
                                     } // End if (_tableCell.HasChildren)
                                 } // End for (_Row = 2; _Row < _tableRows.Count(); _Row++)
+                                _startRow = 0;
                             } // End if (_tableRow.HasChildren)
                         } // End foreach (Table)
                     } // End using wordDocument
@@ -1209,6 +1227,7 @@ namespace BCMWeb
             int _NroProceso = 0;
             long IdProceso = 0;
             string _NombreProceso = string.Empty;
+            int _startRow = 1;
 
             try
             {
@@ -1236,20 +1255,21 @@ namespace BCMWeb
                             {
                                 int _Row = 0;
                                 List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
+                                long[] _IdEscala = { };
 
-                                for (_Row = 1; _Row < _tableRows.Count(); _Row++)
+                                for (_Row = _startRow; _Row < _tableRows.Count(); _Row++)
                                 {
                                     TableRow _tableRow = (TableRow)_tableRows[_Row];
 
                                     if (_tableRow.HasChildren)
                                     {
                                         List<OpenXmlElement> _tableCells = _tableRow.ChildElements.Where(x => x.GetType().Name == "TableCell").ToList();
-                                        int _nroCeldas = _tableCells.Count();
-                                        long[] _IdEscala = new long[_tableCells.Count()];
                                         long IdEscala = 0;
 
                                         if (_Row == 1)
                                         {
+                                            int _nroCeldas = _tableCells.Count();
+                                            _IdEscala = new long[_tableCells.Count()];
                                             for (int _Cell = 2; _Cell < _tableCells.Count(); _Cell++)
                                             {
                                                 string _textoCelda = string.Empty;
@@ -1258,7 +1278,7 @@ namespace BCMWeb
                                                 foreach (var _cellParagraph in _tableCellParagraph)
                                                 {
                                                     if (!string.IsNullOrEmpty(_textoCelda))
-                                                        _textoCelda += ", ";
+                                                        _textoCelda += " ";
                                                     _textoCelda += _cellParagraph.InnerText;
                                                 } // End foreach (var _cellParagraph in _tableCellParagraph)
 
@@ -1308,7 +1328,7 @@ namespace BCMWeb
                                                     foreach (var _cellParagraph in _tableCellParagraph)
                                                     {
                                                         if (!string.IsNullOrEmpty(_textoCelda))
-                                                            _textoCelda += ", ";
+                                                            _textoCelda += " ";
                                                         _textoCelda += _cellParagraph.InnerText;
                                                     } // End foreach (var _cellParagraph in _tableCellParagraph)
 
@@ -1370,6 +1390,7 @@ namespace BCMWeb
                                         }
                                     } // End if (_tableCell.HasChildren)
                                 } // End for (_Row = 2; _Row < _tableRows.Count(); _Row++)
+                                _startRow = 0;
                             } // End if (_tableRow.HasChildren)
                         } // End foreach (Table)
                     } // End using wordDocument
@@ -1396,6 +1417,8 @@ namespace BCMWeb
             int _NroProceso = 0;
             long IdProceso = 0;
             string _NombreProceso = string.Empty;
+            string _UnidadTiempo = string.Empty;
+            int _startRow = 1;
 
             try
             {
@@ -1425,11 +1448,10 @@ namespace BCMWeb
                                 int _Row = 0;
                                 List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
 
-                                for (_Row = 2; _Row < _tableRows.Count(); _Row++)
+                                for (_Row = _startRow; _Row < _tableRows.Count(); _Row++)
                                 {
                                     TableRow _tableRow = (TableRow)_tableRows[_Row];
 
-                                    string _UnidadTiempo = string.Empty;
                                     string _Impacto = string.Empty;
                                     string _Descripcion = string.Empty;
 
@@ -1486,7 +1508,8 @@ namespace BCMWeb
                                                         IdProceso = procBIA.IdProceso;
                                                         break;
                                                     case 2:
-                                                        _UnidadTiempo = _textoCelda;
+                                                        if (!string.IsNullOrEmpty(_textoCelda))
+                                                            _UnidadTiempo = _textoCelda;
                                                         break;
                                                     case 3:
                                                         _Impacto = _textoCelda;
@@ -1498,10 +1521,14 @@ namespace BCMWeb
                                             } // End if (_celda.HasChildren)
                                         } // End for (int _Cell = 0; _Cell < _tableCells.Count(); _Cell++)
 
+                                        tblCultura_TipoFrecuencia Cultura_TipoFrecuencia =
+                                            db.tblCultura_TipoFrecuencia.Where(x => (x.Culture == Culture || x.Culture == "es-VE") && _UnidadTiempo.Contains(x.Descripcion)).FirstOrDefault();
+
                                         tblBIAImpactoOperacional reg = new tblBIAImpactoOperacional
                                         {
                                             IdDocumentoBIA = _DocBIA.IdDocumentoBIA,
                                             IdEmpresa = _IdEmpresa,
+                                            IdTipoFrecuencia = Cultura_TipoFrecuencia.IdTipoFrecuencia,
                                             IdProceso = IdProceso,
                                             Descripcion = _Descripcion,
                                             ImpactoOperacional = _Impacto,
@@ -1512,6 +1539,7 @@ namespace BCMWeb
 
                                     } // End if (_tableCell.HasChildren)
                                 } // End for (_Row = 2; _Row < _tableRows.Count(); _Row++)
+                                _startRow = 0;
                             } // End if (_tableRow.HasChildren)
                         } // End foreach (Table)
                     } // End using wordDocument
@@ -1532,6 +1560,7 @@ namespace BCMWeb
             int _NroProceso = 0;
             long IdProceso = 0;
             string _NombreProceso = string.Empty;
+            int _startRow = 1;
 
             try
             {
@@ -1561,7 +1590,7 @@ namespace BCMWeb
                                 int _Row = 0;
                                 List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
 
-                                for (_Row = 2; _Row < _tableRows.Count(); _Row++)
+                                for (_Row = _startRow; _Row < _tableRows.Count(); _Row++)
                                 {
                                     TableRow _tableRow = (TableRow)_tableRows[_Row];
 
@@ -1634,10 +1663,14 @@ namespace BCMWeb
                                             } // End if (_celda.HasChildren)
                                         } // End for (int _Cell = 0; _Cell < _tableCells.Count(); _Cell++)
 
+                                        tblCultura_TipoFrecuencia Cultura_TipoFrecuencia =
+                                            db.tblCultura_TipoFrecuencia.Where(x => (x.Culture == Culture || x.Culture == "es-VE") && _UnidadTiempo.Contains(x.Descripcion)).FirstOrDefault();
+
                                         tblBIAImpactoFinanciero reg = new tblBIAImpactoFinanciero
                                         {
                                             IdDocumentoBIA = _DocBIA.IdDocumentoBIA,
                                             IdEmpresa = _IdEmpresa,
+                                            IdTipoFrecuencia = Cultura_TipoFrecuencia.IdTipoFrecuencia,
                                             IdProceso = IdProceso,
                                             Descripcion = _Descripcion,
                                             Impacto = _Impacto,
@@ -1648,6 +1681,7 @@ namespace BCMWeb
 
                                     } // End if (_tableCell.HasChildren)
                                 } // End for (_Row = 2; _Row < _tableRows.Count(); _Row++)
+                                _startRow = 0;
                             } // End if (_tableRow.HasChildren)
                         } // End foreach (Table)
                     } // End using wordDocument
@@ -1668,6 +1702,7 @@ namespace BCMWeb
             int _NroProceso = 0;
             long IdProceso = 0;
             string _NombreProceso = string.Empty;
+            int _startRow = 2;
 
             try
             {
@@ -1698,7 +1733,7 @@ namespace BCMWeb
                                 int _Row = 0;
                                 List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
 
-                                for (_Row = 2; _Row < _tableRows.Count(); _Row++)
+                                for (_Row = _startRow; _Row < _tableRows.Count(); _Row++)
                                 {
                                     TableRow _tableRow = (TableRow)_tableRows[_Row];
 
@@ -1709,7 +1744,6 @@ namespace BCMWeb
                                     string _TelefonoHabitacion = string.Empty;
                                     string _CorreosElectronicos = string.Empty;
                                     string _DireccionHabitacion = string.Empty;
-                                    long _IdPersonaClave = 0;
 
                                     if (_tableRow.HasChildren)
                                     {
@@ -1811,6 +1845,7 @@ namespace BCMWeb
                                             };
 
                                             db.tblDocumentoPersonaClave.Add(_dataPersonaClave);
+                                            db.SaveChanges();
                                         }
 
                                         tblBIAPersonaClave reg = new tblBIAPersonaClave
@@ -1827,6 +1862,7 @@ namespace BCMWeb
 
                                     } // End if (_tableCell.HasChildren)
                                 } // End for (_Row = 2; _Row < _tableRows.Count(); _Row++)
+                                _startRow = 0;
                             } // End if (_tableRow.HasChildren)
                         } // End foreach (Table)
                     } // End using wordDocument
@@ -1846,7 +1882,9 @@ namespace BCMWeb
 
             int _NroProceso = 0;
             long IdProceso = 0;
+            string _Ubicacion = string.Empty;
             string _NombreProceso = string.Empty;
+            int _startRow = 2;
 
             try
             {
@@ -1875,11 +1913,10 @@ namespace BCMWeb
                                 int _Row = 0;
                                 List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
 
-                                for (_Row = 2; _Row < _tableRows.Count(); _Row++)
+                                for (_Row = _startRow; _Row < _tableRows.Count(); _Row++)
                                 {
                                     TableRow _tableRow = (TableRow)_tableRows[_Row];
 
-                                    string _Ubicacion = string.Empty;
                                     string _Informacion = string.Empty;
 
                                     if (_tableRow.HasChildren)
@@ -1938,7 +1975,8 @@ namespace BCMWeb
                                                         _Informacion = _textoCelda;
                                                         break;
                                                     case 3:
-                                                        _Ubicacion = _textoCelda;
+                                                        if (!string.IsNullOrEmpty(_textoCelda))
+                                                            _Ubicacion = _textoCelda;
                                                         break;
                                                 }
                                             } // End if (_celda.HasChildren)
@@ -1957,6 +1995,7 @@ namespace BCMWeb
 
                                     } // End if (_tableCell.HasChildren)
                                 } // End for (_Row = 2; _Row < _tableRows.Count(); _Row++)
+                                _startRow = 0;
                             } // End if (_tableRow.HasChildren)
                         } // End foreach (Table)
                     } // End using wordDocument
@@ -1976,7 +2015,9 @@ namespace BCMWeb
 
             int _NroProceso = 0;
             long IdProceso = 0;
+            string _Usuarios = string.Empty;
             string _NombreProceso = string.Empty;
+            int _startRow = 2;
 
             try
             {
@@ -2005,12 +2046,11 @@ namespace BCMWeb
                                 int _Row = 0;
                                 List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
 
-                                for (_Row = 2; _Row < _tableRows.Count(); _Row++)
+                                for (_Row = _startRow; _Row < _tableRows.Count(); _Row++)
                                 {
                                     TableRow _tableRow = (TableRow)_tableRows[_Row];
 
                                     string _Aplicaciones = string.Empty;
-                                    string _Usuarios = string.Empty;
 
                                     if (_tableRow.HasChildren)
                                     {
@@ -2068,7 +2108,8 @@ namespace BCMWeb
                                                         _Aplicaciones = _textoCelda;
                                                         break;
                                                     case 3:
-                                                        _Usuarios = _textoCelda;
+                                                        if (!string.IsNullOrEmpty(_textoCelda))
+                                                            _Usuarios = _textoCelda;
                                                         break;
                                                 }
                                             } // End if (_celda.HasChildren)
@@ -2087,6 +2128,7 @@ namespace BCMWeb
 
                                     } // End if (_tableCell.HasChildren)
                                 } // End for (_Row = 2; _Row < _tableRows.Count(); _Row++)
+                                _startRow = 0;
                             } // End if (_tableRow.HasChildren)
                         } // End foreach (Table)
                     } // End using wordDocument
@@ -2107,6 +2149,7 @@ namespace BCMWeb
             int _NroProceso = 0;
             long IdProceso = 0;
             string _NombreProceso = string.Empty;
+            int _startRow = 2;
 
             try
             {
@@ -2135,7 +2178,7 @@ namespace BCMWeb
                                 int _Row = 0;
                                 List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
 
-                                for (_Row = 2; _Row < _tableRows.Count(); _Row++)
+                                for (_Row = _startRow; _Row < _tableRows.Count(); _Row++)
                                 {
                                     TableRow _tableRow = (TableRow)_tableRows[_Row];
 
@@ -2218,7 +2261,7 @@ namespace BCMWeb
                                             IdDocumentoBIA = _DocBIA.IdDocumentoBIA,
                                             IdEmpresa = _IdEmpresa,
                                             IdProceso = IdProceso,
-                                            Producto = _ProcesoUnidad,
+                                            Producto = _Servicio,
                                             Responsable = _ResponsableUnidad,
                                             Unidad = _UnidadTrabajo
                                         };
@@ -2227,6 +2270,7 @@ namespace BCMWeb
 
                                     } // End if (_tableCell.HasChildren)
                                 } // End for (_Row = 2; _Row < _tableRows.Count(); _Row++)
+                                _startRow = 0;
                             } // End if (_tableRow.HasChildren)
                         } // End foreach (Table)
                     } // End using wordDocument
@@ -2247,6 +2291,7 @@ namespace BCMWeb
             int _NroProceso = 0;
             long IdProceso = 0;
             string _NombreProceso = string.Empty;
+            int _startRow = 2;
 
             try
             {
@@ -2275,7 +2320,7 @@ namespace BCMWeb
                                 int _Row = 0;
                                 List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
 
-                                for (_Row = 2; _Row < _tableRows.Count(); _Row++)
+                                for (_Row = _startRow; _Row < _tableRows.Count(); _Row++)
                                 {
                                     TableRow _tableRow = (TableRow)_tableRows[_Row];
 
@@ -2362,6 +2407,7 @@ namespace BCMWeb
 
                                     } // End if (_tableCell.HasChildren)
                                 } // End for (_Row = 2; _Row < _tableRows.Count(); _Row++)
+                                _startRow = 0;
                             } // End if (_tableRow.HasChildren)
                         } // End foreach (Table)
                     } // End using wordDocument
@@ -2383,6 +2429,7 @@ namespace BCMWeb
             long IdProceso = 0;
             string _NombreProceso = string.Empty;
             string _DescripcionProceso = string.Empty;
+            int _startRow = 2;
 
             try
             {
@@ -2403,7 +2450,8 @@ namespace BCMWeb
 
                     using (WordprocessingDocument wordDocument = WordprocessingDocument.Open(msContent, false))
                     {
-                        foreach (var _Elemento in wordDocument.MainDocumentPart.Document.Body.Where(x => x.GetType().Name == "Table").ToList())
+                        List<DocumentFormat.OpenXml.OpenXmlElement> _Tables = wordDocument.MainDocumentPart.Document.Body.Where(x => x.GetType().Name == "Table").ToList();
+                        foreach (var _Elemento in _Tables)
                         {
                             DocumentFormat.OpenXml.Wordprocessing.Table _Table = (DocumentFormat.OpenXml.Wordprocessing.Table)_Elemento;
                             if (_Table.HasChildren)
@@ -2411,7 +2459,7 @@ namespace BCMWeb
                                 int _Row = 0;
                                 List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
 
-                                for (_Row = 2; _Row < _tableRows.Count(); _Row++)
+                                for (_Row = _startRow; _Row < _tableRows.Count(); _Row++)
                                 {
                                     TableRow _tableRow = (TableRow)_tableRows[_Row];
 
@@ -2455,7 +2503,7 @@ namespace BCMWeb
 
                                                             tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
                                                                                                              && x.IdDocumentoBia == _DocBIA.IdDocumentoBIA
-                                                                                                             && x.NroProceso == _NroProceso).FirstOrDefault();
+                                                                                                             && x.Nombre == _NombreProceso).FirstOrDefault();
 
                                                             if (procBIA == null)
                                                             {
@@ -2506,6 +2554,7 @@ namespace BCMWeb
 
                                     } // End if (_tableCell.HasChildren)
                                 } // End for (_Row = 2; _Row < _tableRows.Count(); _Row++)
+                                _startRow = 0;
                             } // End if (_tableRow.HasChildren)
                         } // End foreach (Table)
                     } // End using wordDocument
@@ -2527,6 +2576,7 @@ namespace BCMWeb
             long IdProceso = 0;
             string _NombreProceso = string.Empty;
             string _DescripcionProceso = string.Empty;
+            int _startRow = 2;
 
             try
             {
@@ -2555,7 +2605,7 @@ namespace BCMWeb
                                 int _Row = 0;
                                 List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
 
-                                for (_Row = 2; _Row < _tableRows.Count(); _Row++)
+                                for (_Row = _startRow; _Row < _tableRows.Count(); _Row++)
                                 {
                                     TableRow _tableRow = (TableRow)_tableRows[_Row];
 
@@ -2590,46 +2640,38 @@ namespace BCMWeb
                                                     case 1:
                                                         if (!string.IsNullOrEmpty(_textoCelda))
                                                             _NombreProceso = _textoCelda;
+                                                        tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
+                                                                                                         && x.IdDocumentoBia == _DocBIA.IdDocumentoBIA
+                                                                                                         && x.NroProceso == _NroProceso).FirstOrDefault();
+
+                                                        if (procBIA == null)
+                                                        {
+                                                            procBIA = new tblBIAProceso
+                                                            {
+                                                                Critico = false,
+                                                                Descripcion = string.Empty,
+                                                                FechaCreacion = DateTime.UtcNow,
+                                                                FechaUltimoEstatus = DateTime.UtcNow,
+                                                                IdDocumentoBia = _DocBIA.IdDocumentoBIA,
+                                                                IdEmpresa = _IdEmpresa,
+                                                                IdEstadoProceso = (int)eEstadoProceso.Activo,
+                                                                IdUnidadOrganizativa = _DocBIA.IdUnidadOrganizativa,
+                                                                Nombre = _NombreProceso,
+                                                                NroProceso = _NroProceso,
+                                                            };
+
+                                                            db.tblBIAProceso.Add(procBIA);
+                                                            db.SaveChanges();
+                                                        }
+                                                        IdProceso = procBIA.IdProceso;
                                                         break;
                                                     case 2:
-                                                        if (!string.IsNullOrEmpty(_textoCelda))
-                                                        {
-
-                                                            _DescripcionProceso = _textoCelda;
-
-                                                            tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
-                                                                                                             && x.IdDocumentoBia == _DocBIA.IdDocumentoBIA
-                                                                                                             && x.NroProceso == _NroProceso).FirstOrDefault();
-
-                                                            if (procBIA == null)
-                                                            {
-                                                                procBIA = new tblBIAProceso
-                                                                {
-                                                                    Critico = false,
-                                                                    Descripcion = _DescripcionProceso,
-                                                                    FechaCreacion = DateTime.UtcNow,
-                                                                    FechaUltimoEstatus = DateTime.UtcNow,
-                                                                    IdDocumentoBia = _DocBIA.IdDocumentoBIA,
-                                                                    IdEmpresa = _IdEmpresa,
-                                                                    IdEstadoProceso = (int)eEstadoProceso.Activo,
-                                                                    IdUnidadOrganizativa = _DocBIA.IdUnidadOrganizativa,
-                                                                    Nombre = _NombreProceso,
-                                                                    NroProceso = _NroProceso,
-                                                                };
-
-                                                                db.tblBIAProceso.Add(procBIA);
-                                                                db.SaveChanges();
-                                                            }
-                                                            IdProceso = procBIA.IdProceso;
-                                                        }
-                                                        break;
-                                                    case 3:
                                                         _Organizacion = _textoCelda;
                                                         break;
-                                                    case 4:
+                                                    case 3:
                                                         _Servicio = _textoCelda;
                                                         break;
-                                                    case 5:
+                                                    case 4:
                                                         _Contacto = _textoCelda;
                                                         break;
                                                 }
@@ -2650,6 +2692,7 @@ namespace BCMWeb
 
                                     } // End if (_tableCell.HasChildren)
                                 } // End for (_Row = 2; _Row < _tableRows.Count(); _Row++)
+                                _startRow = 0;
                             } // End if (_tableRow.HasChildren)
                         } // End foreach (Table)
                     } // End using wordDocument
@@ -2661,7 +2704,6 @@ namespace BCMWeb
                 throw ex;
             } // End catch
         }
-
         //private static void ProcessFichaBIA(MemoryStream msContent)
         //{
         //    long _IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
@@ -3722,7 +3764,6 @@ namespace BCMWeb
                 throw ex;
             } // End catch
         }
-
         private static void DeleteFile(string _filePath)
         {
             if (File.Exists(_filePath))

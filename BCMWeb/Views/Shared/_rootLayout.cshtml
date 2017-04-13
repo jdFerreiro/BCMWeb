@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0" />
     <title>@ViewBag.Title</title>
 
+    <link rel="SHORTCUT ICON" href="../../favicon.ico" />
+    <link rel="icon" href="../../favicon.ico" type="image/ico" />
+
     @Html.DevExpress().GetStyleSheets(
         new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
         new StyleSheet { ExtensionSuite = ExtensionSuite.SpellChecker },
@@ -56,10 +59,16 @@
        function GetEditableForm() {
            return document.getElementById("editForm");
        }
+       //function OnSavePerfil(s, e) {
+       //    if ($("#frmPerfil").valid() && $("#PerfilValid").val() == 'true') {
+       //        //$("#Perfil_Changed").val(true);
+       //        //Alert($("#Perfil_Changed").val());
+       //        lp.Show();
+       //    };
+       //}
     </script>
 </head>
 <body onloadstart="lp.Show()" onload="lp.Hide()" onunload="lp.Show();">
-
     @Html.DevExpress().LoadingPanel(s =>
         {
             s.Name = "lp";
@@ -67,29 +76,24 @@
             s.Text = Resources.BCMWebPublic.labelLoadPanel;
             s.Width = Unit.Percentage(20);
         }).GetHtml()
-
     @Html.DevExpress().Panel(settings =>
-{
-    settings.Name = "HeaderPane";
-    settings.FixedPosition = PanelFixedPosition.WindowTop;
-    settings.Collapsible = true;
-    settings.SettingsAdaptivity.CollapseAtWindowInnerWidth = 500;
-    settings.ControlStyle.CssClass = "headerPane";
-    settings.Styles.Panel.CssClass = "panel";
-    settings.Styles.ExpandedPanel.CssClass = "expandedPanel";
-    settings.Styles.ExpandBar.CssClass = "bar";
-    settings.SetContent(() =>
     {
-        Html.RenderPartial("HeaderPartialView", HeaderViewRenderMode.Full);
-    });
-    settings.SetExpandBarTemplateContent((c) =>
-    {
-        Html.RenderPartial("HeaderPartialView", HeaderViewRenderMode.Title);
-    });
-}).GetHtml()
+        settings.Name = "HeaderPane";
+        settings.FixedPosition = PanelFixedPosition.WindowTop;
+        settings.Collapsible = true;
+        settings.SettingsAdaptivity.CollapseAtWindowInnerWidth = 500;
+        settings.ControlStyle.CssClass = "headerPane";
+        settings.Styles.Panel.CssClass = "panel";
+        settings.Styles.ExpandedPanel.CssClass = "expandedPanel";
+        settings.Styles.ExpandBar.CssClass = "bar";
+        settings.SetContent(() =>
+        {
+            Html.RenderPartial("HeaderPartialView");
+        });
+    }).GetHtml()
 
     <script type="text/javascript">
-        function updateHeaderMenuOrientation(){
+        function updateHeaderMenuOrientation() {
             if(!window.HeaderMenu) return;
             var orientation = HeaderPane.IsExpandable() ? 'Vertical' : 'Horizontal';
             if(orientation !== HeaderMenu.GetOrientation())
@@ -99,7 +103,6 @@
         collection.ControlsInitialized.AddHandler(updateHeaderMenuOrientation);
         collection.BrowserWindowResized.AddHandler(updateHeaderMenuOrientation);
     </script>
-
     <div class="container" style="margin-top: 10px; margin-bottom: 10px;">
         @Html.DevExpress().Panel(settings =>
         {

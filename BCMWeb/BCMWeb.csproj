@@ -194,8 +194,11 @@
     <Content Include="Content\BCMWeb.css" />
     <Content Include="Content\BCMWeb_Menu.css" />
     <Content Include="Content\Images\AquaHeader.jpg" />
+    <Content Include="Content\Images\Banderas\bandera-colombia-300x189.gif" />
     <Content Include="Content\Images\BlackGlassHeader.jpg" />
+    <Content Include="Content\Images\Banderas\espana.jpg" />
     <Content Include="Content\Images\GlassHeader.jpg" />
+    <Content Include="Content\Images\Banderas\guatemala.png" />
     <Content Include="Content\Images\Internal\icono-pdf.jpg" />
     <Content Include="Content\Images\Menu\Adiestramiento.png" />
     <Content Include="Content\Images\Menu\Administration.jpg" />
@@ -213,6 +216,7 @@
     <Content Include="Content\Images\Menu\Riesgo.png" />
     <Content Include="Content\Images\PlasticBlueHeader.jpg" />
     <Content Include="Content\Images\RedWineHeader.jpg" />
+    <Content Include="Content\Images\Banderas\venezuela-300x200.jpg" />
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\jquery-ui.min.css" />
     <Content Include="Content\LogosEmpresa\biv_logo.jpg" />
@@ -238,6 +242,7 @@
       <DependentUpon>BCMWebEntities.edmx</DependentUpon>
       <LastGenOutput>BCMWebEntities.cs</LastGenOutput>
     </Content>
+    <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Images\500px-ISO22301_Lifecycle.png" />
     <Content Include="Content\Images\bcp.jpg" />
@@ -250,9 +255,11 @@
     <Content Include="Content\Images\Movil.png" />
     <Content Include="Content\Images\seo_analysis_big-403x250.jpg" />
     <Content Include="Content\Images\tornado_163m.jpg" />
+    <Content Include="Logo-BiaPlus.png" />
     <Content Include="LogosEmpresa\biv_logo.jpg" />
     <Content Include="LogosEmpresa\logo BancaribeCB.jpg" />
     <Content Include="LogosEmpresa\Logo BancoExterior.jpg" />
+    <Content Include="LogosEmpresa\Logo Directv.jpg" />
     <Content Include="LogosEmpresa\LogoAplired.png" />
     <Content Include="LogosEmpresa\LogoBancaribe.jpg" />
     <Content Include="LogosEmpresa\logoBancoActivo.png" />
@@ -315,7 +322,9 @@
     <Content Include="Views\Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Account\ChangePassword.cshtml" />
     <Content Include="Views\Account\ChangePasswordSuccess.cshtml" />
@@ -371,6 +380,27 @@
     <Content Include="Views\Documentos\AprobacionGridPartialView.cshtml" />
     <Content Include="Views\Documentos\CertificacionGridPartialView.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Account\ForgotPasword.cshtml" />
+    <Content Include="Views\Account\RecoveryPage.cshtml" />
+    <Content Include="Views\Account\EmailSent.cshtml" />
+    <Content Include="Views\Account\ConfirmPaswordChange.cshtml" />
+    <Content Include="Views\Home\Contact - Copia.cshtml" />
+    <Content Include="Views\Home\MensajeContactoPartialView.cshtml" />
+    <Content Include="Views\FileManager\ContentLeftPartialView.cshtml" />
+    <Content Include="Views\FileManager\Index.cshtml" />
+    <Content Include="Views\FileManager\FileManagerUpload.cshtml" />
+    <Content Include="Views\FileManager\FileManagerPartial.cshtml" />
+    <Content Include="Views\Documentos\Anexar.cshtml" />
+    <Content Include="Views\Documentos\FileManagerPartial.cshtml" />
+    <Content Include="Views\Shared\PerfilPartial.cshtml" />
+    <Content Include="Views\Shared\_PerfilPartialView.cshtml" />
+    <Content Include="Views\Documentos\DiagramaBIA.cshtml" />
+    <Content Include="Views\Documentos\PartialProcesosView.cshtml" />
+    <Content Include="Views\Documentos\PartialDiagramaProceso.cshtml" />
+    <Content Include="Views\Reportes\ContentLeftPartialView.cshtml" />
+    <Content Include="Views\Reportes\Cuadro.cshtml" />
+    <Content Include="Views\Reportes\Grafico.cshtml" />
+    <Content Include="Views\Reportes\Tabla.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -414,6 +444,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ContactResource.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_LocalResources\DiagramaResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DiagramaResource.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_LocalResources\DocumentoResource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -449,6 +484,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>FichaResource.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_LocalResources\FileManagerResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FileManagerResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_LocalResources\ForgotPasswordResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ForgotPasswordResource.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_LocalResources\HomeIndex.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -463,6 +508,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PDFResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_LocalResources\PerfilResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PerfilResource.resx</DependentUpon>
     </Compile>
     <Compile Include="App_LocalResources\ProcedimientoBCPResource.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -482,8 +532,11 @@
     <Compile Include="Controllers\DocumentoController.cs" />
     <Compile Include="Controllers\DocumentosController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\FileManagerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
+    <Compile Include="Controllers\ReportesController.cs" />
+    <Compile Include="Controllers\SeguridadController.cs" />
     <Compile Include="Controllers\UploadController.cs" />
     <Compile Include="DAL\EmpresaUsuario.cs" />
     <Compile Include="DAL\Encriptador.cs" />
@@ -915,6 +968,7 @@
     <Compile Include="Data\EF\tblVicepresidencia.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Data\EmailManager.cs" />
     <Compile Include="Data\ProcesarDocumento.cs" />
     <Compile Include="DAL\Repository.cs" />
     <Compile Include="DAL\User.cs" />
@@ -943,12 +997,16 @@
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\AuditoriaModels.cs" />
+    <Compile Include="Models\ContactoViewModel.cs" />
     <Compile Include="Models\DocumentoModels.cs" />
     <Compile Include="Models\DocumentoWordModels.cs" />
     <Compile Include="Models\EmpresaModels.cs" />
+    <Compile Include="Models\FileManagerModel.cs" />
     <Compile Include="Models\MenuModels.cs" />
     <Compile Include="Models\ModuloModels.cs" />
     <Compile Include="Models\PersonaModels.cs" />
+    <Compile Include="Models\ReporteModels.cs" />
+    <Compile Include="Models\SeguridadModels.cs" />
     <Compile Include="Models\TablaModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Validators\EnsureOneElementAttribute.cs" />
@@ -957,6 +1015,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\DocsFolder\" />
+    <Folder Include="Content\FileManager\Thumbnails\" />
     <Folder Include="PDFDocs\" />
     <Folder Include="Views\AdminDoc\" />
     <Folder Include="Views\Error\" />
@@ -1000,6 +1059,11 @@
       <LastGenOutput>ContactResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Resources</CustomToolNamespace>
     </EmbeddedResource>
+    <EmbeddedResource Include="App_LocalResources\DiagramaResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DiagramaResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources</CustomToolNamespace>
+    </EmbeddedResource>
     <EmbeddedResource Include="App_LocalResources\DocumentoResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>DocumentoResource.Designer.cs</LastGenOutput>
@@ -1035,6 +1099,16 @@
       <LastGenOutput>FichaResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Resources</CustomToolNamespace>
     </EmbeddedResource>
+    <EmbeddedResource Include="App_LocalResources\FileManagerResource.resx">
+      <CustomToolNamespace>Resources</CustomToolNamespace>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>FileManagerResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App_LocalResources\ForgotPasswordResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ForgotPasswordResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources</CustomToolNamespace>
+    </EmbeddedResource>
     <EmbeddedResource Include="App_LocalResources\HomeIndex.resx">
       <CustomToolNamespace>Resources</CustomToolNamespace>
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -1049,6 +1123,11 @@
       <CustomToolNamespace>Resources</CustomToolNamespace>
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PDFResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App_LocalResources\PerfilResource.resx">
+      <CustomToolNamespace>Resources</CustomToolNamespace>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PerfilResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="App_LocalResources\ProcedimientoBCPResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

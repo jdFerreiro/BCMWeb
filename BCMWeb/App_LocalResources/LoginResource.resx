@@ -153,4 +153,10 @@
   <data name="LogOutString" xml:space="preserve">
     <value>Cerrar sesión</value>
   </data>
+  <data name="EmpresaLabelString" xml:space="preserve">
+    <value>EMPRESA:</value>
+  </data>
+  <data name="WelcomeString" xml:space="preserve">
+    <value>Bienvenido:</value>
+  </data>
 </root>

@@ -63,16 +63,28 @@ namespace BCMWeb.Controllers
 
         public static void docFileUploadComplete(object sender, FileUploadCompleteEventArgs e)
         {
+
             if (e.UploadedFile.IsValid)
             {
                 string resultFilePath = HttpContext.Current.Request.MapPath(DocUploadDirectory + e.UploadedFile.FileName);
-                e.UploadedFile.SaveAs(resultFilePath, true);//Code Central Mode - Uncomment This Line
-                Session["uploadedFile"] = e.UploadedFile;
-                IUrlResolutionService urlResolver = sender as IUrlResolutionService;
-                if (urlResolver != null)
+                try
                 {
-                    e.CallbackData = urlResolver.ResolveClientUrl(resultFilePath);
+                    e.UploadedFile.SaveAs(resultFilePath, true); //Code Central Mode - Uncomment This Line
+                    Session["uploadedFile"] = e.UploadedFile;
+                    IUrlResolutionService urlResolver = sender as IUrlResolutionService;
+                    if (urlResolver != null)
+                    {
+                        e.CallbackData = urlResolver.ResolveClientUrl(resultFilePath);
+                    }
                 }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+            else
+            {
+                throw new Exception(e.ErrorText);
             }
         }
         public static void logoFileUploadComplete(object sender, FileUploadCompleteEventArgs e)

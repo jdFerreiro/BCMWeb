@@ -106,7 +106,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Grupo Aplired C.A..
+        ///   Looks up a localized string similar to Grupo APLIRED S.L..
         /// </summary>
         public static string Direccion2Linea1 {
             get {
@@ -205,11 +205,38 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to contacto.BCMWeb@aplired.com.
+        ///   Looks up a localized string similar to contacto.bcmweb@aplired.com.
         /// </summary>
         public static string EmailContacto {
             get {
                 return ResourceManager.GetString("EmailContacto", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Se ha recibido un mensaje de contacto.
+        /// </summary>
+        public static string HeaderEmailApliredHtml {
+            get {
+                return ResourceManager.GetString("HeaderEmailApliredHtml", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gracias por Contactarnos.
+        /// </summary>
+        public static string HeaderEmailClienteHtml {
+            get {
+                return ResourceManager.GetString("HeaderEmailClienteHtml", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Asunto.
+        /// </summary>
+        public static string labelAsunto {
+            get {
+                return ResourceManager.GetString("labelAsunto", resourceCulture);
             }
         }
         
@@ -223,6 +250,100 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mensaje.
+        /// </summary>
+        public static string labelMensaje {
+            get {
+                return ResourceManager.GetString("labelMensaje", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nombre.
+        /// </summary>
+        public static string labelNombre {
+            get {
+                return ResourceManager.GetString("labelNombre", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
+        ///&lt;html&gt;
+        ///&lt;head&gt;
+        ///    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;
+        ///&lt;/head&gt;
+        ///&lt;body&gt;
+        ///    &lt;table&gt;
+        ///        &lt;tr&gt;
+        ///            &lt;td&gt;
+        ///                &lt;img src=&quot;cid:Logo-BiaPlus&quot; width=&quot;80&quot; /&gt;
+        ///            &lt;/td&gt;
+        ///            &lt;td&gt;&lt;h1&gt;{0}&lt;/h1&gt;&lt;/td&gt;
+        ///        &lt;/tr&gt;
+        ///        &lt;tr&gt;
+        ///            &lt;td colspan=&quot;2&quot; style=&quot;align-content:center; text-align:center;&quot;&gt;
+        ///                &lt;h2&gt;{5}&lt;/h2&gt;
+        ///            &lt;/td&gt;
+        ///        &lt;/tr&gt;
+        ///        &lt;tr&gt;
+        ///            &lt;td colspan=&quot;2&quot;&gt;
+        ///              [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string MensajeEmailApliredHTML {
+            get {
+                return ResourceManager.GetString("MensajeEmailApliredHTML", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Se ha recibido un correo electrónico de contacto. {0} {0} La información recibida es la siguiente: {0} Nombre: {1} {0} Correo Electrónico: {2}{0} Asunto: {3} {0} Mensaje {4} .
+        /// </summary>
+        public static string MensajeEmailApliredTexto {
+            get {
+                return ResourceManager.GetString("MensajeEmailApliredTexto", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
+        ///&lt;html&gt;
+        ///&lt;head&gt;
+        ///    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;
+        ///&lt;/head&gt;
+        ///&lt;body&gt;
+        ///    &lt;table&gt;
+        ///        &lt;tr&gt;
+        ///            &lt;td&gt;
+        ///                &lt;img src=&quot;cid:Logo-BiaPlus&quot; width=&quot;80&quot; /&gt;
+        ///            &lt;/td&gt;
+        ///            &lt;td&gt;&lt;h1&gt;{0}&lt;/h1&gt;&lt;/td&gt;
+        ///        &lt;/tr&gt;
+        ///        &lt;tr&gt;
+        ///            &lt;td colspan=&quot;2&quot; style=&quot;align-content:center; text-align:center;&quot;&gt;
+        ///                &lt;h2&gt;{2}&lt;/h2&gt;
+        ///            &lt;/td&gt;
+        ///        &lt;/tr&gt;
+        ///        &lt;tr&gt;
+        ///            &lt;td colspan=&quot;2&quot;&gt;
+        ///              [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string MensajeEmailClienteHTML {
+            get {
+                return ResourceManager.GetString("MensajeEmailClienteHTML", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sr/a {1}. {0} {0} Su mensaja ha sido enviado de manera satisfactoria. {0} Queremos agradecerle por contactarnos..
+        /// </summary>
+        public static string MensajeEmailClienteTexto {
+            get {
+                return ResourceManager.GetString("MensajeEmailClienteTexto", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Contáctenos.
         /// </summary>
         public static string PageTitle {
@@ -232,20 +353,47 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Puedes contactarnos a través de:.
+        ///   Looks up a localized string similar to Sedes.
         /// </summary>
-        public static string SubHeader {
+        public static string SedesLabel {
             get {
-                return ResourceManager.GetString("SubHeader", resourceCulture);
+                return ResourceManager.GetString("SedesLabel", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to O nuestras oficinas ubicadas en:.
+        ///   Looks up a localized string similar to Envíenos un Correo Electrónico a:.
         /// </summary>
-        public static string SubHeaderDireccion {
+        public static string SubHeaderCorreo {
             get {
-                return ResourceManager.GetString("SubHeaderDireccion", resourceCulture);
+                return ResourceManager.GetString("SubHeaderCorreo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Envíenos un Mensaje.
+        /// </summary>
+        public static string SubHeaderMensaje {
+            get {
+                return ResourceManager.GetString("SubHeaderMensaje", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Contacto desde BCMWeb.
+        /// </summary>
+        public static string SubjectEmailAplired {
+            get {
+                return ResourceManager.GetString("SubjectEmailAplired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Respuesta de contacto en BCMWeb.
+        /// </summary>
+        public static string SubjectEmailCliente {
+            get {
+                return ResourceManager.GetString("SubjectEmailCliente", resourceCulture);
             }
         }
     }

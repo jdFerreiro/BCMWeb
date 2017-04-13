@@ -36,7 +36,6 @@ namespace BCMWeb.Data.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIAPersonaClave> tblBIAPersonaClave { get; set; }
         public virtual tblDocumento tblDocumento { get; set; }
-        public virtual tblPersona tblPersona { get; set; }
         public virtual tblEmpresa tblEmpresa { get; set; }
     }
 }

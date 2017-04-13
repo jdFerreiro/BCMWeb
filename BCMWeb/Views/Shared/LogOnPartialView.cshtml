@@ -1,5 +1,7 @@
 @using BCMWeb
 
+@model BCMWeb.Models.ModulosUserModel
+
 @if(!Request.IsAuthenticated) {
     @*@Html.ActionLink("Register", "Register", "Account") 
     @: |*@ 
@@ -8,14 +10,18 @@
 else
 {
 
-    @: Welcome <b>@User.Identity.Name</b>
- 
+    @*@Html.ActionLink(string.Format("{0} {1}", Resources.LoginResource.WelcomeString, User.Identity.Name), "", null, new { href = "javascript:perfilModalMode.Show();" })*@
+    @*@Html.ActionLink(string.Format("{0} {1}", Resources.LoginResource.WelcomeString, Model.Perfil.Nombre), "", null, new { href = "javascript:perfilModalMode.Show();" })*@
+    @Html.Raw(string.Format("{0} {1}", Resources.LoginResource.WelcomeString, User.Identity.Name))
     @: |
     @Html.ActionLink(Resources.LoginResource.LogOutString, "LogOff", "Account", routeValues: null, htmlAttributes: new { onclick = "lp.Show();" })
 
     @: <br/><br/>
     @: @if (Session["IdEmpresa"] != null)
     { 
-        <span style="font-weight: bold; font-size: 12pt;">@Html.Raw(String.Format("Empresa: {0}", Metodos.GetNombreEmpresa()).ToUpperInvariant())</span> 
+        <span style="font-weight: bold; font-size: 12pt;">@Html.Raw(String.Format("{1} {0}", Metodos.GetNombreEmpresa(), Resources.LoginResource.EmpresaLabelString))</span> 
     }
+
+    @*@Html.Partial("_PerfilPartialView", Model);*@
 }
+

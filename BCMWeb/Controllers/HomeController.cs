@@ -1,8 +1,11 @@
+using BCMWeb.Models;
+using DevExpress.Web.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace BCMWeb.Controllers
 {
@@ -47,13 +50,6 @@ namespace BCMWeb.Controllers
             return View();
         }
         [HandleError]
-        public ActionResult Contact()
-        {
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, Resources.BCMWebPublic.ContactPageTitle);
-            ViewBag.PageTitle = Resources.BCMWebPublic.ContactPageTitle;
-            return View();
-        }
-        [HandleError]
         public ActionResult FAQ()
         {
             ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, Resources.BCMWebPublic.FAQPageTitle);
@@ -73,6 +69,36 @@ namespace BCMWeb.Controllers
             ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, Resources.BCMWebPublic.ProcedimientoBIAPageTitle);
             ViewBag.PageTitle = Resources.BCMWebPublic.ProcedimientoBIAPageTitle;
             return View();
+        }
+        [HandleError]
+        public ActionResult Contact()
+        {
+            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, Resources.BCMWebPublic.ContactPageTitle);
+            ViewBag.PageTitle = Resources.BCMWebPublic.ContactPageTitle;
+            ContactoViewModel model = new ContactoViewModel();
+            return View(model);
+        }
+        [HandleError]
+        [HttpPost]
+        public ActionResult Contact(ContactoViewModel model)
+        {
+            if (ModelState.IsValid && CaptchaExtension.GetIsValid("captcha"))
+            {
+                string _esquema = Request.Url.Scheme;
+                string _hostName = Request.Url.Host;
+
+                EmailManager.EnviarEmailContacto(model.Nombre, model.Email, model.Asunto, model.Mensaje, this.ControllerContext, RouteTable.Routes, _esquema, _hostName);
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, Resources.BCMWebPublic.ContactPageTitle);
+            ViewBag.PageTitle = Resources.BCMWebPublic.ContactPageTitle;
+            return View(model);
+        }
+        [HandleError]
+        public ActionResult MensajeContactoPartialView()
+        {
+            return PartialView();
         }
     }
 }

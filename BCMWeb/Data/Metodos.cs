@@ -1,5 +1,6 @@
 ﻿using BCMWeb.Data.EF;
 using BCMWeb.Models;
+using BCMWeb.Security;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -21,6 +22,31 @@ namespace BCMWeb
         private static string _AppUrl = _ContextUrl.AbsoluteUri.Replace(_ContextUrl.AbsolutePath, string.Empty);
         private static HttpServerUtility _Server = HttpContext.Current.Server;
 
+        public static PerfilModelView GetPerfilData()
+        {
+            long IdUser = long.Parse(Session["UserId"].ToString());
+            PerfilModelView model = new PerfilModelView();
+
+            using (Entities db = new Entities())
+            {
+                tblUsuario usuario = db.tblUsuario.Where(x => x.IdUsuario == IdUser).FirstOrDefault();
+
+                Encriptador Encriptar = new Encriptador();
+                string _password = Encriptar.Desencriptar(usuario.ClaveUsuario, Encriptador.HasAlgorimt.SHA1, Encriptador.Keysize.KS256);
+
+                model = new PerfilModelView
+                {
+                    Email = usuario.Email,
+                    IdUsuario = usuario.IdUsuario,
+                    Nombre = usuario.Nombre,
+                    Password = _password,
+                    PasswordCompare = _password
+                };
+
+            }
+
+            return model;
+        }
         public static IList<EmpresaModel> GetEmpresasUsuario()
         {
 
@@ -60,6 +86,28 @@ namespace BCMWeb
             }
             
             return Data;
+        }
+        public static void SavePerfil(PerfilModelView model)
+        {
+            long IdUser = long.Parse(Session["UserId"].ToString());
+
+            Encriptador Encriptar = new Encriptador();
+            string _password = Encriptar.Encriptar(model.Password, Encriptador.HasAlgorimt.SHA1, Encriptador.Keysize.KS256);
+
+            using (Entities db = new Entities())
+            {
+                tblUsuario usuario = db.tblUsuario.Where(x => x.IdUsuario == IdUser).FirstOrDefault();
+
+                if (usuario != null)
+                {
+                    usuario.Email = model.Email;
+                    usuario.CodigoUsuario = model.Email;
+                    usuario.ClaveUsuario = _password;
+                    usuario.Nombre = model.Nombre;
+
+                    db.SaveChanges();
+                }
+            }
         }
         public static string GetNombreModulo(long idModulo)
         {
@@ -182,11 +230,21 @@ namespace BCMWeb
                                                             && x.IdTipoDocumento == IdTipoDocumento
                                                             && x.NroDocumento == docNroDocumento
                                                             && x.NroVersion > docVersion).Count() > 0;
+                    string _EstadoDocumento = string.Empty;
+
+                    if (d.IdEstadoDocumento < 6)
+                    {
+                        _EstadoDocumento = db.tblCultura_EstadoDocumento.Where(x => x.IdEstadoDocumento == 1 && (x.Culture == Culture || x.Culture == "es-VE")).FirstOrDefault().Descripcion;
+                    }
+                    else
+                    {
+                        _EstadoDocumento = d.tblEstadoDocumento.tblCultura_EstadoDocumento.Where(x => x.Culture == Culture || x.Culture == "es-VE").FirstOrDefault().Descripcion;
+                    }
                     DocumentoModel Documento = new DocumentoModel
                     {
                         Editable = d.IdEstadoDocumento != 6 && (EmpresaUsuario.IdNivelUsuario == 6 || EmpresaUsuario.IdNivelUsuario == 4 || ModulosEditables > 0),
                         Eliminable = d.IdEstadoDocumento != 6 && (EmpresaUsuario.IdNivelUsuario == 6 || EmpresaUsuario.IdNivelUsuario == 4 || ModulosEliminables > 0),
-                        Estatus = d.tblEstadoDocumento.tblCultura_EstadoDocumento.Where(x => x.Culture == Culture || x.Culture == "es-VE").FirstOrDefault().Descripcion,
+                        Estatus = _EstadoDocumento,
                         FechaCreacion = (DateTime)d.FechaCreacion.AddMinutes(Minutos),
                         FechaEstadoDocumento = (DateTime)d.FechaEstadoDocumento.AddMinutes(Minutos),
                         FechaUltimaModificacion = (DateTime)(d.FechaUltimaModificacion != null ? ((DateTime)d.FechaUltimaModificacion).AddMinutes(Minutos) : d.FechaUltimaModificacion),
@@ -217,6 +275,31 @@ namespace BCMWeb
             }
             return Documentos;
         }
+        public static bool ValidarEmailUsuario(string email)
+        {
+            bool IsValid = false;
+            
+            using (Entities db = new Entities())
+            {
+                tblUsuario usuario = db.tblUsuario.Where(x => x.Email == email).FirstOrDefault();
+                if (usuario != null)
+                    IsValid = true;
+            }
+
+            return IsValid;
+        }
+        public static void ChangePassword(string email, string password)
+        {
+             Encriptador _Encriptar = new Encriptador();
+
+            string encriptPassword = _Encriptar.Encriptar(password, Encriptador.HasAlgorimt.SHA1, Encriptador.Keysize.KS256);
+            using (Entities db = new Entities())
+            {
+                tblUsuario usuario = db.tblUsuario.Where(x => x.Email == email).FirstOrDefault();
+                usuario.ClaveUsuario = encriptPassword;
+                db.SaveChanges();
+            }
+        }
         public static DocumentoModel GetDocumento(long IdDocumento, int IdTipoDocumento)
         {
             long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
@@ -230,13 +313,25 @@ namespace BCMWeb
             using (Entities db = new Entities())
             {
                 tblDocumento data = (from d in db.tblDocumento
-                                  where d.IdEmpresa == IdEmpresa && d.IdTipoDocumento == IdTipoDocumento && d.IdDocumento == IdDocumento
-                                  select d).FirstOrDefault();
+                                     where d.IdEmpresa == IdEmpresa && d.IdTipoDocumento == IdTipoDocumento && d.IdDocumento == IdDocumento
+                                     select d).FirstOrDefault();
+                string _EstadoDocumento = string.Empty;
+
+                if (data == null || data.IdEstadoDocumento < 6)
+                    {
+                        _EstadoDocumento = db.tblCultura_EstadoDocumento.Where(x => x.IdEstadoDocumento == 1 && (x.Culture == Culture || x.Culture == "es-VE")).FirstOrDefault().Descripcion;
+                    }
+                    else
+                    {
+                        _EstadoDocumento = data.tblEstadoDocumento.tblCultura_EstadoDocumento.Where(x => x.Culture == Culture || x.Culture == "es-VE").FirstOrDefault().Descripcion;
+                    }
+
+
                 if (data != null)
                 {
                     Documento = new DocumentoModel
                     {
-                        Estatus = data.tblEstadoDocumento.tblCultura_EstadoDocumento.Where(x => x.Culture == Culture || x.Culture == "es-VE").FirstOrDefault().Descripcion,
+                        Estatus = _EstadoDocumento,
                         FechaCreacion = (DateTime)data.FechaCreacion.AddMinutes(Minutos),
                         FechaEstadoDocumento = (DateTime)data.FechaEstadoDocumento.AddMinutes(Minutos),
                         FechaUltimaModificacion = (DateTime)((DateTime)data.FechaUltimaModificacion).AddMinutes(Minutos),
@@ -444,16 +539,19 @@ namespace BCMWeb
 
                 if (IdModuloPadre == 99010000)
                 {
-                    if (IdDocumento > 0) {
+                    if (IdDocumento > 0)
+                    {
                         eEstadoDocumento IdEstadoDocumento = (eEstadoDocumento)db.tblDocumento.Where(x => x.IdEmpresa == IdEmpresa && x.IdDocumento == IdDocumento).FirstOrDefault().IdEstadoDocumento;
                         switch (IdEstadoDocumento)
                         {
                             case eEstadoDocumento.Aprobando:
                                 SubModulos.Remove(SubModulos.Where(x => x.IdModulo == 99010100).FirstOrDefault());
+                                SubModulos.Remove(SubModulos.Where(x => x.IdModulo == 99010300).FirstOrDefault());
                                 SubModulos.Remove(SubModulos.Where(x => x.IdModulo == 99010500).FirstOrDefault());
                                 break;
                             case eEstadoDocumento.Cargando:
                                 SubModulos.Remove(SubModulos.Where(x => x.IdModulo == 99010400).FirstOrDefault());
+                                SubModulos.Remove(SubModulos.Where(x => x.IdModulo == 99010300).FirstOrDefault());
                                 SubModulos.Remove(SubModulos.Where(x => x.IdModulo == 99010500).FirstOrDefault());
                                 break;
                             case eEstadoDocumento.Certificado:
@@ -463,14 +561,17 @@ namespace BCMWeb
                                 break;
                             case eEstadoDocumento.Certificando:
                                 SubModulos.Remove(SubModulos.Where(x => x.IdModulo == 99010100).FirstOrDefault());
+                                SubModulos.Remove(SubModulos.Where(x => x.IdModulo == 99010300).FirstOrDefault());
                                 SubModulos.Remove(SubModulos.Where(x => x.IdModulo == 99010400).FirstOrDefault());
                                 break;
                             case eEstadoDocumento.PorAprobar:
                                 SubModulos.Remove(SubModulos.Where(x => x.IdModulo == 99010100).FirstOrDefault());
+                                SubModulos.Remove(SubModulos.Where(x => x.IdModulo == 99010300).FirstOrDefault());
                                 SubModulos.Remove(SubModulos.Where(x => x.IdModulo == 99010500).FirstOrDefault());
                                 break;
                             case eEstadoDocumento.PorCertificar:
                                 SubModulos.Remove(SubModulos.Where(x => x.IdModulo == 99010100).FirstOrDefault());
+                                SubModulos.Remove(SubModulos.Where(x => x.IdModulo == 99010300).FirstOrDefault());
                                 SubModulos.Remove(SubModulos.Where(x => x.IdModulo == 99010400).FirstOrDefault());
                                 break;
                         }
@@ -478,6 +579,7 @@ namespace BCMWeb
                     else
                     {
                         SubModulos.Remove(SubModulos.Where(x => x.IdModulo == 99010400).FirstOrDefault());
+                        SubModulos.Remove(SubModulos.Where(x => x.IdModulo == 99010300).FirstOrDefault());
                         SubModulos.Remove(SubModulos.Where(x => x.IdModulo == 99010500).FirstOrDefault());
                     }
                 }
@@ -568,6 +670,204 @@ namespace BCMWeb
 
             return Persona;
         }
+
+        public static string GetTecnologiaDiagrama(long idProceso)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            long IdDocumento = long.Parse(Session["IdDocumento"].ToString());
+            string Result = string.Empty;
+
+            using (Entities db = new Entities())
+            {
+                List<tblBIAAplicacion> Data = db.tblBIAAplicacion
+                    .Where(x => x.IdEmpresa == IdEmpresa && x.IdDocumentoBIA == IdDocumento && x.IdProceso == idProceso)
+                    .ToList();
+                foreach (tblBIAAplicacion Reg in Data)
+                {
+                    Result += "<div class=\"internal\"><table>";
+                    Result += string.Format("<tr><td class=\"subHeader\">{0}</td></tr>", Resources.DiagramaResource.TecnologiaPataformaHeader);
+                    Result += string.Format("<tr><td>{0}</td></tr>", Reg.Nombre);
+                    Result += string.Format("<tr><td class=\"subHeader\">{0}</td></tr>", Resources.DiagramaResource.TecnologiaUsuarioHeader);
+                    Result += string.Format("<tr><td>{0}</td></tr>", Reg.Usuario);
+                    Result += "</table></div>";
+                }
+            }
+
+            return Result;
+        }
+
+        public static string GetProveedoresDiagrama(long idProceso)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            long IdDocumento = long.Parse(Session["IdDocumento"].ToString());
+            string Result = string.Empty;
+
+            using (Entities db = new Entities())
+            {
+                List<tblBIAProveedor> Data = db.tblBIAProveedor
+                    .Where(x => x.IdEmpresa == IdEmpresa && x.IdDocumentoBIA == IdDocumento && x.IdProceso == idProceso)
+                    .ToList();
+                foreach (tblBIAProveedor Reg in Data)
+                {
+                    Result += "<div class=\"internal\"><table>";
+                    Result += string.Format("<tr><td class=\"subHeader\">{0}</td></tr>", Resources.DiagramaResource.ProveedorOrganizacionHeader);
+                    Result += string.Format("<tr><td>{0}</td></tr>", Reg.Organizacion);
+                    Result += string.Format("<tr><td class=\"subHeader\">{0}</td></tr>", Resources.DiagramaResource.ProveedorServicioHeader);
+                    Result += string.Format("<tr><td>{0}</td></tr>", Reg.Servicio);
+                    Result += string.Format("<tr><td class=\"subHeader\">{0}</td></tr>", Resources.DiagramaResource.ProveedorResponsableHeader);
+                    Result += string.Format("<tr><td>{0}</td></tr>", Reg.Contacto);
+                    Result += "</table></div>";
+                }
+            }
+
+            return Result;
+        }
+
+        public static string GetPersonasClaveDiagrama(long idProceso)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            long IdDocumento = long.Parse(Session["IdDocumento"].ToString());
+            string Result = string.Empty;
+
+            using (Entities db = new Entities())
+            {
+                List<tblBIAPersonaClave> Data = db.tblBIAPersonaClave
+                    .Where(x => x.IdEmpresa == IdEmpresa && x.IdDocumentoBIA == IdDocumento && x.IdProceso == idProceso)
+                    .ToList();
+                foreach (tblBIAPersonaClave Reg in Data)
+                {
+                    Result += "<div class=\"internal\"><table>";
+                    Result += string.Format("<tr><td class=\"subHeader\">{0}</td></tr>", Resources.DiagramaResource.PersonaClaveHeaderNombre);
+                    Result += string.Format("<tr><td>{0}</td></tr>", Reg.tblDocumentoPersonaClave.Nombre);
+                    Result += string.Format("<tr><td class=\"subHeader\">{0}</td></tr>", Resources.DiagramaResource.PersonaClaveHeaderCedula);
+                    Result += string.Format("<tr><td>{0}</td></tr>", Reg.tblDocumentoPersonaClave.Cedula);
+                    Result += string.Format("<tr><td class=\"subHeader\">{0}</td></tr>", Resources.DiagramaResource.PersonaClaveHeaderTelfOficina);
+                    Result += string.Format("<tr><td>{0}</td></tr>", Reg.tblDocumentoPersonaClave.TelefonoOficina);
+                    Result += string.Format("<tr><td class=\"subHeader\">{0}</td></tr>", Resources.DiagramaResource.PersonaClaveHeaderTelfHabitacion);
+                    Result += string.Format("<tr><td>{0}</td></tr>", Reg.tblDocumentoPersonaClave.TelefonoHabitacion);
+                    Result += string.Format("<tr><td class=\"subHeader\">{0}</td></tr>", Resources.DiagramaResource.PersonaClaveHeaderTelfMovil);
+                    Result += string.Format("<tr><td>{0}</td></tr>", Reg.tblDocumentoPersonaClave.TelefonoCelular);
+                    Result += string.Format("<tr><td class=\"subHeader\">{0}</td></tr>", Resources.DiagramaResource.PersonaClaveHeaderEmail);
+                    Result += string.Format("<tr><td>{0}</td></tr>", Reg.tblDocumentoPersonaClave.Correo);
+                    Result += string.Format("<tr><td class=\"subHeader\">{0}</td></tr>", Resources.DiagramaResource.PersonaClaveHeaderDireccion);
+                    Result += string.Format("<tr><td>{0}</td></tr>", Reg.tblDocumentoPersonaClave.DireccionHabitacion);
+                    Result += "</table></div>";
+                }
+            }
+
+            return Result;
+        }
+
+        public static string GetEntradasDiagrama(long idProceso)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            long IdDocumento = long.Parse(Session["IdDocumento"].ToString());
+            string Result = string.Empty;
+
+            using (Entities db = new Entities())
+            {
+                List<tblBIAEntrada> Data = db.tblBIAEntrada
+                    .Where(x => x.IdEmpresa == IdEmpresa && x.IdDocumentoBIA == IdDocumento && x.IdProceso == idProceso)
+                    .ToList();
+                foreach (tblBIAEntrada Reg in Data)
+                {
+                    Result += "<div class=\"internal\"><table>";
+                    Result += string.Format("<tr><td class=\"subHeader\">{0}</td></tr>", Resources.DiagramaResource.EntradaUnidadHeader);
+                    Result += string.Format("<tr><td>{0}</td></tr>", Reg.Unidad);
+                    Result += string.Format("<tr><td class=\"subHeader\">{0}</td></tr>", Resources.DiagramaResource.EntradaProcesoHeader);
+                    Result += string.Format("<tr><td>{0}</td></tr>", Reg.Evento);
+                    Result += string.Format("<tr><td class=\"subHeader\">{0}</td></tr>", Resources.DiagramaResource.EntradaResponsableHeader);
+                    Result += string.Format("<tr><td>{0}</td></tr>", Reg.Responsable);
+                    Result += "</table></div>";
+                }
+            }
+            return Result;
+        }
+        public static string GetClientesProductosDiagrama(long idProceso)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            long IdDocumento = long.Parse(Session["IdDocumento"].ToString());
+            string Result = string.Empty;
+
+            using (Entities db = new Entities())
+            {
+                List<tblBIAClienteProceso> Data = db.tblBIAClienteProceso
+                    .Where(x => x.IdEmpresa == IdEmpresa && x.IdDocumentoBIA == IdDocumento && x.IdProceso == idProceso)
+                    .ToList();
+                foreach (tblBIAClienteProceso Reg in Data)
+                {
+                    Result += "<div class=\"internal\"><table>";
+                    Result += string.Format("<tr><td class=\"subHeader\">{0}</td></tr>", Resources.DiagramaResource.ClienteUnidadHeader);
+                    Result += string.Format("<tr><td>{0}</td></tr>", Reg.Unidad);
+                    Result += string.Format("<tr><td class=\"subHeader\">{0}</td></tr>", Resources.DiagramaResource.ClienteProcesoHeader);
+                    Result += string.Format("<tr><td>{0}</td></tr>", Reg.Proceso);
+                    Result += string.Format("<tr><td class=\"subHeader\">{0}</td></tr>", Resources.DiagramaResource.ClienteResponsableHeader);
+                    Result += string.Format("<tr><td>{0}</td></tr>", Reg.Responsable);
+                    Result += string.Format("<tr><td class=\"subHeader\">{0}</td></tr>", Resources.DiagramaResource.ClienteProductoHeader);
+                    Result += string.Format("<tr><td>{0}</td></tr>", Reg.Producto);
+                    Result += "</table></div>";
+                }
+            }
+            return Result;
+        }
+        public static string GetInterdependenciasDiagrama(long idProceso)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            long IdDocumento = long.Parse(Session["IdDocumento"].ToString());
+            string Data = string.Empty;
+
+            using (Entities db = new Entities())
+            {
+                List<tblBIAInterdependencia> Interdependencias = db.tblBIAInterdependencia
+                    .Where(x => x.IdEmpresa == IdEmpresa && x.IdDocumentoBIA == IdDocumento && x.IdProceso == idProceso)
+                    .ToList();
+                foreach (tblBIAInterdependencia Interdependencia in Interdependencias)
+                {
+                    Data += "<div class=\"internal\"><table>";
+                    //Data += string.Format("<tr><td style=\"width: 40%; padding: 2px;\">{0}</td><td style=\"width: 60%; padding: 2px;\">{1}</td></tr>", Resources.DiagramaResource.InterdependenciaUnidadHeader, Interdependencia.Organizacion);
+                    //Data += string.Format("<tr><td style=\"width: 40%; padding: 2px;\">{0}</td><td style=\"width: 60%; padding: 2px;\">{1}</td></tr>", Resources.DiagramaResource.InterdependenciaProcesoHeader, Interdependencia.Servicio);
+                    //Data += string.Format("<tr><td style=\"width: 40%; padding: 2px;\">{0}</td><td style=\"width: 60%; padding: 2px;\">{1}</td></tr>", Resources.DiagramaResource.InterdepdendenciaResponsableHeader, Interdependencia.Contacto);
+                    Data += string.Format("<tr><td class=\"subHeader\">{0}</td></tr>", Resources.DiagramaResource.InterdependenciaUnidadHeader);
+                    Data += string.Format("<tr><td>{0}</td></tr>", Interdependencia.Organizacion);
+                    Data += string.Format("<tr><td class=\"subHeader\">{0}</td></tr>", Resources.DiagramaResource.InterdependenciaProcesoHeader);
+                    Data += string.Format("<tr><td>{0}</td></tr>", Interdependencia.Servicio);
+                    Data += string.Format("<tr><td class=\"subHeader\">{0}</td></tr>", Resources.DiagramaResource.InterdepdendenciaResponsableHeader);
+                    Data += string.Format("<tr><td>{0}</td></tr>", Interdependencia.Contacto);
+
+                    Data += "</table></div>";
+                }
+            }
+            return Data;
+        }
+        public static DocumentoProcesoModel GetProceso(long idProceso)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            long IdDocumento = long.Parse(Session["IdDocumento"].ToString());
+
+            DocumentoProcesoModel Proceso = new DocumentoProcesoModel();
+
+            using (Entities db = new Entities())
+            {
+                tblBIAProceso _proceso = db.tblBIAProceso.Where(x => x.IdEmpresa == IdEmpresa &&
+                                                                     x.IdDocumentoBia == IdDocumento &&
+                                                                     x.IdProceso == idProceso).FirstOrDefault();
+
+                if (_proceso != null)
+                {
+                    Proceso.Critico = (bool)_proceso.Critico;
+                    Proceso.Descripcion = _proceso.Descripcion;
+                    Proceso.FechaCreacion = (DateTime)_proceso.FechaCreacion;
+                    Proceso.FechaEstatus = (DateTime)_proceso.FechaUltimoEstatus;
+                    Proceso.IdEstatus = (long)_proceso.IdEstadoProceso;
+                    Proceso.IdProceso = _proceso.IdProceso;
+                    Proceso.Nombre = _proceso.Nombre;
+                    Proceso.NroProceso = (int)_proceso.NroProceso;
+                }
+            }
+
+            return Proceso;
+        }
+
         public static string GetNombreUnidadCompleto(long idUnidadOrganizativa)
         {
             string NombreCompleto = string.Empty;
@@ -1512,18 +1812,6 @@ namespace BCMWeb
 
                     db.tblDocumento.Add(nuevoDocumento);
 
-                    foreach (tblDocumentoAnexo anexo in documentoActual.tblDocumentoAnexo)
-                    {
-                        tblDocumentoAnexo nuevoAnexo = new tblDocumentoAnexo
-                        {
-                            IdDocumento = nuevoDocumento.IdDocumento,
-                            IdEmpresa = IdEmpresa,
-                            IdTipoDocumento = IdTipoDocumento,
-                            Nombre = anexo.Nombre,
-                            Ruta = anexo.Ruta,
-                        };
-                        db.tblDocumentoAnexo.Add(nuevoAnexo);
-                    }
                     foreach (tblDocumentoAprobacion aprobacion in documentoActual.tblDocumentoAprobacion)
                     {
                         tblDocumentoAprobacion nuevaAprobacion = new tblDocumentoAprobacion
@@ -2154,5 +2442,30 @@ namespace BCMWeb
 
             return IdNuevoDocumento;
         }
+        public static List<DocumentoProcesoModel> GetProcesosDocumento()
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            long IdDocumento = long.Parse(Session["IdDocumento"].ToString());
+            List<DocumentoProcesoModel> Procesos = new List<DocumentoProcesoModel>();
+
+            using (Entities db = new Entities())
+            {
+                Procesos = db.tblBIAProceso.Where(x => x.IdEmpresa == IdEmpresa && x.IdDocumentoBia == IdDocumento)
+                    .Select(x => new DocumentoProcesoModel
+                    {
+                        Critico = (bool)x.Critico,
+                        Descripcion = x.Descripcion,
+                        FechaCreacion = (DateTime)x.FechaCreacion,
+                        FechaEstatus = (DateTime)x.FechaUltimoEstatus,
+                        IdEstatus = (long)x.IdEstadoProceso,
+                        IdProceso = x.IdProceso,
+                        Nombre = x.Nombre,
+                        NroProceso = (int)x.NroProceso
+                    }).Distinct().OrderBy(x => x.NroProceso).ToList();
+            }
+
+            return Procesos;
+        }
+
     }
 }
