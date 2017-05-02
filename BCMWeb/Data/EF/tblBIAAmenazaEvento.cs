@@ -28,8 +28,8 @@ namespace BCMWeb.Data.EF
         public string Nombre { get; set; }
         public long IdEventoRiesgo { get; set; }
     
-        public virtual tblBIAAmenaza tblBIAAmenaza { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIAEventoControl> tblBIAEventoControl { get; set; }
+        public virtual tblBIAAmenaza tblBIAAmenaza { get; set; }
     }
 }

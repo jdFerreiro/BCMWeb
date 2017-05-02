@@ -24,7 +24,7 @@ namespace BCMWeb
 
         [SessionExpire]
         [HandleError]
-        public static void ProcesarFicha(long ModuloId, byte[] Contenido)
+        public static void ProcesarContenidoDocumento(long ModuloId, byte[] Contenido)
         {
 
             // string _filePath = SaveFile(new MemoryStream(Contenido));
@@ -92,15 +92,9 @@ namespace BCMWeb
                     case 4070100: // Grandes Impactos
                         ProcesarGrandesImpactos(msContent);
                         break;
-                    //case 4080100: // Diagrama de Impacto
-                    //    ProcesarDiagramadeImpacto(msContent);
-                    //    break;
-                    //case 4080200: // Diagrama de Tecnología
-                    //    ProcesarDiagramadeTecnología(msContent);
-                    //    break;
-                    //case 4080300: // Diagrama de Personas Claves
-                    //    ProcesarDiagramadePersonasClaves(msContent);
-                    //    break;
+                    case 4020100: // Grandes Impactos
+                        ProcesarAnalisisRiesgo(msContent);
+                        break;
                     case 7000101: // Ficha del BCP
                     case 1010100:
                     case 2010100:
@@ -1405,7 +1399,206 @@ namespace BCMWeb
 
         private static void ProcesarAnalisisRiesgo(MemoryStream msContent)
         {
-            throw new NotImplementedException();
+            long _IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            long _IdDocumento = long.Parse(Session["IdDocumento"].ToString());
+            int _IdTipoDocumento = int.Parse(Session["IdTipoDocumento"].ToString());
+
+            int _NroProceso = 0;
+            long IdProceso = 0;
+            string _NombreProceso = string.Empty;
+            string _UnidadTiempo = string.Empty;
+            int _startRow = 2;
+            List<objAmenaza> Amenazas = new List<objAmenaza>();
+
+            try
+            {
+                using (Entities db = new Entities())
+                {
+                    tblDocumento _Documento = db.tblDocumento.Where(x => x.IdEmpresa == _IdEmpresa
+                                                                  && x.IdDocumento == _IdDocumento
+                                                                  && x.IdTipoDocumento == _IdTipoDocumento).FirstOrDefault();
+
+                    tblEmpresa _Empresa = db.tblEmpresa.Where(x => x.IdEmpresa == _IdEmpresa).FirstOrDefault();
+                    tblBIADocumento _DocBIA = db.tblBIADocumento.Where(x => x.IdEmpresa == _IdEmpresa
+                                                                         && x.IdDocumento == _IdDocumento
+                                                                         && x.IdTipoDocumento == _IdTipoDocumento).FirstOrDefault();
+
+                    List<tblBIAAmenaza> Actuales = db.tblBIAAmenaza.Where(x => x.IdEmpresa == _IdEmpresa
+                                                                            && x.IdDocumentoBIA == _IdDocumento).ToList();
+
+                    db.tblBIAAmenaza.RemoveRange(Actuales);
+
+                    using (WordprocessingDocument wordDocument = WordprocessingDocument.Open(msContent, false))
+                    {
+                        int nroTabla = 0;
+                        var _tables = wordDocument.MainDocumentPart.Document.Body.Where(x => x.GetType().Name == "Table").ToList();
+
+                        foreach (var _Elemento in wordDocument.MainDocumentPart.Document.Body.Where(x => x.GetType().Name == "Table").ToList())
+                        {
+                            nroTabla += 1;
+                            if (nroTabla < 3 || nroTabla == _tables.Count())
+                            {
+                                DocumentFormat.OpenXml.Wordprocessing.Table _Table = (DocumentFormat.OpenXml.Wordprocessing.Table)_Elemento;
+                                if (_Table.HasChildren)
+                                {
+                                    int _Row = 0;
+                                    List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
+
+                                    for (_Row = _startRow; _Row < _tableRows.Count(); _Row++)
+                                    {
+                                        TableRow _tableRow = (TableRow)_tableRows[_Row];
+
+                                        if (_tableRow.HasChildren)
+                                        {
+                                            List<OpenXmlElement> _tableCells = _tableRow.ChildElements.Where(x => x.GetType().Name == "TableCell").ToList();
+                                            objAmenaza _Amenaza;
+                                            if (nroTabla == 1)
+                                                _Amenaza = new objAmenaza();
+                                            else
+                                                _Amenaza = Amenazas[_Row - _startRow];
+
+                                            for (int _Cell = 0; _Cell < _tableCells.Count(); _Cell++)
+                                            {
+                                                TableCell _celda = (TableCell)_tableCells[_Cell];
+                                                if (_celda.HasChildren)
+                                                {
+                                                    string _textoCelda = string.Empty;
+                                                    List<OpenXmlElement> _tableCellParagraph = _celda.ChildElements.Where(x => x.GetType().Name == "Paragraph").ToList();
+                                                    foreach (var _cellParagraph in _tableCellParagraph)
+                                                    {
+                                                        if (!string.IsNullOrEmpty(_textoCelda))
+                                                            _textoCelda += ", ";
+                                                        _textoCelda += _cellParagraph.InnerText;
+                                                    } // End foreach (var _cellParagraph in _tableCellParagraph)
+
+                                                    switch (_Cell)
+                                                    {
+                                                        case 0:
+                                                            if (!string.IsNullOrEmpty(_textoCelda) && (nroTabla < 3 || nroTabla == (_tables.Count() - 1)))
+                                                                _NroProceso = (int.Parse(_textoCelda));
+                                                            break;
+                                                        case 1:
+                                                            if (nroTabla == 1)
+                                                            {
+                                                                if (!string.IsNullOrEmpty(_textoCelda))
+                                                                    _NombreProceso = _textoCelda;
+                                                                tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
+                                                                                                                 && x.IdDocumentoBia == _DocBIA.IdDocumentoBIA
+                                                                                                                 && x.NroProceso == _NroProceso).FirstOrDefault();
+
+                                                                if (procBIA == null)
+                                                                {
+                                                                    procBIA = new tblBIAProceso
+                                                                    {
+                                                                        Critico = false,
+                                                                        Descripcion = string.Empty,
+                                                                        FechaCreacion = DateTime.UtcNow,
+                                                                        FechaUltimoEstatus = DateTime.UtcNow,
+                                                                        IdDocumentoBia = _DocBIA.IdDocumentoBIA,
+                                                                        IdEmpresa = _IdEmpresa,
+                                                                        IdEstadoProceso = (int)eEstadoProceso.Activo,
+                                                                        IdUnidadOrganizativa = _DocBIA.IdUnidadOrganizativa,
+                                                                        Nombre = _NombreProceso,
+                                                                        NroProceso = _NroProceso,
+                                                                    };
+
+                                                                    db.tblBIAProceso.Add(procBIA);
+                                                                    db.SaveChanges();
+                                                                }
+                                                                IdProceso = procBIA.IdProceso;
+                                                                _Amenaza.IdProceso = IdProceso;
+                                                            }
+                                                            break;
+                                                        case 2:
+                                                            if (!string.IsNullOrEmpty(_textoCelda))
+                                                            {
+                                                                if (nroTabla == 1)
+                                                                    _Amenaza.Descripcion = _textoCelda;
+                                                                else if (nroTabla == 2)
+                                                                    _Amenaza.Implantado = _textoCelda;
+                                                                else
+                                                                    _Amenaza.Probabilidad = int.Parse(_textoCelda);
+                                                            }
+                                                            break;
+                                                        case 3:
+                                                            if (!string.IsNullOrEmpty(_textoCelda))
+                                                            {
+                                                                if (nroTabla == 1)
+                                                                    _Amenaza.Evento = _textoCelda;
+                                                                else if (nroTabla == 2)
+                                                                    _Amenaza.Implantar = _textoCelda;
+                                                                else
+                                                                    _Amenaza.Impacto = int.Parse(_textoCelda);
+                                                            }
+                                                            break;
+                                                        case 4:
+                                                            if (!string.IsNullOrEmpty(_textoCelda))
+                                                            {
+                                                                if (nroTabla == _tables.Count())
+                                                                    _Amenaza.Control = int.Parse(_textoCelda);
+                                                            }
+                                                            break;
+                                                        case 5:
+                                                            if (!string.IsNullOrEmpty(_textoCelda))
+                                                            {
+                                                                if (nroTabla == _tables.Count())
+                                                                    _Amenaza.Severidad = int.Parse(_textoCelda);
+                                                            }
+                                                            break;
+                                                        case 6:
+                                                            if (!string.IsNullOrEmpty(_textoCelda))
+                                                            {
+                                                                if (nroTabla == _tables.Count())
+                                                                    _Amenaza.Fuente = _textoCelda;
+                                                            }
+                                                            break;
+                                                    }
+                                                } // End if (_celda.HasChildren)
+                                            } // End for (int _Cell = 0; _Cell < _tableCells.Count(); _Cell++)
+                                            if (nroTabla == 1)
+                                                Amenazas.Add(_Amenaza);
+                                        } // End if (_tableCell.HasChildren)
+                                    } // End for (_Row = 2; _Row < _tableRows.Count(); _Row++)
+                                } // End if (_tableRow.HasChildren)
+                            }
+                        } // End foreach (Table)
+                    } // End using wordDocument
+                    foreach (objAmenaza Amenaza in Amenazas)
+                    {
+                        int _Estado = Amenaza.Probabilidad + Amenaza.Impacto + Amenaza.Control;
+                        if (_Estado >= 6)
+                            Amenaza.Estado = 3;
+                        else if (_Estado == 4 || _Estado == 5)
+                            Amenaza.Estado = 2;
+                        else
+                            Amenaza.Estado = 1;
+
+                        tblBIAAmenaza dataAmenaza = new tblBIAAmenaza
+                        {
+                            IdEmpresa = _IdEmpresa,
+                            IdDocumentoBIA = _IdDocumento,
+                            IdProceso = Amenaza.IdProceso,
+                            Descripcion = Amenaza.Descripcion,
+                            Control = Amenaza.Control,
+                            ControlesImplantar = Amenaza.Implantar,
+                            Estado = Amenaza.Estado,
+                            Evento = Amenaza.Evento,
+                            Fuente = Amenaza.Fuente,
+                            Impacto = Amenaza.Impacto,
+                            Probabilidad = Amenaza.Probabilidad,
+                            Severidad = Amenaza.Severidad,
+                            TipoControlImplantado = Amenaza.Implantado
+                        };
+
+                        db.tblBIAAmenaza.Add(dataAmenaza);
+                    }
+                    db.SaveChanges();
+                } // End using (Entities db = new Entities())
+            } // End Try
+            catch (Exception ex)
+            {
+                throw ex;
+            } // End catch
         }
 
         private static void ProcesarImpactoOperacional(MemoryStream msContent)

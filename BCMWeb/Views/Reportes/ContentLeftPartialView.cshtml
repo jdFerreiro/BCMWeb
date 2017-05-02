@@ -1,6 +1,14 @@
 @using BCMWeb.Models
 
-@model  ReporteModel
+@model  ModulosUserModel
+
+<script type="text/javascript">
+    function itemMenuClick(s, e) {
+        if (e.item.items.length == 0) {
+            lp.Show();
+        }
+    }
+</script>
 
 <div class="leftPanel">
     <table>
@@ -35,35 +43,31 @@
                             &nbsp;
                         </td>
                     </tr>
-                    <tr>
-                        <td>
-                            @Html.DevExpress().RadioButtonList(s =>
-                            {
-                                s.Name = "rblClaseDocumento";
-                                s.Properties.Caption = Resources.DocumentoResource.ClaseDocumentoCaption;
-                                s.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
-                                s.Properties.ValueType = typeof(System.Int32);
-                                s.Properties.Items.Add(Resources.DocumentoResource.TipoNegocios, 1);
-                                s.Properties.Items.Add(Resources.DocumentoResource.TipoDRP, 2);
-                                s.Properties.RepeatDirection = RepeatDirection.Vertical;
-                                s.Properties.RepeatColumns = 1;
-                                s.Properties.ClientSideEvents.SelectedIndexChanged = "function (s,e) { lp.Show(); $(\"#IdClaseDocumento\").val(rblClaseDocumento.GetValue()); document.forms[\"docForm\"].submit();  }";
-                            }).Bind(Model.IdClaseDocumento).GetHtml()
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div style="margin-top: 40px; text-align:center; ">
-                                @Html.DevExpress().Button(b =>
-                            {
-                                b.Name = "botAnexo";
-                                b.Text = Resources.BCMWebPublic.botAnexosText;
-                                b.ClientSideEvents.Click = "function(s, e) { lp.Show(); document.location='" + DevExpressHelper.GetUrl(new { Controller = "FileManager", Action = "Index" }) + "?IdClaseDocumento=" + Model.IdClaseDocumento.ToString() + "&modId=" + Model.IdModulo.ToString() + "' }";
-                            }).GetHtml()
-                            </div>
-                        </td>
-                    </tr>
                 </table>
+            </td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>
+                @Html.DevExpress().Menu(s =>
+                {
+                    s.Name = "menuOpciones";
+                    s.Width = Unit.Percentage(100);
+                    s.ItemAutoWidth = false;
+                    s.EnableSubMenuScrolling = true;
+                    s.Styles.Item.Font.Size = FontUnit.Small;
+                    s.Styles.Item.Wrap = DefaultBoolean.True;
+                    s.Styles.SubMenuItem.Font.Size = FontUnit.Small;
+                    s.Styles.SubMenuItem.Wrap = DefaultBoolean.True;
+                    s.Styles.SubMenuItem.Width = Unit.Pixel(350);
+                    s.Orientation = Orientation.Vertical;
+                    s.ShowPopOutImages = DefaultBoolean.False;
+                    s.ControlStyle.HorizontalAlign = HorizontalAlign.Center;
+                    s.EnableAdaptivity = true;
+                    s.ClientSideEvents.ItemClick = "itemMenuClick";
+                }).Bind(Model.SubModulos).GetHtml()
             </td>
         </tr>
     </table>

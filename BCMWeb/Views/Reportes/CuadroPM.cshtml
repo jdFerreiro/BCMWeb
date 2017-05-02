@@ -25,7 +25,7 @@
     }).GetHtml()
 }
 
-@using (Html.BeginForm("Cuadro", "Reportes", FormMethod.Post, htmlAttributes: new { id = "graphForm" }))
+@using (Html.BeginForm("CuadroPM", "Reportes", FormMethod.Post, htmlAttributes: new { id = "graphForm" }))
 {
     @Html.HiddenFor(m => m.IdModulo)
     @Html.HiddenFor(m => m.IdUnidadOrganizativa)
@@ -40,18 +40,7 @@
                 @Html.DisplayFor(m => m.UnidadOrganizativa)
             </div>
             <div class="content">
-                @switch (Model.IdModuloActual)
-                {
-                    case 13010100:
-                        Html.RenderAction("CuadroIOPartialView", "Reportes", new { IdUnidadOrganizativa = ViewData["IdUnidadOrganizativa"] });
-                        break;
-                    case 13010400:
-                        Html.RenderAction("CuadroVIPartialView", "Reportes", new { IdUnidadOrganizativa = ViewData["IdUnidadOrganizativa"] });
-                        break;
-                    case 13010700:
-                        Html.RenderAction("CuadroPMPartialView", "Reportes", new { IdUnidadOrganizativa = ViewData["IdUnidadOrganizativa"] });
-                        break;
-                }
+                @Html.Partial("CuadroPMPartialView", Model)
             </div>
         </div>
     </div>

@@ -1,48 +1,35 @@
 ﻿@using BCMWeb.Models
 
-@model DocumentosModel
+@model ReporteModel
 
-<script type="text/javascript">
-    function SelectionChanged(s, e) {
-        s.GetSelectedFieldValues("ContactName", GetSelectedFieldValuesCallback);
-    }
-    function GetSelectedFieldValuesCallback(values) {
-        alert(values);
-    }
-</script>
-
-@using (Html.BeginForm("Cuadro", "Reportes", FormMethod.Post, htmlAttributes: new { id = "docForm" }))
+@section LeftPanel {
+    @Html.DevExpress().Panel(settings =>
 {
-    @Html.Hidden("DocSelected")
-    @Html.HiddenFor(m => m.IdClaseDocumento)
-    @Html.HiddenFor(m => m.IdModulo)
-
-    @section LeftPanel {
-        @Html.DevExpress().Panel(settings => {
-            settings.Name = "LeftPane";
-            settings.FixedPosition = PanelFixedPosition.WindowLeft;
-            settings.Collapsible = true;
-            settings.SettingsAdaptivity.CollapseAtWindowInnerWidth = 1023;
-            settings.ControlStyle.CssClass = "leftPane";
-            settings.Styles.Panel.CssClass = "panel";
-            settings.SetContent(() => {
-                Html.RenderPartial("ContentLeftPartialView");
-            });
-        }).GetHtml()
-    }
-
-    <div style="margin-top: -30px;">
-        @Html.DevExpress().Button(b =>
+    settings.Name = "LeftPane";
+    settings.FixedPosition = PanelFixedPosition.WindowLeft;
+    settings.Collapsible = true;
+    settings.SettingsAdaptivity.CollapseAtWindowInnerWidth = 1023;
+    settings.ControlStyle.CssClass = "leftPane";
+    settings.Styles.Panel.CssClass = "panel";
+    settings.SetContent(() =>
     {
-        b.Name = "botNew";
-        b.Text = Resources.BCMWebPublic.captionButtonNew;
-        b.ClientSideEvents.Click = "function(s, e) { lp.Show(); document.location='"
-            + DevExpressHelper.GetUrl(new { Controller = "Documento", Action = "EditarDocumento" })
-            + "?IdDocumento=0&IdClaseDocumento=" + Model.IdClaseDocumento.ToString() + "&IdModulo=" + Model.IdModulo.ToString()
-            + "' }";
-
-    }).GetHtml()
-    </div>
-   @Html.Partial("DocumentoPartialView", Model)
-
+        Html.RenderPartial("ContentLeftPartialView");
+    });
+}).GetHtml()
 }
+
+<div class="Grafico">
+    @switch (Model.IdModuloActual)
+    {
+        case 13010200:
+            @Html.Partial("TablaPUOPartialView", Model.DataCuadro)
+            break;
+        case 13010500:
+            @Html.Partial("TablaVIPartialView", Model.DataCuadro)
+            break;
+        case 13010800:
+            @Html.Partial("TablaGIPartialView", Model.DataCuadro)
+            break;
+
+    }
+</div>

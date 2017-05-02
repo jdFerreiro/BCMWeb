@@ -121,21 +121,6 @@ namespace BCMWeb.Models
         [Display(Name = "captionNroTelefono", ResourceType = typeof(Resources.FichaResource))]
         public string NroTelefono { get; set; }
     }
-    public class UnidadOrganizativaModel
-    {
-        public long IdUnidad { get; set; }
-        public long IdUnidadPadre { get; set; }
-        [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "RequiredErrorFemale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
-        [Display(Name = "captionUO", ResourceType = typeof(Resources.FichaResource))]
-        public string NombreUnidadOrganizativa { get; set; }
-        public string NombreCompleto
-        {
-            get
-            {
-                return Metodos.GetNombreUnidadCompleto(this.IdUnidad);
-            }
-        }
-    }
     public class CargoModel
     {
         public long IdCargo { get; set; }

@@ -40,18 +40,7 @@
                 @Html.DisplayFor(m => m.UnidadOrganizativa)
             </div>
             <div class="content">
-                @switch (Model.IdModuloActual)
-                {
-                    case 13010100:
-                        Html.RenderAction("CuadroIOPartialView", "Reportes", new { IdUnidadOrganizativa = ViewData["IdUnidadOrganizativa"] });
-                        break;
-                    case 13010400:
-                        Html.RenderAction("CuadroVIPartialView", "Reportes", new { IdUnidadOrganizativa = ViewData["IdUnidadOrganizativa"] });
-                        break;
-                    case 13010700:
-                        Html.RenderAction("CuadroPMPartialView", "Reportes", new { IdUnidadOrganizativa = ViewData["IdUnidadOrganizativa"] });
-                        break;
-                }
+                @Html.Partial("CuadroPartialView", Model)
             </div>
         </div>
     </div>

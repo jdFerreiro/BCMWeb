@@ -66,7 +66,9 @@
     <Reference Include="DevExpress.Web.Resources.v16.2, Version=16.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.Web.v16.2, Version=16.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.XtraCharts.v16.2, Version=16.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraCharts.v16.2.UI, Version=16.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraCharts.v16.2.Web, Version=16.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraPrinting.v16.2, Version=16.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraScheduler.v16.2.Core, Version=16.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DocumentFormat.OpenXml, Version=2.5.5631.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\DocumentFormat.OpenXml.2.5\lib\DocumentFormat.OpenXml.dll</HintPath>
@@ -175,6 +177,7 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
@@ -193,6 +196,9 @@
   <ItemGroup>
     <Content Include="Content\BCMWeb.css" />
     <Content Include="Content\BCMWeb_Menu.css" />
+    <Content Include="Content\ChartIcons\BtnPrint.png" />
+    <Content Include="Content\ChartIcons\BtnSave.png" />
+    <Content Include="Content\ChartIcons\BtnSaveWindow.png" />
     <Content Include="Content\Images\AquaHeader.jpg" />
     <Content Include="Content\Images\Banderas\bandera-colombia-300x189.gif" />
     <Content Include="Content\Images\BlackGlassHeader.jpg" />
@@ -401,6 +407,30 @@
     <Content Include="Views\Reportes\Cuadro.cshtml" />
     <Content Include="Views\Reportes\Grafico.cshtml" />
     <Content Include="Views\Reportes\Tabla.cshtml" />
+    <Content Include="Views\Reportes\PartialUnidadesOrganizativas.cshtml" />
+    <Content Include="Views\Reportes\CuadroPMPartialView.cshtml" />
+    <Content Include="Views\Reportes\CuadroIOPartialView.cshtml" />
+    <Content Include="Views\Reportes\CuadroPartialView.cshtml" />
+    <Content Include="Views\Reportes\CuadroVIPartialView.cshtml" />
+    <Content Include="Views\Reportes\CuadroPM.cshtml" />
+    <Content Include="Views\Reportes\TablaPUOPartialView.cshtml" />
+    <Content Include="Views\Reportes\TablaVIPartialView.cshtml" />
+    <Content Include="Views\Reportes\TablaGIPartialView.cshtml" />
+    <Content Include="Views\Reportes\GraficoGIPartialView.cshtml" />
+    <Content Include="Views\Reportes\GraficoPUOPartialView.cshtml" />
+    <Content Include="Views\Reportes\GraficoMTDPartialView.cshtml" />
+    <Content Include="Views\Reportes\GraficoWRTPartialView.cshtml" />
+    <Content Include="Views\Reportes\GraficoRTOPartialView.cshtml" />
+    <Content Include="Views\Reportes\GraficoRPOPartialView.cshtml" />
+    <Content Include="Views\Reportes\DiagImpacto.cshtml" />
+    <Content Include="Views\Reportes\PartialProcesosView.cshtml" />
+    <Content Include="Views\Reportes\PartialDiagramaProceso.cshtml" />
+    <Content Include="Views\Reportes\CuadroPartialView - Copia.cshtml" />
+    <Content Include="Views\Reportes\CuadroIOPartialView - Copia.cshtml" />
+    <Content Include="Views\Reportes\Cuadro - Copia.cshtml" />
+    <Content Include="Views\Reportes\CuadroVIPartialView - Copia.cshtml" />
+    <Content Include="Views\Reportes\CuadroPMPartialView - Copia.cshtml" />
+    <Content Include="Views\Reportes\ComboBoxGrafico.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -524,6 +554,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ProcedimientoBIAResource.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_LocalResources\ReporteResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ReporteResource.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_Start\AuthConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -542,6 +577,7 @@
     <Compile Include="DAL\Encriptador.cs" />
     <Compile Include="DAL\Enumeradores.cs" />
     <Compile Include="DAL\FirstModuloSelected.cs" />
+    <Compile Include="Data\dataObjects.cs" />
     <Compile Include="Data\EF\tblAuditoria.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
@@ -1008,6 +1044,7 @@
     <Compile Include="Models\ReporteModels.cs" />
     <Compile Include="Models\SeguridadModels.cs" />
     <Compile Include="Models\TablaModels.cs" />
+    <Compile Include="Models\UnidadOrganizativaModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Validators\EnsureOneElementAttribute.cs" />
     <Compile Include="Filters\SessionExpireFilterAttribute.cs" />
@@ -1137,6 +1174,11 @@
     <EmbeddedResource Include="App_LocalResources\ProcedimientoBIAResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ProcedimientoBIAResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App_LocalResources\ReporteResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ReporteResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Resources</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>

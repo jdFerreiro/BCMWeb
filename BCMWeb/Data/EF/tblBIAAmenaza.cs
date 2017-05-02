@@ -25,6 +25,15 @@ namespace BCMWeb.Data.EF
         public long IdProceso { get; set; }
         public long IdAmenaza { get; set; }
         public string Descripcion { get; set; }
+        public string Evento { get; set; }
+        public string TipoControlImplantado { get; set; }
+        public string ControlesImplantar { get; set; }
+        public Nullable<int> Probabilidad { get; set; }
+        public Nullable<int> Impacto { get; set; }
+        public Nullable<int> Control { get; set; }
+        public Nullable<int> Severidad { get; set; }
+        public string Fuente { get; set; }
+        public Nullable<int> Estado { get; set; }
     
         public virtual tblBIAProceso tblBIAProceso { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

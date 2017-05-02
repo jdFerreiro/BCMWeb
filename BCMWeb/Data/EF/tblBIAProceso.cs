@@ -18,7 +18,6 @@ namespace BCMWeb.Data.EF
         public tblBIAProceso()
         {
             this.tblBCPDocumento = new HashSet<tblBCPDocumento>();
-            this.tblBIAAmenaza = new HashSet<tblBIAAmenaza>();
             this.tblBIAAplicacion = new HashSet<tblBIAAplicacion>();
             this.tblBIAClienteProceso = new HashSet<tblBIAClienteProceso>();
             this.tblBIADocumentacion = new HashSet<tblBIADocumentacion>();
@@ -38,6 +37,7 @@ namespace BCMWeb.Data.EF
             this.tblBIAWRT = new HashSet<tblBIAWRT>();
             this.tblBIAImpactoFinanciero = new HashSet<tblBIAImpactoFinanciero>();
             this.tblBIAImpactoOperacional = new HashSet<tblBIAImpactoOperacional>();
+            this.tblBIAAmenaza = new HashSet<tblBIAAmenaza>();
         }
     
         public long IdEmpresa { get; set; }
@@ -54,8 +54,6 @@ namespace BCMWeb.Data.EF
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBCPDocumento> tblBCPDocumento { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblBIAAmenaza> tblBIAAmenaza { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIAAplicacion> tblBIAAplicacion { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -97,5 +95,7 @@ namespace BCMWeb.Data.EF
         public virtual ICollection<tblBIAImpactoFinanciero> tblBIAImpactoFinanciero { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIAImpactoOperacional> tblBIAImpactoOperacional { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblBIAAmenaza> tblBIAAmenaza { get; set; }
     }
 }

@@ -208,6 +208,15 @@
           <Property Name="IdProceso" Type="bigint" Nullable="false" />
           <Property Name="IdAmenaza" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Descripcion" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Evento" Type="nvarchar(max)" />
+          <Property Name="TipoControlImplantado" Type="nvarchar(max)" />
+          <Property Name="ControlesImplantar" Type="nvarchar(max)" />
+          <Property Name="Probabilidad" Type="int" />
+          <Property Name="Impacto" Type="int" />
+          <Property Name="Control" Type="int" />
+          <Property Name="Severidad" Type="int" />
+          <Property Name="Fuente" Type="nvarchar" MaxLength="3" />
+          <Property Name="Estado" Type="int" />
         </EntityType>
         <EntityType Name="tblBIAAmenazaEvento">
           <Key>
@@ -5482,7 +5491,6 @@
           <EntitySet Name="tblBCPRestauracionInfraestructura" EntityType="BCMWeb.tblBCPRestauracionInfraestructura" />
           <EntitySet Name="tblBCPRestauracionMobiliario" EntityType="BCMWeb.tblBCPRestauracionMobiliario" />
           <EntitySet Name="tblBCPRestauracionOtro" EntityType="BCMWeb.tblBCPRestauracionOtro" />
-          <EntitySet Name="tblBIAAmenaza" EntityType="BCMWeb.tblBIAAmenaza" />
           <EntitySet Name="tblBIAAmenazaEvento" EntityType="BCMWeb.tblBIAAmenazaEvento" />
           <EntitySet Name="tblBIAAplicacion" EntityType="BCMWeb.tblBIAAplicacion" />
           <EntitySet Name="tblBIACadenaServicio" EntityType="BCMWeb.tblBIACadenaServicio" />
@@ -5683,14 +5691,6 @@
           <AssociationSet Name="FK_tblPersona_tblBCPRecuperacionPersonaClave_FK1" Association="BCMWeb.FK_tblPersona_tblBCPRecuperacionPersonaClave_FK1">
             <End Role="tblPersona" EntitySet="tblPersona" />
             <End Role="tblBCPRecuperacionPersonaClave" EntitySet="tblBCPRecuperacionPersonaClave" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tblBIAAmenaza_tblBIAProceso" Association="BCMWeb.FK_tblBIAAmenaza_tblBIAProceso">
-            <End Role="tblBIAProceso" EntitySet="tblBIAProceso" />
-            <End Role="tblBIAAmenaza" EntitySet="tblBIAAmenaza" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tblBIAAmenazaEvento_tblBIAAmenaza" Association="BCMWeb.FK_tblBIAAmenazaEvento_tblBIAAmenaza">
-            <End Role="tblBIAAmenaza" EntitySet="tblBIAAmenaza" />
-            <End Role="tblBIAAmenazaEvento" EntitySet="tblBIAAmenazaEvento" />
           </AssociationSet>
           <AssociationSet Name="FK_tblBIAEventoControl_tblBIAAmenazaEvento" Association="BCMWeb.FK_tblBIAEventoControl_tblBIAAmenazaEvento">
             <End Role="tblBIAAmenazaEvento" EntitySet="tblBIAAmenazaEvento" />
@@ -6406,6 +6406,15 @@
             <End Role="tblEmpresa" EntitySet="tblEmpresa" />
             <End Role="tblDocumentoPersonaClave" EntitySet="tblDocumentoPersonaClave" />
           </AssociationSet>
+          <EntitySet Name="tblBIAAmenaza" EntityType="BCMWeb.tblBIAAmenaza" />
+          <AssociationSet Name="FK_tblBIAAmenaza_tblBIAProceso" Association="BCMWeb.FK_tblBIAAmenaza_tblBIAProceso">
+            <End Role="tblBIAProceso" EntitySet="tblBIAProceso" />
+            <End Role="tblBIAAmenaza" EntitySet="tblBIAAmenaza" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblBIAAmenazaEvento_tblBIAAmenaza" Association="BCMWeb.FK_tblBIAAmenazaEvento_tblBIAAmenaza">
+            <End Role="tblBIAAmenaza" EntitySet="tblBIAAmenaza" />
+            <End Role="tblBIAAmenazaEvento" EntitySet="tblBIAAmenazaEvento" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="tblAuditoria">
           <Key>
@@ -6629,21 +6638,6 @@
           <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="450" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="tblBCPDocumento" Relationship="BCMWeb.FK_tblBCPDocumento_tblBCPRestauracionOtro_FK1" FromRole="tblBCPRestauracionOtro" ToRole="tblBCPDocumento" />
         </EntityType>
-        <EntityType Name="tblBIAAmenaza">
-          <Key>
-            <PropertyRef Name="IdEmpresa" />
-            <PropertyRef Name="IdDocumentoBIA" />
-            <PropertyRef Name="IdProceso" />
-            <PropertyRef Name="IdAmenaza" />
-          </Key>
-          <Property Name="IdEmpresa" Type="Int64" Nullable="false" />
-          <Property Name="IdDocumentoBIA" Type="Int64" Nullable="false" />
-          <Property Name="IdProceso" Type="Int64" Nullable="false" />
-          <Property Name="IdAmenaza" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="tblBIAProceso" Relationship="BCMWeb.FK_tblBIAAmenaza_tblBIAProceso" FromRole="tblBIAAmenaza" ToRole="tblBIAProceso" />
-          <NavigationProperty Name="tblBIAAmenazaEvento" Relationship="BCMWeb.FK_tblBIAAmenazaEvento_tblBIAAmenaza" FromRole="tblBIAAmenaza" ToRole="tblBIAAmenazaEvento" />
-        </EntityType>
         <EntityType Name="tblBIAAmenazaEvento">
           <Key>
             <PropertyRef Name="IdEmpresa" />
@@ -6659,8 +6653,8 @@
           <Property Name="IdAmenazaEvento" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Nombre" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="IdEventoRiesgo" Type="Int64" Nullable="false" />
-          <NavigationProperty Name="tblBIAAmenaza" Relationship="BCMWeb.FK_tblBIAAmenazaEvento_tblBIAAmenaza" FromRole="tblBIAAmenazaEvento" ToRole="tblBIAAmenaza" />
           <NavigationProperty Name="tblBIAEventoControl" Relationship="BCMWeb.FK_tblBIAEventoControl_tblBIAAmenazaEvento" FromRole="tblBIAAmenazaEvento" ToRole="tblBIAEventoControl" />
+          <NavigationProperty Name="tblBIAAmenaza" Relationship="BCMWeb.FK_tblBIAAmenazaEvento_tblBIAAmenaza" FromRole="tblBIAAmenazaEvento" ToRole="tblBIAAmenaza" />
         </EntityType>
         <EntityType Name="tblBIAAplicacion">
           <Key>
@@ -6951,7 +6945,6 @@
           <Property Name="IdEstadoProceso" Type="Int64" />
           <Property Name="FechaUltimoEstatus" Type="DateTime" Precision="3" />
           <NavigationProperty Name="tblBCPDocumento" Relationship="BCMWeb.FK_tblBCPDocumento_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBCPDocumento" />
-          <NavigationProperty Name="tblBIAAmenaza" Relationship="BCMWeb.FK_tblBIAAmenaza_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIAAmenaza" />
           <NavigationProperty Name="tblBIAAplicacion" Relationship="BCMWeb.FK_tblBIAAplicacion_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIAAplicacion" />
           <NavigationProperty Name="tblBIAClienteProceso" Relationship="BCMWeb.FK_tblBIAClienteProducto_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIAClienteProceso" />
           <NavigationProperty Name="tblBIADocumentacion" Relationship="BCMWeb.FK_tblBIADocumentacion_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIADocumentacion" />
@@ -6974,6 +6967,7 @@
           <NavigationProperty Name="tblBIAWRT" Relationship="BCMWeb.FK_tblBIAWRT_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIAWRT" />
           <NavigationProperty Name="tblBIAImpactoFinanciero" Relationship="BCMWeb.FK_tblBIAImpactoFinanciero_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIAImpactoFinanciero" />
           <NavigationProperty Name="tblBIAImpactoOperacional" Relationship="BCMWeb.FK_tblBIAImpactoOperacional_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIAImpactoOperacional" />
+          <NavigationProperty Name="tblBIAAmenaza" Relationship="BCMWeb.FK_tblBIAAmenaza_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIAAmenaza" />
         </EntityType>
         <EntityType Name="tblBIAProcesoAlterno">
           <Key>
@@ -8672,40 +8666,6 @@
             <Dependent Role="tblBCPRecuperacionPersonaClave">
               <PropertyRef Name="IdEmpresa" />
               <PropertyRef Name="IdPersonaClavePrincipal" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_tblBIAAmenaza_tblBIAProceso">
-          <End Type="BCMWeb.tblBIAProceso" Role="tblBIAProceso" Multiplicity="1" />
-          <End Type="BCMWeb.tblBIAAmenaza" Role="tblBIAAmenaza" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblBIAProceso">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdDocumentoBia" />
-              <PropertyRef Name="IdProceso" />
-            </Principal>
-            <Dependent Role="tblBIAAmenaza">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdDocumentoBIA" />
-              <PropertyRef Name="IdProceso" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_tblBIAAmenazaEvento_tblBIAAmenaza">
-          <End Type="BCMWeb.tblBIAAmenaza" Role="tblBIAAmenaza" Multiplicity="1" />
-          <End Type="BCMWeb.tblBIAAmenazaEvento" Role="tblBIAAmenazaEvento" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblBIAAmenaza">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdDocumentoBIA" />
-              <PropertyRef Name="IdProceso" />
-              <PropertyRef Name="IdAmenaza" />
-            </Principal>
-            <Dependent Role="tblBIAAmenazaEvento">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdDocumentoBIA" />
-              <PropertyRef Name="IdProceso" />
-              <PropertyRef Name="IdAmenaza" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -11279,6 +11239,66 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="tblBIAAmenaza">
+          <Key>
+            <PropertyRef Name="IdEmpresa" />
+            <PropertyRef Name="IdDocumentoBIA" />
+            <PropertyRef Name="IdProceso" />
+            <PropertyRef Name="IdAmenaza" />
+          </Key>
+          <Property Name="IdEmpresa" Type="Int64" Nullable="false" />
+          <Property Name="IdDocumentoBIA" Type="Int64" Nullable="false" />
+          <Property Name="IdProceso" Type="Int64" Nullable="false" />
+          <Property Name="IdAmenaza" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Evento" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TipoControlImplantado" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ControlesImplantar" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Probabilidad" Type="Int32" />
+          <Property Name="Impacto" Type="Int32" />
+          <Property Name="Control" Type="Int32" />
+          <Property Name="Severidad" Type="Int32" />
+          <Property Name="Fuente" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Name="Estado" Type="Int32" />
+          <NavigationProperty Name="tblBIAProceso" Relationship="BCMWeb.FK_tblBIAAmenaza_tblBIAProceso" FromRole="tblBIAAmenaza" ToRole="tblBIAProceso" />
+          <NavigationProperty Name="tblBIAAmenazaEvento" Relationship="BCMWeb.FK_tblBIAAmenazaEvento_tblBIAAmenaza" FromRole="tblBIAAmenaza" ToRole="tblBIAAmenazaEvento" />
+        </EntityType>
+        <Association Name="FK_tblBIAAmenaza_tblBIAProceso">
+          <End Type="BCMWeb.tblBIAProceso" Role="tblBIAProceso" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="BCMWeb.tblBIAAmenaza" Role="tblBIAAmenaza" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblBIAProceso">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumentoBia" />
+              <PropertyRef Name="IdProceso" />
+            </Principal>
+            <Dependent Role="tblBIAAmenaza">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumentoBIA" />
+              <PropertyRef Name="IdProceso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblBIAAmenazaEvento_tblBIAAmenaza">
+          <End Type="BCMWeb.tblBIAAmenaza" Role="tblBIAAmenaza" Multiplicity="1" />
+          <End Type="BCMWeb.tblBIAAmenazaEvento" Role="tblBIAAmenazaEvento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblBIAAmenaza">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumentoBIA" />
+              <PropertyRef Name="IdProceso" />
+              <PropertyRef Name="IdAmenaza" />
+            </Principal>
+            <Dependent Role="tblBIAAmenazaEvento">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumentoBIA" />
+              <PropertyRef Name="IdProceso" />
+              <PropertyRef Name="IdAmenaza" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -11461,17 +11481,6 @@
                 <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
                 <ScalarProperty Name="IdBCPRestauracionOtro" ColumnName="IdBCPRestauracionOtro" />
                 <ScalarProperty Name="IdDocumentoBCP" ColumnName="IdDocumentoBCP" />
-                <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblBIAAmenaza">
-            <EntityTypeMapping TypeName="BCMWeb.tblBIAAmenaza">
-              <MappingFragment StoreEntitySet="tblBIAAmenaza">
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
-                <ScalarProperty Name="IdAmenaza" ColumnName="IdAmenaza" />
-                <ScalarProperty Name="IdProceso" ColumnName="IdProceso" />
-                <ScalarProperty Name="IdDocumentoBIA" ColumnName="IdDocumentoBIA" />
                 <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -12884,6 +12893,26 @@
                 <ScalarProperty Name="IdPersona" ColumnName="IdPersona" />
                 <ScalarProperty Name="IdTipoDocumento" ColumnName="IdTipoDocumento" />
                 <ScalarProperty Name="IdDocumento" ColumnName="IdDocumento" />
+                <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblBIAAmenaza">
+            <EntityTypeMapping TypeName="BCMWeb.tblBIAAmenaza">
+              <MappingFragment StoreEntitySet="tblBIAAmenaza">
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Fuente" ColumnName="Fuente" />
+                <ScalarProperty Name="Severidad" ColumnName="Severidad" />
+                <ScalarProperty Name="Control" ColumnName="Control" />
+                <ScalarProperty Name="Impacto" ColumnName="Impacto" />
+                <ScalarProperty Name="Probabilidad" ColumnName="Probabilidad" />
+                <ScalarProperty Name="ControlesImplantar" ColumnName="ControlesImplantar" />
+                <ScalarProperty Name="TipoControlImplantado" ColumnName="TipoControlImplantado" />
+                <ScalarProperty Name="Evento" ColumnName="Evento" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="IdAmenaza" ColumnName="IdAmenaza" />
+                <ScalarProperty Name="IdProceso" ColumnName="IdProceso" />
+                <ScalarProperty Name="IdDocumentoBIA" ColumnName="IdDocumentoBIA" />
                 <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
               </MappingFragment>
             </EntityTypeMapping>
