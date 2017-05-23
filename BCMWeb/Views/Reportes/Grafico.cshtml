@@ -18,80 +18,70 @@
 
 <div style="margin-bottom: 8px; float:right; position: relative;">
     @Html.DevExpress().Menu(settings =>
-{
-    settings.Name = "toolbar";
-    settings.ShowAsToolbar = true;
-
-    settings.Items.Add(new MVCxMenuItem(string.Empty, "mnuPrint", "~/Content/ChartIcons/BtnPrint.png")
     {
-        ToolTip = Resources.ReporteResource.ToolTipPrintButton
-    });
-    //settings.Items.Add(new MVCxMenuItem(string.Empty, "mnuSaveToDisk", "~/Content/ChartIcons/BtnSave.png")
-    //{
-    //    ToolTip = Resources.ReporteResource.ToolTipSaveToDiskButton,
-    //    BeginGroup = true
-    //});
-    //settings.Items.Add(new MVCxMenuItem(string.Empty, "mnuSaveToWindow", "~/Content/ChartIcons/BtnSaveWindow.png")
-    //{
-    //    ToolTip = Resources.ReporteResource.ToolTipSaveToWindowButton
-    //});
+        settings.Name = "toolbar";
+        settings.ShowAsToolbar = true;
 
-    MVCxMenuItem mnuFormat = new MVCxMenuItem();
-    mnuFormat.Name = "mnuFormat";
+        settings.Items.Add(new MVCxMenuItem(string.Empty, "mnuPrint", "~/Content/ChartIcons/BtnPrint.png")
+        {
+            ToolTip = Resources.ReporteResource.ToolTipPrintButton
+        });
+        MVCxMenuItem mnuFormat = new MVCxMenuItem();
+        mnuFormat.Name = "mnuFormat";
 
-    //ComboBoxSettings cbFormatSettings = new ComboBoxSettings();
-    //cbFormatSettings.Name = "cbFormat";
-    //cbFormatSettings.SelectedIndex = 0;
-    //cbFormatSettings.Width = 60;
+        DevExpress.Web.MenuItemStyle itemStyle = new DevExpress.Web.MenuItemStyle();
+        itemStyle.Assign(mnuFormat.ItemStyle);
+        itemStyle.Paddings.Padding = new Unit(2, UnitType.Pixel);
+        itemStyle.Paddings.PaddingBottom = new Unit(1, UnitType.Pixel);
 
-    //foreach (string format in ChartDemoHelper.GetExportFormats())
-    //{
-    //    cbFormatSettings.Properties.Items.Add(format);
-    //}
+        mnuFormat.ItemStyle.Assign(itemStyle);
 
-    //mnuFormat.SetTextTemplateContent(c =>
-    //{
-    //    Html.DevExpress().ComboBox(cbFormatSettings).Render();
-    //});
-
-    DevExpress.Web.MenuItemStyle itemStyle = new DevExpress.Web.MenuItemStyle();
-    itemStyle.Assign(mnuFormat.ItemStyle);
-    itemStyle.Paddings.Padding = new Unit(2, UnitType.Pixel);
-    itemStyle.Paddings.PaddingBottom = new Unit(1, UnitType.Pixel);
-
-    mnuFormat.ItemStyle.Assign(itemStyle);
-
-    settings.Items.Add(mnuFormat);
-    settings.ClientSideEvents.ItemClick = "function(s, e) { chart.GetPrintOptions().SetSizeMode('Zoom'); chart.Print(); }";
-    //settings.ClientSideEvents.ItemClick = "function(s, e) { chart.GetPrintOptions().SetSizeMode('Zoom'); PrintDiv(); }";
-}).GetHtml()
-    @*@Html.DevExpress().Button(settings =>
-    {
-        settings.Name = "btExport";
-        settings.Text = "Export to PDF";
-        settings.RouteValues = new { Controller = "Reportes", Action = "ExportChart", IdModuloActual = Model. };
-    }).GetHtml()*@
+        settings.Items.Add(mnuFormat);
+        settings.ClientSideEvents.ItemClick = "function(s, e) { chart.GetPrintOptions().SetSizeMode('Zoom'); chart.Print(); }";
+    }).GetHtml()
 </div>
 
 @using (Html.BeginForm("Grafico", "Reportes", FormMethod.Post, htmlAttributes: new { id = "graphForm" }))
 {
     @Html.HiddenFor(m => m.IdModulo)
     @Html.HiddenFor(m => m.IdModuloActual)
+    @Html.HiddenFor(m => m.IdEscalaGrafico)
 
-<div style="margin-bottom: 10px;">
-    @Html.Partial("ComboBoxGrafico")
-</div>
 <div id="dvContents" class="Grafico">
     @switch (Model.IdModuloActual)
     {
         case 13010300:
+            <div style="margin-bottom: 10px;">
+                @Html.Partial("ComboBoxGrafico")
+            </div>
             @Html.Partial("GraficoPUOPartialView", Model.DataCuadro)
             break;
         case 13010600:
+            <div style="margin-bottom: 10px;">
+                @Html.Partial("ComboBoxGrafico")
+            </div>
             @Html.Partial("GraficoMTDPartialView", Model.DataCuadro)
             break;
         case 13010900:
+            <div style="margin-bottom: 10px;">
+                @Html.Partial("ComboBoxGrafico")
+            </div>
             @Html.Partial("GraficoGIPartialView", Model.DataCuadro)
+            break;
+        case 13050200:
+            @Html.Partial("GraficoRPPartialView", Model.DataCuadro)
+            break;
+        case 13050300:
+            @Html.Partial("GraficoRIPartialView", Model.DataCuadro)
+            break;
+        case 13050400:
+            @Html.Partial("GraficoRSPartialView", Model.DataCuadro)
+            break;
+        case 13050500:
+            @Html.Partial("GraficoRFPartialView", Model.DataCuadro)
+            break;
+        case 13050700:
+            @Html.Partial("GraficoRCPartialView", Model.DataCuadro)
             break;
     }
 </div>

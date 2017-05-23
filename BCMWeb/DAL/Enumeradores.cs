@@ -508,6 +508,15 @@ namespace BCMWeb
         [EnumMember()]
         [Description("Acceder Anexo Documento Movil")]
         AccederAnexoDocumentoMovil,
+        [EnumMember()]
+        [Description("Acceder Anexo Documento Movil")]
+        AgregarIniciativa,
+        [EnumMember()]
+        [Description("Acceder Anexo Documento Movil")]
+        ActualizarIniciativa,
+        [EnumMember()]
+        [Description("Acceder Anexo Documento Movil")]
+        EliminarIniciativa,
 
     }
     [DataContract(Name = "Secciones de Ficha")]

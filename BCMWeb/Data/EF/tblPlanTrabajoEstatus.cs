@@ -20,6 +20,7 @@ namespace BCMWeb.Data.EF
             this.tblCultura_PlanTrabajoEstatus = new HashSet<tblCultura_PlanTrabajoEstatus>();
             this.tblPlanTrabajo = new HashSet<tblPlanTrabajo>();
             this.tblPlanTrabajoAuditoria = new HashSet<tblPlanTrabajoAuditoria>();
+            this.tblIniciativas = new HashSet<tblIniciativas>();
         }
     
         public short IdEstatusActividad { get; set; }
@@ -30,5 +31,7 @@ namespace BCMWeb.Data.EF
         public virtual ICollection<tblPlanTrabajo> tblPlanTrabajo { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblPlanTrabajoAuditoria> tblPlanTrabajoAuditoria { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblIniciativas> tblIniciativas { get; set; }
     }
 }

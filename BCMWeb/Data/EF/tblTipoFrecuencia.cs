@@ -17,18 +17,22 @@ namespace BCMWeb.Data.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public tblTipoFrecuencia()
         {
+            this.tblBIAImpactoFinanciero = new HashSet<tblBIAImpactoFinanciero>();
+            this.tblBIAImpactoOperacional = new HashSet<tblBIAImpactoOperacional>();
             this.tblBIAMTD = new HashSet<tblBIAMTD>();
             this.tblBIARPO = new HashSet<tblBIARPO>();
             this.tblBIARTO = new HashSet<tblBIARTO>();
             this.tblBIAWRT = new HashSet<tblBIAWRT>();
             this.tblCultura_TipoFrecuencia = new HashSet<tblCultura_TipoFrecuencia>();
             this.tblPPEFrecuencia = new HashSet<tblPPEFrecuencia>();
-            this.tblBIAImpactoFinanciero = new HashSet<tblBIAImpactoFinanciero>();
-            this.tblBIAImpactoOperacional = new HashSet<tblBIAImpactoOperacional>();
         }
     
         public long IdTipoFrecuencia { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblBIAImpactoFinanciero> tblBIAImpactoFinanciero { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblBIAImpactoOperacional> tblBIAImpactoOperacional { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIAMTD> tblBIAMTD { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -41,9 +45,5 @@ namespace BCMWeb.Data.EF
         public virtual ICollection<tblCultura_TipoFrecuencia> tblCultura_TipoFrecuencia { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblPPEFrecuencia> tblPPEFrecuencia { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblBIAImpactoFinanciero> tblBIAImpactoFinanciero { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblBIAImpactoOperacional> tblBIAImpactoOperacional { get; set; }
     }
 }

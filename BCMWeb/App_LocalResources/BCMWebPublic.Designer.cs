@@ -275,5 +275,14 @@ namespace Resources {
                 return ResourceManager.GetString("stringEmptyContenido", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enviar a Excel.
+        /// </summary>
+        public static string stringExportExcel {
+            get {
+                return ResourceManager.GetString("stringExportExcel", resourceCulture);
+            }
+        }
     }
 }

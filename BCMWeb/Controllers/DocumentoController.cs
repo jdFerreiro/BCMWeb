@@ -36,6 +36,8 @@ namespace BCMWeb.Controllers
 
             Auditoria.RegistarAccion(eTipoAccion.AccesoModuloWeb);
 
+            Session["IdClaseDocumento"] = model.IdClaseDocumento;
+
             return View(model);
         }
         [HttpPost]
@@ -65,6 +67,7 @@ namespace BCMWeb.Controllers
             model.Perfil = Metodos.GetPerfilData();
             model.ModulosPrincipales = Metodos.GetModulosPrincipalesEmpresaUsuario();
             model.PageTitle = Resources.DocumentoResource.DocumentosPageTitle;
+            model.IdModulo = long.Parse(_IdModulo);
             ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
 
             return PartialView(model);

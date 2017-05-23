@@ -57,17 +57,11 @@ namespace BCMWeb.Models
         [Display(Name = "captionPassword", ResourceType = typeof(Resources.LoginResource))]
         public string Password { get; set; }
     }
-    public class RegisterModel
+    public class RegisterModel : ModulosUserModel
     {
         [Required(ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
         [Display(Name = "captionUsername", ResourceType = typeof(Resources.LoginResource))]
         public string UserName { get; set; }
-
-        [Required(ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
-        [RegularExpression("\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*", ErrorMessageResourceName = "EmailError", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
-        [DataType(DataType.EmailAddress)]
-        [Display(Name = "captionEmail", ResourceType = typeof(Resources.LoginResource))]
-        public string Email { get; set; }
 
         [Required(ErrorMessageResourceName = "RequiredErrorFemale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
         [StringLength(100, ErrorMessageResourceType = typeof(Resources.ErrorResource), ErrorMessageResourceName = "StringLengthErrorFemale", MinimumLength = 6)]
@@ -102,5 +96,9 @@ namespace BCMWeb.Models
         [Display(Name = "captionPasswordConfirm", ResourceType = typeof(Resources.LoginResource))]
         [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessageResourceName = "CompareErrorFemalevsFemale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
         public string PasswordCompare { get; set; }
+    }
+    public class PrimeraVezModel
+    {
+        public int MyProperty { get; set; }
     }
 }

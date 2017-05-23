@@ -114,17 +114,18 @@ namespace BCMWeb
     public class objAmenaza
     {
         public long IdProceso { get; set; }
+        public long IdDocumentoBIA { get; set; }
         public long IdAmenaza { get; set; }
         public string Descripcion { get; set; }
         public string Evento { get; set; }
         public string Implantado { get; set; }
         public string Implantar { get; set; }
-        public int Probabilidad { get; set; }
-        public int Severidad { get; set; }
-        public int Control { get; set; }
-        public int Impacto { get; set; }
+        public short Probabilidad { get; set; }
+        public short Severidad { get; set; }
+        public short Control { get; set; }
+        public short Impacto { get; set; }
         public string Fuente { get; set; }
-        public int Estado { get; set; }
+        public short Estado { get; set; }
     }
     public class objTablaAmenaza
     {

@@ -27,5 +27,6 @@ namespace BCMWeb.Data.EF
         public virtual tblBIADocumento tblBIADocumento { get; set; }
         public virtual tblBIAProceso tblBIAProceso { get; set; }
         public virtual tblTipoFrecuencia tblTipoFrecuencia { get; set; }
+        public virtual tblEscala tblEscala { get; set; }
     }
 }

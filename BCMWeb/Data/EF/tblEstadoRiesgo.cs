@@ -12,14 +12,21 @@ namespace BCMWeb.Data.EF
     using System;
     using System.Collections.Generic;
     
-    public partial class tblBIAEstadoRiesgo
+    public partial class tblEstadoRiesgo
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public tblEstadoRiesgo()
+        {
+            this.tblBIAAmenaza = new HashSet<tblBIAAmenaza>();
+        }
+    
         public long IdEmpresa { get; set; }
-        public long IdEstadoRiesgo { get; set; }
+        public short IdEstadoRiesgo { get; set; }
         public string Nombre { get; set; }
-        public short Valor { get; set; }
         public string Color { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblBIAAmenaza> tblBIAAmenaza { get; set; }
         public virtual tblEmpresa tblEmpresa { get; set; }
     }
 }

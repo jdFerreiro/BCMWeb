@@ -9,17 +9,8 @@
         {
             switch (Model.IdModuloActual)
             {
-                case 4080100: // Diagrama de Impacto
+                case 4090100: // Diagrama de Impacto
                     <td class="leftPane">
-                        <div class="Contenedor Naranja">
-                            <div class="Titulo">
-                                @Html.Raw(Resources.DiagramaResource.headerInterdependencia)
-                            </div>
-                            @{ 
-                                string _HtmlInterdependencias = Model.Interdependencias;
-                                @(new HtmlString(_HtmlInterdependencias));
-                            }
-                        </div>
                         <div class="Contenedor Verde">
                             <div class="Titulo">
                                 @Html.Raw(Resources.DiagramaResource.headerEntrada)
@@ -29,17 +20,17 @@
                                 @(new HtmlString(_HtmlEntradas));
                             }
                         </div>
-                        <div class="Contenedor Rosado">
+                     </td>
+                    <td class="MiddlePane">
+                        <div class="Contenedor Naranja">
                             <div class="Titulo">
-                                @Html.Raw(Resources.DiagramaResource.headerProveedores)
+                                @Html.Raw(Resources.DiagramaResource.headerInterdependencia)
                             </div>
                             @{
-                                string _HtmlProveedores = Model.Proveedores;
-                                @(new HtmlString(_HtmlProveedores));
+                                string _HtmlInterdependencias = Model.Interdependencias;
+                                @(new HtmlString(_HtmlInterdependencias));
                             }
                         </div>
-                    </td>
-                    <td class="MiddlePane">
                         <div class="Contenedor Amarillo">
                             <div class="Titulo">
                                 @Html.Raw(Resources.DiagramaResource.headerProceso)
@@ -67,7 +58,16 @@
                                 </table>
                             </div>
                         </div>
-                    </td>
+                        <div class="Contenedor Rosado">
+                            <div class="Titulo">
+                                @Html.Raw(Resources.DiagramaResource.headerProveedores)
+                            </div>
+                            @{
+                                string _HtmlProveedores = Model.Proveedores;
+                                @(new HtmlString(_HtmlProveedores));
+                            }
+                        </div>
+                   </td>
                     <td class="RightPane">
                         <div class="Contenedor Azul">
                             <div class="Titulo">
@@ -80,7 +80,7 @@
                         </div>
                     </td>
                    break;
-                case 4080200: // Diagrama de Tecnología
+                case 4090200: // Diagrama de Tecnología
                     <td class="leftPane">
                     </td>
                     <td class="MiddlePane">
@@ -124,7 +124,7 @@
                        </div>
                     </td>
                     break;
-                case 4080300:// Diagrama de Personas Claves
+                case 4090300:// Diagrama de Personas Claves
                     <td class="leftPane">
                     </td>
                     <td class="MiddlePane">

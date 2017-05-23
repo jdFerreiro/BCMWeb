@@ -22,13 +22,15 @@ namespace BCMWeb.Data.EF
             this.tblBCPDocumento = new HashSet<tblBCPDocumento>();
             this.tblBIACadenaServicio = new HashSet<tblBIACadenaServicio>();
             this.tblBIADocumento = new HashSet<tblBIADocumento>();
-            this.tblBIAEstadoRiesgo = new HashSet<tblBIAEstadoRiesgo>();
             this.tblBIAEventoRiesgo = new HashSet<tblBIAEventoRiesgo>();
-            this.tblBIAFuenteRiesgo = new HashSet<tblBIAFuenteRiesgo>();
-            this.tblBIAProbabilidadRiesgo = new HashSet<tblBIAProbabilidadRiesgo>();
             this.tblBIAUnidadTrabajo = new HashSet<tblBIAUnidadTrabajo>();
             this.tblCargo = new HashSet<tblCargo>();
             this.tblDocumento = new HashSet<tblDocumento>();
+            this.tblDocumentoPersonaClave = new HashSet<tblDocumentoPersonaClave>();
+            this.tblEstadoRiesgo = new HashSet<tblEstadoRiesgo>();
+            this.tblProbabilidadRiesgo = new HashSet<tblProbabilidadRiesgo>();
+            this.tblFuenteRiesgo = new HashSet<tblFuenteRiesgo>();
+            this.tblEscala = new HashSet<tblEscala>();
             this.tblLocalidad = new HashSet<tblLocalidad>();
             this.tblPersona = new HashSet<tblPersona>();
             this.tblProveedor = new HashSet<tblProveedor>();
@@ -38,6 +40,7 @@ namespace BCMWeb.Data.EF
             this.tblEmpresaUsuario = new HashSet<tblEmpresaUsuario>();
             this.tblModulo_NivelUsuario = new HashSet<tblModulo_NivelUsuario>();
             this.tblModulo = new HashSet<tblModulo>();
+            this.tblModuloAnexo = new HashSet<tblModuloAnexo>();
             this.tblPBEPruebaEjecucionEjercicio = new HashSet<tblPBEPruebaEjecucionEjercicio>();
             this.tblPBEPruebaPlanificacion = new HashSet<tblPBEPruebaPlanificacion>();
             this.tblPlanTrabajo = new HashSet<tblPlanTrabajo>();
@@ -48,9 +51,7 @@ namespace BCMWeb.Data.EF
             this.tblPMTResponsableUpdate = new HashSet<tblPMTResponsableUpdate>();
             this.tblProducto = new HashSet<tblProducto>();
             this.tblUsuarioUnidadOrganizativa = new HashSet<tblUsuarioUnidadOrganizativa>();
-            this.tblEscala = new HashSet<tblEscala>();
-            this.tblModuloAnexo = new HashSet<tblModuloAnexo>();
-            this.tblDocumentoPersonaClave = new HashSet<tblDocumentoPersonaClave>();
+            this.tblIniciativas = new HashSet<tblIniciativas>();
         }
     
         public long IdEmpresa { get; set; }
@@ -82,13 +83,7 @@ namespace BCMWeb.Data.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIADocumento> tblBIADocumento { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblBIAEstadoRiesgo> tblBIAEstadoRiesgo { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIAEventoRiesgo> tblBIAEventoRiesgo { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblBIAFuenteRiesgo> tblBIAFuenteRiesgo { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblBIAProbabilidadRiesgo> tblBIAProbabilidadRiesgo { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIAUnidadTrabajo> tblBIAUnidadTrabajo { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -96,6 +91,16 @@ namespace BCMWeb.Data.EF
         public virtual tblCiudad tblCiudad { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblDocumento> tblDocumento { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblDocumentoPersonaClave> tblDocumentoPersonaClave { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblEstadoRiesgo> tblEstadoRiesgo { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblProbabilidadRiesgo> tblProbabilidadRiesgo { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblFuenteRiesgo> tblFuenteRiesgo { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblEscala> tblEscala { get; set; }
         public virtual tblEstado tblEstado { get; set; }
         public virtual tblEstadoEmpresa tblEstadoEmpresa { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -118,6 +123,8 @@ namespace BCMWeb.Data.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblModulo> tblModulo { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblModuloAnexo> tblModuloAnexo { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblPBEPruebaEjecucionEjercicio> tblPBEPruebaEjecucionEjercicio { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblPBEPruebaPlanificacion> tblPBEPruebaPlanificacion { get; set; }
@@ -138,10 +145,6 @@ namespace BCMWeb.Data.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblUsuarioUnidadOrganizativa> tblUsuarioUnidadOrganizativa { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblEscala> tblEscala { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblModuloAnexo> tblModuloAnexo { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblDocumentoPersonaClave> tblDocumentoPersonaClave { get; set; }
+        public virtual ICollection<tblIniciativas> tblIniciativas { get; set; }
     }
 }

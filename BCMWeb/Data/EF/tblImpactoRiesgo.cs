@@ -17,14 +17,16 @@ namespace BCMWeb.Data.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public tblImpactoRiesgo()
         {
+            this.tblBIAAmenaza = new HashSet<tblBIAAmenaza>();
             this.tblBIAEventoRiesgo = new HashSet<tblBIAEventoRiesgo>();
         }
     
         public long IdEmpresa { get; set; }
-        public long IdImpacto { get; set; }
+        public short IdImpacto { get; set; }
         public string Nombre { get; set; }
-        public short Valor { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblBIAAmenaza> tblBIAAmenaza { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIAEventoRiesgo> tblBIAEventoRiesgo { get; set; }
     }

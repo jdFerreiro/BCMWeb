@@ -32,6 +32,11 @@ namespace BCMWeb.Models
         public long IdTipoEscala { get; set; }
         public string TipoEscala { get; set; }
     }
+    public class TipoEscalaTexto
+    {
+        public string IdTipoEscala { get; set; }
+        public string TipoEscala { get; set; }
+    }
     public class ChartHelpers
     {
         public static ChartControlSettings GetChartSettings()
@@ -107,5 +112,31 @@ namespace BCMWeb.Models
 
             return data;
         }
+    }
+    public class TablasGeneralesModel
+    {
+        public string Descripcion { get; set; }
+        public string Valoracion { get; set; }
+    }
+    public class RiesgoControlModel : ModulosUserModel
+    {
+        public long IdUnidadOrganizativa { get; set; }
+        public string UnidadOrganizativa
+        {
+            get
+            {
+                return Metodos.GetNombreUnidadCompleto(this.IdUnidadOrganizativa);
+            }
+        }
+    }
+    public class DataRiesgoControl
+    {
+        public int NroProceso { get; set; }
+        public string Amenaza { get; set; }
+        public string Evento { get; set; }
+        public string Implantado { get; set; }
+        public string Implantar { get; set; }
+        public int Estado { get; set; }
+
     }
 }

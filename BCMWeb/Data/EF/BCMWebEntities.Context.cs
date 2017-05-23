@@ -39,25 +39,24 @@ namespace BCMWeb.Data.EF
         public virtual DbSet<tblBCPRestauracionInfraestructura> tblBCPRestauracionInfraestructura { get; set; }
         public virtual DbSet<tblBCPRestauracionMobiliario> tblBCPRestauracionMobiliario { get; set; }
         public virtual DbSet<tblBCPRestauracionOtro> tblBCPRestauracionOtro { get; set; }
+        public virtual DbSet<tblBIAAmenaza> tblBIAAmenaza { get; set; }
         public virtual DbSet<tblBIAAmenazaEvento> tblBIAAmenazaEvento { get; set; }
         public virtual DbSet<tblBIAAplicacion> tblBIAAplicacion { get; set; }
         public virtual DbSet<tblBIACadenaServicio> tblBIACadenaServicio { get; set; }
         public virtual DbSet<tblBIAClienteProceso> tblBIAClienteProceso { get; set; }
         public virtual DbSet<tblBIAComentario> tblBIAComentario { get; set; }
-        public virtual DbSet<tblBIAControlRiesgo> tblBIAControlRiesgo { get; set; }
         public virtual DbSet<tblBIADocumentacion> tblBIADocumentacion { get; set; }
         public virtual DbSet<tblBIADocumento> tblBIADocumento { get; set; }
         public virtual DbSet<tblBIAEntrada> tblBIAEntrada { get; set; }
-        public virtual DbSet<tblBIAEstadoRiesgo> tblBIAEstadoRiesgo { get; set; }
         public virtual DbSet<tblBIAEventoControl> tblBIAEventoControl { get; set; }
         public virtual DbSet<tblBIAEventoRiesgo> tblBIAEventoRiesgo { get; set; }
-        public virtual DbSet<tblBIAFuenteRiesgo> tblBIAFuenteRiesgo { get; set; }
         public virtual DbSet<tblBIAGranImpacto> tblBIAGranImpacto { get; set; }
+        public virtual DbSet<tblBIAImpactoFinanciero> tblBIAImpactoFinanciero { get; set; }
+        public virtual DbSet<tblBIAImpactoOperacional> tblBIAImpactoOperacional { get; set; }
         public virtual DbSet<tblBIAInterdependencia> tblBIAInterdependencia { get; set; }
         public virtual DbSet<tblBIAMTD> tblBIAMTD { get; set; }
         public virtual DbSet<tblBIAPersonaClave> tblBIAPersonaClave { get; set; }
         public virtual DbSet<tblBIAPersonaRespaldoProceso> tblBIAPersonaRespaldoProceso { get; set; }
-        public virtual DbSet<tblBIAProbabilidadRiesgo> tblBIAProbabilidadRiesgo { get; set; }
         public virtual DbSet<tblBIAProceso> tblBIAProceso { get; set; }
         public virtual DbSet<tblBIAProcesoAlterno> tblBIAProcesoAlterno { get; set; }
         public virtual DbSet<tblBIAProveedor> tblBIAProveedor { get; set; }
@@ -71,6 +70,7 @@ namespace BCMWeb.Data.EF
         public virtual DbSet<tblBIAWRT> tblBIAWRT { get; set; }
         public virtual DbSet<tblCargo> tblCargo { get; set; }
         public virtual DbSet<tblCiudad> tblCiudad { get; set; }
+        public virtual DbSet<tblControlRiesgo> tblControlRiesgo { get; set; }
         public virtual DbSet<tblCultura_Ciudad> tblCultura_Ciudad { get; set; }
         public virtual DbSet<tblCultura_Estado> tblCultura_Estado { get; set; }
         public virtual DbSet<tblCultura_EstadoDocumento> tblCultura_EstadoDocumento { get; set; }
@@ -93,25 +93,31 @@ namespace BCMWeb.Data.EF
         public virtual DbSet<tblCultura_TipoTelefono> tblCultura_TipoTelefono { get; set; }
         public virtual DbSet<tblCultura_TipoUbicacionInformacion> tblCultura_TipoUbicacionInformacion { get; set; }
         public virtual DbSet<tblDocumento> tblDocumento { get; set; }
+        public virtual DbSet<tblDocumentoAnexo> tblDocumentoAnexo { get; set; }
         public virtual DbSet<tblDocumentoAprobacion> tblDocumentoAprobacion { get; set; }
         public virtual DbSet<tblDocumentoCertificacion> tblDocumentoCertificacion { get; set; }
         public virtual DbSet<tblDocumentoContenido> tblDocumentoContenido { get; set; }
         public virtual DbSet<tblDocumentoEntrevista> tblDocumentoEntrevista { get; set; }
         public virtual DbSet<tblDocumentoEntrevistaPersona> tblDocumentoEntrevistaPersona { get; set; }
+        public virtual DbSet<tblDocumentoPersonaClave> tblDocumentoPersonaClave { get; set; }
         public virtual DbSet<tblEmpresa> tblEmpresa { get; set; }
         public virtual DbSet<tblEmpresaModulo> tblEmpresaModulo { get; set; }
         public virtual DbSet<tblEmpresaUsuario> tblEmpresaUsuario { get; set; }
+        public virtual DbSet<tblEscala> tblEscala { get; set; }
         public virtual DbSet<tblEstado> tblEstado { get; set; }
         public virtual DbSet<tblEstadoDocumento> tblEstadoDocumento { get; set; }
         public virtual DbSet<tblEstadoEmpresa> tblEstadoEmpresa { get; set; }
         public virtual DbSet<tblEstadoProceso> tblEstadoProceso { get; set; }
+        public virtual DbSet<tblEstadoRiesgo> tblEstadoRiesgo { get; set; }
         public virtual DbSet<tblEstadoUsuario> tblEstadoUsuario { get; set; }
+        public virtual DbSet<tblFuenteRiesgo> tblFuenteRiesgo { get; set; }
         public virtual DbSet<tblImpactoRiesgo> tblImpactoRiesgo { get; set; }
         public virtual DbSet<tblLocalidad> tblLocalidad { get; set; }
         public virtual DbSet<tblMes> tblMes { get; set; }
         public virtual DbSet<tblModulo> tblModulo { get; set; }
         public virtual DbSet<tblModulo_NivelUsuario> tblModulo_NivelUsuario { get; set; }
         public virtual DbSet<tblModulo_Usuario> tblModulo_Usuario { get; set; }
+        public virtual DbSet<tblModuloAnexo> tblModuloAnexo { get; set; }
         public virtual DbSet<tblNivelImpacto> tblNivelImpacto { get; set; }
         public virtual DbSet<tblNivelUsuario> tblNivelUsuario { get; set; }
         public virtual DbSet<tblPais> tblPais { get; set; }
@@ -143,8 +149,10 @@ namespace BCMWeb.Data.EF
         public virtual DbSet<tblPMTResponsableUpdate> tblPMTResponsableUpdate { get; set; }
         public virtual DbSet<tblPMTResponsableUpdate_Correo> tblPMTResponsableUpdate_Correo { get; set; }
         public virtual DbSet<tblPPEFrecuencia> tblPPEFrecuencia { get; set; }
+        public virtual DbSet<tblProbabilidadRiesgo> tblProbabilidadRiesgo { get; set; }
         public virtual DbSet<tblProducto> tblProducto { get; set; }
         public virtual DbSet<tblProveedor> tblProveedor { get; set; }
+        public virtual DbSet<tblSeveridadRiesgo> tblSeveridadRiesgo { get; set; }
         public virtual DbSet<tblTipoCorreo> tblTipoCorreo { get; set; }
         public virtual DbSet<tblTipoDireccion> tblTipoDireccion { get; set; }
         public virtual DbSet<tblTipoEscala> tblTipoEscala { get; set; }
@@ -160,12 +168,6 @@ namespace BCMWeb.Data.EF
         public virtual DbSet<tblUsuario> tblUsuario { get; set; }
         public virtual DbSet<tblUsuarioUnidadOrganizativa> tblUsuarioUnidadOrganizativa { get; set; }
         public virtual DbSet<tblVicepresidencia> tblVicepresidencia { get; set; }
-        public virtual DbSet<tblEscala> tblEscala { get; set; }
-        public virtual DbSet<tblDocumentoAnexo> tblDocumentoAnexo { get; set; }
-        public virtual DbSet<tblModuloAnexo> tblModuloAnexo { get; set; }
-        public virtual DbSet<tblBIAImpactoFinanciero> tblBIAImpactoFinanciero { get; set; }
-        public virtual DbSet<tblBIAImpactoOperacional> tblBIAImpactoOperacional { get; set; }
-        public virtual DbSet<tblDocumentoPersonaClave> tblDocumentoPersonaClave { get; set; }
-        public virtual DbSet<tblBIAAmenaza> tblBIAAmenaza { get; set; }
+        public virtual DbSet<tblIniciativas> tblIniciativas { get; set; }
     }
 }

@@ -14,29 +14,30 @@ namespace BCMWeb.Data.EF
     
     public partial class tblBIAAmenaza
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public tblBIAAmenaza()
-        {
-            this.tblBIAAmenazaEvento = new HashSet<tblBIAAmenazaEvento>();
-        }
-    
         public long IdEmpresa { get; set; }
-        public long IdDocumentoBIA { get; set; }
+        public long IdDocumento { get; set; }
         public long IdProceso { get; set; }
         public long IdAmenaza { get; set; }
+        public long IdDocumentoBIA { get; set; }
+        public long IdTipoDocumento { get; set; }
         public string Descripcion { get; set; }
         public string Evento { get; set; }
         public string TipoControlImplantado { get; set; }
         public string ControlesImplantar { get; set; }
-        public Nullable<int> Probabilidad { get; set; }
-        public Nullable<int> Impacto { get; set; }
-        public Nullable<int> Control { get; set; }
-        public Nullable<int> Severidad { get; set; }
+        public Nullable<short> Probabilidad { get; set; }
+        public Nullable<short> Impacto { get; set; }
+        public Nullable<short> Control { get; set; }
+        public Nullable<short> Severidad { get; set; }
         public string Fuente { get; set; }
-        public Nullable<int> Estado { get; set; }
+        public Nullable<short> Estado { get; set; }
     
+        public virtual tblControlRiesgo tblControlRiesgo { get; set; }
+        public virtual tblDocumento tblDocumento { get; set; }
+        public virtual tblEstadoRiesgo tblEstadoRiesgo { get; set; }
+        public virtual tblFuenteRiesgo tblFuenteRiesgo { get; set; }
+        public virtual tblImpactoRiesgo tblImpactoRiesgo { get; set; }
+        public virtual tblProbabilidadRiesgo tblProbabilidadRiesgo { get; set; }
+        public virtual tblSeveridadRiesgo tblSeveridadRiesgo { get; set; }
         public virtual tblBIAProceso tblBIAProceso { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblBIAAmenazaEvento> tblBIAAmenazaEvento { get; set; }
     }
 }

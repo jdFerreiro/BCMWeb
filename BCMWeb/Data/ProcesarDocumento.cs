@@ -26,93 +26,102 @@ namespace BCMWeb
         [HandleError]
         public static void ProcesarContenidoDocumento(long ModuloId, byte[] Contenido)
         {
-
-            // string _filePath = SaveFile(new MemoryStream(Contenido));
-            MemoryStream msContent = new MemoryStream(Contenido);
-
-            try
+            if (Contenido != null)
             {
-                switch (ModuloId)
+                // string _filePath = SaveFile(new MemoryStream(Contenido));
+                MemoryStream msContent = new MemoryStream(Contenido);
+                long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+
+                try
                 {
-                    case 4010100: // ficha del BIA
-                        ProcessFichaEstandar(msContent);
-                        //ProcessFichaBIA(msContent);
-                        break;
-                    case 4010200: // Entradas del Proceso
-                        ProcesarEntradasdelProceso(msContent);
-                        break;
-                    case 4010300: // Proveedores
-                        ProcesarProveedores(msContent);
-                        break;
-                    case 4010400: // Interdependencias
-                        ProcesarInterdependencias(msContent);
-                        break;
-                    case 4010500: // Clientes y Productos
-                        ProcesarClientesyProductos(msContent);
-                        break;
-                    case 4010600: // Tecnología
-                        ProcesarTecnología(msContent);
-                        break;
-                    case 4010700: // Información Esencial
-                        ProcesarInformaciónEsencial(msContent);
-                        break;
-                    case 4010800: // Personal Clave
-                        ProcesarPersonalClave(msContent);
-                        break;
-                    case 4030100: // Impacto Financiero
-                        ProcesarImpactoFinanciero(msContent);
-                        break;
-                    case 4030200: // Impacto Operacional
-                        ProcesarImpactoOperacional(msContent);
-                        break;
-                    case 4030300: // Escalas
-                        ProcesarAnalisisRiesgo(msContent);
-                        break;
-                    case 4040100: // TMC
-                        ProcesarTMC(msContent);
-                        break;
-                    case 4040200: // TOR
-                        ProcesarTOR(msContent);
-                        break;
-                    case 4040300: // POR
-                        ProcesarPOR(msContent);
-                        break;
-                    case 4040400: // TRT
-                        ProcesarTRT(msContent);
-                        break;
-                    case 4050100: // Procedimientos Alternos
-                        ProcesarProcedimientosAlternos(msContent);
-                        break;
-                    case 4060100: // Ubicación Principal
-                        ProcesarUbicaciónPrincipal(msContent);
-                        break;
-                    case 4060200: // Ubicación Alterna
-                        ProcesarUbicaciónAlterna(msContent);
-                        break;
-                    case 4070100: // Grandes Impactos
-                        ProcesarGrandesImpactos(msContent);
-                        break;
-                    case 4020100: // Grandes Impactos
-                        ProcesarAnalisisRiesgo(msContent);
-                        break;
-                    case 7000101: // Ficha del BCP
-                    case 1010100:
-                    case 2010100:
-                    case 3010100:
-                    case 5010100:
-                    case 6010100:
-                    case 8010100:
-                    case 9010100:
-                    case 10010100:
-                        ProcessFichaEstandar(msContent);
-                        break;
+                    switch (ModuloId)
+                    {
+                        case 4010100: // ficha del BIA
+                            ProcessFichaEstandar(msContent);
+                            //ProcessFichaBIA(msContent);
+                            break;
+                        case 4020200: // Entradas del Proceso
+                            ProcesarEntradasdelProceso(msContent);
+                            break;
+                        case 4020300: // Proveedores
+                            ProcesarProveedores(msContent);
+                            break;
+                        case 4020400: // Interdependencias
+                            ProcesarInterdependencias(msContent);
+                            break;
+                        case 4020500: // Clientes y Productos
+                            ProcesarClientesyProductos(msContent);
+                            break;
+                        case 4020600: // Tecnología
+                            ProcesarTecnología(msContent);
+                            break;
+                        case 4020700: // Información Esencial
+                            ProcesarInformaciónEsencial(msContent);
+                            break;
+                        case 4020800: // Personal Clave
+                            ProcesarPersonalClave(msContent);
+                            break;
+                        case 4040100: // Impacto Financiero
+                            ProcesarImpactoFinanciero(msContent);
+                            break;
+                        case 4040200: // Impacto Operacional
+                            ProcesarImpactoOperacional(msContent);
+                            break;
+                        case 4030300: // Escalas
+                            ProcesarAnalisisRiesgo(msContent);
+                            break;
+                        case 4050100: // TMC
+                            ProcesarTMC(msContent);
+                            break;
+                        case 4050200: // TOR
+                            ProcesarTOR(msContent);
+                            break;
+                        case 4050300: // POR
+                            ProcesarPOR(msContent);
+                            break;
+                        case 4050400: // TRT
+                            ProcesarTRT(msContent);
+                            break;
+                        case 4060100: // Procedimientos Alternos
+                            ProcesarProcedimientosAlternos(msContent);
+                            break;
+                        case 4070100: // Ubicación Principal
+                            ProcesarUbicaciónPrincipal(msContent);
+                            break;
+                        case 4070200: // Ubicación Alterna
+                            ProcesarUbicaciónAlterna(msContent);
+                            break;
+                        case 4080100: // Grandes Impactos
+                            ProcesarGrandesImpactos(msContent);
+                            break;
+                        case 3030100: // Amenazas
+                            if (IdEmpresa == 9)
+                                ProcesarAnalisisRiesgo(msContent);
+                            break;
+                        case 3040100: // Amenazas
+                            if (IdEmpresa == 14)
+                                ProcesarAnalisisRiesgo(msContent);
+                            break;
+                        case 7000101: // Ficha del BCP
+                        case 1010100:
+                        case 2010100:
+                        case 3010100:
+                        case 5010100:
+                        case 6010100:
+                        case 8010100:
+                        case 9010100:
+                        case 10010100:
+                           if (IdEmpresa > 13) 
+                                ProcessFichaEstandar(msContent);
+                            break;
+                    }
                 }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+                //DeleteFile(_filePath);
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            //DeleteFile(_filePath);
         }
 
         private static void ProcesarGrandesImpactos(MemoryStream msContent)
@@ -121,6 +130,7 @@ namespace BCMWeb
             long _IdDocumento = long.Parse(Session["IdDocumento"].ToString());
             int _IdTipoDocumento = int.Parse(Session["IdTipoDocumento"].ToString());
 
+            string _NrosProceso = string.Empty;
             int _NroProceso = 0;
             long IdProceso = 0;
             string _NombreProceso = string.Empty;
@@ -158,6 +168,8 @@ namespace BCMWeb
 
                                 List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
 
+                                _startRow = GetNextRow(_tableRows, _startRow, out _NroProceso);
+
                                 for (int _Row = _startRow; _Row < _tableRows.Count(); _Row++)
                                 {
                                     if (_NroTabla == 1) { 
@@ -167,7 +179,7 @@ namespace BCMWeb
                                         {
                                             List<OpenXmlElement> _tableCells = _tableRow.ChildElements.Where(x => x.GetType().Name == "TableCell").ToList();
 
-                                            for (int _Cell = 0; _Cell < _Procesos.Count(); _Cell++)
+                                            for (int _Cell = 0; _Cell < _tableCells.Count(); _Cell++)
                                             {
                                                 TableCell _celda = (TableCell)_tableCells[_Cell];
                                                 if (_celda.HasChildren)
@@ -176,14 +188,19 @@ namespace BCMWeb
                                                     List<OpenXmlElement> _tableCellParagraph = _celda.ChildElements.Where(x => x.GetType().Name == "Paragraph").ToList();
                                                     foreach (var _cellParagraph in _tableCellParagraph)
                                                     {
-                                                        if (!string.IsNullOrEmpty(_textoCelda))
-                                                            _textoCelda += ", ";
-                                                        _textoCelda += _cellParagraph.InnerText;
+                                                        if (!string.IsNullOrEmpty(_cellParagraph.InnerText.Trim()))
+                                                        {
+                                                            if (!string.IsNullOrEmpty(_textoCelda))
+                                                                _textoCelda += '/';
+                                                            _textoCelda += _cellParagraph.InnerText.Trim();
+
+                                                        }
                                                     } // End foreach (var _cellParagraph in _tableCellParagraph)
 
                                                     if (!string.IsNullOrEmpty(_textoCelda))
                                                     {
-                                                        _Datos[_Row - 1, _Cell - 1] = _Procesos[_Row - 1].IdProceso.ToString();
+                                                        if ((_Row - 1) < _Procesos.Count)
+                                                            _Datos[_Row - 1, _Cell] = _Procesos[_Row - 1].IdProceso.ToString();
                                                     }
 
                                                 } // End if (_celda.HasChildren)
@@ -213,40 +230,29 @@ namespace BCMWeb
                                                             List<OpenXmlElement> _tableCellParagraph = _celda.ChildElements.Where(x => x.GetType().Name == "Paragraph").ToList();
                                                             foreach (var _cellParagraph in _tableCellParagraph)
                                                             {
-                                                                if (!string.IsNullOrEmpty(_textoCelda))
-                                                                    _textoCelda += ", ";
-                                                                _textoCelda += _cellParagraph.InnerText;
+                                                                if (!string.IsNullOrEmpty(_cellParagraph.InnerText.Trim()))
+                                                                {
+                                                                    if (!string.IsNullOrEmpty(_textoCelda))
+                                                                        _textoCelda += " ";
+                                                                    _textoCelda += _cellParagraph.InnerText.Trim();
+
+                                                                }
                                                             } // End foreach (var _cellParagraph in _tableCellParagraph)
 
                                                             switch (_Cell)
                                                             {
                                                                 case 0:
+                                                                    IdProceso = 0;
                                                                     if (!string.IsNullOrEmpty(_textoCelda))
-                                                                        _NombreProceso = _textoCelda;
-                                                                    tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
-                                                                                                                     && x.IdDocumentoBia == _DocBIA.IdDocumentoBIA
-                                                                                                                     && x.NroProceso == _NroProceso).FirstOrDefault();
-
-                                                                    if (procBIA == null)
                                                                     {
-                                                                        procBIA = new tblBIAProceso
-                                                                        {
-                                                                            Critico = false,
-                                                                            Descripcion = string.Empty,
-                                                                            FechaCreacion = DateTime.UtcNow,
-                                                                            FechaUltimoEstatus = DateTime.UtcNow,
-                                                                            IdDocumentoBia = _DocBIA.IdDocumentoBIA,
-                                                                            IdEmpresa = _IdEmpresa,
-                                                                            IdEstadoProceso = (int)eEstadoProceso.Activo,
-                                                                            IdUnidadOrganizativa = _DocBIA.IdUnidadOrganizativa,
-                                                                            Nombre = _NombreProceso,
-                                                                            NroProceso = _NroProceso,
-                                                                        };
+                                                                        _NombreProceso = _textoCelda;
+                                                                        tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
+                                                                                                                         && x.IdDocumentoBia == _DocBIA.IdDocumentoBIA
+                                                                                                                         && x.NroProceso == _NroProceso).FirstOrDefault();
 
-                                                                        db.tblBIAProceso.Add(procBIA);
-                                                                        db.SaveChanges();
+                                                                        if (procBIA != null)
+                                                                            IdProceso = procBIA.IdProceso;
                                                                     }
-                                                                    IdProceso = procBIA.IdProceso;
                                                                     break;
                                                                 case 1:
                                                                     _Explicacion = _textoCelda;
@@ -297,10 +303,11 @@ namespace BCMWeb
             long _IdDocumento = long.Parse(Session["IdDocumento"].ToString());
             int _IdTipoDocumento = int.Parse(Session["IdTipoDocumento"].ToString());
 
+            string _NrosProceso = string.Empty;
             int _NroProceso = 0;
             long IdProceso = 0;
             string _NombreProceso = string.Empty;
-            int _startRow = 2;
+            int _startRow = 0;
 
             try
             {
@@ -329,6 +336,8 @@ namespace BCMWeb
                                 int _Row = 0;
                                 List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
 
+                                _startRow = GetNextRow(_tableRows, _startRow, out _NroProceso);
+
                                 for (_Row = _startRow; _Row < _tableRows.Count(); _Row++)
                                 {
                                     TableRow _tableRow = (TableRow)_tableRows[_Row];
@@ -348,40 +357,29 @@ namespace BCMWeb
                                                 List<OpenXmlElement> _tableCellParagraph = _celda.ChildElements.Where(x => x.GetType().Name == "Paragraph").ToList();
                                                 foreach (var _cellParagraph in _tableCellParagraph)
                                                 {
-                                                    if (!string.IsNullOrEmpty(_textoCelda))
-                                                        _textoCelda += ", ";
-                                                    _textoCelda += _cellParagraph.InnerText;
+                                                    if (!string.IsNullOrEmpty(_cellParagraph.InnerText.Trim()))
+                                                    {
+                                                        if (!string.IsNullOrEmpty(_textoCelda))
+                                                            _textoCelda += " ";
+                                                        _textoCelda += _cellParagraph.InnerText.Trim();
+
+                                                    }
                                                 } // End foreach (var _cellParagraph in _tableCellParagraph)
 
                                                 switch (_Cell)
                                                 {
                                                     case 0:
+                                                        IdProceso = 0;
                                                         if (!string.IsNullOrEmpty(_textoCelda))
-                                                            _NombreProceso = _textoCelda;
-                                                        tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
-                                                                                                         && x.IdDocumentoBia == _DocBIA.IdDocumentoBIA
-                                                                                                         && x.NroProceso == _NroProceso).FirstOrDefault();
-
-                                                        if (procBIA == null)
                                                         {
-                                                            procBIA = new tblBIAProceso
-                                                            {
-                                                                Critico = false,
-                                                                Descripcion = string.Empty,
-                                                                FechaCreacion = DateTime.UtcNow,
-                                                                FechaUltimoEstatus = DateTime.UtcNow,
-                                                                IdDocumentoBia = _DocBIA.IdDocumentoBIA,
-                                                                IdEmpresa = _IdEmpresa,
-                                                                IdEstadoProceso = (int)eEstadoProceso.Activo,
-                                                                IdUnidadOrganizativa = _DocBIA.IdUnidadOrganizativa,
-                                                                Nombre = _NombreProceso,
-                                                                NroProceso = _NroProceso,
-                                                            };
+                                                            _NombreProceso = _textoCelda;
+                                                            tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
+                                                                                                             && x.IdDocumentoBia == _DocBIA.IdDocumentoBIA
+                                                                                                             && x.NroProceso == _NroProceso).FirstOrDefault();
 
-                                                            db.tblBIAProceso.Add(procBIA);
-                                                            db.SaveChanges();
+                                                            if (procBIA != null)
+                                                                IdProceso = procBIA.IdProceso;
                                                         }
-                                                        IdProceso = procBIA.IdProceso;
                                                         break;
                                                     case 1:
                                                         _Ubicacion = _textoCelda;
@@ -420,10 +418,11 @@ namespace BCMWeb
             long _IdDocumento = long.Parse(Session["IdDocumento"].ToString());
             int _IdTipoDocumento = int.Parse(Session["IdTipoDocumento"].ToString());
 
+            string _NrosProceso = string.Empty;
             int _NroProceso = 0;
             long IdProceso = 0;
             string _NombreProceso = string.Empty;
-            int _startRow = 2;
+            int _startRow = 0;
 
             try
             {
@@ -452,6 +451,8 @@ namespace BCMWeb
                                 int _Row = 0;
                                 List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
 
+                                _startRow = GetNextRow(_tableRows, _startRow, out _NroProceso);
+
                                 for (_Row = _startRow; _Row < _tableRows.Count(); _Row++)
                                 {
                                     TableRow _tableRow = (TableRow)_tableRows[_Row];
@@ -471,40 +472,28 @@ namespace BCMWeb
                                                 List<OpenXmlElement> _tableCellParagraph = _celda.ChildElements.Where(x => x.GetType().Name == "Paragraph").ToList();
                                                 foreach (var _cellParagraph in _tableCellParagraph)
                                                 {
-                                                    if (!string.IsNullOrEmpty(_textoCelda))
-                                                        _textoCelda += ", ";
-                                                    _textoCelda += _cellParagraph.InnerText;
-                                                } // End foreach (var _cellParagraph in _tableCellParagraph)
+                                                    if (!string.IsNullOrEmpty(_cellParagraph.InnerText.Trim()))
+                                                    {
+                                                        if (!string.IsNullOrEmpty(_textoCelda))
+                                                            _textoCelda += " ";
+                                                        _textoCelda += _cellParagraph.InnerText.Trim();
 
+                                                    }
+                                                } // End foreach (var _cellParagraph in _tableCellParagraph)
                                                 switch (_Cell)
                                                 {
                                                     case 0:
+                                                        IdProceso = 0;
                                                         if (!string.IsNullOrEmpty(_textoCelda))
-                                                            _NombreProceso = _textoCelda;
-                                                        tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
-                                                                                                         && x.IdDocumentoBia == _DocBIA.IdDocumentoBIA
-                                                                                                         && x.NroProceso == _NroProceso).FirstOrDefault();
-
-                                                        if (procBIA == null)
                                                         {
-                                                            procBIA = new tblBIAProceso
-                                                            {
-                                                                Critico = false,
-                                                                Descripcion = string.Empty,
-                                                                FechaCreacion = DateTime.UtcNow,
-                                                                FechaUltimoEstatus = DateTime.UtcNow,
-                                                                IdDocumentoBia = _DocBIA.IdDocumentoBIA,
-                                                                IdEmpresa = _IdEmpresa,
-                                                                IdEstadoProceso = (int)eEstadoProceso.Activo,
-                                                                IdUnidadOrganizativa = _DocBIA.IdUnidadOrganizativa,
-                                                                Nombre = _NombreProceso,
-                                                                NroProceso = _NroProceso,
-                                                            };
+                                                            _NombreProceso = _textoCelda;
+                                                            tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
+                                                                                                             && x.IdDocumentoBia == _DocBIA.IdDocumentoBIA
+                                                                                                             && x.NroProceso == _NroProceso).FirstOrDefault();
 
-                                                            db.tblBIAProceso.Add(procBIA);
-                                                            db.SaveChanges();
+                                                            if (procBIA != null)
+                                                                IdProceso = procBIA.IdProceso;
                                                         }
-                                                        IdProceso = procBIA.IdProceso;
                                                         break;
                                                     case 1:
                                                         _Ubicacion = _textoCelda;
@@ -543,6 +532,7 @@ namespace BCMWeb
             long _IdDocumento = long.Parse(Session["IdDocumento"].ToString());
             int _IdTipoDocumento = int.Parse(Session["IdTipoDocumento"].ToString());
 
+            string _NrosProceso = string.Empty;
             int _NroProceso = 0;
             long IdProceso = 0;
             string _NombreProceso = string.Empty;
@@ -576,6 +566,8 @@ namespace BCMWeb
                                 int _Row = 0;
                                 List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
 
+                                _startRow = GetNextRow(_tableRows, _startRow, out _NroProceso);
+
                                 for (_Row = _startRow; _Row < _tableRows.Count(); _Row++)
                                 {
                                     TableRow _tableRow = (TableRow)_tableRows[_Row];
@@ -593,40 +585,29 @@ namespace BCMWeb
                                                 List<OpenXmlElement> _tableCellParagraph = _celda.ChildElements.Where(x => x.GetType().Name == "Paragraph").ToList();
                                                 foreach (var _cellParagraph in _tableCellParagraph)
                                                 {
-                                                    if (!string.IsNullOrEmpty(_textoCelda))
-                                                        _textoCelda += ", ";
-                                                    _textoCelda += _cellParagraph.InnerText;
+                                                    if (!string.IsNullOrEmpty(_cellParagraph.InnerText.Trim()))
+                                                    {
+                                                        if (!string.IsNullOrEmpty(_textoCelda))
+                                                            _textoCelda += '/';
+                                                        _textoCelda += _cellParagraph.InnerText.Trim();
+
+                                                    }
                                                 } // End foreach (var _cellParagraph in _tableCellParagraph)
 
                                                 switch (_Cell)
                                                 {
                                                    case 0:
+                                                        IdProceso = 0;
                                                         if (!string.IsNullOrEmpty(_textoCelda))
-                                                            _NombreProceso = _textoCelda;
-                                                        tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
-                                                                                                         && x.IdDocumentoBia == _DocBIA.IdDocumentoBIA
-                                                                                                         && x.NroProceso == _NroProceso).FirstOrDefault();
-
-                                                        if (procBIA == null)
                                                         {
-                                                            procBIA = new tblBIAProceso
-                                                            {
-                                                                Critico = false,
-                                                                Descripcion = string.Empty,
-                                                                FechaCreacion = DateTime.UtcNow,
-                                                                FechaUltimoEstatus = DateTime.UtcNow,
-                                                                IdDocumentoBia = _DocBIA.IdDocumentoBIA,
-                                                                IdEmpresa = _IdEmpresa,
-                                                                IdEstadoProceso = (int)eEstadoProceso.Activo,
-                                                                IdUnidadOrganizativa = _DocBIA.IdUnidadOrganizativa,
-                                                                Nombre = _NombreProceso,
-                                                                NroProceso = _NroProceso,
-                                                            };
+                                                            _NombreProceso = _textoCelda;
+                                                            tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
+                                                                                                             && x.IdDocumentoBia == _DocBIA.IdDocumentoBIA
+                                                                                                             && x.NroProceso == _NroProceso).FirstOrDefault();
 
-                                                            db.tblBIAProceso.Add(procBIA);
-                                                            db.SaveChanges();
+                                                            if (procBIA != null)
+                                                                IdProceso = procBIA.IdProceso;
                                                         }
-                                                        IdProceso = procBIA.IdProceso;
                                                         break;
                                                     case 1:
                                                         if (!string.IsNullOrEmpty(_textoCelda)) 
@@ -666,8 +647,8 @@ namespace BCMWeb
             long _IdDocumento = long.Parse(Session["IdDocumento"].ToString());
             int _IdTipoDocumento = int.Parse(Session["IdTipoDocumento"].ToString());
 
+            string _NrosProceso = string.Empty;
             int _NroProceso = 0;
-            long IdProceso = 0;
             string _NombreProceso = string.Empty;
             int _startRow = 1;
 
@@ -687,6 +668,7 @@ namespace BCMWeb
                                                                     && x.IdDocumentoBIA == _DocBIA.IdDocumentoBIA).ToList();
 
                     db.tblBIAWRT.RemoveRange(Actuales);
+                    db.SaveChanges();
 
                     using (WordprocessingDocument wordDocument = WordprocessingDocument.Open(msContent, false))
                     {
@@ -696,136 +678,92 @@ namespace BCMWeb
                             if (_Table.HasChildren)
                             {
                                 int _Row = 0;
-                                long[] _IdEscala = { };
                                 List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
+                                long[] _IdEscala = { };
+
+                                _startRow = GetNextRow(_tableRows, _startRow, out _NroProceso);
 
                                 for (_Row = _startRow; _Row < _tableRows.Count(); _Row++)
                                 {
-                                    long IdEscala = 0;
                                     TableRow _tableRow = (TableRow)_tableRows[_Row];
 
                                     if (_tableRow.HasChildren)
                                     {
                                         List<OpenXmlElement> _tableCells = _tableRow.ChildElements.Where(x => x.GetType().Name == "TableCell").ToList();
+                                        long ValorEscala = 0;
 
-                                        if (_Row == 1)
+                                        for (int _Cell = 1; _Cell < _tableCells.Count(); _Cell++)
                                         {
-                                            int _nroCeldas = _tableCells.Count();
-                                            _IdEscala = new long[_tableCells.Count()];
-                                            for (int _Cell = 2; _Cell < _tableCells.Count(); _Cell++)
+                                            string _textoCelda = string.Empty;
+                                            TableCell _celda = (TableCell)_tableCells[_Cell];
+                                            List<OpenXmlElement> _tableCellParagraph = _celda.ChildElements.Where(x => x.GetType().Name == "Paragraph").ToList();
+                                            foreach (var _cellParagraph in _tableCellParagraph)
                                             {
-                                                string _textoCelda = string.Empty;
-                                                TableCell _celda = (TableCell)_tableCells[_Cell];
-                                                List<OpenXmlElement> _tableCellParagraph = _celda.ChildElements.Where(x => x.GetType().Name == "Paragraph").ToList();
-                                                foreach (var _cellParagraph in _tableCellParagraph)
-                                                {
-                                                    if (!string.IsNullOrEmpty(_textoCelda))
-                                                        _textoCelda += ", ";
-                                                    _textoCelda += _cellParagraph.InnerText;
-                                                } // End foreach (var _cellParagraph in _tableCellParagraph)
+                                                if (!string.IsNullOrEmpty(_textoCelda))
+                                                    _textoCelda += '/';
 
-                                                tblEscala dataEscala = new tblEscala()
-                                                {
-                                                    IdEmpresa = _IdEmpresa,
-                                                    Descripcion = _textoCelda,
-                                                    FechaRegistro = DateTime.UtcNow,
-                                                    IdTipoEscala = 6,
-                                                };
-                                                switch (_Cell)
-                                                {
-                                                    case 2:
-                                                    case 3:
-                                                        dataEscala.Valor = 5;
-                                                        break;
-                                                    case 4:
-                                                        dataEscala.Valor = 4;
-                                                        break;
-                                                    case 5:
-                                                        dataEscala.Valor = 3;
-                                                        break;
-                                                    case 6:
-                                                        dataEscala.Valor = 2;
-                                                        break;
-                                                    case 7:
-                                                    case 8:
-                                                        dataEscala.Valor = 1;
-                                                        break;
-                                                }
+                                                if (!string.IsNullOrEmpty(_cellParagraph.InnerText.Trim()))
+                                                    _textoCelda += _cellParagraph.InnerText.Trim();
 
-                                                db.tblEscala.Add(dataEscala);
-                                                db.SaveChanges();
-                                                _IdEscala[_Cell] = dataEscala.IdEscala;
+                                            } // End foreach (var _cellParagraph in _tableCellParagraph)
 
-                                            } // End for (int _Cell = 0; _Cell < _tableCells.Count(); _Cell++)
-                                        }
-                                        else
-                                        {
-                                            for (int _Cell = 0; _Cell < _tableCells.Count(); _Cell++)
+                                            switch (_Cell)
                                             {
-                                                TableCell _celda = (TableCell)_tableCells[_Cell];
-                                                if (_celda.HasChildren)
-                                                {
-                                                    string _textoCelda = string.Empty;
-                                                    List<OpenXmlElement> _tableCellParagraph = _celda.ChildElements.Where(x => x.GetType().Name == "Paragraph").ToList();
-                                                    foreach (var _cellParagraph in _tableCellParagraph)
+                                                case 0:
+                                                    try
                                                     {
-                                                        if (!string.IsNullOrEmpty(_textoCelda))
-                                                            _textoCelda += ", ";
-                                                        _textoCelda += _cellParagraph.InnerText;
-                                                    } // End foreach (var _cellParagraph in _tableCellParagraph)
-
-                                                    switch (_Cell)
-                                                    {
-                                                        case 0:
-                                                            if (!string.IsNullOrEmpty(_textoCelda))
-                                                                _NroProceso = (int.Parse(_textoCelda));
-                                                            break;
-                                                        case 1:
-                                                            if (!string.IsNullOrEmpty(_textoCelda))
-                                                                _NombreProceso = _textoCelda;
-                                                            tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
-                                                                                                             && x.IdDocumentoBia == _DocBIA.IdDocumentoBIA
-                                                                                                             && x.NroProceso == _NroProceso).FirstOrDefault();
-
-                                                            if (procBIA == null)
-                                                            {
-                                                                procBIA = new tblBIAProceso
-                                                                {
-                                                                    Critico = false,
-                                                                    Descripcion = string.Empty,
-                                                                    FechaCreacion = DateTime.UtcNow,
-                                                                    FechaUltimoEstatus = DateTime.UtcNow,
-                                                                    IdDocumentoBia = _DocBIA.IdDocumentoBIA,
-                                                                    IdEmpresa = _IdEmpresa,
-                                                                    IdEstadoProceso = (int)eEstadoProceso.Activo,
-                                                                    IdUnidadOrganizativa = _DocBIA.IdUnidadOrganizativa,
-                                                                    Nombre = _NombreProceso,
-                                                                    NroProceso = _NroProceso,
-                                                                };
-
-                                                                db.tblBIAProceso.Add(procBIA);
-                                                                db.SaveChanges();
-                                                            }
-                                                            IdProceso = procBIA.IdProceso;
-                                                            break;
-                                                        default:
-                                                            if (_textoCelda.ToLower() == "x")
-                                                            {
-                                                                IdEscala = _IdEscala[_Cell];
-                                                            }
-                                                            break;
+                                                        _NroProceso = (int.Parse(_textoCelda));
                                                     }
-                                                } // End if (_celda.HasChildren)
-                                            } // End for (int _Cell = 0; _Cell < _tableCells.Count(); _Cell++)
+                                                    catch
+                                                    {
+                                                        _Row = GetNextRow(_tableRows, _Row, out _NroProceso);
+
+                                                    }
+                                                    _NroProceso = ((int)_Documento.NroDocumento * 100) + _NroProceso;
+                                                    break;
+                                                case 1:
+                                                    _NombreProceso = _textoCelda;
+                                                    break;
+                                                case 2:
+                                                case 3:
+                                                    ValorEscala = 5;
+                                                    break;
+                                                case 4:
+                                                    ValorEscala = 4;
+                                                    break;
+                                                case 5:
+                                                    ValorEscala = 3;
+                                                    break;
+                                                case 6:
+                                                    ValorEscala = 2;
+                                                    break;
+                                                case 7:
+                                                case 8:
+                                                    ValorEscala = 1;
+                                                    break;
+                                            } // End switch
+
+                                        } // End for (int _Cell = 0; _Cell < _tableCells.Count(); _Cell++)
+
+                                        tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
+                                                                                         && x.IdDocumentoBia == _DocBIA.IdDocumentoBIA
+                                                                                         && x.Nombre == _NombreProceso).FirstOrDefault();
+
+                                        if (procBIA != null)
+                                        {
+
+                                            tblEscala Escala = db.tblEscala.Where(x => x.IdEmpresa == procBIA.IdEmpresa
+                                                                                    && x.IdTipoEscala == 6
+                                                                                    && x.Valor == ValorEscala).FirstOrDefault();
 
                                             tblBIAWRT reg = new tblBIAWRT
                                             {
                                                 IdDocumentoBIA = _DocBIA.IdDocumentoBIA,
-                                                IdEmpresa = _IdEmpresa,
-                                                IdProceso = IdProceso,
+                                                IdEmpresa = procBIA.IdEmpresa,
+                                                IdProceso = procBIA.IdProceso,
                                                 Observacion = string.Empty,
-                                                IdEscala = IdEscala,
-                                                IdTipoFrecuencia = null,
+                                                IdEscala = Escala.IdEscala,
+                                                IdTipoFrecuencia = 0,
                                             };
 
                                             db.tblBIAWRT.Add(reg);
@@ -850,8 +788,8 @@ namespace BCMWeb
             long _IdDocumento = long.Parse(Session["IdDocumento"].ToString());
             int _IdTipoDocumento = int.Parse(Session["IdTipoDocumento"].ToString());
 
+            string _NrosProceso = string.Empty;
             int _NroProceso = 0;
-            long IdProceso = 0;
             string _NombreProceso = string.Empty;
             int _startRow = 1;
 
@@ -871,6 +809,7 @@ namespace BCMWeb
                                                                     && x.IdDocumentoBIA == _DocBIA.IdDocumentoBIA).ToList();
 
                     db.tblBIARPO.RemoveRange(Actuales);
+                    db.SaveChanges();
 
                     using (WordprocessingDocument wordDocument = WordprocessingDocument.Open(msContent, false))
                     {
@@ -883,6 +822,8 @@ namespace BCMWeb
                                 List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
                                 long[] _IdEscala = { };
 
+                                _startRow = GetNextRow(_tableRows, _startRow, out _NroProceso);
+
                                 for (_Row = _startRow; _Row < _tableRows.Count(); _Row++)
                                 {
                                     TableRow _tableRow = (TableRow)_tableRows[_Row];
@@ -890,125 +831,79 @@ namespace BCMWeb
                                     if (_tableRow.HasChildren)
                                     {
                                         List<OpenXmlElement> _tableCells = _tableRow.ChildElements.Where(x => x.GetType().Name == "TableCell").ToList();
-                                        long IdEscala = 0;
+                                        long ValorEscala = 0;
 
-                                        if (_Row == 1)
+                                        for (int _Cell = 1; _Cell < _tableCells.Count(); _Cell++)
                                         {
-                                            int _nroCeldas = _tableCells.Count();
-                                            _IdEscala = new long[_tableCells.Count()];
-                                            for (int _Cell = 2; _Cell < _tableCells.Count(); _Cell++)
+                                            string _textoCelda = string.Empty;
+                                            TableCell _celda = (TableCell)_tableCells[_Cell];
+                                            List<OpenXmlElement> _tableCellParagraph = _celda.ChildElements.Where(x => x.GetType().Name == "Paragraph").ToList();
+                                            foreach (var _cellParagraph in _tableCellParagraph)
                                             {
-                                                string _textoCelda = string.Empty;
-                                                TableCell _celda = (TableCell)_tableCells[_Cell];
-                                                List<OpenXmlElement> _tableCellParagraph = _celda.ChildElements.Where(x => x.GetType().Name == "Paragraph").ToList();
-                                                foreach (var _cellParagraph in _tableCellParagraph)
-                                                {
-                                                    if (!string.IsNullOrEmpty(_textoCelda))
-                                                        _textoCelda += ", ";
-                                                    _textoCelda += _cellParagraph.InnerText;
-                                                } // End foreach (var _cellParagraph in _tableCellParagraph)
+                                                if (!string.IsNullOrEmpty(_textoCelda))
+                                                    _textoCelda += '/';
 
-                                                tblEscala dataEscala = new tblEscala()
-                                                {
-                                                    IdEmpresa = _IdEmpresa,
-                                                    Descripcion = _textoCelda,
-                                                    FechaRegistro = DateTime.UtcNow,
-                                                    IdTipoEscala = 5,
-                                                };
-                                                switch (_Cell)
-                                                {
-                                                    case 2:
-                                                    case 3:
-                                                        dataEscala.Valor = 5;
-                                                        break;
-                                                    case 4:
-                                                        dataEscala.Valor = 4;
-                                                        break;
-                                                    case 5:
-                                                        dataEscala.Valor = 3;
-                                                        break;
-                                                    case 6:
-                                                        dataEscala.Valor = 2;
-                                                        break;
-                                                    case 7:
-                                                    case 8:
-                                                        dataEscala.Valor = 1;
-                                                        break;
-                                                }
+                                                if (!string.IsNullOrEmpty(_cellParagraph.InnerText.Trim()))
+                                                    _textoCelda += _cellParagraph.InnerText.Trim();
 
-                                                db.tblEscala.Add(dataEscala);
-                                                db.SaveChanges();
-                                                _IdEscala[_Cell] = dataEscala.IdEscala;
+                                            } // End foreach (var _cellParagraph in _tableCellParagraph)
 
-                                            } // End for (int _Cell = 0; _Cell < _tableCells.Count(); _Cell++)
-                                        }
-                                        else
-                                        {
-                                            for (int _Cell = 0; _Cell < _tableCells.Count(); _Cell++)
+                                            switch (_Cell)
                                             {
-                                                TableCell _celda = (TableCell)_tableCells[_Cell];
-                                                if (_celda.HasChildren)
-                                                {
-                                                    string _textoCelda = string.Empty;
-                                                    List<OpenXmlElement> _tableCellParagraph = _celda.ChildElements.Where(x => x.GetType().Name == "Paragraph").ToList();
-                                                    foreach (var _cellParagraph in _tableCellParagraph)
+                                                case 0:
+                                                    try
                                                     {
-                                                        if (!string.IsNullOrEmpty(_textoCelda))
-                                                            _textoCelda += ", ";
-                                                        _textoCelda += _cellParagraph.InnerText;
-                                                    } // End foreach (var _cellParagraph in _tableCellParagraph)
-
-                                                    switch (_Cell)
-                                                    {
-                                                        case 0:
-                                                            if (!string.IsNullOrEmpty(_textoCelda))
-                                                                _NroProceso = (int.Parse(_textoCelda));
-                                                            break;
-                                                        case 1:
-                                                            if (!string.IsNullOrEmpty(_textoCelda))
-                                                                _NombreProceso = _textoCelda;
-                                                            tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
-                                                                                                             && x.IdDocumentoBia == _DocBIA.IdDocumentoBIA
-                                                                                                             && x.NroProceso == _NroProceso).FirstOrDefault();
-
-                                                            if (procBIA == null)
-                                                            {
-                                                                procBIA = new tblBIAProceso
-                                                                {
-                                                                    Critico = false,
-                                                                    Descripcion = string.Empty,
-                                                                    FechaCreacion = DateTime.UtcNow,
-                                                                    FechaUltimoEstatus = DateTime.UtcNow,
-                                                                    IdDocumentoBia = _DocBIA.IdDocumentoBIA,
-                                                                    IdEmpresa = _IdEmpresa,
-                                                                    IdEstadoProceso = (int)eEstadoProceso.Activo,
-                                                                    IdUnidadOrganizativa = _DocBIA.IdUnidadOrganizativa,
-                                                                    Nombre = _NombreProceso,
-                                                                    NroProceso = _NroProceso,
-                                                                };
-
-                                                                db.tblBIAProceso.Add(procBIA);
-                                                                db.SaveChanges();
-                                                            }
-                                                            IdProceso = procBIA.IdProceso;
-                                                            break;
-                                                        default:
-                                                            if (_textoCelda.ToLower() == "x")
-                                                            {
-                                                                IdEscala = _IdEscala[_Cell];
-                                                            }
-                                                            break;
+                                                        _NroProceso = (int.Parse(_textoCelda));
                                                     }
-                                                } // End if (_celda.HasChildren)
-                                            } // End for (int _Cell = 0; _Cell < _tableCells.Count(); _Cell++)
+                                                    catch
+                                                    {
+                                                        _Row = GetNextRow(_tableRows, _Row, out _NroProceso);
+
+                                                    }
+                                                    _NroProceso = ((int)_Documento.NroDocumento * 100) + _NroProceso;
+                                                    break;
+                                                case 1:
+                                                    _NombreProceso = _textoCelda;
+                                                    break;
+                                                case 2:
+                                                case 3:
+                                                    ValorEscala = 5;
+                                                    break;
+                                                case 4:
+                                                    ValorEscala = 4;
+                                                    break;
+                                                case 5:
+                                                    ValorEscala = 3;
+                                                    break;
+                                                case 6:
+                                                    ValorEscala = 2;
+                                                    break;
+                                                case 7:
+                                                case 8:
+                                                    ValorEscala = 1;
+                                                    break;
+                                            } // End switch
+
+                                        } // End for (int _Cell = 0; _Cell < _tableCells.Count(); _Cell++)
+
+                                        tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
+                                                                                         && x.IdDocumentoBia == _DocBIA.IdDocumentoBIA
+                                                                                         && x.Nombre == _NombreProceso).FirstOrDefault();
+
+                                        if (procBIA != null)
+                                        {
+
+                                            tblEscala Escala = db.tblEscala.Where(x => x.IdEmpresa == procBIA.IdEmpresa
+                                                                                    && x.IdTipoEscala == 5
+                                                                                    && x.Valor == ValorEscala).FirstOrDefault();
 
                                             tblBIARPO reg = new tblBIARPO
                                             {
                                                 IdDocumentoBIA = _DocBIA.IdDocumentoBIA,
-                                                IdEmpresa = _IdEmpresa,
-                                                IdProceso = IdProceso,
+                                                IdEmpresa = procBIA.IdEmpresa,
+                                                IdProceso = procBIA.IdProceso,
                                                 Observacion = string.Empty,
-                                                IdEscala = IdEscala,
+                                                IdEscala = Escala.IdEscala,
                                                 IdTipoFrecuencia = 0,
                                             };
 
@@ -1034,8 +929,8 @@ namespace BCMWeb
             long _IdDocumento = long.Parse(Session["IdDocumento"].ToString());
             int _IdTipoDocumento = int.Parse(Session["IdTipoDocumento"].ToString());
 
+            string _NrosProceso = string.Empty;
             int _NroProceso = 0;
-            long IdProceso = 0;
             string _NombreProceso = string.Empty;
             int _startRow = 1;
 
@@ -1055,6 +950,7 @@ namespace BCMWeb
                                                                     && x.IdDocumentoBIA == _DocBIA.IdDocumentoBIA).ToList();
 
                     db.tblBIARTO.RemoveRange(Actuales);
+                    db.SaveChanges();
 
                     using (WordprocessingDocument wordDocument = WordprocessingDocument.Open(msContent, false))
                     {
@@ -1064,8 +960,10 @@ namespace BCMWeb
                             if (_Table.HasChildren)
                             {
                                 int _Row = 0;
-                                long[] _IdEscala = { };
                                 List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
+                                long[] _IdEscala = { };
+
+                                _startRow = GetNextRow(_tableRows, _startRow, out _NroProceso);
 
                                 for (_Row = _startRow; _Row < _tableRows.Count(); _Row++)
                                 {
@@ -1074,125 +972,79 @@ namespace BCMWeb
                                     if (_tableRow.HasChildren)
                                     {
                                         List<OpenXmlElement> _tableCells = _tableRow.ChildElements.Where(x => x.GetType().Name == "TableCell").ToList();
-                                        long IdEscala = 0;
+                                        long ValorEscala = 0;
 
-                                        if (_Row == 1)
+                                        for (int _Cell = 1; _Cell < _tableCells.Count(); _Cell++)
                                         {
-                                            int _nroCeldas = _tableCells.Count();
-                                            _IdEscala = new long[_tableCells.Count()];
-                                            for (int _Cell = 2; _Cell < _tableCells.Count(); _Cell++)
+                                            string _textoCelda = string.Empty;
+                                            TableCell _celda = (TableCell)_tableCells[_Cell];
+                                            List<OpenXmlElement> _tableCellParagraph = _celda.ChildElements.Where(x => x.GetType().Name == "Paragraph").ToList();
+                                            foreach (var _cellParagraph in _tableCellParagraph)
                                             {
-                                                string _textoCelda = string.Empty;
-                                                TableCell _celda = (TableCell)_tableCells[_Cell];
-                                                List<OpenXmlElement> _tableCellParagraph = _celda.ChildElements.Where(x => x.GetType().Name == "Paragraph").ToList();
-                                                foreach (var _cellParagraph in _tableCellParagraph)
-                                                {
-                                                    if (!string.IsNullOrEmpty(_textoCelda))
-                                                        _textoCelda += ", ";
-                                                    _textoCelda += _cellParagraph.InnerText;
-                                                } // End foreach (var _cellParagraph in _tableCellParagraph)
+                                                if (!string.IsNullOrEmpty(_textoCelda))
+                                                    _textoCelda += '/';
 
-                                                tblEscala dataEscala = new tblEscala()
-                                                {
-                                                    IdEmpresa = _IdEmpresa,
-                                                    Descripcion = _textoCelda,
-                                                    FechaRegistro = DateTime.UtcNow,
-                                                    IdTipoEscala = 4,
-                                                };
-                                                switch (_Cell)
-                                                {
-                                                    case 2:
-                                                    case 3:
-                                                        dataEscala.Valor = 5;
-                                                        break;
-                                                    case 4:
-                                                        dataEscala.Valor = 4;
-                                                        break;
-                                                    case 5:
-                                                        dataEscala.Valor = 3;
-                                                        break;
-                                                    case 6:
-                                                        dataEscala.Valor = 2;
-                                                        break;
-                                                    case 7:
-                                                    case 8:
-                                                        dataEscala.Valor = 1;
-                                                        break;
-                                                }
+                                                if (!string.IsNullOrEmpty(_cellParagraph.InnerText.Trim()))
+                                                    _textoCelda += _cellParagraph.InnerText.Trim();
 
-                                                db.tblEscala.Add(dataEscala);
-                                                db.SaveChanges();
-                                                _IdEscala[_Cell] = dataEscala.IdEscala;
+                                            } // End foreach (var _cellParagraph in _tableCellParagraph)
 
-                                            } // End for (int _Cell = 0; _Cell < _tableCells.Count(); _Cell++)
-                                        }
-                                        else
-                                        {
-                                            for (int _Cell = 0; _Cell < _tableCells.Count(); _Cell++)
+                                            switch (_Cell)
                                             {
-                                                TableCell _celda = (TableCell)_tableCells[_Cell];
-                                                if (_celda.HasChildren)
-                                                {
-                                                    string _textoCelda = string.Empty;
-                                                    List<OpenXmlElement> _tableCellParagraph = _celda.ChildElements.Where(x => x.GetType().Name == "Paragraph").ToList();
-                                                    foreach (var _cellParagraph in _tableCellParagraph)
+                                                case 0:
+                                                    try
                                                     {
-                                                        if (!string.IsNullOrEmpty(_textoCelda))
-                                                            _textoCelda += ", ";
-                                                        _textoCelda += _cellParagraph.InnerText;
-                                                    } // End foreach (var _cellParagraph in _tableCellParagraph)
-
-                                                    switch (_Cell)
-                                                    {
-                                                        case 0:
-                                                            if (!string.IsNullOrEmpty(_textoCelda))
-                                                                _NroProceso = (int.Parse(_textoCelda));
-                                                            break;
-                                                        case 1:
-                                                            if (!string.IsNullOrEmpty(_textoCelda))
-                                                                _NombreProceso = _textoCelda;
-                                                            tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
-                                                                                                             && x.IdDocumentoBia == _DocBIA.IdDocumentoBIA
-                                                                                                             && x.NroProceso == _NroProceso).FirstOrDefault();
-
-                                                            if (procBIA == null)
-                                                            {
-                                                                procBIA = new tblBIAProceso
-                                                                {
-                                                                    Critico = false,
-                                                                    Descripcion = string.Empty,
-                                                                    FechaCreacion = DateTime.UtcNow,
-                                                                    FechaUltimoEstatus = DateTime.UtcNow,
-                                                                    IdDocumentoBia = _DocBIA.IdDocumentoBIA,
-                                                                    IdEmpresa = _IdEmpresa,
-                                                                    IdEstadoProceso = (int)eEstadoProceso.Activo,
-                                                                    IdUnidadOrganizativa = _DocBIA.IdUnidadOrganizativa,
-                                                                    Nombre = _NombreProceso,
-                                                                    NroProceso = _NroProceso,
-                                                                };
-
-                                                                db.tblBIAProceso.Add(procBIA);
-                                                                db.SaveChanges();
-                                                            }
-                                                            IdProceso = procBIA.IdProceso;
-                                                            break;
-                                                        default:
-                                                            if (_textoCelda.ToLower() == "x")
-                                                            {
-                                                                IdEscala = _IdEscala[_Cell];
-                                                            }
-                                                            break;
+                                                        _NroProceso = (int.Parse(_textoCelda));
                                                     }
-                                                } // End if (_celda.HasChildren)
-                                            } // End for (int _Cell = 0; _Cell < _tableCells.Count(); _Cell++)
+                                                    catch
+                                                    {
+                                                        _Row = GetNextRow(_tableRows, _Row, out _NroProceso);
+
+                                                    }
+                                                    _NroProceso = ((int)_Documento.NroDocumento * 100) + _NroProceso;
+                                                    break;
+                                                case 1:
+                                                    _NombreProceso = _textoCelda;
+                                                    break;
+                                                case 2:
+                                                case 3:
+                                                    ValorEscala = 5;
+                                                    break;
+                                                case 4:
+                                                    ValorEscala = 4;
+                                                    break;
+                                                case 5:
+                                                    ValorEscala = 3;
+                                                    break;
+                                                case 6:
+                                                    ValorEscala = 2;
+                                                    break;
+                                                case 7:
+                                                case 8:
+                                                    ValorEscala = 1;
+                                                    break;
+                                            } // End switch
+
+                                        } // End for (int _Cell = 0; _Cell < _tableCells.Count(); _Cell++)
+
+                                        tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
+                                                                                         && x.IdDocumentoBia == _DocBIA.IdDocumentoBIA
+                                                                                         && x.Nombre == _NombreProceso).FirstOrDefault();
+
+                                        if (procBIA != null)
+                                        {
+
+                                            tblEscala Escala = db.tblEscala.Where(x => x.IdEmpresa == procBIA.IdEmpresa
+                                                                                    && x.IdTipoEscala == 4
+                                                                                    && x.Valor == ValorEscala).FirstOrDefault();
 
                                             tblBIARTO reg = new tblBIARTO
                                             {
                                                 IdDocumentoBIA = _DocBIA.IdDocumentoBIA,
-                                                IdEmpresa = _IdEmpresa,
-                                                IdProceso = IdProceso,
+                                                IdEmpresa = procBIA.IdEmpresa,
+                                                IdProceso = procBIA.IdProceso,
                                                 Observacion = string.Empty,
-                                                IdEscala = IdEscala,
+                                                IdEscala = Escala.IdEscala,
                                                 IdTipoFrecuencia = 0,
                                             };
 
@@ -1218,8 +1070,8 @@ namespace BCMWeb
             long _IdDocumento = long.Parse(Session["IdDocumento"].ToString());
             int _IdTipoDocumento = int.Parse(Session["IdTipoDocumento"].ToString());
 
+            string _NrosProceso = string.Empty;
             int _NroProceso = 0;
-            long IdProceso = 0;
             string _NombreProceso = string.Empty;
             int _startRow = 1;
 
@@ -1239,6 +1091,7 @@ namespace BCMWeb
                                                                     && x.IdDocumentoBIA == _DocBIA.IdDocumentoBIA).ToList();
 
                     db.tblBIAMTD.RemoveRange(Actuales);
+                    db.SaveChanges();
 
                     using (WordprocessingDocument wordDocument = WordprocessingDocument.Open(msContent, false))
                     {
@@ -1251,6 +1104,8 @@ namespace BCMWeb
                                 List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
                                 long[] _IdEscala = { };
 
+                                _startRow = GetNextRow(_tableRows, _startRow, out _NroProceso);
+
                                 for (_Row = _startRow; _Row < _tableRows.Count(); _Row++)
                                 {
                                     TableRow _tableRow = (TableRow)_tableRows[_Row];
@@ -1258,125 +1113,79 @@ namespace BCMWeb
                                     if (_tableRow.HasChildren)
                                     {
                                         List<OpenXmlElement> _tableCells = _tableRow.ChildElements.Where(x => x.GetType().Name == "TableCell").ToList();
-                                        long IdEscala = 0;
+                                        long ValorEscala = 0;
 
-                                        if (_Row == 1)
+                                        for (int _Cell = 1; _Cell < _tableCells.Count(); _Cell++)
                                         {
-                                            int _nroCeldas = _tableCells.Count();
-                                            _IdEscala = new long[_tableCells.Count()];
-                                            for (int _Cell = 2; _Cell < _tableCells.Count(); _Cell++)
+                                            string _textoCelda = string.Empty;
+                                            TableCell _celda = (TableCell)_tableCells[_Cell];
+                                            List<OpenXmlElement> _tableCellParagraph = _celda.ChildElements.Where(x => x.GetType().Name == "Paragraph").ToList();
+                                            foreach (var _cellParagraph in _tableCellParagraph)
                                             {
-                                                string _textoCelda = string.Empty;
-                                                TableCell _celda = (TableCell)_tableCells[_Cell];
-                                                List<OpenXmlElement> _tableCellParagraph = _celda.ChildElements.Where(x => x.GetType().Name == "Paragraph").ToList();
-                                                foreach (var _cellParagraph in _tableCellParagraph)
-                                                {
-                                                    if (!string.IsNullOrEmpty(_textoCelda))
-                                                        _textoCelda += " ";
-                                                    _textoCelda += _cellParagraph.InnerText;
-                                                } // End foreach (var _cellParagraph in _tableCellParagraph)
+                                                if (!string.IsNullOrEmpty(_textoCelda))
+                                                    _textoCelda += '/';
 
-                                                tblEscala dataEscala = new tblEscala()
-                                                {
-                                                    IdEmpresa = _IdEmpresa,
-                                                    Descripcion = _textoCelda,
-                                                    FechaRegistro = DateTime.UtcNow,
-                                                    IdTipoEscala = 3,
-                                                };
-                                                switch (_Cell)
-                                                {
-                                                    case 2:
-                                                    case 3:
-                                                        dataEscala.Valor = 5;
-                                                        break;
-                                                    case 4:
-                                                        dataEscala.Valor = 4;
-                                                        break;
-                                                    case 5:
-                                                        dataEscala.Valor = 3;
-                                                        break;
-                                                    case 6:
-                                                        dataEscala.Valor = 2;
-                                                        break;
-                                                    case 7:
-                                                    case 8:
-                                                        dataEscala.Valor = 1;
-                                                        break;
-                                                }
+                                                if (!string.IsNullOrEmpty(_cellParagraph.InnerText.Trim()))
+                                                    _textoCelda += _cellParagraph.InnerText.Trim();
 
-                                                db.tblEscala.Add(dataEscala);
-                                                db.SaveChanges();
-                                                _IdEscala[_Cell] = dataEscala.IdEscala;
+                                            } // End foreach (var _cellParagraph in _tableCellParagraph)
 
-                                            } // End for (int _Cell = 0; _Cell < _tableCells.Count(); _Cell++)
-                                        }
-                                        else
-                                        {
-                                            for (int _Cell = 0; _Cell < _tableCells.Count(); _Cell++)
+                                            switch (_Cell)
                                             {
-                                                TableCell _celda = (TableCell)_tableCells[_Cell];
-                                                if (_celda.HasChildren)
-                                                {
-                                                    string _textoCelda = string.Empty;
-                                                    List<OpenXmlElement> _tableCellParagraph = _celda.ChildElements.Where(x => x.GetType().Name == "Paragraph").ToList();
-                                                    foreach (var _cellParagraph in _tableCellParagraph)
+                                                case 0:
+                                                    try
                                                     {
-                                                        if (!string.IsNullOrEmpty(_textoCelda))
-                                                            _textoCelda += " ";
-                                                        _textoCelda += _cellParagraph.InnerText;
-                                                    } // End foreach (var _cellParagraph in _tableCellParagraph)
-
-                                                    switch (_Cell)
-                                                    {
-                                                        case 0:
-                                                            if (!string.IsNullOrEmpty(_textoCelda))
-                                                                _NroProceso = (int.Parse(_textoCelda));
-                                                            break;
-                                                        case 1:
-                                                            if (!string.IsNullOrEmpty(_textoCelda))
-                                                                _NombreProceso = _textoCelda;
-                                                            tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
-                                                                                                             && x.IdDocumentoBia == _DocBIA.IdDocumentoBIA
-                                                                                                             && x.NroProceso == _NroProceso).FirstOrDefault();
-
-                                                            if (procBIA == null)
-                                                            {
-                                                                procBIA = new tblBIAProceso
-                                                                {
-                                                                    Critico = false,
-                                                                    Descripcion = string.Empty,
-                                                                    FechaCreacion = DateTime.UtcNow,
-                                                                    FechaUltimoEstatus = DateTime.UtcNow,
-                                                                    IdDocumentoBia = _DocBIA.IdDocumentoBIA,
-                                                                    IdEmpresa = _IdEmpresa,
-                                                                    IdEstadoProceso = (int)eEstadoProceso.Activo,
-                                                                    IdUnidadOrganizativa = _DocBIA.IdUnidadOrganizativa,
-                                                                    Nombre = _NombreProceso,
-                                                                    NroProceso = _NroProceso,
-                                                                };
-
-                                                                db.tblBIAProceso.Add(procBIA);
-                                                                db.SaveChanges();
-                                                            }
-                                                            IdProceso = procBIA.IdProceso;
-                                                            break;
-                                                        default:
-                                                            if (_textoCelda.ToLower() == "x")
-                                                            {
-                                                                IdEscala = _IdEscala[_Cell];
-                                                            }
-                                                            break;
+                                                        _NroProceso = (int.Parse(_textoCelda));
                                                     }
-                                                } // End if (_celda.HasChildren)
-                                            } // End for (int _Cell = 0; _Cell < _tableCells.Count(); _Cell++)
+                                                    catch
+                                                    {
+                                                        _Row = GetNextRow(_tableRows, _Row, out _NroProceso);
+
+                                                    }
+                                                    _NroProceso = ((int)_Documento.NroDocumento * 100) + _NroProceso;
+                                                    break;
+                                                case 1:
+                                                    _NombreProceso = _textoCelda;
+                                                    break;
+                                                case 2:
+                                                case 3:
+                                                    ValorEscala = 5;
+                                                    break;
+                                                case 4:
+                                                    ValorEscala = 4;
+                                                    break;
+                                                case 5:
+                                                    ValorEscala = 3;
+                                                    break;
+                                                case 6:
+                                                    ValorEscala = 2;
+                                                    break;
+                                                case 7:
+                                                case 8:
+                                                    ValorEscala = 1;
+                                                    break;
+                                            } // End switch
+
+                                        } // End for (int _Cell = 0; _Cell < _tableCells.Count(); _Cell++)
+
+                                        tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
+                                                                                         && x.IdDocumentoBia == _DocBIA.IdDocumentoBIA
+                                                                                         && x.Nombre == _NombreProceso).FirstOrDefault();
+
+                                        if (procBIA != null)
+                                        {
+
+                                            tblEscala Escala = db.tblEscala.Where(x => x.IdEmpresa == procBIA.IdEmpresa
+                                                                                    && x.IdTipoEscala == 3
+                                                                                    && x.Valor == ValorEscala).FirstOrDefault();
 
                                             tblBIAMTD reg = new tblBIAMTD
                                             {
                                                 IdDocumentoBIA = _DocBIA.IdDocumentoBIA,
-                                                IdEmpresa = _IdEmpresa,
-                                                IdProceso = IdProceso,
+                                                IdEmpresa = procBIA.IdEmpresa,
+                                                IdProceso = procBIA.IdProceso,
                                                 Observacion = string.Empty,
-                                                IdEscala = IdEscala,
+                                                IdEscala = Escala.IdEscala,
                                                 IdTipoFrecuencia = 0,
                                             };
 
@@ -1396,18 +1205,17 @@ namespace BCMWeb
                 throw ex;
             } // End catch
         }
-
         private static void ProcesarAnalisisRiesgo(MemoryStream msContent)
         {
             long _IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
             long _IdDocumento = long.Parse(Session["IdDocumento"].ToString());
             int _IdTipoDocumento = int.Parse(Session["IdTipoDocumento"].ToString());
 
+            string _NrosProceso = string.Empty;
             int _NroProceso = 0;
-            long IdProceso = 0;
             string _NombreProceso = string.Empty;
-            string _UnidadTiempo = string.Empty;
-            int _startRow = 2;
+            string _Descripcion = string.Empty;
+            int _startRow = 1;
             List<objAmenaza> Amenazas = new List<objAmenaza>();
 
             try
@@ -1419,180 +1227,161 @@ namespace BCMWeb
                                                                   && x.IdTipoDocumento == _IdTipoDocumento).FirstOrDefault();
 
                     tblEmpresa _Empresa = db.tblEmpresa.Where(x => x.IdEmpresa == _IdEmpresa).FirstOrDefault();
-                    tblBIADocumento _DocBIA = db.tblBIADocumento.Where(x => x.IdEmpresa == _IdEmpresa
-                                                                         && x.IdDocumento == _IdDocumento
-                                                                         && x.IdTipoDocumento == _IdTipoDocumento).FirstOrDefault();
 
                     List<tblBIAAmenaza> Actuales = db.tblBIAAmenaza.Where(x => x.IdEmpresa == _IdEmpresa
-                                                                            && x.IdDocumentoBIA == _IdDocumento).ToList();
+                                                                            && x.IdDocumento == _IdDocumento).ToList();
 
                     db.tblBIAAmenaza.RemoveRange(Actuales);
 
                     using (WordprocessingDocument wordDocument = WordprocessingDocument.Open(msContent, false))
                     {
-                        int nroTabla = 0;
                         var _tables = wordDocument.MainDocumentPart.Document.Body.Where(x => x.GetType().Name == "Table").ToList();
 
                         foreach (var _Elemento in wordDocument.MainDocumentPart.Document.Body.Where(x => x.GetType().Name == "Table").ToList())
                         {
-                            nroTabla += 1;
-                            if (nroTabla < 3 || nroTabla == _tables.Count())
+                            DocumentFormat.OpenXml.Wordprocessing.Table _Table = (DocumentFormat.OpenXml.Wordprocessing.Table)_Elemento;
+                            if (_Table.HasChildren)
                             {
-                                DocumentFormat.OpenXml.Wordprocessing.Table _Table = (DocumentFormat.OpenXml.Wordprocessing.Table)_Elemento;
-                                if (_Table.HasChildren)
+                                int _Row = 0;
+                                List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
+
+                                _startRow = GetNextRow(_tableRows, _startRow, out _NroProceso);
+
+                                for (_Row = _startRow; _Row < _tableRows.Count(); _Row++)
                                 {
-                                    int _Row = 0;
-                                    List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
+                                    TableRow _tableRow = (TableRow)_tableRows[_Row];
 
-                                    for (_Row = _startRow; _Row < _tableRows.Count(); _Row++)
+                                    if (_tableRow.HasChildren)
                                     {
-                                        TableRow _tableRow = (TableRow)_tableRows[_Row];
+                                        List<OpenXmlElement> _tableCells = _tableRow.ChildElements.Where(x => x.GetType().Name == "TableCell").ToList();
+                                        objAmenaza _Amenaza;
+                                        _Amenaza = new objAmenaza();
 
-                                        if (_tableRow.HasChildren)
+                                        for (int _Cell = 0; _Cell < _tableCells.Count(); _Cell++)
                                         {
-                                            List<OpenXmlElement> _tableCells = _tableRow.ChildElements.Where(x => x.GetType().Name == "TableCell").ToList();
-                                            objAmenaza _Amenaza;
-                                            if (nroTabla == 1)
-                                                _Amenaza = new objAmenaza();
-                                            else
-                                                _Amenaza = Amenazas[_Row - _startRow];
-
-                                            for (int _Cell = 0; _Cell < _tableCells.Count(); _Cell++)
+                                            TableCell _celda = (TableCell)_tableCells[_Cell];
+                                            if (_celda.HasChildren)
                                             {
-                                                TableCell _celda = (TableCell)_tableCells[_Cell];
-                                                if (_celda.HasChildren)
+                                                string _textoCelda = string.Empty;
+                                                List<OpenXmlElement> _tableCellParagraph = _celda.ChildElements.Where(x => x.GetType().Name == "Paragraph").ToList();
+                                                foreach (var _cellParagraph in _tableCellParagraph)
                                                 {
-                                                    string _textoCelda = string.Empty;
-                                                    List<OpenXmlElement> _tableCellParagraph = _celda.ChildElements.Where(x => x.GetType().Name == "Paragraph").ToList();
-                                                    foreach (var _cellParagraph in _tableCellParagraph)
-                                                    {
+                                                    if (!string.IsNullOrEmpty(_cellParagraph.InnerText.Trim()))
+                                                        _textoCelda += _cellParagraph.InnerText.Trim();
+                                                } // End foreach (var _cellParagraph in _tableCellParagraph)
+
+                                                switch (_Cell)
+                                                {
+                                                    case 0:
                                                         if (!string.IsNullOrEmpty(_textoCelda))
-                                                            _textoCelda += ", ";
-                                                        _textoCelda += _cellParagraph.InnerText;
-                                                    } // End foreach (var _cellParagraph in _tableCellParagraph)
+                                                            _NroProceso = (int.Parse(_textoCelda));
+                                                        break;
+                                                    case 1:
+                                                        if (!string.IsNullOrEmpty(_textoCelda))
+                                                            _NombreProceso = _textoCelda;
 
-                                                    switch (_Cell)
-                                                    {
-                                                        case 0:
-                                                            if (!string.IsNullOrEmpty(_textoCelda) && (nroTabla < 3 || nroTabla == (_tables.Count() - 1)))
-                                                                _NroProceso = (int.Parse(_textoCelda));
-                                                            break;
-                                                        case 1:
-                                                            if (nroTabla == 1)
-                                                            {
-                                                                if (!string.IsNullOrEmpty(_textoCelda))
-                                                                    _NombreProceso = _textoCelda;
-                                                                tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
-                                                                                                                 && x.IdDocumentoBia == _DocBIA.IdDocumentoBIA
-                                                                                                                 && x.NroProceso == _NroProceso).FirstOrDefault();
 
-                                                                if (procBIA == null)
-                                                                {
-                                                                    procBIA = new tblBIAProceso
-                                                                    {
-                                                                        Critico = false,
-                                                                        Descripcion = string.Empty,
-                                                                        FechaCreacion = DateTime.UtcNow,
-                                                                        FechaUltimoEstatus = DateTime.UtcNow,
-                                                                        IdDocumentoBia = _DocBIA.IdDocumentoBIA,
-                                                                        IdEmpresa = _IdEmpresa,
-                                                                        IdEstadoProceso = (int)eEstadoProceso.Activo,
-                                                                        IdUnidadOrganizativa = _DocBIA.IdUnidadOrganizativa,
-                                                                        Nombre = _NombreProceso,
-                                                                        NroProceso = _NroProceso,
-                                                                    };
+                                                        tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
+                                                                                                         && x.Nombre == _NombreProceso).FirstOrDefault();
+                                                        if (procBIA != null)
+                                                        {
+                                                            _Amenaza.IdDocumentoBIA = procBIA.IdDocumentoBia;
+                                                            _Amenaza.IdProceso = procBIA.IdProceso;
+                                                        }
+                                                        break;
+                                                    case 2:
+                                                        if (!string.IsNullOrEmpty(_textoCelda))
+                                                        {
+                                                            _Descripcion = _textoCelda;
+                                                        }
+                                                        break;
+                                                    case 3:
+                                                        if (!string.IsNullOrEmpty(_textoCelda))
+                                                        {
+                                                            _Amenaza.Evento = _textoCelda;
+                                                        }
+                                                        break;
+                                                    case 4:
+                                                        if (!string.IsNullOrEmpty(_textoCelda))
+                                                        {
+                                                            _Amenaza.Probabilidad = short.Parse(_textoCelda);
+                                                        }
+                                                        break;
+                                                    case 5:
+                                                        if (!string.IsNullOrEmpty(_textoCelda))
+                                                        {
+                                                            _Amenaza.Impacto = short.Parse(_textoCelda);
+                                                        }
+                                                        break;
+                                                    case 6:
+                                                        if (!string.IsNullOrEmpty(_textoCelda))
+                                                        {
+                                                            _Amenaza.Control = short.Parse(_textoCelda);
+                                                        }
+                                                        break;
+                                                    case 7:
+                                                        if (!string.IsNullOrEmpty(_textoCelda))
+                                                        {
+                                                            _Amenaza.Severidad = short.Parse(_textoCelda);
+                                                        }
+                                                        break;
+                                                    case 8:
+                                                        if (!string.IsNullOrEmpty(_textoCelda))
+                                                        {
+                                                            _Amenaza.Fuente = _textoCelda;
+                                                        }
+                                                        break;
+                                                }
+                                            } // End if (_celda.HasChildren)
+                                        } // End for (int _Cell = 0; _Cell < _tableCells.Count(); _Cell++)
+                                        _Amenaza.Implantado = string.Empty;
+                                        _Amenaza.Implantar = string.Empty;
+                                        int _Estado = _Amenaza.Probabilidad + _Amenaza.Impacto + _Amenaza.Control;
+                                        if (_Estado >= 6)
+                                            _Amenaza.Estado = 3;
+                                        else if (_Estado == 4 || _Estado == 5)
+                                            _Amenaza.Estado = 2;
+                                        else
+                                            _Amenaza.Estado = 1;
 
-                                                                    db.tblBIAProceso.Add(procBIA);
-                                                                    db.SaveChanges();
-                                                                }
-                                                                IdProceso = procBIA.IdProceso;
-                                                                _Amenaza.IdProceso = IdProceso;
-                                                            }
-                                                            break;
-                                                        case 2:
-                                                            if (!string.IsNullOrEmpty(_textoCelda))
-                                                            {
-                                                                if (nroTabla == 1)
-                                                                    _Amenaza.Descripcion = _textoCelda;
-                                                                else if (nroTabla == 2)
-                                                                    _Amenaza.Implantado = _textoCelda;
-                                                                else
-                                                                    _Amenaza.Probabilidad = int.Parse(_textoCelda);
-                                                            }
-                                                            break;
-                                                        case 3:
-                                                            if (!string.IsNullOrEmpty(_textoCelda))
-                                                            {
-                                                                if (nroTabla == 1)
-                                                                    _Amenaza.Evento = _textoCelda;
-                                                                else if (nroTabla == 2)
-                                                                    _Amenaza.Implantar = _textoCelda;
-                                                                else
-                                                                    _Amenaza.Impacto = int.Parse(_textoCelda);
-                                                            }
-                                                            break;
-                                                        case 4:
-                                                            if (!string.IsNullOrEmpty(_textoCelda))
-                                                            {
-                                                                if (nroTabla == _tables.Count())
-                                                                    _Amenaza.Control = int.Parse(_textoCelda);
-                                                            }
-                                                            break;
-                                                        case 5:
-                                                            if (!string.IsNullOrEmpty(_textoCelda))
-                                                            {
-                                                                if (nroTabla == _tables.Count())
-                                                                    _Amenaza.Severidad = int.Parse(_textoCelda);
-                                                            }
-                                                            break;
-                                                        case 6:
-                                                            if (!string.IsNullOrEmpty(_textoCelda))
-                                                            {
-                                                                if (nroTabla == _tables.Count())
-                                                                    _Amenaza.Fuente = _textoCelda;
-                                                            }
-                                                            break;
-                                                    }
-                                                } // End if (_celda.HasChildren)
-                                            } // End for (int _Cell = 0; _Cell < _tableCells.Count(); _Cell++)
-                                            if (nroTabla == 1)
-                                                Amenazas.Add(_Amenaza);
-                                        } // End if (_tableCell.HasChildren)
-                                    } // End for (_Row = 2; _Row < _tableRows.Count(); _Row++)
-                                } // End if (_tableRow.HasChildren)
-                            }
+                                        if (_Amenaza.IdProceso > 0 && _Amenaza.IdDocumentoBIA > 0)
+                                        {
+                                            tblBIAProceso test = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa && x.IdDocumentoBia == _Amenaza.IdDocumentoBIA && x.IdProceso == _Amenaza.IdProceso).FirstOrDefault();
+                                            tblBIAAmenaza dataAmenaza = new tblBIAAmenaza
+                                            {
+                                                IdEmpresa = _IdEmpresa,
+                                                IdDocumento = _IdDocumento,
+                                                IdDocumentoBIA = _Amenaza.IdDocumentoBIA,
+                                                IdProceso = _Amenaza.IdProceso,
+                                                IdTipoDocumento = _Documento.IdTipoDocumento,
+                                                Descripcion = _Descripcion,
+                                                Control = _Amenaza.Control,
+                                                ControlesImplantar = _Amenaza.Implantar,
+                                                Estado = _Amenaza.Estado,
+                                                Evento = _Amenaza.Evento,
+                                                Fuente = _Amenaza.Fuente,
+                                                Impacto = _Amenaza.Impacto,
+                                                Probabilidad = _Amenaza.Probabilidad,
+                                                Severidad = _Amenaza.Severidad,
+                                                TipoControlImplantado = _Amenaza.Implantado
+                                            };
+
+                                            db.tblBIAAmenaza.Add(dataAmenaza);
+                                            try
+                                            {
+                                                db.SaveChanges();
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                if (_Amenaza.IdDocumentoBIA != 81)
+                                                    throw ex;
+                                            } // End catch
+                                        }
+                                    } // End if (_tableCell.HasChildren)
+                                } // End for (_Row = 2; _Row < _tableRows.Count(); _Row++)
+                            } // End if (_tableRow.HasChildren)
                         } // End foreach (Table)
                     } // End using wordDocument
-                    foreach (objAmenaza Amenaza in Amenazas)
-                    {
-                        int _Estado = Amenaza.Probabilidad + Amenaza.Impacto + Amenaza.Control;
-                        if (_Estado >= 6)
-                            Amenaza.Estado = 3;
-                        else if (_Estado == 4 || _Estado == 5)
-                            Amenaza.Estado = 2;
-                        else
-                            Amenaza.Estado = 1;
-
-                        tblBIAAmenaza dataAmenaza = new tblBIAAmenaza
-                        {
-                            IdEmpresa = _IdEmpresa,
-                            IdDocumentoBIA = _IdDocumento,
-                            IdProceso = Amenaza.IdProceso,
-                            Descripcion = Amenaza.Descripcion,
-                            Control = Amenaza.Control,
-                            ControlesImplantar = Amenaza.Implantar,
-                            Estado = Amenaza.Estado,
-                            Evento = Amenaza.Evento,
-                            Fuente = Amenaza.Fuente,
-                            Impacto = Amenaza.Impacto,
-                            Probabilidad = Amenaza.Probabilidad,
-                            Severidad = Amenaza.Severidad,
-                            TipoControlImplantado = Amenaza.Implantado
-                        };
-
-                        db.tblBIAAmenaza.Add(dataAmenaza);
-                    }
-                    db.SaveChanges();
                 } // End using (Entities db = new Entities())
             } // End Try
             catch (Exception ex)
@@ -1600,15 +1389,14 @@ namespace BCMWeb
                 throw ex;
             } // End catch
         }
-
         private static void ProcesarImpactoOperacional(MemoryStream msContent)
         {
             long _IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
             long _IdDocumento = long.Parse(Session["IdDocumento"].ToString());
             int _IdTipoDocumento = int.Parse(Session["IdTipoDocumento"].ToString());
 
+            string _NrosProceso = string.Empty;
             int _NroProceso = 0;
-            long IdProceso = 0;
             string _NombreProceso = string.Empty;
             string _UnidadTiempo = string.Empty;
             int _startRow = 1;
@@ -1641,6 +1429,8 @@ namespace BCMWeb
                                 int _Row = 0;
                                 List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
 
+                                _startRow = GetNextRow(_tableRows, _startRow, out _NroProceso);
+
                                 for (_Row = _startRow; _Row < _tableRows.Count(); _Row++)
                                 {
                                     TableRow _tableRow = (TableRow)_tableRows[_Row];
@@ -1661,44 +1451,24 @@ namespace BCMWeb
                                                 List<OpenXmlElement> _tableCellParagraph = _celda.ChildElements.Where(x => x.GetType().Name == "Paragraph").ToList();
                                                 foreach (var _cellParagraph in _tableCellParagraph)
                                                 {
-                                                    if (!string.IsNullOrEmpty(_textoCelda))
-                                                        _textoCelda += ", ";
-                                                    _textoCelda += _cellParagraph.InnerText;
+                                                    if (!string.IsNullOrEmpty(_cellParagraph.InnerText.Trim()))
+                                                    {
+                                                        if (!string.IsNullOrEmpty(_textoCelda))
+                                                            _textoCelda += '/';
+                                                        _textoCelda += _cellParagraph.InnerText.Trim();
+
+                                                    }
                                                 } // End foreach (var _cellParagraph in _tableCellParagraph)
 
                                                 switch (_Cell)
                                                 {
                                                     case 0:
                                                         if (!string.IsNullOrEmpty(_textoCelda))
-                                                            _NroProceso = (int.Parse(_textoCelda));
+                                                          _NrosProceso = _textoCelda;
                                                         break;
                                                     case 1:
                                                         if (!string.IsNullOrEmpty(_textoCelda))
                                                             _NombreProceso = _textoCelda;
-                                                        tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
-                                                                                                         && x.IdDocumentoBia == _DocBIA.IdDocumentoBIA
-                                                                                                         && x.NroProceso == _NroProceso).FirstOrDefault();
-
-                                                        if (procBIA == null)
-                                                        {
-                                                            procBIA = new tblBIAProceso
-                                                            {
-                                                                Critico = false,
-                                                                Descripcion = string.Empty,
-                                                                FechaCreacion = DateTime.UtcNow,
-                                                                FechaUltimoEstatus = DateTime.UtcNow,
-                                                                IdDocumentoBia = _DocBIA.IdDocumentoBIA,
-                                                                IdEmpresa = _IdEmpresa,
-                                                                IdEstadoProceso = (int)eEstadoProceso.Activo,
-                                                                IdUnidadOrganizativa = _DocBIA.IdUnidadOrganizativa,
-                                                                Nombre = _NombreProceso,
-                                                                NroProceso = _NroProceso,
-                                                            };
-
-                                                            db.tblBIAProceso.Add(procBIA);
-                                                            db.SaveChanges();
-                                                        }
-                                                        IdProceso = procBIA.IdProceso;
                                                         break;
                                                     case 2:
                                                         if (!string.IsNullOrEmpty(_textoCelda))
@@ -1714,22 +1484,47 @@ namespace BCMWeb
                                             } // End if (_celda.HasChildren)
                                         } // End for (int _Cell = 0; _Cell < _tableCells.Count(); _Cell++)
 
-                                        tblCultura_TipoFrecuencia Cultura_TipoFrecuencia =
-                                            db.tblCultura_TipoFrecuencia.Where(x => (x.Culture == Culture || x.Culture == "es-VE") && _UnidadTiempo.Contains(x.Descripcion)).FirstOrDefault();
+                                        string[] _aNrosProceso = _NrosProceso.Split('/');
 
-                                        tblBIAImpactoOperacional reg = new tblBIAImpactoOperacional
+                                        foreach (string _nroProceso in _aNrosProceso)
                                         {
-                                            IdDocumentoBIA = _DocBIA.IdDocumentoBIA,
-                                            IdEmpresa = _IdEmpresa,
-                                            IdTipoFrecuencia = Cultura_TipoFrecuencia.IdTipoFrecuencia,
-                                            IdProceso = IdProceso,
-                                            Descripcion = _Descripcion,
-                                            ImpactoOperacional = _Impacto,
-                                            UnidadTiempo = _UnidadTiempo
-                                        };
+                                            try
+                                            {
+                                                _NroProceso = ((int)_Documento.NroDocumento * 100) + int.Parse(_nroProceso);
 
-                                        db.tblBIAImpactoOperacional.Add(reg);
+                                                tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
+                                                         && x.IdDocumentoBia == _DocBIA.IdDocumentoBIA
+                                                         && x.NroProceso == _NroProceso).FirstOrDefault();
 
+                                                if (procBIA != null)
+                                                {
+                                                    tblCultura_TipoFrecuencia Cultura_TipoFrecuencia =
+                                                        db.tblCultura_TipoFrecuencia.Where(x => (x.Culture == Culture || x.Culture == "es-VE") && _UnidadTiempo.Contains(x.Descripcion)).FirstOrDefault();
+
+                                                    tblBIAImpactoOperacional reg = new tblBIAImpactoOperacional
+                                                    {
+                                                        IdDocumentoBIA = _DocBIA.IdDocumentoBIA,
+                                                        IdEmpresa = _IdEmpresa,
+                                                        IdTipoFrecuencia = Cultura_TipoFrecuencia.IdTipoFrecuencia,
+                                                        IdProceso = procBIA.IdProceso,
+                                                        Descripcion = _Descripcion,
+                                                        ImpactoOperacional = _Impacto,
+                                                        UnidadTiempo = _UnidadTiempo,
+                                                        IdEscala = null
+                                                    };
+
+                                                    db.tblBIAImpactoOperacional.Add(reg);
+                                                }
+                                                else
+                                                {
+                                                    throw new Exception("No existe el proceso");
+                                                }
+                                            }
+                                            catch
+                                            {
+                                                break;
+                                            }
+                                        }
                                     } // End if (_tableCell.HasChildren)
                                 } // End for (_Row = 2; _Row < _tableRows.Count(); _Row++)
                                 _startRow = 0;
@@ -1750,8 +1545,8 @@ namespace BCMWeb
             long _IdDocumento = long.Parse(Session["IdDocumento"].ToString());
             int _IdTipoDocumento = int.Parse(Session["IdTipoDocumento"].ToString());
 
+            string _NrosProceso = string.Empty;
             int _NroProceso = 0;
-            long IdProceso = 0;
             string _NombreProceso = string.Empty;
             int _startRow = 1;
 
@@ -1783,6 +1578,8 @@ namespace BCMWeb
                                 int _Row = 0;
                                 List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
 
+                                _startRow = GetNextRow(_tableRows, _startRow, out _NroProceso);
+
                                 for (_Row = _startRow; _Row < _tableRows.Count(); _Row++)
                                 {
                                     TableRow _tableRow = (TableRow)_tableRows[_Row];
@@ -1804,44 +1601,24 @@ namespace BCMWeb
                                                 List<OpenXmlElement> _tableCellParagraph = _celda.ChildElements.Where(x => x.GetType().Name == "Paragraph").ToList();
                                                 foreach (var _cellParagraph in _tableCellParagraph)
                                                 {
-                                                    if (!string.IsNullOrEmpty(_textoCelda))
-                                                        _textoCelda += ", ";
-                                                    _textoCelda += _cellParagraph.InnerText;
+                                                    if (!string.IsNullOrEmpty(_cellParagraph.InnerText.Trim()))
+                                                    {
+                                                        if (!string.IsNullOrEmpty(_textoCelda))
+                                                            _textoCelda += '/';
+                                                        _textoCelda += _cellParagraph.InnerText.Trim();
+
+                                                    }
                                                 } // End foreach (var _cellParagraph in _tableCellParagraph)
 
                                                 switch (_Cell)
                                                 {
                                                     case 0:
                                                         if (!string.IsNullOrEmpty(_textoCelda))
-                                                            _NroProceso = (int.Parse(_textoCelda));
+                                                            _NrosProceso = _textoCelda;
                                                         break;
                                                     case 1:
                                                         if (!string.IsNullOrEmpty(_textoCelda))
                                                             _NombreProceso = _textoCelda;
-                                                        tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
-                                                                                                         && x.IdDocumentoBia == _DocBIA.IdDocumentoBIA
-                                                                                                         && x.NroProceso == _NroProceso).FirstOrDefault();
-
-                                                        if (procBIA == null)
-                                                        {
-                                                            procBIA = new tblBIAProceso
-                                                            {
-                                                                Critico = false,
-                                                                Descripcion = string.Empty,
-                                                                FechaCreacion = DateTime.UtcNow,
-                                                                FechaUltimoEstatus = DateTime.UtcNow,
-                                                                IdDocumentoBia = _DocBIA.IdDocumentoBIA,
-                                                                IdEmpresa = _IdEmpresa,
-                                                                IdEstadoProceso = (int)eEstadoProceso.Activo,
-                                                                IdUnidadOrganizativa = _DocBIA.IdUnidadOrganizativa,
-                                                                Nombre = _NombreProceso,
-                                                                NroProceso = _NroProceso,
-                                                            };
-
-                                                            db.tblBIAProceso.Add(procBIA);
-                                                            db.SaveChanges();
-                                                        }
-                                                        IdProceso = procBIA.IdProceso;
                                                         break;
                                                     case 2:
                                                         _UnidadTiempo = _textoCelda;
@@ -1856,22 +1633,47 @@ namespace BCMWeb
                                             } // End if (_celda.HasChildren)
                                         } // End for (int _Cell = 0; _Cell < _tableCells.Count(); _Cell++)
 
-                                        tblCultura_TipoFrecuencia Cultura_TipoFrecuencia =
-                                            db.tblCultura_TipoFrecuencia.Where(x => (x.Culture == Culture || x.Culture == "es-VE") && _UnidadTiempo.Contains(x.Descripcion)).FirstOrDefault();
+                                        string[] _aNrosProceso = _NrosProceso.Split('/');
 
-                                        tblBIAImpactoFinanciero reg = new tblBIAImpactoFinanciero
+                                        foreach (string _nroProceso in _aNrosProceso)
                                         {
-                                            IdDocumentoBIA = _DocBIA.IdDocumentoBIA,
-                                            IdEmpresa = _IdEmpresa,
-                                            IdTipoFrecuencia = Cultura_TipoFrecuencia.IdTipoFrecuencia,
-                                            IdProceso = IdProceso,
-                                            Descripcion = _Descripcion,
-                                            Impacto = _Impacto,
-                                            UnidadTiempo = _UnidadTiempo
-                                        };
+                                            try
+                                            {
+                                                _NroProceso = ((int)_Documento.NroDocumento * 100) + int.Parse(_nroProceso);
 
-                                        db.tblBIAImpactoFinanciero.Add(reg);
+                                                tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
+                                                         && x.IdDocumentoBia == _DocBIA.IdDocumentoBIA
+                                                         && x.NroProceso == _NroProceso).FirstOrDefault();
 
+                                                if (procBIA != null)
+                                                {
+                                                    tblCultura_TipoFrecuencia Cultura_TipoFrecuencia =
+                                                        db.tblCultura_TipoFrecuencia.Where(x => (x.Culture == Culture || x.Culture == "es-VE") && _UnidadTiempo.Contains(x.Descripcion)).FirstOrDefault();
+
+                                                    tblBIAImpactoFinanciero reg = new tblBIAImpactoFinanciero
+                                                    {
+                                                        IdDocumentoBIA = _DocBIA.IdDocumentoBIA,
+                                                        IdEmpresa = _IdEmpresa,
+                                                        IdTipoFrecuencia = Cultura_TipoFrecuencia.IdTipoFrecuencia,
+                                                        IdProceso = procBIA.IdProceso,
+                                                        Descripcion = _Descripcion,
+                                                        Impacto = _Impacto,
+                                                        UnidadTiempo = _UnidadTiempo,
+                                                        IdEscala = null
+                                                    };
+
+                                                    db.tblBIAImpactoFinanciero.Add(reg);
+                                                }
+                                                else
+                                                {
+                                                    throw new Exception("No existe el proceso");
+                                                }
+                                            }
+                                            catch
+                                            {
+                                                break;
+                                            }
+                                        }
                                     } // End if (_tableCell.HasChildren)
                                 } // End for (_Row = 2; _Row < _tableRows.Count(); _Row++)
                                 _startRow = 0;
@@ -1892,10 +1694,10 @@ namespace BCMWeb
             long _IdDocumento = long.Parse(Session["IdDocumento"].ToString());
             int _IdTipoDocumento = int.Parse(Session["IdTipoDocumento"].ToString());
 
+            string _NrosProceso = string.Empty;
             int _NroProceso = 0;
-            long IdProceso = 0;
             string _NombreProceso = string.Empty;
-            int _startRow = 2;
+            int _startRow = 0;
 
             try
             {
@@ -1926,6 +1728,8 @@ namespace BCMWeb
                                 int _Row = 0;
                                 List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
 
+                                _startRow = GetNextRow(_tableRows, _startRow, out _NroProceso);
+
                                 for (_Row = _startRow; _Row < _tableRows.Count(); _Row++)
                                 {
                                     TableRow _tableRow = (TableRow)_tableRows[_Row];
@@ -1951,44 +1755,24 @@ namespace BCMWeb
                                                 List<OpenXmlElement> _tableCellParagraph = _celda.ChildElements.Where(x => x.GetType().Name == "Paragraph").ToList();
                                                 foreach (var _cellParagraph in _tableCellParagraph)
                                                 {
-                                                    if (!string.IsNullOrEmpty(_textoCelda))
-                                                        _textoCelda += ", ";
-                                                    _textoCelda += _cellParagraph.InnerText;
+                                                    if (!string.IsNullOrEmpty(_cellParagraph.InnerText.Trim()))
+                                                    {
+                                                        if (!string.IsNullOrEmpty(_textoCelda))
+                                                            _textoCelda += '/';
+                                                        _textoCelda += _cellParagraph.InnerText.Trim();
+
+                                                    }
                                                 } // End foreach (var _cellParagraph in _tableCellParagraph)
 
                                                 switch (_Cell)
                                                 {
                                                     case 0:
                                                         if (!string.IsNullOrEmpty(_textoCelda))
-                                                            _NroProceso = (int.Parse(_textoCelda));
+                                                            _NrosProceso = _textoCelda;
                                                         break;
                                                     case 1:
                                                         if (!string.IsNullOrEmpty(_textoCelda))
                                                             _NombreProceso = _textoCelda;
-                                                        tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
-                                                                                                         && x.IdDocumentoBia == _DocBIA.IdDocumentoBIA
-                                                                                                         && x.NroProceso == _NroProceso).FirstOrDefault();
-
-                                                        if (procBIA == null)
-                                                        {
-                                                            procBIA = new tblBIAProceso
-                                                            {
-                                                                Critico = false,
-                                                                Descripcion = string.Empty,
-                                                                FechaCreacion = DateTime.UtcNow,
-                                                                FechaUltimoEstatus = DateTime.UtcNow,
-                                                                IdDocumentoBia = _DocBIA.IdDocumentoBIA,
-                                                                IdEmpresa = _IdEmpresa,
-                                                                IdEstadoProceso = (int)eEstadoProceso.Activo,
-                                                                IdUnidadOrganizativa = _DocBIA.IdUnidadOrganizativa,
-                                                                Nombre = _NombreProceso,
-                                                                NroProceso = _NroProceso,
-                                                            };
-
-                                                            db.tblBIAProceso.Add(procBIA);
-                                                            db.SaveChanges();
-                                                        }
-                                                        IdProceso = procBIA.IdProceso;
                                                         break;
                                                     case 2:
                                                         _Nombre = _textoCelda;
@@ -2015,51 +1799,82 @@ namespace BCMWeb
                                             } // End if (_celda.HasChildren)
                                         } // End for (int _Cell = 0; _Cell < _tableCells.Count(); _Cell++)
 
-                                        tblDocumentoPersonaClave _dataPersonaClave = db.tblDocumentoPersonaClave.Where(x => x.IdEmpresa == _IdEmpresa
+                                        string[] _aNrosProceso = _NrosProceso.Split('/');
+
+                                        foreach (string _nroProceso in _aNrosProceso)
+                                        {
+                                            try
+                                            {
+                                                _NroProceso = ((int)_Documento.NroDocumento * 100) + int.Parse(_nroProceso);
+
+                                                tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
+                                                         && x.IdDocumentoBia == _DocBIA.IdDocumentoBIA
+                                                         && x.NroProceso == _NroProceso).FirstOrDefault();
+
+                                                if (procBIA != null)
+                                                {
+                                                    tblDocumentoPersonaClave _dataPersonaClave = db.tblDocumentoPersonaClave.Where(x => x.IdEmpresa == _IdEmpresa
                                                                                                                          && x.IdDocumento == _IdDocumento
                                                                                                                          && x.IdTipoDocumento == _IdTipoDocumento
                                                                                                                          && x.Nombre == _Nombre).FirstOrDefault();
 
-                                        if (_dataPersonaClave == null)
-                                        {
-                                            _dataPersonaClave = new tblDocumentoPersonaClave
+                                                    if (_dataPersonaClave == null)
+                                                    {
+                                                        _dataPersonaClave = new tblDocumentoPersonaClave
+                                                        {
+                                                            Cedula = _Identificacion,
+                                                            Correo = _CorreosElectronicos,
+                                                            DireccionHabitacion = _DireccionHabitacion,
+                                                            IdDocumento = _IdDocumento,
+                                                            IdEmpresa = _IdEmpresa,
+                                                            IdTipoDocumento = _IdTipoDocumento,
+                                                            Nombre = _Nombre,
+                                                            Principal = null,
+                                                            TelefonoCelular = _TelefonoCelular,
+                                                            TelefonoHabitacion = _TelefonoHabitacion,
+                                                            TelefonoOficina = _TelefonoOficina
+                                                        };
+
+                                                        db.tblDocumentoPersonaClave.Add(_dataPersonaClave);
+                                                        db.SaveChanges();
+                                                    }
+
+                                                    tblBIAPersonaClave reg = db.tblBIAPersonaClave.Where(x => x.IdEmpresa == _IdEmpresa
+                                                                                                                && x.IdDocumentoBIA == _DocBIA.IdDocumentoBIA
+                                                                                                                && x.IdProceso == procBIA.IdProceso
+                                                                                                                && x.IdPersonaClave == _dataPersonaClave.IdPersona).FirstOrDefault();
+
+                                                    if (reg == null)
+                                                    {
+                                                        reg = new tblBIAPersonaClave
+                                                        {
+                                                            IdDocumento = _IdDocumento,
+                                                            IdDocumentoBIA = _DocBIA.IdDocumentoBIA,
+                                                            IdEmpresa = _IdEmpresa,
+                                                            IdTipoDocumento = _IdTipoDocumento,
+                                                            IdPersonaClave = _dataPersonaClave.IdPersona,
+                                                            IdProceso = procBIA.IdProceso,
+                                                        };
+                                                        db.tblBIAPersonaClave.Add(reg);
+                                                        db.SaveChanges();
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    throw new Exception("No existe el proceso");
+                                                }
+                                            }
+                                            catch
                                             {
-                                                Cedula = _Identificacion,
-                                                Correo = _CorreosElectronicos,
-                                                DireccionHabitacion = _DireccionHabitacion,
-                                                IdDocumento = _IdDocumento,
-                                                IdEmpresa = _IdEmpresa,
-                                                IdTipoDocumento = _IdTipoDocumento,
-                                                Nombre = _Nombre,
-                                                Principal = null,
-                                                TelefonoCelular = _TelefonoCelular,
-                                                TelefonoHabitacion = _TelefonoHabitacion,
-                                                TelefonoOficina = _TelefonoOficina
-                                            };
-
-                                            db.tblDocumentoPersonaClave.Add(_dataPersonaClave);
-                                            db.SaveChanges();
+                                                break;
+                                            }
                                         }
-
-                                        tblBIAPersonaClave reg = new tblBIAPersonaClave
-                                        {
-                                            IdDocumento = _IdDocumento,
-                                            IdDocumentoBIA = _DocBIA.IdDocumentoBIA,
-                                            IdEmpresa = _IdEmpresa,
-                                            IdTipoDocumento = _IdTipoDocumento,
-                                            IdPersonaClave = _dataPersonaClave.IdPersona,
-                                            IdProceso = IdProceso,
-                                        };
-
-                                        db.tblBIAPersonaClave.Add(reg);
-
                                     } // End if (_tableCell.HasChildren)
                                 } // End for (_Row = 2; _Row < _tableRows.Count(); _Row++)
                                 _startRow = 0;
                             } // End if (_tableRow.HasChildren)
                         } // End foreach (Table)
                     } // End using wordDocument
-                    db.SaveChanges();
                 } // End using (Entities db = new Entities())
             } // End Try
             catch (Exception ex)
@@ -2073,11 +1888,11 @@ namespace BCMWeb
             long _IdDocumento = long.Parse(Session["IdDocumento"].ToString());
             int _IdTipoDocumento = int.Parse(Session["IdTipoDocumento"].ToString());
 
+            string _NrosProceso = string.Empty;
             int _NroProceso = 0;
-            long IdProceso = 0;
             string _Ubicacion = string.Empty;
             string _NombreProceso = string.Empty;
-            int _startRow = 2;
+            int _startRow = 0;
 
             try
             {
@@ -2106,6 +1921,8 @@ namespace BCMWeb
                                 int _Row = 0;
                                 List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
 
+                                _startRow = GetNextRow(_tableRows, _startRow, out _NroProceso);
+
                                 for (_Row = _startRow; _Row < _tableRows.Count(); _Row++)
                                 {
                                     TableRow _tableRow = (TableRow)_tableRows[_Row];
@@ -2125,44 +1942,24 @@ namespace BCMWeb
                                                 List<OpenXmlElement> _tableCellParagraph = _celda.ChildElements.Where(x => x.GetType().Name == "Paragraph").ToList();
                                                 foreach (var _cellParagraph in _tableCellParagraph)
                                                 {
-                                                    if (!string.IsNullOrEmpty(_textoCelda))
-                                                        _textoCelda += ", ";
-                                                    _textoCelda += _cellParagraph.InnerText;
+                                                    if (!string.IsNullOrEmpty(_cellParagraph.InnerText.Trim()))
+                                                    {
+                                                        if (!string.IsNullOrEmpty(_textoCelda))
+                                                            _textoCelda += '/';
+                                                        _textoCelda += _cellParagraph.InnerText.Trim();
+
+                                                    }
                                                 } // End foreach (var _cellParagraph in _tableCellParagraph)
 
                                                 switch (_Cell)
                                                 {
                                                     case 0:
                                                         if (!string.IsNullOrEmpty(_textoCelda))
-                                                            _NroProceso = (int.Parse(_textoCelda));
+                                                            _NrosProceso = _textoCelda;
                                                         break;
                                                     case 1:
                                                         if (!string.IsNullOrEmpty(_textoCelda))
                                                             _NombreProceso = _textoCelda;
-                                                        tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
-                                                                                                         && x.IdDocumentoBia == _DocBIA.IdDocumentoBIA
-                                                                                                         && x.NroProceso == _NroProceso).FirstOrDefault();
-
-                                                        if (procBIA == null)
-                                                        {
-                                                            procBIA = new tblBIAProceso
-                                                            {
-                                                                Critico = false,
-                                                                Descripcion = string.Empty,
-                                                                FechaCreacion = DateTime.UtcNow,
-                                                                FechaUltimoEstatus = DateTime.UtcNow,
-                                                                IdDocumentoBia = _DocBIA.IdDocumentoBIA,
-                                                                IdEmpresa = _IdEmpresa,
-                                                                IdEstadoProceso = (int)eEstadoProceso.Activo,
-                                                                IdUnidadOrganizativa = _DocBIA.IdUnidadOrganizativa,
-                                                                Nombre = _NombreProceso,
-                                                                NroProceso = _NroProceso,
-                                                            };
-
-                                                            db.tblBIAProceso.Add(procBIA);
-                                                            db.SaveChanges();
-                                                        }
-                                                        IdProceso = procBIA.IdProceso;
                                                         break;
                                                     case 2:
                                                         _Informacion = _textoCelda;
@@ -2175,17 +1972,41 @@ namespace BCMWeb
                                             } // End if (_celda.HasChildren)
                                         } // End for (int _Cell = 0; _Cell < _tableCells.Count(); _Cell++)
 
-                                        tblBIADocumentacion reg = new tblBIADocumentacion
+                                        string[] _aNrosProceso = _NrosProceso.Split('/');
+
+                                        foreach (string _nroProceso in _aNrosProceso)
                                         {
-                                            IdDocumentoBIA = _DocBIA.IdDocumentoBIA,
-                                            IdEmpresa = _IdEmpresa,
-                                            IdProceso = IdProceso,
-                                            Nombre = _Informacion,
-                                            Ubicacion = _Ubicacion
-                                        };
+                                            try
+                                            {
+                                                _NroProceso = ((int)_Documento.NroDocumento * 100) + int.Parse(_nroProceso);
 
-                                        db.tblBIADocumentacion.Add(reg);
+                                                tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
+                                                         && x.IdDocumentoBia == _DocBIA.IdDocumentoBIA
+                                                         && x.NroProceso == _NroProceso).FirstOrDefault();
 
+                                                if (procBIA != null)
+                                                {
+                                                    tblBIADocumentacion reg = new tblBIADocumentacion
+                                                    {
+                                                        IdDocumentoBIA = _DocBIA.IdDocumentoBIA,
+                                                        IdEmpresa = _IdEmpresa,
+                                                        IdProceso = procBIA.IdProceso,
+                                                        Nombre = _Informacion,
+                                                        Ubicacion = _Ubicacion
+                                                    };
+
+                                                    db.tblBIADocumentacion.Add(reg);
+                                                }
+                                                else
+                                                {
+                                                    throw new Exception("No existe el proceso");
+                                                }
+                                            }
+                                            catch
+                                            {
+                                                break;
+                                            }
+                                        }
                                     } // End if (_tableCell.HasChildren)
                                 } // End for (_Row = 2; _Row < _tableRows.Count(); _Row++)
                                 _startRow = 0;
@@ -2206,11 +2027,11 @@ namespace BCMWeb
             long _IdDocumento = long.Parse(Session["IdDocumento"].ToString());
             int _IdTipoDocumento = int.Parse(Session["IdTipoDocumento"].ToString());
 
+            string _NrosProceso = string.Empty;
             int _NroProceso = 0;
-            long IdProceso = 0;
             string _Usuarios = string.Empty;
             string _NombreProceso = string.Empty;
-            int _startRow = 2;
+            int _startRow = 0;
 
             try
             {
@@ -2239,6 +2060,8 @@ namespace BCMWeb
                                 int _Row = 0;
                                 List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
 
+                                _startRow = GetNextRow(_tableRows, _startRow, out _NroProceso);
+
                                 for (_Row = _startRow; _Row < _tableRows.Count(); _Row++)
                                 {
                                     TableRow _tableRow = (TableRow)_tableRows[_Row];
@@ -2258,44 +2081,24 @@ namespace BCMWeb
                                                 List<OpenXmlElement> _tableCellParagraph = _celda.ChildElements.Where(x => x.GetType().Name == "Paragraph").ToList();
                                                 foreach (var _cellParagraph in _tableCellParagraph)
                                                 {
-                                                    if (!string.IsNullOrEmpty(_textoCelda))
-                                                        _textoCelda += ", ";
-                                                    _textoCelda += _cellParagraph.InnerText;
+                                                    if (!string.IsNullOrEmpty(_cellParagraph.InnerText.Trim()))
+                                                    {
+                                                        if (!string.IsNullOrEmpty(_textoCelda))
+                                                            _textoCelda += '/';
+                                                        _textoCelda += _cellParagraph.InnerText.Trim();
+
+                                                    }
                                                 } // End foreach (var _cellParagraph in _tableCellParagraph)
 
                                                 switch (_Cell)
                                                 {
                                                     case 0:
                                                         if (!string.IsNullOrEmpty(_textoCelda))
-                                                            _NroProceso = (int.Parse(_textoCelda));
+                                                            _NrosProceso = _textoCelda;
                                                         break;
                                                     case 1:
                                                         if (!string.IsNullOrEmpty(_textoCelda))
                                                             _NombreProceso = _textoCelda;
-                                                        tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
-                                                                                                         && x.IdDocumentoBia == _DocBIA.IdDocumentoBIA
-                                                                                                         && x.NroProceso == _NroProceso).FirstOrDefault();
-
-                                                        if (procBIA == null)
-                                                        {
-                                                            procBIA = new tblBIAProceso
-                                                            {
-                                                                Critico = false,
-                                                                Descripcion = string.Empty,
-                                                                FechaCreacion = DateTime.UtcNow,
-                                                                FechaUltimoEstatus = DateTime.UtcNow,
-                                                                IdDocumentoBia = _DocBIA.IdDocumentoBIA,
-                                                                IdEmpresa = _IdEmpresa,
-                                                                IdEstadoProceso = (int)eEstadoProceso.Activo,
-                                                                IdUnidadOrganizativa = _DocBIA.IdUnidadOrganizativa,
-                                                                Nombre = _NombreProceso,
-                                                                NroProceso = _NroProceso,
-                                                            };
-
-                                                            db.tblBIAProceso.Add(procBIA);
-                                                            db.SaveChanges();
-                                                        }
-                                                        IdProceso = procBIA.IdProceso;
                                                         break;
                                                     case 2:
                                                         _Aplicaciones = _textoCelda;
@@ -2308,16 +2111,41 @@ namespace BCMWeb
                                             } // End if (_celda.HasChildren)
                                         } // End for (int _Cell = 0; _Cell < _tableCells.Count(); _Cell++)
 
-                                        tblBIAAplicacion reg = new tblBIAAplicacion
-                                        {
-                                            IdDocumentoBIA = _DocBIA.IdDocumentoBIA,
-                                            IdEmpresa = _IdEmpresa,
-                                            IdProceso = IdProceso,
-                                            Nombre = _Aplicaciones,
-                                            Usuario = _Usuarios
-                                        };
+                                        string[] _aNrosProceso = _NrosProceso.Split('/');
 
-                                        db.tblBIAAplicacion.Add(reg);
+                                        foreach (string _nroProceso in _aNrosProceso)
+                                        {
+                                            try
+                                            {
+                                                _NroProceso = ((int)_Documento.NroDocumento * 100) + int.Parse(_nroProceso);
+
+                                                tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
+                                                         && x.IdDocumentoBia == _DocBIA.IdDocumentoBIA
+                                                         && x.NroProceso == _NroProceso).FirstOrDefault();
+
+                                                if (procBIA != null)
+                                                {
+                                                    tblBIAAplicacion reg = new tblBIAAplicacion
+                                                    {
+                                                        IdDocumentoBIA = _DocBIA.IdDocumentoBIA,
+                                                        IdEmpresa = _IdEmpresa,
+                                                        IdProceso = procBIA.IdProceso,
+                                                        Nombre = _Aplicaciones,
+                                                        Usuario = _Usuarios
+                                                    };
+
+                                                    db.tblBIAAplicacion.Add(reg);
+                                                }
+                                                else
+                                                {
+                                                    throw new Exception("No existe el proceso");
+                                                }
+                                            }
+                                            catch
+                                            {
+                                                break;
+                                            }
+                                        }
 
                                     } // End if (_tableCell.HasChildren)
                                 } // End for (_Row = 2; _Row < _tableRows.Count(); _Row++)
@@ -2339,10 +2167,10 @@ namespace BCMWeb
             long _IdDocumento = long.Parse(Session["IdDocumento"].ToString());
             int _IdTipoDocumento = int.Parse(Session["IdTipoDocumento"].ToString());
 
+            string _NrosProceso = string.Empty;
             int _NroProceso = 0;
-            long IdProceso = 0;
             string _NombreProceso = string.Empty;
-            int _startRow = 2;
+            int _startRow = 0;
 
             try
             {
@@ -2371,6 +2199,8 @@ namespace BCMWeb
                                 int _Row = 0;
                                 List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
 
+                                _startRow = GetNextRow(_tableRows, _startRow, out _NroProceso);
+
                                 for (_Row = _startRow; _Row < _tableRows.Count(); _Row++)
                                 {
                                     TableRow _tableRow = (TableRow)_tableRows[_Row];
@@ -2393,44 +2223,24 @@ namespace BCMWeb
                                                 List<OpenXmlElement> _tableCellParagraph = _celda.ChildElements.Where(x => x.GetType().Name == "Paragraph").ToList();
                                                 foreach (var _cellParagraph in _tableCellParagraph)
                                                 {
-                                                    if (!string.IsNullOrEmpty(_textoCelda))
-                                                        _textoCelda += ", ";
-                                                    _textoCelda += _cellParagraph.InnerText;
+                                                    if (!string.IsNullOrEmpty(_cellParagraph.InnerText.Trim()))
+                                                    {
+                                                        if (!string.IsNullOrEmpty(_textoCelda))
+                                                            _textoCelda += '/';
+                                                        _textoCelda += _cellParagraph.InnerText.Trim();
+
+                                                    }
                                                 } // End foreach (var _cellParagraph in _tableCellParagraph)
 
                                                 switch (_Cell)
                                                 {
                                                     case 0:
                                                         if (!string.IsNullOrEmpty(_textoCelda))
-                                                            _NroProceso = (int.Parse(_textoCelda));
+                                                            _NrosProceso = _textoCelda;
                                                         break;
                                                     case 1:
                                                         if (!string.IsNullOrEmpty(_textoCelda))
                                                             _NombreProceso = _textoCelda;
-                                                        tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
-                                                                                                         && x.IdDocumentoBia == _DocBIA.IdDocumentoBIA
-                                                                                                         && x.NroProceso == _NroProceso).FirstOrDefault();
-
-                                                        if (procBIA == null)
-                                                        {
-                                                            procBIA = new tblBIAProceso
-                                                            {
-                                                                Critico = false,
-                                                                Descripcion = string.Empty,
-                                                                FechaCreacion = DateTime.UtcNow,
-                                                                FechaUltimoEstatus = DateTime.UtcNow,
-                                                                IdDocumentoBia = _DocBIA.IdDocumentoBIA,
-                                                                IdEmpresa = _IdEmpresa,
-                                                                IdEstadoProceso = (int)eEstadoProceso.Activo,
-                                                                IdUnidadOrganizativa = _DocBIA.IdUnidadOrganizativa,
-                                                                Nombre = _NombreProceso,
-                                                                NroProceso = _NroProceso,
-                                                            };
-
-                                                            db.tblBIAProceso.Add(procBIA);
-                                                            db.SaveChanges();
-                                                        }
-                                                        IdProceso = procBIA.IdProceso;
                                                         break;
                                                     case 2:
                                                         _UnidadTrabajo = _textoCelda;
@@ -2448,19 +2258,43 @@ namespace BCMWeb
                                             } // End if (_celda.HasChildren)
                                         } // End for (int _Cell = 0; _Cell < _tableCells.Count(); _Cell++)
 
-                                        tblBIAClienteProceso reg = new tblBIAClienteProceso
+                                        string[] _aNrosProceso = _NrosProceso.Split('/');
+
+                                        foreach (string _nroProceso in _aNrosProceso)
                                         {
-                                            Proceso = _ProcesoUnidad,
-                                            IdDocumentoBIA = _DocBIA.IdDocumentoBIA,
-                                            IdEmpresa = _IdEmpresa,
-                                            IdProceso = IdProceso,
-                                            Producto = _Servicio,
-                                            Responsable = _ResponsableUnidad,
-                                            Unidad = _UnidadTrabajo
-                                        };
+                                            try
+                                            {
+                                                _NroProceso = ((int)_Documento.NroDocumento * 100) + int.Parse(_nroProceso);
 
-                                        db.tblBIAClienteProceso.Add(reg);
+                                                tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
+                                                         && x.IdDocumentoBia == _DocBIA.IdDocumentoBIA
+                                                         && x.NroProceso == _NroProceso).FirstOrDefault();
 
+                                                if (procBIA != null)
+                                                {
+                                                    tblBIAClienteProceso reg = new tblBIAClienteProceso
+                                                    {
+                                                        Proceso = _ProcesoUnidad,
+                                                        IdDocumentoBIA = _DocBIA.IdDocumentoBIA,
+                                                        IdEmpresa = _IdEmpresa,
+                                                        IdProceso = procBIA.IdProceso,
+                                                        Producto = _Servicio,
+                                                        Responsable = _ResponsableUnidad,
+                                                        Unidad = _UnidadTrabajo
+                                                    };
+
+                                                    db.tblBIAClienteProceso.Add(reg);
+                                                }
+                                                else
+                                                {
+                                                    throw new Exception("No existe el proceso");
+                                                }
+                                            }
+                                            catch
+                                            {
+                                                break;
+                                            }
+                                        }
                                     } // End if (_tableCell.HasChildren)
                                 } // End for (_Row = 2; _Row < _tableRows.Count(); _Row++)
                                 _startRow = 0;
@@ -2481,10 +2315,10 @@ namespace BCMWeb
             long _IdDocumento = long.Parse(Session["IdDocumento"].ToString());
             int _IdTipoDocumento = int.Parse(Session["IdTipoDocumento"].ToString());
 
+            string _NrosProceso = string.Empty;
             int _NroProceso = 0;
-            long IdProceso = 0;
             string _NombreProceso = string.Empty;
-            int _startRow = 2;
+            int _startRow = 0;
 
             try
             {
@@ -2513,6 +2347,8 @@ namespace BCMWeb
                                 int _Row = 0;
                                 List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
 
+                                _startRow = GetNextRow(_tableRows, _startRow, out _NroProceso);
+
                                 for (_Row = _startRow; _Row < _tableRows.Count(); _Row++)
                                 {
                                     TableRow _tableRow = (TableRow)_tableRows[_Row];
@@ -2534,44 +2370,24 @@ namespace BCMWeb
                                                 List<OpenXmlElement> _tableCellParagraph = _celda.ChildElements.Where(x => x.GetType().Name == "Paragraph").ToList();
                                                 foreach (var _cellParagraph in _tableCellParagraph)
                                                 {
-                                                    if (!string.IsNullOrEmpty(_textoCelda))
-                                                        _textoCelda += ", ";
-                                                    _textoCelda += _cellParagraph.InnerText;
+                                                    if (!string.IsNullOrEmpty(_cellParagraph.InnerText.Trim()))
+                                                    {
+                                                        if (!string.IsNullOrEmpty(_textoCelda))
+                                                            _textoCelda += '/';
+                                                        _textoCelda += _cellParagraph.InnerText.Trim();
+
+                                                    }
                                                 } // End foreach (var _cellParagraph in _tableCellParagraph)
 
                                                 switch (_Cell)
                                                 {
                                                     case 0:
                                                         if (!string.IsNullOrEmpty(_textoCelda))
-                                                            _NroProceso = (int.Parse(_textoCelda));
+                                                            _NrosProceso = _textoCelda;
                                                         break;
                                                     case 1:
                                                         if (!string.IsNullOrEmpty(_textoCelda))
                                                             _NombreProceso = _textoCelda;
-                                                        tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
-                                                                                                         && x.IdDocumentoBia == _DocBIA.IdDocumentoBIA
-                                                                                                         && x.NroProceso == _NroProceso).FirstOrDefault();
-
-                                                        if (procBIA == null)
-                                                        {
-                                                            procBIA = new tblBIAProceso
-                                                            {
-                                                                Critico = false,
-                                                                Descripcion = string.Empty,
-                                                                FechaCreacion = DateTime.UtcNow,
-                                                                FechaUltimoEstatus = DateTime.UtcNow,
-                                                                IdDocumentoBia = _DocBIA.IdDocumentoBIA,
-                                                                IdEmpresa = _IdEmpresa,
-                                                                IdEstadoProceso = (int)eEstadoProceso.Activo,
-                                                                IdUnidadOrganizativa = _DocBIA.IdUnidadOrganizativa,
-                                                                Nombre = _NombreProceso,
-                                                                NroProceso = _NroProceso,
-                                                            };
-
-                                                            db.tblBIAProceso.Add(procBIA);
-                                                            db.SaveChanges();
-                                                        }
-                                                        IdProceso = procBIA.IdProceso;
                                                         break;
                                                     case 2:
                                                         _Organizaciones = _textoCelda;
@@ -2586,18 +2402,187 @@ namespace BCMWeb
                                             } // End if (_celda.HasChildren)
                                         } // End for (int _Cell = 0; _Cell < _tableCells.Count(); _Cell++)
 
-                                        tblBIAInterdependencia reg = new tblBIAInterdependencia
+                                        string[] _aNrosProceso = _NrosProceso.Split('/');
+
+                                        foreach (string _nroProceso in _aNrosProceso)
                                         {
-                                            Contacto = _Contacto,
-                                            IdDocumentoBIA = _DocBIA.IdDocumentoBIA,
-                                            IdEmpresa = _IdEmpresa,
-                                            IdProceso = IdProceso,
-                                            Organizacion = _Organizaciones,
-                                            Servicio = _Servicio
-                                        };
+                                            try
+                                            {
+                                                _NroProceso = ((int)_Documento.NroDocumento * 100) + int.Parse(_nroProceso);
 
-                                        db.tblBIAInterdependencia.Add(reg);
+                                                tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
+                                                         && x.IdDocumentoBia == _DocBIA.IdDocumentoBIA
+                                                         && x.NroProceso == _NroProceso).FirstOrDefault();
 
+                                                if (procBIA != null)
+                                                {
+                                                    tblBIAInterdependencia reg = new tblBIAInterdependencia
+                                                    {
+                                                        Contacto = _Contacto,
+                                                        IdDocumentoBIA = _DocBIA.IdDocumentoBIA,
+                                                        IdEmpresa = _IdEmpresa,
+                                                        IdProceso = procBIA.IdProceso,
+                                                        Organizacion = _Organizaciones,
+                                                        Servicio = _Servicio
+                                                    };
+
+                                                    db.tblBIAInterdependencia.Add(reg);
+                                                }
+                                                else
+                                                {
+                                                    throw new Exception("No existe el proceso");
+                                                }
+                                            }
+                                            catch
+                                            {
+                                                break;
+                                            }
+                                        }
+                                    } // End if (_tableCell.HasChildren)
+                                } // End for (_Row = 2; _Row < _tableRows.Count(); _Row++)
+                                _startRow = 0;
+                            } // End if (_tableRow.HasChildren)
+                        } // End foreach (Table)
+                    } // End using wordDocument
+                    db.SaveChanges();
+                } // End using (Entities db = new Entities())
+            } // End Try
+            catch (Exception ex)
+            {
+                throw ex;
+            } // End catch
+        }
+        private static void ProcesarProveedores(MemoryStream msContent)
+        {
+            long _IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            long _IdDocumento = long.Parse(Session["IdDocumento"].ToString());
+            int _IdTipoDocumento = int.Parse(Session["IdTipoDocumento"].ToString());
+
+            string _NrosProceso = string.Empty;
+            int _NroProceso = 0;
+            string _NombreProceso = string.Empty;
+            string _DescripcionProceso = string.Empty;
+            int _startRow = 0;
+
+            try
+            {
+                using (Entities db = new Entities())
+                {
+                    tblDocumento _Documento = db.tblDocumento.Where(x => x.IdEmpresa == _IdEmpresa
+                                                                  && x.IdDocumento == _IdDocumento
+                                                                  && x.IdTipoDocumento == _IdTipoDocumento).FirstOrDefault();
+
+                    tblEmpresa _Empresa = db.tblEmpresa.Where(x => x.IdEmpresa == _IdEmpresa).FirstOrDefault();
+                    tblBIADocumento _DocBIA = db.tblBIADocumento.Where(x => x.IdEmpresa == _IdEmpresa
+                                                                         && x.IdDocumento == _IdDocumento
+                                                                         && x.IdTipoDocumento == _IdTipoDocumento).FirstOrDefault();
+                    List<tblBIAProveedor> Proveedores = db.tblBIAProveedor.Where(x => x.IdEmpresa == _IdEmpresa
+                                                                                   && x.IdDocumentoBIA == _DocBIA.IdDocumentoBIA).ToList();
+
+                    db.tblBIAProveedor.RemoveRange(Proveedores);
+
+                    using (WordprocessingDocument wordDocument = WordprocessingDocument.Open(msContent, false))
+                    {
+                        foreach (var _Elemento in wordDocument.MainDocumentPart.Document.Body.Where(x => x.GetType().Name == "Table").ToList())
+                        {
+                            DocumentFormat.OpenXml.Wordprocessing.Table _Table = (DocumentFormat.OpenXml.Wordprocessing.Table)_Elemento;
+                            if (_Table.HasChildren)
+                            {
+                                int _Row = 0;
+                                List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
+
+                                _startRow = GetNextRow(_tableRows, _startRow, out _NroProceso);
+
+                                for (_Row = _startRow; _Row < _tableRows.Count(); _Row++)
+                                {
+                                    TableRow _tableRow = (TableRow)_tableRows[_Row];
+
+                                    string _Organizacion = string.Empty;
+                                    string _Servicio = string.Empty;
+                                    string _Contacto = string.Empty;
+
+                                    if (_tableRow.HasChildren)
+                                    {
+                                        List<OpenXmlElement> _tableCells = _tableRow.ChildElements.Where(x => x.GetType().Name == "TableCell").ToList();
+
+                                        for (int _Cell = 0; _Cell < _tableCells.Count(); _Cell++)
+                                        {
+                                            TableCell _celda = (TableCell)_tableCells[_Cell];
+                                            if (_celda.HasChildren)
+                                            {
+                                                string _textoCelda = string.Empty;
+                                                List<OpenXmlElement> _tableCellParagraph = _celda.ChildElements.Where(x => x.GetType().Name == "Paragraph").ToList();
+                                                foreach (var _cellParagraph in _tableCellParagraph)
+                                                {
+                                                    if (!string.IsNullOrEmpty(_cellParagraph.InnerText.Trim()))
+                                                    {
+                                                        if (!string.IsNullOrEmpty(_textoCelda))
+                                                            _textoCelda += '/';
+                                                        _textoCelda += _cellParagraph.InnerText.Trim();
+
+                                                    }
+                                                } // End foreach (var _cellParagraph in _tableCellParagraph)
+
+                                                switch (_Cell)
+                                                {
+                                                    case 0:
+                                                        if (!string.IsNullOrEmpty(_textoCelda))
+                                                            _NrosProceso = _textoCelda;
+                                                        break;
+                                                    case 1:
+                                                        if (!string.IsNullOrEmpty(_textoCelda))
+                                                            _NombreProceso = _textoCelda;
+                                                        break;
+                                                    case 2:
+                                                        _Organizacion = _textoCelda;
+                                                        break;
+                                                    case 3:
+                                                        _Servicio = _textoCelda;
+                                                        break;
+                                                    case 4:
+                                                        _Contacto = _textoCelda;
+                                                        break;
+                                                }
+                                            } // End if (_celda.HasChildren)
+                                        } // End for (int _Cell = 0; _Cell < _tableCells.Count(); _Cell++)
+
+                                        string[] _aNrosProceso = _NrosProceso.Split('/');
+
+                                        foreach (string _nroProceso in _aNrosProceso)
+                                        {
+                                            try
+                                            {
+                                                _NroProceso = ((int)_Documento.NroDocumento * 100) + int.Parse(_nroProceso);
+
+                                                tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
+                                                         && x.IdDocumentoBia == _DocBIA.IdDocumentoBIA
+                                                         && x.NroProceso == _NroProceso).FirstOrDefault();
+
+                                                if (procBIA != null)
+                                                {
+
+                                                    tblBIAProveedor Proveedor = new tblBIAProveedor
+                                                    {
+                                                        Contacto = _Contacto,
+                                                        IdDocumentoBIA = _DocBIA.IdDocumentoBIA,
+                                                        IdEmpresa = _IdEmpresa,
+                                                        IdProceso = procBIA.IdProceso,
+                                                        Organizacion = _Organizacion,
+                                                        Servicio = _Servicio
+                                                    };
+
+                                                    db.tblBIAProveedor.Add(Proveedor);
+                                                }
+                                                else
+                                                {
+                                                    throw new Exception("No existe el proceso");
+                                                }
+                                            }
+                                            catch
+                                            {
+                                                break;
+                                            }
+                                        }
                                     } // End if (_tableCell.HasChildren)
                                 } // End for (_Row = 2; _Row < _tableRows.Count(); _Row++)
                                 _startRow = 0;
@@ -2622,7 +2607,7 @@ namespace BCMWeb
             long IdProceso = 0;
             string _NombreProceso = string.Empty;
             string _DescripcionProceso = string.Empty;
-            int _startRow = 2;
+            int _startRow = 0;
 
             try
             {
@@ -2634,12 +2619,37 @@ namespace BCMWeb
 
                     tblEmpresa _Empresa = db.tblEmpresa.Where(x => x.IdEmpresa == _IdEmpresa).FirstOrDefault();
                     tblBIADocumento _DocBIA = db.tblBIADocumento.Where(x => x.IdEmpresa == _IdEmpresa
-                                                                         && x.IdDocumento == _IdDocumento
-                                                                         && x.IdTipoDocumento == _IdTipoDocumento).FirstOrDefault();
-                    List<tblBIAEntrada> Entradas = db.tblBIAEntrada.Where(x => x.IdEmpresa == _IdEmpresa
-                                                                            && x.IdDocumentoBIA == _DocBIA.IdDocumentoBIA).ToList();
+                                                                         && x.IdTipoDocumento == _IdTipoDocumento
+                                                                         && x.IdDocumento == _IdDocumento).FirstOrDefault();
+                    List<tblBIAProceso> Procesos = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa && x.IdDocumentoBia == _IdDocumento).ToList();
 
-                    db.tblBIAEntrada.RemoveRange(Entradas);
+                    foreach (tblBIAProceso Proceso in Procesos)
+                    {
+                        db.tblBIAAmenaza.RemoveRange(Proceso.tblBIAAmenaza.ToList());
+                        db.tblBCPDocumento.RemoveRange(Proceso.tblBCPDocumento.ToList());
+                        db.tblBIAAplicacion.RemoveRange(Proceso.tblBIAAplicacion.ToList());
+                        db.tblBIAClienteProceso.RemoveRange(Proceso.tblBIAClienteProceso.ToList());
+                        db.tblBIADocumentacion.RemoveRange(Proceso.tblBIADocumentacion.ToList());
+                        db.tblBIAEntrada.RemoveRange(Proceso.tblBIAEntrada.ToList());
+                        db.tblBIAGranImpacto.RemoveRange(Proceso.tblBIAGranImpacto.ToList());
+                        db.tblBIAImpactoFinanciero.RemoveRange(Proceso.tblBIAImpactoFinanciero.ToList());
+                        db.tblBIAImpactoOperacional.RemoveRange(Proceso.tblBIAImpactoOperacional.ToList());
+                        db.tblBIAInterdependencia.RemoveRange(Proceso.tblBIAInterdependencia.ToList());
+                        db.tblBIAMTD.RemoveRange(Proceso.tblBIAMTD.ToList());
+                        db.tblBIAPersonaClave.RemoveRange(Proceso.tblBIAPersonaClave.ToList());
+                        db.tblBIAPersonaRespaldoProceso.RemoveRange(Proceso.tblBIAPersonaRespaldoProceso.ToList());
+                        db.tblBIAProcesoAlterno.RemoveRange(Proceso.tblBIAProcesoAlterno.ToList());
+                        db.tblBIAProveedor.RemoveRange(Proceso.tblBIAProveedor.ToList());
+                        db.tblBIARespaldoPrimario.RemoveRange(Proceso.tblBIARespaldoPrimario.ToList());
+                        db.tblBIARespaldoSecundario.RemoveRange(Proceso.tblBIARespaldoSecundario.ToList());
+                        db.tblBIARPO.RemoveRange(Proceso.tblBIARPO.ToList());
+                        db.tblBIARTO.RemoveRange(Proceso.tblBIARTO.ToList());
+                        db.tblBIAUnidadTrabajoProceso.RemoveRange(Proceso.tblBIAUnidadTrabajoProceso.ToList());
+                        db.tblBIAWRT.RemoveRange(Proceso.tblBIAWRT.ToList());
+                    }
+
+                    db.tblBIAProceso.RemoveRange(Procesos);
+                    db.SaveChanges();
 
                     using (WordprocessingDocument wordDocument = WordprocessingDocument.Open(msContent, false))
                     {
@@ -2651,6 +2661,8 @@ namespace BCMWeb
                             {
                                 int _Row = 0;
                                 List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
+
+                                _startRow = GetNextRow(_tableRows, _startRow, out _NroProceso);
 
                                 for (_Row = _startRow; _Row < _tableRows.Count(); _Row++)
                                 {
@@ -2673,16 +2685,26 @@ namespace BCMWeb
                                                 List<OpenXmlElement> _tableCellParagraph = _celda.ChildElements.Where(x => x.GetType().Name == "Paragraph").ToList();
                                                 foreach (var _cellParagraph in _tableCellParagraph)
                                                 {
-                                                    if (!string.IsNullOrEmpty(_textoCelda))
-                                                        _textoCelda += ", ";
-                                                    _textoCelda += _cellParagraph.InnerText;
+                                                    if (!string.IsNullOrEmpty(_cellParagraph.InnerText.Trim()))
+                                                        _textoCelda += _cellParagraph.InnerText.Trim();
                                                 } // End foreach (var _cellParagraph in _tableCellParagraph)
 
                                                 switch (_Cell)
                                                 {
                                                     case 0:
                                                         if (!string.IsNullOrEmpty(_textoCelda))
-                                                            _NroProceso = (int.Parse(_textoCelda));
+                                                        {
+                                                            try
+                                                            {
+                                                                _NroProceso = (int.Parse(_textoCelda));
+                                                            }
+                                                            catch
+                                                            {
+                                                                _Row = GetNextRow(_tableRows, _Row, out _NroProceso);
+
+                                                            }
+                                                            _NroProceso = ((int)_Documento.NroDocumento * 100) + _NroProceso;
+                                                        }
                                                         break;
                                                     case 1:
                                                         if (!string.IsNullOrEmpty(_textoCelda))
@@ -2759,143 +2781,41 @@ namespace BCMWeb
                 throw ex;
             } // End catch
         }
-        private static void ProcesarProveedores(MemoryStream msContent)
+        private static int GetNextRow(List<OpenXmlElement> _tableRows, int _startRow, out int _NroProceso)
         {
-            long _IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
-            long _IdDocumento = long.Parse(Session["IdDocumento"].ToString());
-            int _IdTipoDocumento = int.Parse(Session["IdTipoDocumento"].ToString());
+            bool findCell = false;
+            _NroProceso = 0;
 
-            int _NroProceso = 0;
-            long IdProceso = 0;
-            string _NombreProceso = string.Empty;
-            string _DescripcionProceso = string.Empty;
-            int _startRow = 2;
-
-            try
+            while (!findCell)
             {
-                using (Entities db = new Entities())
+                TableRow _tableRow = (TableRow)_tableRows[_startRow];
+
+                if (_tableRow.HasChildren)
                 {
-                    tblDocumento _Documento = db.tblDocumento.Where(x => x.IdEmpresa == _IdEmpresa
-                                                                  && x.IdDocumento == _IdDocumento
-                                                                  && x.IdTipoDocumento == _IdTipoDocumento).FirstOrDefault();
-
-                    tblEmpresa _Empresa = db.tblEmpresa.Where(x => x.IdEmpresa == _IdEmpresa).FirstOrDefault();
-                    tblBIADocumento _DocBIA = db.tblBIADocumento.Where(x => x.IdEmpresa == _IdEmpresa
-                                                                         && x.IdDocumento == _IdDocumento
-                                                                         && x.IdTipoDocumento == _IdTipoDocumento).FirstOrDefault();
-                    List<tblBIAProveedor> Proveedores = db.tblBIAProveedor.Where(x => x.IdEmpresa == _IdEmpresa
-                                                                                   && x.IdDocumentoBIA == _DocBIA.IdDocumentoBIA).ToList();
-
-                    db.tblBIAProveedor.RemoveRange(Proveedores);
-
-                    using (WordprocessingDocument wordDocument = WordprocessingDocument.Open(msContent, false))
+                    List<OpenXmlElement> _tableCells = _tableRow.ChildElements.Where(x => x.GetType().Name == "TableCell").ToList();
+                    TableCell _celda = (TableCell)_tableCells[0];
+                    List<OpenXmlElement> _tableCellParagraph = _celda.ChildElements.Where(x => x.GetType().Name == "Paragraph").ToList();
+                    string _textoCelda = string.Empty;
+                    foreach (var _cellParagraph in _tableCellParagraph)
                     {
-                        foreach (var _Elemento in wordDocument.MainDocumentPart.Document.Body.Where(x => x.GetType().Name == "Table").ToList())
-                        {
-                            DocumentFormat.OpenXml.Wordprocessing.Table _Table = (DocumentFormat.OpenXml.Wordprocessing.Table)_Elemento;
-                            if (_Table.HasChildren)
-                            {
-                                int _Row = 0;
-                                List<OpenXmlElement> _tableRows = _Table.ChildElements.Where(x => x.GetType().Name == "TableRow").ToList();
+                        _textoCelda += _cellParagraph.InnerText;
+                    } // End foreach (var _cellParagraph in _tableCellParagraph)
 
-                                for (_Row = _startRow; _Row < _tableRows.Count(); _Row++)
-                                {
-                                    TableRow _tableRow = (TableRow)_tableRows[_Row];
+                    try
+                    {
+                        _NroProceso = (int.Parse(_textoCelda));
+                        findCell = true;
+                    }
+                    catch
+                    {
+                        _startRow += 1;
+                        if (_startRow >= _tableRows.Count())
+                            break;
+                    }
+                }
+            }
 
-                                    string _Organizacion = string.Empty;
-                                    string _Servicio = string.Empty;
-                                    string _Contacto = string.Empty;
-
-                                    if (_tableRow.HasChildren)
-                                    {
-                                        List<OpenXmlElement> _tableCells = _tableRow.ChildElements.Where(x => x.GetType().Name == "TableCell").ToList();
-
-                                        for (int _Cell = 0; _Cell < _tableCells.Count(); _Cell++)
-                                        {
-                                            TableCell _celda = (TableCell)_tableCells[_Cell];
-                                            if (_celda.HasChildren)
-                                            {
-                                                string _textoCelda = string.Empty;
-                                                List<OpenXmlElement> _tableCellParagraph = _celda.ChildElements.Where(x => x.GetType().Name == "Paragraph").ToList();
-                                                foreach (var _cellParagraph in _tableCellParagraph)
-                                                {
-                                                    if (!string.IsNullOrEmpty(_textoCelda))
-                                                        _textoCelda += ", ";
-                                                    _textoCelda += _cellParagraph.InnerText;
-                                                } // End foreach (var _cellParagraph in _tableCellParagraph)
-
-                                                switch (_Cell)
-                                                {
-                                                    case 0:
-                                                        if (!string.IsNullOrEmpty(_textoCelda))
-                                                            _NroProceso = (int.Parse(_textoCelda));
-                                                        break;
-                                                    case 1:
-                                                        if (!string.IsNullOrEmpty(_textoCelda))
-                                                            _NombreProceso = _textoCelda;
-                                                        tblBIAProceso procBIA = db.tblBIAProceso.Where(x => x.IdEmpresa == _IdEmpresa
-                                                                                                         && x.IdDocumentoBia == _DocBIA.IdDocumentoBIA
-                                                                                                         && x.NroProceso == _NroProceso).FirstOrDefault();
-
-                                                        if (procBIA == null)
-                                                        {
-                                                            procBIA = new tblBIAProceso
-                                                            {
-                                                                Critico = false,
-                                                                Descripcion = string.Empty,
-                                                                FechaCreacion = DateTime.UtcNow,
-                                                                FechaUltimoEstatus = DateTime.UtcNow,
-                                                                IdDocumentoBia = _DocBIA.IdDocumentoBIA,
-                                                                IdEmpresa = _IdEmpresa,
-                                                                IdEstadoProceso = (int)eEstadoProceso.Activo,
-                                                                IdUnidadOrganizativa = _DocBIA.IdUnidadOrganizativa,
-                                                                Nombre = _NombreProceso,
-                                                                NroProceso = _NroProceso,
-                                                            };
-
-                                                            db.tblBIAProceso.Add(procBIA);
-                                                            db.SaveChanges();
-                                                        }
-                                                        IdProceso = procBIA.IdProceso;
-                                                        break;
-                                                    case 2:
-                                                        _Organizacion = _textoCelda;
-                                                        break;
-                                                    case 3:
-                                                        _Servicio = _textoCelda;
-                                                        break;
-                                                    case 4:
-                                                        _Contacto = _textoCelda;
-                                                        break;
-                                                }
-                                            } // End if (_celda.HasChildren)
-                                        } // End for (int _Cell = 0; _Cell < _tableCells.Count(); _Cell++)
-
-                                        tblBIAProveedor Proveedor = new tblBIAProveedor
-                                        {
-                                            Contacto = _Contacto,
-                                            IdDocumentoBIA = _DocBIA.IdDocumentoBIA,
-                                            IdEmpresa = _IdEmpresa,
-                                            IdProceso = IdProceso,
-                                            Organizacion = _Organizacion,
-                                            Servicio = _Servicio
-                                        };
-
-                                        db.tblBIAProveedor.Add(Proveedor);
-
-                                    } // End if (_tableCell.HasChildren)
-                                } // End for (_Row = 2; _Row < _tableRows.Count(); _Row++)
-                                _startRow = 0;
-                            } // End if (_tableRow.HasChildren)
-                        } // End foreach (Table)
-                    } // End using wordDocument
-                    db.SaveChanges();
-                } // End using (Entities db = new Entities())
-            } // End Try
-            catch (Exception ex)
-            {
-                throw ex;
-            } // End catch
+            return _startRow;
         }
         //private static void ProcessFichaBIA(MemoryStream msContent)
         //{

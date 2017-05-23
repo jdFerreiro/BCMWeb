@@ -9,7 +9,7 @@
         settings.Name = "cbxProceso";
         settings.Width = Unit.Percentage(50);
         settings.SelectedIndex = 0;
-        settings.CallbackRouteValues = new { Controller = "Documento", Action = "PartialProcesosView" };
+        settings.CallbackRouteValues = new { Controller = "Reportes", Action = "PartialProcesosView" };
         settings.Properties.CallbackPageSize = 15;
         settings.Properties.Caption = Resources.DocumentoResource.captionProceso;
         settings.Properties.DropDownStyle = DropDownStyle.DropDownList;
@@ -19,8 +19,10 @@
         settings.Properties.ValueField = "IdProceso";
         settings.Properties.ValueType = typeof(System.Int64);
         settings.Properties.ItemStyle.SelectedStyle.CssClass = "selectedItem";
+        settings.Properties.ItemStyle.Wrap = DefaultBoolean.True;
         settings.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.Never;
         settings.Properties.ClientSideEvents.BeginCallback = "function (s,e) { lp.Show();}";
+        settings.Properties.ClientSideEvents.EndCallback = "function (s,e) { lp.Hide();}";
         settings.Properties.ClientSideEvents.SelectedIndexChanged = "function (s,e) { lp.Show(); $(\"#IdProceso\").val(cbxProceso.GetValue()); document.forms[\"frmDiagrama\"].submit(); }";
     }
 ).BindList(Metodos.GetProcesosEmpresa()).Bind(Model.IdProceso).GetHtml()

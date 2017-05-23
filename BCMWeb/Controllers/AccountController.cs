@@ -9,23 +9,18 @@ using WebMatrix.WebData;
 using BCMWeb.Models;
 using BCMWeb.Security;
 using System.Security.Principal;
+using BCMWeb.Data.EF;
 
 namespace BCMWeb.Controllers {
     [Authorize]
     //[InitializeSimpleMembership]
     public class AccountController : Controller {
 
-        //
-        // GET: /Account/Login
         [AllowAnonymous]
         public ActionResult Login() {
             ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, Resources.LoginResource.accountHeader);
             return View();
         }
-
-        //
-        // POST: /Account/Login
-
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -52,6 +47,9 @@ namespace BCMWeb.Controllers {
                             Session["IdEmpresa"] = Metodos.GetEmpresasUsuario().FirstOrDefault().IdEmpresa;
                             Session["UserTimeZone"] = model.UserTimezone;
                             Metodos.LoginUsuario(long.Parse(UserId));
+                            if (_User.PrimeraVez)
+                                return RedirectToAction("PrimeraVez", "Account");
+
                             return RedirectToAction("Index", "Menu");
                         case eEstadoUsuario.Bloqueado:
                             ViewBag.ErrorMessage = Resources.ErrorResource.BloqueadoErrorMessage;
@@ -104,10 +102,6 @@ namespace BCMWeb.Controllers {
         public ActionResult Register() {
             return View();
         }
-
-        //
-        // POST: /Account/Register
-
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -127,19 +121,11 @@ namespace BCMWeb.Controllers {
             // If we got this far, something failed, redisplay form
             return View(model);
         }
-
-        //
-        // GET: /Account/ChangePassword
-
         [SessionExpire]
         [HandleError]
         public ActionResult ChangePassword() {
             return View();
         }
-
-        //
-        // POST: /Account/ChangePassword
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         [HandleError]
@@ -164,15 +150,10 @@ namespace BCMWeb.Controllers {
             // If we got this far, something failed, redisplay form
             return View(model);
         }
-
-        //
-        // GET: /Account/ChangePasswordSuccess
-
         [HandleError]
         public ActionResult ChangePasswordSuccess() {
             return View();
         }
-
         [AllowAnonymous]
         public ActionResult ForgotPasword()
         {
@@ -237,6 +218,36 @@ namespace BCMWeb.Controllers {
         {
             return View();
         }
+        [AllowAnonymous]
+        public ActionResult PrimeraVez()
+        {
+            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, Resources.LoginResource.accountHeader);
+            RegisterModel model = Metodos.GetUsuario();
+            return View(model);
+        }
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult PrimeraVez(RegisterModel model, string returnUrl)
+        {
+            if (ModelState.IsValid)
+            {
+                Metodos.UpdateUsuario(model.UserName, model.Password);
+                PerfilModelView _perfil = Metodos.GetPerfilData();
+
+                FormsAuthentication.SignOut();
+                FormsAuthentication.SetAuthCookie(_perfil.Email, true);
+                string UserId = _perfil.IdUsuario.ToString();
+                var authTicket = new FormsAuthenticationTicket(1, model.UserName, DateTime.Now, DateTime.Now.AddMinutes(20), false, UserId);
+                string encriptedTicket = FormsAuthentication.Encrypt(authTicket);
+                var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encriptedTicket);
+                HttpContext.Response.Cookies.Add(authCookie);
+                return RedirectToAction("Index", "Menu");
+            }
+            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, Resources.LoginResource.accountHeader);
+            return View(model);
+        }
+
 
         #region Status Codes
         private static string ErrorCodeToString(MembershipCreateStatus createStatus) {

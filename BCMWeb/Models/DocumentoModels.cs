@@ -327,6 +327,14 @@ namespace BCMWeb.Models
         }
         [Display(Name = "captionFechaEstatusProceso", ResourceType = typeof(Resources.DocumentoResource))]
         public DateTime FechaEstatus { get; set; }
+        public bool Selected { get; set; }
+        public string ImpactoFinanciero { get; set; }
+        public string ImpactoOperacional { get; set; }
+        public string MTD { get; set; }
+        public string RTO { get; set; }
+        public string RPO { get; set; }
+        public string WRT { get; set; }
+
     }
     public class DocumentoDiagrama : DocumentoModel
     {

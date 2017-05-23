@@ -17,11 +17,12 @@ namespace BCMWeb.Data.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public tblEscala()
         {
+            this.tblBIAImpactoOperacional = new HashSet<tblBIAImpactoOperacional>();
             this.tblBIAMTD = new HashSet<tblBIAMTD>();
             this.tblBIARPO = new HashSet<tblBIARPO>();
             this.tblBIARTO = new HashSet<tblBIARTO>();
             this.tblBIAWRT = new HashSet<tblBIAWRT>();
-            this.tblBIAImpactoOperacional = new HashSet<tblBIAImpactoOperacional>();
+            this.tblBIAImpactoFinanciero = new HashSet<tblBIAImpactoFinanciero>();
         }
     
         public long IdEmpresa { get; set; }
@@ -31,6 +32,8 @@ namespace BCMWeb.Data.EF
         public string Descripcion { get; set; }
         public Nullable<System.DateTime> FechaRegistro { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblBIAImpactoOperacional> tblBIAImpactoOperacional { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIAMTD> tblBIAMTD { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -42,6 +45,6 @@ namespace BCMWeb.Data.EF
         public virtual tblEmpresa tblEmpresa { get; set; }
         public virtual tblTipoEscala tblTipoEscala { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblBIAImpactoOperacional> tblBIAImpactoOperacional { get; set; }
+        public virtual ICollection<tblBIAImpactoFinanciero> tblBIAImpactoFinanciero { get; set; }
     }
 }

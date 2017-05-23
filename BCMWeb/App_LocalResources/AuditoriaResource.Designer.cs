@@ -115,6 +115,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Agregar la Iniciativa {1}.
+        /// </summary>
+        public static string AgregarIniciativaMessage {
+            get {
+                return ResourceManager.GetString("AgregarIniciativaMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ingresa a los anexos del documento {1} version {2} en el módulo {0} desde un dispositivo Móvil.
         /// </summary>
         public static string AnexoAccederDocumentoMovilMessage {
@@ -439,6 +448,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Eliminar la iniciativa {1}.
+        /// </summary>
+        public static string EliminarIniciativaMessage {
+            get {
+                return ResourceManager.GetString("EliminarIniciativaMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Generar versión {5} del documento {1} versión {2} del módulo {0}.
         /// </summary>
         public static string GenerarCopiaDocumentoMessage {
@@ -480,6 +498,15 @@ namespace Resources {
         public static string LogOutAccionMessage {
             get {
                 return ResourceManager.GetString("LogOutAccionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Actualizar la iniciativa {1}.
+        /// </summary>
+        public static string ModificarIniciativaMessage {
+            get {
+                return ResourceManager.GetString("ModificarIniciativaMessage", resourceCulture);
             }
         }
         

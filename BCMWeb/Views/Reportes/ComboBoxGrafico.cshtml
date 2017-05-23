@@ -3,8 +3,6 @@
 
 @model ReporteModel
 
-@Html.HiddenFor(m => m.IdEscalaGrafico)
-
 @Html.DevExpress().ComboBox(
     settings =>
     {
@@ -13,7 +11,7 @@
         settings.SelectedIndex = 0;
         settings.CallbackRouteValues = new { Controller = "Reportes", Action = "ComboBoxGrafico" };
         settings.Properties.CallbackPageSize = 15;
-        settings.Properties.Caption = Resources.EmpresaResource.captionEmpresa;
+        settings.Properties.Caption = Resources.ReporteResource.captionEscala;
         settings.Properties.DropDownStyle = DropDownStyle.DropDownList;
         settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
         settings.Properties.TextFormatString = "{0}";

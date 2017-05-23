@@ -61,6 +61,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Por favor, corrija todos los errores..
+        /// </summary>
+        public static string AllErrors {
+            get {
+                return ResourceManager.GetString("AllErrors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error en la aplicación.
         /// </summary>
         public static string AppErrorTitle {

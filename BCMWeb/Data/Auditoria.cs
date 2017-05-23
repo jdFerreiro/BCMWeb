@@ -263,6 +263,73 @@ namespace BCMWeb
             }
 
         }
+        [SessionExpire]
+        [HandleError]
+        public static void RegistarIniciativa(eTipoAccion Accion, long IdIniciativa, string NombreIniciativa)
+        {
+            long IdUser = long.Parse(Session["UserId"].ToString());
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+
+            using (Entities db = new Entities())
+            {
+                tblModulo moduloPrincipal = db.tblModulo.Where(x => x.IdEmpresa == IdEmpresa && x.IdModulo == 14000000).FirstOrDefault();
+                tblModulo moduloActivo = db.tblModulo.Where(x => x.IdEmpresa == IdEmpresa && x.IdModulo == 14010100).FirstOrDefault();
+                string NroIniciativa = string.Empty;
+                string AccionMessage = string.Empty;
+                string NombreModulo = moduloActivo.Nombre;
+                tblIniciativas reg = null;
+
+                switch (Accion)
+                {
+                    case eTipoAccion.AgregarIniciativa:
+                        AccionMessage = Resources.AuditoriaResource.MostrarAccionMessage;
+                        NombreModulo = moduloActivo.Nombre;
+                        reg = db.tblIniciativas.Where(x => x.IdEmpresa == IdEmpresa && x.IdIniciativa == IdIniciativa).FirstOrDefault();
+
+                        if (reg != null)
+                        {
+                            NroIniciativa = reg.NroIniciativa.ToString();
+                        }
+                        break;
+                    case eTipoAccion.ActualizarIniciativa:
+                        AccionMessage = Resources.AuditoriaResource.MostrarAccionMessage;
+                        NombreModulo = moduloActivo.Nombre;
+                        reg = db.tblIniciativas.Where(x => x.IdEmpresa == IdEmpresa && x.IdIniciativa == IdIniciativa).FirstOrDefault();
+
+                        if (reg != null)
+                        {
+                            NroIniciativa = reg.NroIniciativa.ToString();
+                        }
+                        break;
+                    case eTipoAccion.EliminarIniciativa:
+                        AccionMessage = Resources.AuditoriaResource.MostrarAccionMessage;
+                        NombreModulo = moduloActivo.Nombre;
+                        break;
+                }
+
+                tblUsuario usuario = db.tblUsuario.Where(x => x.IdUsuario == IdUser).FirstOrDefault();
+
+                string _Accion = string.Format(AccionMessage, NombreModulo, NombreIniciativa, NroIniciativa);
+
+                tblAuditoria regAuditoria = new tblAuditoria
+                {
+                    Accion = _Accion,
+                    DireccionIP = Request.UserHostAddress,
+                    FechaRegistro = DateTime.UtcNow,
+                    IdDocumento = 0,
+                    IdEmpresa = IdEmpresa,
+                    IdTipoDocumento = 0,
+                    IdUsuario = IdUser,
+                    Mensaje = string.Empty,
+                    Negocios = true,
+                };
+
+                db.tblAuditoria.Add(regAuditoria);
+                usuario.FechaUltimaConexion = DateTime.UtcNow;
+                usuario.EstadoUsuario = 2;
+                db.SaveChanges();
+            }
+        }
 
 
     }

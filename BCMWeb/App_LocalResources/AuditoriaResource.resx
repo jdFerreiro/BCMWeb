@@ -261,4 +261,13 @@
   <data name="AnexoRenombrarItemModuloMessage" xml:space="preserve">
     <value>Renombar anexo {3} del módulo {0}</value>
   </data>
+  <data name="AgregarIniciativaMessage" xml:space="preserve">
+    <value>Agregar la Iniciativa {1}</value>
+  </data>
+  <data name="EliminarIniciativaMessage" xml:space="preserve">
+    <value>Eliminar la iniciativa {1}</value>
+  </data>
+  <data name="ModificarIniciativaMessage" xml:space="preserve">
+    <value>Actualizar la iniciativa {1}</value>
+  </data>
 </root>

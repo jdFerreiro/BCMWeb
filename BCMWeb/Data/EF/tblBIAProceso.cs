@@ -23,6 +23,8 @@ namespace BCMWeb.Data.EF
             this.tblBIADocumentacion = new HashSet<tblBIADocumentacion>();
             this.tblBIAEntrada = new HashSet<tblBIAEntrada>();
             this.tblBIAGranImpacto = new HashSet<tblBIAGranImpacto>();
+            this.tblBIAImpactoFinanciero = new HashSet<tblBIAImpactoFinanciero>();
+            this.tblBIAImpactoOperacional = new HashSet<tblBIAImpactoOperacional>();
             this.tblBIAInterdependencia = new HashSet<tblBIAInterdependencia>();
             this.tblBIAMTD = new HashSet<tblBIAMTD>();
             this.tblBIAPersonaClave = new HashSet<tblBIAPersonaClave>();
@@ -35,8 +37,6 @@ namespace BCMWeb.Data.EF
             this.tblBIARTO = new HashSet<tblBIARTO>();
             this.tblBIAUnidadTrabajoProceso = new HashSet<tblBIAUnidadTrabajoProceso>();
             this.tblBIAWRT = new HashSet<tblBIAWRT>();
-            this.tblBIAImpactoFinanciero = new HashSet<tblBIAImpactoFinanciero>();
-            this.tblBIAImpactoOperacional = new HashSet<tblBIAImpactoOperacional>();
             this.tblBIAAmenaza = new HashSet<tblBIAAmenaza>();
         }
     
@@ -66,6 +66,10 @@ namespace BCMWeb.Data.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIAGranImpacto> tblBIAGranImpacto { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblBIAImpactoFinanciero> tblBIAImpactoFinanciero { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblBIAImpactoOperacional> tblBIAImpactoOperacional { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIAInterdependencia> tblBIAInterdependencia { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIAMTD> tblBIAMTD { get; set; }
@@ -91,10 +95,6 @@ namespace BCMWeb.Data.EF
         public virtual ICollection<tblBIAUnidadTrabajoProceso> tblBIAUnidadTrabajoProceso { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIAWRT> tblBIAWRT { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblBIAImpactoFinanciero> tblBIAImpactoFinanciero { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblBIAImpactoOperacional> tblBIAImpactoOperacional { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIAAmenaza> tblBIAAmenaza { get; set; }
     }

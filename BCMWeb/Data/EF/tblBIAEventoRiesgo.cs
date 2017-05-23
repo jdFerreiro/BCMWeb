@@ -16,17 +16,16 @@ namespace BCMWeb.Data.EF
     {
         public long IdEventoRiesgo { get; set; }
         public long IdEmpresa { get; set; }
-        public long Probabilidad { get; set; }
-        public long Impacto { get; set; }
-        public long Control { get; set; }
+        public short Probabilidad { get; set; }
+        public short Impacto { get; set; }
+        public short Control { get; set; }
         public long Severidad { get; set; }
         public long IdEstadoRiesgo { get; set; }
         public long IdFuenteRiesgo { get; set; }
     
-        public virtual tblBIAControlRiesgo tblBIAControlRiesgo { get; set; }
-        public virtual tblBIAFuenteRiesgo tblBIAFuenteRiesgo { get; set; }
+        public virtual tblControlRiesgo tblControlRiesgo { get; set; }
         public virtual tblImpactoRiesgo tblImpactoRiesgo { get; set; }
-        public virtual tblBIAProbabilidadRiesgo tblBIAProbabilidadRiesgo { get; set; }
+        public virtual tblProbabilidadRiesgo tblProbabilidadRiesgo { get; set; }
         public virtual tblEmpresa tblEmpresa { get; set; }
     }
 }

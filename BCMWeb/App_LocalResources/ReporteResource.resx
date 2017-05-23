@@ -195,4 +195,112 @@
   <data name="captionCantidad" xml:space="preserve">
     <value>Cantidad</value>
   </data>
+  <data name="captionAccion1" xml:space="preserve">
+    <value>No se tiene planificada alguna acción y/o la acción planificada no mitigará el riesgo</value>
+  </data>
+  <data name="captionAccion2" xml:space="preserve">
+    <value>Se consideran acciones a largo plazo</value>
+  </data>
+  <data name="captionAccion3" xml:space="preserve">
+    <value>Acciones de mitigación se estarán aplicando a corto plazo</value>
+  </data>
+  <data name="captionAccionTomar" xml:space="preserve">
+    <value>Acciones a tomar</value>
+  </data>
+  <data name="captionDescripcion" xml:space="preserve">
+    <value>Descripción</value>
+  </data>
+  <data name="captionDescripcionFuente" xml:space="preserve">
+    <value>Fuente de la Amenaza</value>
+  </data>
+  <data name="captionDeterminacionEstado" xml:space="preserve">
+    <value>Suma: Valoración de “P” + Valoración de “I”  + Valoración de “C” =</value>
+  </data>
+  <data name="CaptionDeterminacionLinea1" xml:space="preserve">
+    <value>Si la Suma es igual o mayor que “6”</value>
+  </data>
+  <data name="CaptionDeterminacionLinea2" xml:space="preserve">
+    <value>Si la Suma es “4” o “5”</value>
+  </data>
+  <data name="CaptionDeterminacionLinea3" xml:space="preserve">
+    <value>Si la Suma es “3”</value>
+  </data>
+  <data name="captionEstado" xml:space="preserve">
+    <value>Estado</value>
+  </data>
+  <data name="captionEstadoRiesgo" xml:space="preserve">
+    <value>Determinación del Estado</value>
+  </data>
+  <data name="captionNivelImpacto1" xml:space="preserve">
+    <value>Bajo (1)</value>
+  </data>
+  <data name="captionNivelImpacto2" xml:space="preserve">
+    <value>Medio (2)</value>
+  </data>
+  <data name="captionNivelImpacto3" xml:space="preserve">
+    <value>Alto (3)</value>
+  </data>
+  <data name="captionProbabilidad1" xml:space="preserve">
+    <value>Baja (1)</value>
+  </data>
+  <data name="captionProbabilidad2" xml:space="preserve">
+    <value>Media (2)</value>
+  </data>
+  <data name="captionProbabilidad3" xml:space="preserve">
+    <value>Alta (3)</value>
+  </data>
+  <data name="captionSeveridad" xml:space="preserve">
+    <value>Severidad</value>
+  </data>
+  <data name="captionValoracion" xml:space="preserve">
+    <value>Valoración</value>
+  </data>
+  <data name="captionValoracionFuente" xml:space="preserve">
+    <value>Código</value>
+  </data>
+  <data name="SubtituloNivelImpacto" xml:space="preserve">
+    <value>Nivel del Impacto (I)</value>
+  </data>
+  <data name="TituloAcciones" xml:space="preserve">
+    <value>Tabla: Acciones a tomar dependiendo de la Valoración del Riesgo</value>
+  </data>
+  <data name="TituloControl" xml:space="preserve">
+    <value>Control (C) sobre el Riesgo</value>
+  </data>
+  <data name="TituloFuentes" xml:space="preserve">
+    <value>Tabla: Fuentes de la Amenaza</value>
+  </data>
+  <data name="TituloImpacto" xml:space="preserve">
+    <value>Características del Impacto (I)</value>
+  </data>
+  <data name="TituloProbabilidad" xml:space="preserve">
+    <value>Probabilidad (P) de Ocurrencia</value>
+  </data>
+  <data name="TituloSeveridad" xml:space="preserve">
+    <value>Tabla: Severidad del Riesgo</value>
+  </data>
+  <data name="TituloTablasValoracionRiesgo" xml:space="preserve">
+    <value>Tablas: Valoración del Riesgo</value>
+  </data>
+  <data name="TituloValoracionRiesgo" xml:space="preserve">
+    <value>Tabla: Valoración del Estado de Riesto</value>
+  </data>
+  <data name="captionAmenaza" xml:space="preserve">
+    <value>Amenaza</value>
+  </data>
+  <data name="captionEvento" xml:space="preserve">
+    <value>Evento Disparador</value>
+  </data>
+  <data name="captionImplantado" xml:space="preserve">
+    <value>Control Implantado</value>
+  </data>
+  <data name="captionImplantar" xml:space="preserve">
+    <value>Control a Implantar</value>
+  </data>
+  <data name="captionEscala" xml:space="preserve">
+    <value>Escala</value>
+  </data>
+  <data name="TextoExplicativoInformacion" xml:space="preserve">
+    <value>Toda la información que se muestra en los gráficos se corresponde a la última información actualizada o al último año. No existe información histórica.</value>
+  </data>
 </root>

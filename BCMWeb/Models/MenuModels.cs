@@ -94,7 +94,7 @@ namespace BCMWeb.Models
             get
             {
                 List<tblModulo> Modulos = new List<tblModulo>();
-                if (IdModulo < 13000000)
+                if (IdModulo < 11000000)
                 {
                     Modulos = Metodos.GetSubModulos(IdModulo).ToList();
                     Modulos.AddRange(Metodos.GetSubModulos(99000000).ToList());
@@ -140,7 +140,24 @@ namespace BCMWeb.Models
         {
             get
             {
-                return Metodos.GetSubModulos(ModuloID).Select(x => new ChildData(x));
+                List<tblModulo> Modulos = new List<tblModulo>();
+                Modulos = Metodos.GetSubModulos(ModuloID).ToList();
+                List<ItemData> data = new List<ItemData>();
+
+                foreach (tblModulo Modulo in Modulos)
+                {
+                    if (Modulo.IdTipoElemento == 3)
+                    {
+                        data.Add(new ModuloData(Modulo));
+                    }
+                    else
+                    {
+                        data.Add(new ChildData(Modulo));
+                    }
+                }
+
+                return data;
+                //return Modulos.OrderBy(x => x.IdModulo).ThenBy(x => x.IdTipoElemento).Select(x => );
                 // return NorthwindDataProvider.DB.Products.Where(p => p.CategoryID == CategoryID).ToList().Select(p => new ProductData(p));
             }
         }

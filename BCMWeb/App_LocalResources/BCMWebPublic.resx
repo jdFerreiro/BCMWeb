@@ -195,4 +195,7 @@ AIACABtk25KCATmC3MAAAB/AAAAEgAAAAAAAAAAAAAAAADmBQAAd29yZC9udW1iZXJpbmcueG1sUEsBA
   <data name="botAnexosText" xml:space="preserve">
     <value>Anexos</value>
   </data>
+  <data name="stringExportExcel" xml:space="preserve">
+    <value>Enviar a Excel</value>
+  </data>
 </root>
