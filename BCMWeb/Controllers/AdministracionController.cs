@@ -36,7 +36,7 @@ namespace BCMWeb.Controllers
             model.Perfil = Metodos.GetPerfilData();
             model.PageTitle = Metodos.GetModuloName(modId);
             model.Modulos = Metodos.GetModulosPrincipalesEmpresaUsuario(model.IdEmpresa);
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
             Auditoria.RegistarAccion(eTipoAccion.Actualizar);
 
             return View(model);
@@ -52,7 +52,7 @@ namespace BCMWeb.Controllers
 
             model.Perfil = Metodos.GetPerfilData();
             model.PageTitle = Metodos.GetModuloName(model.IdModuloActual);
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
             Auditoria.RegistarAccion(eTipoAccion.Actualizar);
             model.Modulos = Metodos.GetModulosPrincipalesEmpresaUsuario(model.IdEmpresaSelected);
             if (model.IdModuloActualiza > 0)
@@ -90,7 +90,7 @@ namespace BCMWeb.Controllers
 
             AuditoriaAdminModel model = new AuditoriaAdminModel();
             model.PageTitle = Metodos.GetModuloName(modId);
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
             model.IdModulo = IdModulo;
             model.Perfil = Metodos.GetPerfilData();
             model.IdModuloActual = modId;
@@ -123,7 +123,7 @@ namespace BCMWeb.Controllers
             if (Horas < 0) Minutos *= -1;
 
             model.PageTitle = Metodos.GetModuloName(model.IdModuloActual);
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
             model.IdModulo = IdModulo;
             model.Perfil = Metodos.GetPerfilData();
             if (model.FechaHasta == DateTime.MinValue)
@@ -156,7 +156,7 @@ namespace BCMWeb.Controllers
             long IdModulo = IdTipoDocumento * 1000000;
 
             model.PageTitle = Metodos.GetModuloName(modId);
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
             model.IdModulo = IdModulo;
             model.Perfil = Metodos.GetPerfilData();
             model.IdModuloActual = modId;

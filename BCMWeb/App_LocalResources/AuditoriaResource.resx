@@ -250,24 +250,54 @@
     <value>Descarga el anexo {3} del módulo {0} desde un pc o laptop</value>
   </data>
   <data name="AnexoMoverItemDocumentoMessage" xml:space="preserve">
-    <value>Mover anexo {3} del documento {1} versión {2} del módulo {0}</value>
+    <value>Mover anexo {3} del documento {1} versión {2} del módulo {0}, de {4}</value>
   </data>
   <data name="AnexoMoverItemModuloMessage" xml:space="preserve">
-    <value>Mover anexo {3} del módulo {0}</value>
+    <value>Mover anexo {3} del módulo {0}, de {4}</value>
   </data>
   <data name="AnexoRenombrarItemDocumentoMessage" xml:space="preserve">
-    <value>Renombrar anexo {3} del documento {1} versión {2} del módulo {0}</value>
+    <value>Renombrar anexo del documento {1} versión {2} del módulo {0} de {4} a {3}</value>
   </data>
   <data name="AnexoRenombrarItemModuloMessage" xml:space="preserve">
-    <value>Renombar anexo {3} del módulo {0}</value>
+    <value>Renombar anexo del módulo {0} de {4} a {3}</value>
   </data>
   <data name="AgregarIniciativaMessage" xml:space="preserve">
-    <value>Agregar la Iniciativa {1}</value>
+    <value>Agregar la Iniciativa {2} - {1}</value>
   </data>
   <data name="EliminarIniciativaMessage" xml:space="preserve">
     <value>Eliminar la iniciativa {1}</value>
   </data>
   <data name="ModificarIniciativaMessage" xml:space="preserve">
-    <value>Actualizar la iniciativa {1}</value>
+    <value>Actualizar la iniciativa {2} - {1}</value>
+  </data>
+  <data name="MostrarIniciativaMessage" xml:space="preserve">
+    <value>Consultar la sección {0} </value>
+  </data>
+  <data name="AnexoAgregarCarpetaIniciativaMessage" xml:space="preserve">
+    <value>Agregar carpeta {1} a los anexos de la iniciativa {0}</value>
+  </data>
+  <data name="AnexoAgregarItemIniciativaMessage" xml:space="preserve">
+    <value>Agregar anexo {1} a la iniciativa {0}</value>
+  </data>
+  <data name="AnexoCopiarItemIniciativaMessage" xml:space="preserve">
+    <value>Copiar anexo {1} a la iniciativa {0}</value>
+  </data>
+  <data name="AnexoEliminarItemIniciativaMessage" xml:space="preserve">
+    <value>Eliminar anexo {1} a la iniciativa {0}</value>
+  </data>
+  <data name="AnexoMoverItemIniciativaMessage" xml:space="preserve">
+    <value>Mover anexo {1} de la iniciativa {0}, de {2}</value>
+  </data>
+  <data name="AnexoRenombrarItemIniciativaMessage" xml:space="preserve">
+    <value>Renombrar anexo en la iniciativa {0} de {2} a {1}</value>
+  </data>
+  <data name="AnexoCargarDocumentoIniciativaMessage" xml:space="preserve">
+    <value>Carga el anexo {1} a la iniciativa {0}</value>
+  </data>
+  <data name="AnexoDescargarIniciativaWebMessage" xml:space="preserve">
+    <value>Descarga el anexo {1} de la iniciativa {0}</value>
+  </data>
+  <data name="CaptionDatosModificados" xml:space="preserve">
+    <value>Datos Actualizados</value>
   </data>
 </root>

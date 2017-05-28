@@ -115,7 +115,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Agregar la Iniciativa {1}.
+        ///   Looks up a localized string similar to Agregar la Iniciativa {2} - {1}.
         /// </summary>
         public static string AgregarIniciativaMessage {
             get {
@@ -169,6 +169,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Agregar carpeta {1} a los anexos de la iniciativa {0}.
+        /// </summary>
+        public static string AnexoAgregarCarpetaIniciativaMessage {
+            get {
+                return ResourceManager.GetString("AnexoAgregarCarpetaIniciativaMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Agregar carpeta {3} a los anexos del módulo {0}.
         /// </summary>
         public static string AnexoAgregarCarpetaModuloMessage {
@@ -187,11 +196,29 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Agregar anexo {1} a la iniciativa {0}.
+        /// </summary>
+        public static string AnexoAgregarItemIniciativaMessage {
+            get {
+                return ResourceManager.GetString("AnexoAgregarItemIniciativaMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Agregar anexo {3} al módulo {0}.
         /// </summary>
         public static string AnexoAgregarItemModuloMessage {
             get {
                 return ResourceManager.GetString("AnexoAgregarItemModuloMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Carga el anexo {1} a la iniciativa {0}.
+        /// </summary>
+        public static string AnexoCargarDocumentoIniciativaMessage {
+            get {
+                return ResourceManager.GetString("AnexoCargarDocumentoIniciativaMessage", resourceCulture);
             }
         }
         
@@ -223,6 +250,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copiar anexo {1} a la iniciativa {0}.
+        /// </summary>
+        public static string AnexoCopiarItemIniciativaMessage {
+            get {
+                return ResourceManager.GetString("AnexoCopiarItemIniciativaMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copiar anexo {3} al módulo {0}.
         /// </summary>
         public static string AnexoCopiarItemModuloMessage {
@@ -246,6 +282,15 @@ namespace Resources {
         public static string AnexoDescargarDocumentoWebMessage {
             get {
                 return ResourceManager.GetString("AnexoDescargarDocumentoWebMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Descarga el anexo {1} de la iniciativa {0}.
+        /// </summary>
+        public static string AnexoDescargarIniciativaWebMessage {
+            get {
+                return ResourceManager.GetString("AnexoDescargarIniciativaWebMessage", resourceCulture);
             }
         }
         
@@ -277,6 +322,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Eliminar anexo {1} a la iniciativa {0}.
+        /// </summary>
+        public static string AnexoEliminarItemIniciativaMessage {
+            get {
+                return ResourceManager.GetString("AnexoEliminarItemIniciativaMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Elimina anexo {3} del módulo {0}.
         /// </summary>
         public static string AnexoEliminarItemModuloMessage {
@@ -286,7 +340,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mover anexo {3} del documento {1} versión {2} del módulo {0}.
+        ///   Looks up a localized string similar to Mover anexo {3} del documento {1} versión {2} del módulo {0}, de {4}.
         /// </summary>
         public static string AnexoMoverItemDocumentoMessage {
             get {
@@ -295,7 +349,16 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mover anexo {3} del módulo {0}.
+        ///   Looks up a localized string similar to Mover anexo {1} de la iniciativa {0}, de {2}.
+        /// </summary>
+        public static string AnexoMoverItemIniciativaMessage {
+            get {
+                return ResourceManager.GetString("AnexoMoverItemIniciativaMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mover anexo {3} del módulo {0}, de {4}.
         /// </summary>
         public static string AnexoMoverItemModuloMessage {
             get {
@@ -304,7 +367,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Renombrar anexo {3} del documento {1} versión {2} del módulo {0}.
+        ///   Looks up a localized string similar to Renombrar anexo del documento {1} versión {2} del módulo {0} de {4} a {3}.
         /// </summary>
         public static string AnexoRenombrarItemDocumentoMessage {
             get {
@@ -313,7 +376,16 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Renombar anexo {3} del módulo {0}.
+        ///   Looks up a localized string similar to Renombrar anexo en la iniciativa {0} de {2} a {1}.
+        /// </summary>
+        public static string AnexoRenombrarItemIniciativaMessage {
+            get {
+                return ResourceManager.GetString("AnexoRenombrarItemIniciativaMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Renombar anexo del módulo {0} de {4} a {3}.
         /// </summary>
         public static string AnexoRenombrarItemModuloMessage {
             get {
@@ -336,6 +408,15 @@ namespace Resources {
         public static string CaptionAccion {
             get {
                 return ResourceManager.GetString("CaptionAccion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Datos Actualizados.
+        /// </summary>
+        public static string CaptionDatosModificados {
+            get {
+                return ResourceManager.GetString("CaptionDatosModificados", resourceCulture);
             }
         }
         
@@ -502,7 +583,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Actualizar la iniciativa {1}.
+        ///   Looks up a localized string similar to Actualizar la iniciativa {2} - {1}.
         /// </summary>
         public static string ModificarIniciativaMessage {
             get {
@@ -516,6 +597,15 @@ namespace Resources {
         public static string MostrarAccionMessage {
             get {
                 return ResourceManager.GetString("MostrarAccionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Consultar la sección {0} .
+        /// </summary>
+        public static string MostrarIniciativaMessage {
+            get {
+                return ResourceManager.GetString("MostrarIniciativaMessage", resourceCulture);
             }
         }
     }

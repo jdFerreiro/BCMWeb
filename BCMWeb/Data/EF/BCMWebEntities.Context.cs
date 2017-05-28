@@ -169,5 +169,6 @@ namespace BCMWeb.Data.EF
         public virtual DbSet<tblUsuarioUnidadOrganizativa> tblUsuarioUnidadOrganizativa { get; set; }
         public virtual DbSet<tblVicepresidencia> tblVicepresidencia { get; set; }
         public virtual DbSet<tblIniciativas> tblIniciativas { get; set; }
+        public virtual DbSet<tblIniciativas_Anexo> tblIniciativas_Anexo { get; set; }
     }
 }

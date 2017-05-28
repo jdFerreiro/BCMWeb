@@ -52,6 +52,7 @@ namespace BCMWeb.Data.EF
             this.tblProducto = new HashSet<tblProducto>();
             this.tblUsuarioUnidadOrganizativa = new HashSet<tblUsuarioUnidadOrganizativa>();
             this.tblIniciativas = new HashSet<tblIniciativas>();
+            this.tblIniciativas_Anexo = new HashSet<tblIniciativas_Anexo>();
         }
     
         public long IdEmpresa { get; set; }
@@ -146,5 +147,7 @@ namespace BCMWeb.Data.EF
         public virtual ICollection<tblUsuarioUnidadOrganizativa> tblUsuarioUnidadOrganizativa { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblIniciativas> tblIniciativas { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblIniciativas_Anexo> tblIniciativas_Anexo { get; set; }
     }
 }

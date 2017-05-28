@@ -1,16 +1,11 @@
-﻿using BCMWeb.Data.EF;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Security.Principal;
+﻿using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 
 namespace BCMWeb
 {
-    public class SessionExpire : System.Web.Mvc.ActionFilterAttribute
+    public class SessionExpire : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {

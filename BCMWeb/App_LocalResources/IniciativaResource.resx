@@ -171,4 +171,31 @@
   <data name="GridTitle" xml:space="preserve">
     <value>Relación de Iniciativas</value>
   </data>
+  <data name="captionAnexos" xml:space="preserve">
+    <value>Anexos</value>
+  </data>
+  <data name="captionFechaRegistro" xml:space="preserve">
+    <value>Fecha de Registro</value>
+  </data>
+  <data name="captionIdAnexo" xml:space="preserve">
+    <value>Anexo</value>
+  </data>
+  <data name="captionNombreAnexo" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="captionRutaAnexo" xml:space="preserve">
+    <value>Ruta</value>
+  </data>
+  <data name="captionNroAnexos" xml:space="preserve">
+    <value>Nro. de Anexos</value>
+  </data>
+  <data name="captionHeaderFormAnexos" xml:space="preserve">
+    <value>Anexar documento</value>
+  </data>
+  <data name="captionHeaderFormIniciativas" xml:space="preserve">
+    <value>Actualización de Iniciativas</value>
+  </data>
+  <data name="captionUploadBrowseButtonText" xml:space="preserve">
+    <value>Seleccione un documento para cargar...</value>
+  </data>
 </root>

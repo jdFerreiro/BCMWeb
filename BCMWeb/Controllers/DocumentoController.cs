@@ -32,7 +32,7 @@ namespace BCMWeb.Controllers
             model.ModulosPrincipales = Metodos.GetModulosPrincipalesEmpresaUsuario();
             model.Perfil = Metodos.GetPerfilData();
             model.PageTitle = Resources.DocumentoResource.DocumentosPageTitle;
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
 
             Auditoria.RegistarAccion(eTipoAccion.AccesoModuloWeb);
 
@@ -51,7 +51,7 @@ namespace BCMWeb.Controllers
             model.Perfil = Metodos.GetPerfilData();
             model.ModulosPrincipales = Metodos.GetModulosPrincipalesEmpresaUsuario();
             model.PageTitle = Resources.DocumentoResource.DocumentosPageTitle;
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
 
             return View(model);
         }
@@ -68,7 +68,7 @@ namespace BCMWeb.Controllers
             model.ModulosPrincipales = Metodos.GetModulosPrincipalesEmpresaUsuario();
             model.PageTitle = Resources.DocumentoResource.DocumentosPageTitle;
             model.IdModulo = long.Parse(_IdModulo);
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
 
             return PartialView(model);
         }

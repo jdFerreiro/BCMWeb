@@ -19,6 +19,7 @@
           <Property Name="Accion" Type="nvarchar" MaxLength="450" Nullable="false" />
           <Property Name="IdUsuario" Type="bigint" />
           <Property Name="Negocios" Type="bit" Nullable="false" />
+          <Property Name="DatosModificados" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="tblAuditoriaProcesoCritico">
           <Key>
@@ -1113,6 +1114,19 @@
           <Property Name="IdEstatusIniciativa" Type="smallint" />
           <Property Name="Urgente" Type="bit" />
           <Property Name="Observacion" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="tblIniciativas_Anexo">
+          <Key>
+            <PropertyRef Name="IdEmpresa" />
+            <PropertyRef Name="IdIniciativa" />
+            <PropertyRef Name="IdAnexo" />
+          </Key>
+          <Property Name="IdEmpresa" Type="bigint" Nullable="false" />
+          <Property Name="IdIniciativa" Type="bigint" Nullable="false" />
+          <Property Name="IdAnexo" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="1500" />
+          <Property Name="RutaArchivo" Type="nvarchar" MaxLength="1500" />
+          <Property Name="fechaRegistro" Type="datetime" />
         </EntityType>
         <EntityType Name="tblLocalidad">
           <Key>
@@ -3614,6 +3628,32 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_tblIniciativas_Anexo_tblEmpresa">
+          <End Role="tblEmpresa" Type="Self.tblEmpresa" Multiplicity="1" />
+          <End Role="tblIniciativas_Anexo" Type="Self.tblIniciativas_Anexo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblEmpresa">
+              <PropertyRef Name="IdEmpresa" />
+            </Principal>
+            <Dependent Role="tblIniciativas_Anexo">
+              <PropertyRef Name="IdEmpresa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblIniciativas_Anexo_tblIniciativas">
+          <End Role="tblIniciativas" Type="Self.tblIniciativas" Multiplicity="1" />
+          <End Role="tblIniciativas_Anexo" Type="Self.tblIniciativas_Anexo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblIniciativas">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdIniciativa" />
+            </Principal>
+            <Dependent Role="tblIniciativas_Anexo">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdIniciativa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_tblIniciativas_tblEmpresa">
           <End Role="tblEmpresa" Type="Self.tblEmpresa" Multiplicity="1" />
           <End Role="tblIniciativas" Type="Self.tblIniciativas" Multiplicity="*" />
@@ -4713,6 +4753,7 @@
           <EntitySet Name="tblFuenteRiesgo" EntityType="Self.tblFuenteRiesgo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblImpactoRiesgo" EntityType="Self.tblImpactoRiesgo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblIniciativas" EntityType="Self.tblIniciativas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblIniciativas_Anexo" EntityType="Self.tblIniciativas_Anexo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblLocalidad" EntityType="Self.tblLocalidad" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblMes" EntityType="Self.tblMes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblModulo" EntityType="Self.tblModulo" Schema="dbo" store:Type="Tables" />
@@ -5304,6 +5345,14 @@
           <AssociationSet Name="FK_tblEscala_tblTipoEscala" Association="Self.FK_tblEscala_tblTipoEscala">
             <End Role="tblTipoEscala" EntitySet="tblTipoEscala" />
             <End Role="tblEscala" EntitySet="tblEscala" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblIniciativas_Anexo_tblEmpresa" Association="Self.FK_tblIniciativas_Anexo_tblEmpresa">
+            <End Role="tblEmpresa" EntitySet="tblEmpresa" />
+            <End Role="tblIniciativas_Anexo" EntitySet="tblIniciativas_Anexo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblIniciativas_Anexo_tblIniciativas" Association="Self.FK_tblIniciativas_Anexo_tblIniciativas">
+            <End Role="tblIniciativas" EntitySet="tblIniciativas" />
+            <End Role="tblIniciativas_Anexo" EntitySet="tblIniciativas_Anexo" />
           </AssociationSet>
           <AssociationSet Name="FK_tblIniciativas_tblEmpresa" Association="Self.FK_tblIniciativas_tblEmpresa">
             <End Role="tblEmpresa" EntitySet="tblEmpresa" />
@@ -6579,6 +6628,15 @@
             <End Role="tblPlanTrabajoEstatus" EntitySet="tblPlanTrabajoEstatus" />
             <End Role="tblIniciativas" EntitySet="tblIniciativas" />
           </AssociationSet>
+          <EntitySet Name="tblIniciativas_Anexo" EntityType="BCMWeb.tblIniciativas_Anexo" />
+          <AssociationSet Name="FK_tblIniciativas_Anexo_tblEmpresa" Association="BCMWeb.FK_tblIniciativas_Anexo_tblEmpresa">
+            <End Role="tblEmpresa" EntitySet="tblEmpresa" />
+            <End Role="tblIniciativas_Anexo" EntitySet="tblIniciativas_Anexo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblIniciativas_Anexo_tblIniciativas" Association="BCMWeb.FK_tblIniciativas_Anexo_tblIniciativas">
+            <End Role="tblIniciativas" EntitySet="tblIniciativas" />
+            <End Role="tblIniciativas_Anexo" EntitySet="tblIniciativas_Anexo" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="tblAuditoria">
           <Key>
@@ -6597,6 +6655,7 @@
           <NavigationProperty Name="tblDocumento" Relationship="BCMWeb.FK_tblAuditoria_tblDocumento" FromRole="tblAuditoria" ToRole="tblDocumento" />
           <NavigationProperty Name="tblEmpresa" Relationship="BCMWeb.FK_tblEmpresa_tblAuditoria_FK1" FromRole="tblAuditoria" ToRole="tblEmpresa" />
           <NavigationProperty Name="tblUsuario" Relationship="BCMWeb.FK_tblUsuario_tblAuditoria_FK1" FromRole="tblAuditoria" ToRole="tblUsuario" />
+          <Property Name="DatosModificados" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="tblAuditoriaProcesoCritico">
           <Key>
@@ -7797,6 +7856,7 @@
           <NavigationProperty Name="tblProducto" Relationship="BCMWeb.FK_tblProducto_tblEmpresa" FromRole="tblEmpresa" ToRole="tblProducto" />
           <NavigationProperty Name="tblUsuarioUnidadOrganizativa" Relationship="BCMWeb.FK_tblUsuarioUnidadOrganizativa_tblEmpresa" FromRole="tblEmpresa" ToRole="tblUsuarioUnidadOrganizativa" />
           <NavigationProperty Name="tblIniciativas" Relationship="BCMWeb.FK_tblIniciativas_tblEmpresa" FromRole="tblEmpresa" ToRole="tblIniciativas" />
+          <NavigationProperty Name="tblIniciativas_Anexo" Relationship="BCMWeb.FK_tblIniciativas_Anexo_tblEmpresa" FromRole="tblEmpresa" ToRole="tblIniciativas_Anexo" />
         </EntityType>
         <EntityType Name="tblEmpresaModulo">
           <Key>
@@ -11604,6 +11664,7 @@
           <Property Name="Observacion" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="tblEmpresa" Relationship="BCMWeb.FK_tblIniciativas_tblEmpresa" FromRole="tblIniciativas" ToRole="tblEmpresa" />
           <NavigationProperty Name="tblPlanTrabajoEstatus" Relationship="BCMWeb.FK_tblIniciativas_tblPlanTrabajoEstatus" FromRole="tblIniciativas" ToRole="tblPlanTrabajoEstatus" />
+          <NavigationProperty Name="tblIniciativas_Anexo" Relationship="BCMWeb.FK_tblIniciativas_Anexo_tblIniciativas" FromRole="tblIniciativas" ToRole="tblIniciativas_Anexo" />
         </EntityType>
         <Association Name="FK_tblIniciativas_tblEmpresa">
           <End Type="BCMWeb.tblEmpresa" Role="tblEmpresa" Multiplicity="1" />
@@ -11629,6 +11690,47 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="tblIniciativas_Anexo">
+          <Key>
+            <PropertyRef Name="IdEmpresa" />
+            <PropertyRef Name="IdIniciativa" />
+            <PropertyRef Name="IdAnexo" />
+          </Key>
+          <Property Name="IdEmpresa" Type="Int64" Nullable="false" />
+          <Property Name="IdIniciativa" Type="Int64" Nullable="false" />
+          <Property Name="IdAnexo" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="1500" FixedLength="false" Unicode="true" />
+          <Property Name="RutaArchivo" Type="String" MaxLength="1500" FixedLength="false" Unicode="true" />
+          <Property Name="fechaRegistro" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="tblEmpresa" Relationship="BCMWeb.FK_tblIniciativas_Anexo_tblEmpresa" FromRole="tblIniciativas_Anexo" ToRole="tblEmpresa" />
+          <NavigationProperty Name="tblIniciativas" Relationship="BCMWeb.FK_tblIniciativas_Anexo_tblIniciativas" FromRole="tblIniciativas_Anexo" ToRole="tblIniciativas" />
+        </EntityType>
+        <Association Name="FK_tblIniciativas_Anexo_tblEmpresa">
+          <End Type="BCMWeb.tblEmpresa" Role="tblEmpresa" Multiplicity="1" />
+          <End Type="BCMWeb.tblIniciativas_Anexo" Role="tblIniciativas_Anexo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblEmpresa">
+              <PropertyRef Name="IdEmpresa" />
+            </Principal>
+            <Dependent Role="tblIniciativas_Anexo">
+              <PropertyRef Name="IdEmpresa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblIniciativas_Anexo_tblIniciativas">
+          <End Type="BCMWeb.tblIniciativas" Role="tblIniciativas" Multiplicity="1" />
+          <End Type="BCMWeb.tblIniciativas_Anexo" Role="tblIniciativas_Anexo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblIniciativas">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdIniciativa" />
+            </Principal>
+            <Dependent Role="tblIniciativas_Anexo">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdIniciativa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -11638,6 +11740,7 @@
           <EntitySetMapping Name="tblAuditoria">
             <EntityTypeMapping TypeName="BCMWeb.tblAuditoria">
               <MappingFragment StoreEntitySet="tblAuditoria">
+                <ScalarProperty Name="DatosModificados" ColumnName="DatosModificados" />
                 <ScalarProperty Name="Negocios" ColumnName="Negocios" />
                 <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
                 <ScalarProperty Name="Accion" ColumnName="Accion" />
@@ -13272,6 +13375,18 @@
                 <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="NroIniciativa" ColumnName="NroIniciativa" />
+                <ScalarProperty Name="IdIniciativa" ColumnName="IdIniciativa" />
+                <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblIniciativas_Anexo">
+            <EntityTypeMapping TypeName="BCMWeb.tblIniciativas_Anexo">
+              <MappingFragment StoreEntitySet="tblIniciativas_Anexo">
+                <ScalarProperty Name="fechaRegistro" ColumnName="fechaRegistro" />
+                <ScalarProperty Name="RutaArchivo" ColumnName="RutaArchivo" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="IdAnexo" ColumnName="IdAnexo" />
                 <ScalarProperty Name="IdIniciativa" ColumnName="IdIniciativa" />
                 <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
               </MappingFragment>

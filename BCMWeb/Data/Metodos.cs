@@ -4215,12 +4215,13 @@ namespace BCMWeb
                 data = (from d in db.tblAuditoria
                         let fechaRegistro = SqlFunctions.DateAdd("mi", Minutos, d.FechaRegistro)
                         where d.IdEmpresa == IdEmpresa
-                             && d.FechaRegistro >= FechaDesde
-                             && d.FechaRegistro <= FechaHasta
+                             && fechaRegistro >= FechaDesde
+                             && fechaRegistro <= FechaHasta
                              && d.IdUsuario == (long)(IdUsuario == null ? d.IdUsuario : IdUsuario)
                         select new AuditoriaModel
                         {
                             Accion = d.Accion,
+                            datosmodificados = d.DatosModificados,
                             DireccionIP = d.DireccionIP,
                             Empresa = d.tblEmpresa.NombreComercial,
                             FechaRegistro = (DateTime)fechaRegistro,
@@ -4695,6 +4696,7 @@ namespace BCMWeb
                         FechaCierreReal = x.FechaCierreReal,
                         FechaInicioEstimada = (DateTime)x.FechaInicioEstimada,
                         FechaInicioReal = x.FechaInicioReal,
+                        NroAnexos = 0,
                         IdEmpresa = x.IdEmpresa,
                         IdEstatus = (short)x.IdEstatusIniciativa,
                         IdIniciativa = x.IdIniciativa,
@@ -4771,7 +4773,7 @@ namespace BCMWeb
                 db.tblIniciativas.Add(reg);
                 db.SaveChanges();
 
-                Auditoria.RegistarIniciativa(eTipoAccion.AgregarIniciativa, reg.IdIniciativa, reg.Nombre);
+                Auditoria.RegistarIniciativa(eTipoAccion.AgregarIniciativa, reg.IdIniciativa, reg.Nombre, string.Empty);
             }
         }
         public static void UpdateIniciativa(IniciativaModel Iniciativa)
@@ -4790,16 +4792,116 @@ namespace BCMWeb
                 reg.IdEstatusIniciativa = Iniciativa.IdEstatus;
                 reg.IdUnidadOrganizativa = Iniciativa.IdUnidadOrganizativa;
                 reg.Nombre = Iniciativa.Nombre;
-                reg.NombreResponsable = Iniciativa.Nombre;
+                reg.NombreResponsable = Iniciativa.Responsable;
                 reg.Observacion = Iniciativa.Observacion;
                 reg.PresupuestoEstimado = Iniciativa.PresupuestoEstimado;
                 reg.PresupuestoReal = Iniciativa.PresupuestoReal;
                 reg.Urgente = Iniciativa.Urgente;
 
                 db.SaveChanges();
-
-                Auditoria.RegistarIniciativa(eTipoAccion.ActualizarIniciativa, reg.IdIniciativa, reg.Nombre);
             }
+        }
+        public static string GetDatosActualizados(IniciativaModel iniciativa)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+
+            tblIniciativas reg = null;
+
+            using (Entities db = new Entities())
+            {
+                reg = db.tblIniciativas.Where(x => x.IdEmpresa == IdEmpresa && x.IdIniciativa == iniciativa.IdIniciativa).FirstOrDefault();
+            }
+
+            string Actualizaciones = string.Empty;
+
+            if (reg != null) {
+                if (reg.Descripcion != iniciativa.Descripcion)
+                {
+                    string _valorAnterior = reg.Descripcion;
+                    string _valorActual = iniciativa.Descripcion;
+                    Actualizaciones += string.Format("Descripción de la Iniciativa de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                }
+                if (reg.FechaInicioEstimada != iniciativa.FechaInicioEstimada)
+                {
+                    string _valorAnterior = ((DateTime)reg.FechaInicioEstimada).ToString("dd/MM/yyyy");
+                    string _valorActual = ((DateTime)reg.FechaInicioEstimada).ToString("dd/MM/yyyy");
+                    Actualizaciones += string.Format("Fecha de Inicio Estimada de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                }
+                if (reg.FechaCierreEstimada != iniciativa.FechaCierreEstimada)
+                {
+                    string _valorAnterior = ((DateTime)reg.FechaCierreEstimada).ToString("dd/MM/yyyy");
+                    string _valorActual = ((DateTime)reg.FechaCierreEstimada).ToString("dd/MM/yyyy");
+                    Actualizaciones += string.Format("Fecha de Cierre Estimada de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                }
+                if (reg.FechaInicioReal != iniciativa.FechaInicioReal)
+                {
+                    string _valorAnterior = ((DateTime)reg.FechaInicioReal).ToString("dd/MM/yyyy");
+                    string _valorActual = ((DateTime)reg.FechaInicioReal).ToString("dd/MM/yyyy");
+                    Actualizaciones += string.Format("Fecha de Inicio Real de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                }
+                if (reg.FechaCierreReal != iniciativa.FechaCierreReal)
+                {
+                    string _valorAnterior = ((DateTime)reg.FechaCierreReal).ToString("dd/MM/yyyy");
+                    string _valorActual = ((DateTime)reg.FechaCierreReal).ToString("dd/MM/yyyy");
+                    Actualizaciones += string.Format("Fecha de Cierre Real de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                }
+                if (reg.IdEstatusIniciativa != iniciativa.IdEstatus)
+                {
+                    string _valorAnterior = Metodos.GetEstatusIniciativa((short)reg.IdEstatusIniciativa);
+                    string _valorActual = Metodos.GetEstatusIniciativa(iniciativa.IdEstatus);
+                    Actualizaciones += string.Format("Estado de la Iniciativa de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                }
+                if (reg.IdUnidadOrganizativa != iniciativa.IdUnidadOrganizativa)
+                {
+                    string _valorAnterior = Metodos.GetUnidadOrganizativaById((long)reg.IdUnidadOrganizativa).NombreCompleto;
+                    string _valorActual = Metodos.GetUnidadOrganizativaById((long)iniciativa.IdUnidadOrganizativa).NombreCompleto;
+                    Actualizaciones += string.Format("Unidad Organizativa de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                }
+                if (reg.Nombre != iniciativa.Nombre)
+                {
+                    string _valorAnterior = reg.Nombre;
+                    string _valorActual = iniciativa.Nombre;
+                    Actualizaciones += string.Format("Nombre de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                }
+                if (reg.PresupuestoEstimado != iniciativa.PresupuestoEstimado)
+                {
+                    string _valorAnterior = ((decimal)reg.PresupuestoEstimado).ToString("#.##0.00");
+                    string _valorActual = ((decimal)reg.PresupuestoEstimado).ToString("#.##0.00");
+                    Actualizaciones += string.Format("Presupuesto Estimado de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                }
+                if (reg.PresupuestoReal != iniciativa.PresupuestoReal)
+                {
+                    string _valorAnterior = ((decimal)reg.PresupuestoReal).ToString("#.##0.00");
+                    string _valorActual = ((decimal)reg.PresupuestoReal).ToString("#.##0.00");
+                    Actualizaciones += string.Format("Presupuesto Real de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                }
+                if (reg.NombreResponsable != iniciativa.Responsable)
+                {
+                    string _valorAnterior = reg.NombreResponsable;
+                    string _valorActual = iniciativa.Responsable;
+                    Actualizaciones += string.Format("Responsable de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                }
+                if (reg.Urgente != iniciativa.Urgente)
+                {
+                    string _valorAnterior = ((bool)reg.Urgente ? "Urgente" : "Normal");
+                    string _valorActual = ((bool)iniciativa.Urgente ? "Urgente" : "Normal");
+                    Actualizaciones += string.Format("Prioridad de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                }
+
+                if (reg.Observacion != iniciativa.Observacion)
+                {
+                    string _valorAnterior = reg.Observacion;
+                    string _valorActual = iniciativa.Observacion;
+                    Actualizaciones += string.Format("Observación de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                }
+            }
+
+            if (string.IsNullOrEmpty(Actualizaciones))
+                Actualizaciones = "Se editó pero sin modificar datos";
+            else
+                Actualizaciones = "Información Actualizada" + Environment.NewLine + Environment.NewLine + Actualizaciones;
+
+            return Actualizaciones;
         }
         public static void DeleteIniciativa(long IdIniciativa)
         {
@@ -4824,7 +4926,7 @@ namespace BCMWeb
                 }
                 db.SaveChanges();
 
-                Auditoria.RegistarIniciativa(eTipoAccion.EliminarIniciativa, IdIniciativa, NombreIniciativa);
+                Auditoria.RegistarIniciativa(eTipoAccion.EliminarIniciativa, IdIniciativa, NombreIniciativa, string.Empty);
             }
         }
         public static List<TablaModel> GetEstadosIniciativa()
@@ -4901,5 +5003,27 @@ namespace BCMWeb
             }
 
         }
+        public static List<AnexosIniciativaModel> GetAnexosIniciativas(long IdIniciativa)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            List<AnexosIniciativaModel> Anexos = new List<AnexosIniciativaModel>();
+
+            using (Entities db = new Entities())
+            {
+                Anexos = db.tblIniciativas_Anexo.Where(x => x.IdEmpresa == IdEmpresa && x.IdIniciativa == IdIniciativa) 
+                    .Select(x => new AnexosIniciativaModel
+                    {
+                        fechaRegistro = x.fechaRegistro,
+                        id = x.IdAnexo,
+                        IdEmpresa = x.IdEmpresa,
+                        IdIniciativa = x.IdIniciativa,
+                        Nombre = x.Nombre,
+                        Ruta = x.RutaArchivo,
+                    }).ToList();
+            }
+
+            return Anexos;
+        }
+ 
     }
 }

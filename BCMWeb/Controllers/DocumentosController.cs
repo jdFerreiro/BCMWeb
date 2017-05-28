@@ -423,7 +423,7 @@ namespace BCMWeb.Controllers
             model.IdModuloActual = modId;
             model.Perfil = Metodos.GetPerfilData();
             model.PageTitle = Metodos.GetModuloName(modId);
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
 
             string uniqueId = model.IdDocumento.ToString().Trim() + model.IdModuloActual.ToString().Trim();
 
@@ -554,7 +554,7 @@ namespace BCMWeb.Controllers
             model.IdModuloActual = 0;
             model.Perfil = Metodos.GetPerfilData();
             model.PageTitle = Metodos.GetModuloName(99010300);
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
             return View(model);
         }
         [HttpPost]
@@ -580,7 +580,7 @@ namespace BCMWeb.Controllers
 
             DocumentoModel model = Metodos.GetDocumento(IdDocumento, IdTipoDocumento);
             model.PageTitle = Metodos.GetModuloName(modId);
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
             model.IdModulo = IdModulo;
             model.Perfil = Metodos.GetPerfilData();
             model.IdModuloActual = IdModulo;
@@ -619,7 +619,7 @@ namespace BCMWeb.Controllers
 
             DocumentoModel model = Metodos.GetDocumento(IdDocumento, IdTipoDocumento);
             model.PageTitle = Metodos.GetModuloName(modId);
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
             model.IdModulo = modId;
             model.IdModuloActual = IdModulo;
             model.returnPage = Url.Action("Index", "Documento", new { IdModulo });
@@ -646,7 +646,7 @@ namespace BCMWeb.Controllers
 
             DocumentoModel model = Metodos.GetDocumento(IdDocumento, IdTipoDocumento);
             model.PageTitle = Metodos.GetModuloName(modId);
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
             model.IdModulo = modId;
             model.IdModuloActual = IdModulo;
             model.returnPage = Url.Action("Index", "Documento", new { IdModulo });
@@ -701,7 +701,7 @@ namespace BCMWeb.Controllers
             model.IdModuloActual = IdModulo;
             model.PageTitle = Metodos.GetModuloName(modId);
             model.Perfil = Metodos.GetPerfilData();
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
 
             string uniqueId = model.IdDocumento.ToString().Trim() + model.IdModuloActual.ToString().Trim();
 
@@ -725,11 +725,11 @@ namespace BCMWeb.Controllers
         [HttpPost]
         [SessionExpire]
         [HandleError]
-        public JsonResult RegistrarOperacion(string Tipo, string nombre)
+        public JsonResult RegistrarOperacion(string Tipo, string nombre, string viejo = "")
         {
 
             bool success = true;
-            Auditoria.RegistarOperacionAnexoModulo(Tipo, nombre, true);
+            Auditoria.RegistarOperacionAnexoModulo(Tipo, nombre, viejo, true);
 
             return Json(new { success });
         }
@@ -769,7 +769,7 @@ namespace BCMWeb.Controllers
             model.Version = doc.Version;
             model.VersionOriginal = doc.VersionOriginal;
 
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
 
             return View(model);
         }
@@ -817,7 +817,7 @@ namespace BCMWeb.Controllers
             model.Nombre = Proceso.Nombre;
             model.Descripcion = Proceso.Descripcion;
 
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
 
             return View(model);
         }

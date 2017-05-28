@@ -24,6 +24,7 @@ namespace BCMWeb.Data.EF
         public string Accion { get; set; }
         public Nullable<long> IdUsuario { get; set; }
         public bool Negocios { get; set; }
+        public string DatosModificados { get; set; }
     
         public virtual tblDocumento tblDocumento { get; set; }
         public virtual tblEmpresa tblEmpresa { get; set; }

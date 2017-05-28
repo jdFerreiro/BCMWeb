@@ -1,12 +1,19 @@
 ﻿using BCMWeb.Models;
+using DevExpress.Web;
+using DevExpress.Web.Mvc;
 using System;
+using System.IO;
+using System.Web;
 using System.Web.Mvc;
+using System.Web.SessionState;
 
 namespace BCMWeb.Controllers
 {
     [Authorize]
     public class PlanTrabajoController : Controller
     {
+        public object RootFolder = "~/Content/FileManager/AnexosPlanTrabajo";
+
         [SessionExpire]
         [HandleError]
         public ActionResult Index(long IdModulo)
@@ -32,9 +39,9 @@ namespace BCMWeb.Controllers
             model.IdModuloActual = modId;
             model.Perfil = Metodos.GetPerfilData();
             model.PageTitle = Metodos.GetModuloName(modId);
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
 
-            Auditoria.RegistarAccion(eTipoAccion.Mostrar);
+            Auditoria.RegistarAccion(eTipoAccion.MostrarIniciativa);
             Session["GridViewData"] = Metodos.GetIniciativas();
             return View(model);
         }
@@ -53,7 +60,7 @@ namespace BCMWeb.Controllers
             model.IdModuloActual = modId;
             model.Perfil = Metodos.GetPerfilData();
             model.PageTitle = Metodos.GetModuloName(modId);
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
 
             Session["GridViewData"] = Metodos.GetIniciativas();
             return GridViewExportIniciativas.FormatConditionsExportFormatsInfo[GridViewExportFormat.Xlsx](GridViewExportIniciativas.FormatConditionsExportGridViewSettings, Metodos.GetIniciativas());
@@ -99,7 +106,9 @@ namespace BCMWeb.Controllers
             {
                 try
                 {
+                    string DatosActualizados = Metodos.GetDatosActualizados(Iniciativa);
                     Metodos.UpdateIniciativa(Iniciativa);
+                    Auditoria.RegistarIniciativa(eTipoAccion.ActualizarIniciativa, Iniciativa.IdIniciativa, Iniciativa.Nombre, DatosActualizados);
                 }
                 catch (Exception e)
                 {
@@ -133,6 +142,38 @@ namespace BCMWeb.Controllers
             }
             Session["GridViewData"] = Metodos.GetIniciativas();
             return PartialView("IniciativaPartialView", Metodos.GetIniciativas());
+        }
+        [SessionExpire]
+        [HandleError]
+        public ActionResult AnexosIniciativaPartialView(long IdIniciativa)
+        {
+            ViewData["IdIniciativa"] = IdIniciativa;
+            return PartialView("AnexosIniciativaPartialView", Metodos.GetAnexosIniciativas(IdIniciativa));
+        }
+        [SessionExpire]
+        [HandleError]
+        [HttpPost]
+        public ActionResult AnexosIniciativaPartialView(AnexosIniciativaModel Iniciativa)
+        {
+            long IdIniciativa = Iniciativa.IdIniciativa;
+            ViewData["IdIniciativa"] = IdIniciativa;
+            return PartialView("AnexosIniciativaPartialView", Metodos.GetAnexosIniciativas(IdIniciativa));
+        }
+        [SessionExpire]
+        [HandleError]
+        [ValidateInput(false)]
+        public ActionResult FileManagerPartial(long IdIniciativa = 0)
+        {
+            if (Session["IdIniciativa"] == null)
+                Session["IdIniciativa"] = IdIniciativa;
+            return PartialView("FileManagerPartial", FileManagerPlanTrabajoControllerFileManagerSettings.Model);
+        }
+        [SessionExpire]
+        [HandleError]
+        public FileStreamResult FileManagerPartialDownload()
+        {
+            return FileManagerExtension.DownloadFiles(FileManagerPlanTrabajoControllerFileManagerSettings.CreateFileManagerDownloadSettings(), 
+                                                      FileManagerPlanTrabajoControllerFileManagerSettings.Model);
         }
     }
 }

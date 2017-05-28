@@ -35,7 +35,7 @@ namespace BCMWeb.Controllers
             model.IdModuloActual = modId;
             model.Perfil = Metodos.GetPerfilData();
             model.PageTitle = Metodos.GetModuloName(modId);
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
 
             Auditoria.RegistarAccion(eTipoAccion.Mostrar);
 
@@ -56,7 +56,7 @@ namespace BCMWeb.Controllers
             model.IdModuloActual = modId;
             model.Perfil = Metodos.GetPerfilData();
             model.PageTitle = Metodos.GetModuloName(modId);
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
 
             return View(model);
         }
@@ -123,7 +123,7 @@ namespace BCMWeb.Controllers
             model.IdModuloActual = modId;
             model.Perfil = Metodos.GetPerfilData();
             model.PageTitle = Metodos.GetModuloName(modId);
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
 
             Auditoria.RegistarAccion(eTipoAccion.Mostrar);
 
@@ -144,7 +144,7 @@ namespace BCMWeb.Controllers
             model.IdModuloActual = modId;
             model.Perfil = Metodos.GetPerfilData();
             model.PageTitle = Metodos.GetModuloName(modId);
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
 
             return View(model);
         }
@@ -211,7 +211,7 @@ namespace BCMWeb.Controllers
             model.IdModuloActual = modId;
             model.Perfil = Metodos.GetPerfilData();
             model.PageTitle = Metodos.GetModuloName(modId);
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
 
             Auditoria.RegistarAccion(eTipoAccion.Mostrar);
 
@@ -232,7 +232,7 @@ namespace BCMWeb.Controllers
             model.IdModuloActual = modId;
             model.Perfil = Metodos.GetPerfilData();
             model.PageTitle = Metodos.GetModuloName(modId);
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
 
             return View(model);
         }
@@ -297,7 +297,7 @@ namespace BCMWeb.Controllers
             model.IdModuloActual = modId;
             model.Perfil = Metodos.GetPerfilData();
             model.PageTitle = Metodos.GetModuloName(modId);
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
 
             Auditoria.RegistarAccion(eTipoAccion.Mostrar);
 
@@ -318,7 +318,7 @@ namespace BCMWeb.Controllers
             model.IdModuloActual = modId;
             model.Perfil = Metodos.GetPerfilData();
             model.PageTitle = Metodos.GetModuloName(modId);
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
 
             return View(model);
         }
@@ -383,7 +383,7 @@ namespace BCMWeb.Controllers
             model.IdModuloActual = modId;
             model.Perfil = Metodos.GetPerfilData();
             model.PageTitle = Metodos.GetModuloName(modId);
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
 
             Auditoria.RegistarAccion(eTipoAccion.Mostrar);
 
@@ -404,7 +404,7 @@ namespace BCMWeb.Controllers
             model.IdModuloActual = modId;
             model.Perfil = Metodos.GetPerfilData();
             model.PageTitle = Metodos.GetModuloName(modId);
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
 
             return View(model);
         }
@@ -469,7 +469,7 @@ namespace BCMWeb.Controllers
             model.IdModuloActual = modId;
             model.Perfil = Metodos.GetPerfilData();
             model.PageTitle = Metodos.GetModuloName(modId);
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
 
             Auditoria.RegistarAccion(eTipoAccion.Mostrar);
 
@@ -490,7 +490,7 @@ namespace BCMWeb.Controllers
             model.IdModuloActual = modId;
             model.Perfil = Metodos.GetPerfilData();
             model.PageTitle = Metodos.GetModuloName(modId);
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
 
             return View(model);
         }
@@ -556,7 +556,7 @@ namespace BCMWeb.Controllers
             model.IdModuloActual = modId;
             model.Perfil = Metodos.GetPerfilData();
             model.PageTitle = Metodos.GetModuloName(modId);
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
 
             Auditoria.RegistarAccion(eTipoAccion.Mostrar);
 
@@ -584,7 +584,7 @@ namespace BCMWeb.Controllers
             model.IdModuloActual = modId;
             model.Perfil = Metodos.GetPerfilData();
             model.PageTitle = Metodos.GetModuloName(modId);
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
             Session["ValoresIF"] = model.ImpactoFinancieroSelected;
             Session["ValoresIO"] = model.ImpactoOperacionalSelected;
             Session["ValoresMTD"] = model.MTDSelected;
@@ -652,7 +652,7 @@ namespace BCMWeb.Controllers
             model.IdModuloActual = modId;
             model.Perfil = Metodos.GetPerfilData();
             model.PageTitle = Metodos.GetModuloName(modId);
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
 
             Auditoria.RegistarAccion(eTipoAccion.Mostrar);
 
@@ -679,7 +679,7 @@ namespace BCMWeb.Controllers
             model.IdModuloActual = modId;
             model.Perfil = Metodos.GetPerfilData();
             model.PageTitle = Metodos.GetModuloName(modId);
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, model.PageTitle);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
             Session["ValoresProbabilidad"] = model.ImpactoFinancieroSelected;
             Session["ValoresImpacto"] = model.ImpactoOperacionalSelected;
             Session["ValoresSeveridad"] = model.MTDSelected;

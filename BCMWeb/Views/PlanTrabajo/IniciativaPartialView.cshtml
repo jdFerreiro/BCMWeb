@@ -2,6 +2,10 @@
 @using DevExpress.Data;
 
 @{
+
+    Html.EnableClientValidation();
+    Html.EnableUnobtrusiveJavaScript();
+
     var grid = Html.DevExpress().GridView(
         settings =>
         {
@@ -11,7 +15,7 @@
             settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "PlanTrabajo", Action = "EditIniciativaAddNewPartial" };
             settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "PlanTrabajo", Action = "EditIniciativaUpdatePartial" };
             settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "PlanTrabajo", Action = "EditIniciativaDeletePartial" };
-            settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
+            settings.SettingsEditing.Mode = GridViewEditingMode.PopupEditForm;
             settings.SettingsBehavior.ConfirmDelete = true;
             settings.Width = Unit.Percentage(100);
             settings.Settings.VerticalScrollableHeight = 325;
@@ -20,6 +24,9 @@
             settings.Caption = Resources.IniciativaResource.GridTitle;
             settings.Styles.TitlePanel.Font.Bold = true;
             settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+            settings.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+            settings.ClientSideEvents.BeginCallback = "function (s,e) { lp.Show(); }";
+            settings.ClientSideEvents.EndCallback = "function (s,e) { lp.Hide(); }";
 
             settings.Settings.ShowFilterRow = true;
             settings.Settings.ShowFilterRowMenu = true;
@@ -38,7 +45,17 @@
             settings.CommandColumn.Width = Unit.Pixel(150);
             settings.CommandColumn.Caption = string.Empty;
 
-
+            settings.SettingsDetail.AllowOnlyOneMasterRowExpanded = false;
+            settings.SettingsDetail.ShowDetailRow = true;
+            settings.SettingsDetail.ShowDetailButtons = true;
+            
+            settings.SetDetailRowTemplateContent(c =>
+            {
+                using (Html.BeginForm())
+                {
+                    Html.RenderAction("FileManagerPartial", new { IdIniciativa = DataBinder.Eval(c.DataItem, "IdIniciativa") });
+                };
+            });
             settings.Columns.Add(c =>
             {
                 c.FieldName = "NroIniciativa";
@@ -186,14 +203,21 @@
                 c.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
             });
 
+            settings.SettingsPopup.EditForm.HorizontalAlign = PopupHorizontalAlign.WindowCenter;
+            settings.SettingsPopup.EditForm.VerticalAlign = PopupVerticalAlign.WindowCenter;
+            settings.SettingsPopup.EditForm.Modal = true;
+            settings.SettingsPopup.EditForm.ShowCloseButton = false;
+            settings.SettingsPopup.EditForm.ShowHeader = true;
+            settings.SettingsText.PopupEditFormCaption = Resources.IniciativaResource.captionHeaderFormIniciativas;
+
             settings.SetEditFormTemplateContent(c =>
             {
-                Html.DevExpress().FormLayout(formLayoutSettings =>
+                Html.DevExpress().FormLayout(fls =>
                 {
-                    formLayoutSettings.Name = "FormLayoutIniciativas";
-                    formLayoutSettings.Width = Unit.Percentage(25);
-                    //formLayoutSettings.ColCount = 2;
-                    formLayoutSettings.Items.Add(i =>
+                    fls.Name = "FormLayoutIniciativas";
+                    fls.Width = Unit.Percentage(25);
+                    fls.ColCount = 2;
+                    fls.Items.Add(i =>
                     {
                         i.FieldName = "Nombre";
                         i.Caption = Resources.IniciativaResource.Nombre;
@@ -202,10 +226,10 @@
                             s.Height = Unit.Pixel(50);
                             s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                             s.ShowModelErrors = true;
-                            s.Width = Unit.Percentage(100);
+                            s.Width = Unit.Pixel(300);
                         });
                     });
-                    formLayoutSettings.Items.Add(i =>
+                    fls.Items.Add(i =>
                     {
                         i.FieldName = "Descripcion";
                         i.Caption = Resources.IniciativaResource.Descripcion;
@@ -214,10 +238,10 @@
                             s.Height = Unit.Pixel(50);
                             s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                             s.ShowModelErrors = true;
-                            s.Width = Unit.Percentage(100);
+                            s.Width = Unit.Pixel(300);
                         });
                     });
-                    formLayoutSettings.Items.Add(i =>
+                    fls.Items.Add(i =>
                     {
                         i.FieldName = "IdUnidadOrganizativa";
                         i.Caption = Resources.IniciativaResource.UnidadOrganizativa;
@@ -227,10 +251,10 @@
                             s.Properties.ValueField = "IdUnidad";
                             s.Properties.ValueType = typeof(long);
                             s.Properties.DataSource = Metodos.GetUnidadesOrganizativas();
-                            s.Width = Unit.Percentage(100);
+                            s.Width = Unit.Pixel(300);
                         });
                     });
-                    formLayoutSettings.Items.Add(i =>
+                    fls.Items.Add(i =>
                     {
                         i.FieldName = "Responsable";
                         i.Caption = Resources.IniciativaResource.Responsable;
@@ -238,10 +262,10 @@
                         {
                             s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                             s.ShowModelErrors = true;
-                            s.Width = Unit.Percentage(100);
+                            s.Width = Unit.Pixel(300);
                         });
                     });
-                    formLayoutSettings.Items.Add(i =>
+                    fls.Items.Add(i =>
                     {
                         i.FieldName = "FechaInicioEstimada";
                         i.Caption = Resources.IniciativaResource.FechaInicioEstimada;
@@ -249,10 +273,10 @@
                         {
                             s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                             s.ShowModelErrors = true;
-                            s.Width = Unit.Percentage(100);
+                            s.Width = Unit.Pixel(300);
                         });
                     });
-                    formLayoutSettings.Items.Add(i =>
+                    fls.Items.Add(i =>
                     {
                         i.FieldName = "FechaCierreEstimada";
                         i.Caption = Resources.IniciativaResource.FechaCierreEstimada;
@@ -260,10 +284,10 @@
                         {
                             s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                             s.ShowModelErrors = true;
-                            s.Width = Unit.Percentage(100);
+                            s.Width = Unit.Pixel(300);
                         });
                     });
-                    formLayoutSettings.Items.Add(i =>
+                    fls.Items.Add(i =>
                     {
                         i.FieldName = "FechaInicioReal";
                         i.Caption = Resources.IniciativaResource.FechaInicioReal;
@@ -271,10 +295,10 @@
                         {
                             s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                             s.ShowModelErrors = true;
-                            s.Width = Unit.Percentage(100);
+                            s.Width = Unit.Pixel(300);
                         });
                     });
-                    formLayoutSettings.Items.Add(i =>
+                    fls.Items.Add(i =>
                     {
                         i.FieldName = "FechaCierreReal";
                         i.Caption = Resources.IniciativaResource.FechaCierreReal;
@@ -282,10 +306,10 @@
                         {
                             s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                             s.ShowModelErrors = true;
-                            s.Width = Unit.Percentage(100);
+                            s.Width = Unit.Pixel(300);
                         });
                     });
-                    formLayoutSettings.Items.Add(i =>
+                    fls.Items.Add(i =>
                     {
                         i.FieldName = "PresupuestoEstimado";
                         i.Caption = Resources.IniciativaResource.PresupuestoEstimado;
@@ -295,10 +319,10 @@
                             s.Properties.MinValue = 0;
                             s.Properties.MaxValue = decimal.MaxValue;
                             s.Properties.SpinButtons.ShowLargeIncrementButtons = true;
-                            s.Width = Unit.Percentage(100);
+                            s.Width = Unit.Pixel(300);
                         });
                     });
-                    formLayoutSettings.Items.Add(i =>
+                    fls.Items.Add(i =>
                     {
                         i.FieldName = "PresupuestoReal";
                         i.Caption = Resources.IniciativaResource.PresupuestoReal;
@@ -308,10 +332,10 @@
                             s.Properties.MinValue = 0;
                             s.Properties.MaxValue = decimal.MaxValue;
                             s.Properties.SpinButtons.ShowLargeIncrementButtons = true;
-                            s.Width = Unit.Percentage(100);
+                            s.Width = Unit.Pixel(300);
                         });
                     });
-                    formLayoutSettings.Items.Add(i =>
+                    fls.Items.Add(i =>
                     {
                         i.FieldName = "IdEstatus";
                         i.Caption = Resources.IniciativaResource.Estatus;
@@ -321,10 +345,10 @@
                             s.Properties.ValueField = "Id";
                             s.Properties.ValueType = typeof(long);
                             s.Properties.DataSource = Metodos.GetEstadosIniciativa();
-                            s.Width = Unit.Percentage(100);
+                            s.Width = Unit.Pixel(300);
                         });
                     });
-                    formLayoutSettings.Items.Add(i =>
+                    fls.Items.Add(i =>
                     {
                         i.FieldName = "Urgente";
                         i.NestedExtension().CheckBox(s =>
@@ -333,9 +357,9 @@
                             s.ShowModelErrors = true;
                         });
                     });
-                    formLayoutSettings.Items.Add(i =>
+                    fls.Items.Add(i =>
                     {
-                        //i.ColSpan = 2;
+                        i.ColSpan = 2;
                         i.FieldName = "Observacion";
                         i.NestedExtension().Memo(s =>
                         {
@@ -345,8 +369,9 @@
                             s.Width = Unit.Percentage(100);
                         });
                     });
-                    formLayoutSettings.Items.Add(i =>
+                    fls.Items.Add(i =>
                     {
+                        i.ColSpan = 2;
                         i.ShowCaption = DefaultBoolean.False;
                     }).SetNestedContent(() =>
                     {
@@ -355,19 +380,20 @@
                     btnSettings =>
                     {
                         btnSettings.Name = "btnUpdate";
-                        btnSettings.Text = "Update";
+                        btnSettings.Text = Resources.BCMWebPublic.captionButtonSave;
                         btnSettings.ClientSideEvents.Click = "function(s, e){ gvIniciativas.UpdateEdit(); }";
                     }).Render();
                         Html.DevExpress().Button(
                     btnSettings =>
                     {
                         btnSettings.Name = "btnCancel";
-                        btnSettings.Text = "Cancel";
+                        btnSettings.Text = Resources.BCMWebPublic.captionButtonCancel;
                         btnSettings.Style[HtmlTextWriterStyle.MarginLeft] = "5px";
                         btnSettings.ClientSideEvents.Click = "function(s, e){ gvIniciativas.CancelEdit(); }";
                     }).Render();
                         ViewContext.Writer.Write("</div>");
                     });
+                    fls.Items.AddEmptyItem();
                 })
                 .Bind(ViewData["EditableIniciativa"] ?? c.DataItem)
                 .Render();

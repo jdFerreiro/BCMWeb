@@ -140,6 +140,10 @@ namespace BCMWeb
                         AccionMessage = Resources.AuditoriaResource.MostrarAccionMessage;
                         NombreModulo = moduloActivo.Nombre;
                         break;
+                    case eTipoAccion.MostrarIniciativa:
+                        AccionMessage = Resources.AuditoriaResource.MostrarIniciativaMessage;
+                        NombreModulo = moduloActivo.Nombre;
+                        break;
                 }
 
                 tblUsuario usuario = db.tblUsuario.Where(x => x.IdUsuario == IdUser).FirstOrDefault();
@@ -178,7 +182,7 @@ namespace BCMWeb
         }
         [SessionExpire]
         [HandleError]
-        public static void RegistarOperacionAnexoModulo(string Operacion, string nombre, bool Web = true)
+        public static void RegistarOperacionAnexoModulo(string Operacion, string nombre, string viejo, bool Web = true)
         {
             string AccionMessage = string.Empty;
             string NombreModulo = string.Empty;
@@ -240,7 +244,7 @@ namespace BCMWeb
                         NroDocumento = Documento.NroDocumento.ToString();
                     }
 
-                    string _Accion = string.Format(AccionMessage, NombreModulo, NroDocumento, docVersion, nombre);
+                    string _Accion = string.Format(AccionMessage, NombreModulo, NroDocumento, docVersion, nombre, viejo);
 
                     tblAuditoria regAuditoria = new tblAuditoria
                     {
@@ -265,7 +269,7 @@ namespace BCMWeb
         }
         [SessionExpire]
         [HandleError]
-        public static void RegistarIniciativa(eTipoAccion Accion, long IdIniciativa, string NombreIniciativa)
+        public static void RegistarIniciativa(eTipoAccion Accion, long IdIniciativa, string NombreIniciativa, string DatosActualizados)
         {
             long IdUser = long.Parse(Session["UserId"].ToString());
             long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
@@ -282,7 +286,7 @@ namespace BCMWeb
                 switch (Accion)
                 {
                     case eTipoAccion.AgregarIniciativa:
-                        AccionMessage = Resources.AuditoriaResource.MostrarAccionMessage;
+                        AccionMessage = Resources.AuditoriaResource.AgregarIniciativaMessage;
                         NombreModulo = moduloActivo.Nombre;
                         reg = db.tblIniciativas.Where(x => x.IdEmpresa == IdEmpresa && x.IdIniciativa == IdIniciativa).FirstOrDefault();
 
@@ -292,7 +296,7 @@ namespace BCMWeb
                         }
                         break;
                     case eTipoAccion.ActualizarIniciativa:
-                        AccionMessage = Resources.AuditoriaResource.MostrarAccionMessage;
+                        AccionMessage = Resources.AuditoriaResource.ModificarIniciativaMessage;
                         NombreModulo = moduloActivo.Nombre;
                         reg = db.tblIniciativas.Where(x => x.IdEmpresa == IdEmpresa && x.IdIniciativa == IdIniciativa).FirstOrDefault();
 
@@ -302,7 +306,7 @@ namespace BCMWeb
                         }
                         break;
                     case eTipoAccion.EliminarIniciativa:
-                        AccionMessage = Resources.AuditoriaResource.MostrarAccionMessage;
+                        AccionMessage = Resources.AuditoriaResource.EliminarIniciativaMessage;
                         NombreModulo = moduloActivo.Nombre;
                         break;
                 }
@@ -322,6 +326,7 @@ namespace BCMWeb
                     IdUsuario = IdUser,
                     Mensaje = string.Empty,
                     Negocios = true,
+                    DatosModificados = DatosActualizados
                 };
 
                 db.tblAuditoria.Add(regAuditoria);
@@ -329,6 +334,79 @@ namespace BCMWeb
                 usuario.EstadoUsuario = 2;
                 db.SaveChanges();
             }
+        }
+        [SessionExpire]
+        [HandleError]
+        public static void RegistarOperacionAnexoIniciativa(string Operacion, string nombre, string viejo, bool Web = true)
+        {
+            string AccionMessage = string.Empty;
+            string NombreModulo = string.Empty;
+
+            long IdUser = long.Parse(Session["UserId"].ToString());
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            long IdIniciativa = long.Parse(Session["IdIniciativa"].ToString());
+
+            switch (Operacion)
+            {
+                case "FolderCreated":
+                    AccionMessage = Resources.AuditoriaResource.AnexoAgregarCarpetaIniciativaMessage;
+                    break;
+                case "CurrentFolderChanged":
+                    break;
+                case "FileDownloading":
+                    AccionMessage = Resources.AuditoriaResource.AnexoDescargarIniciativaWebMessage;
+                    break;
+                case "FileUploaded":
+                    AccionMessage = Resources.AuditoriaResource.AnexoCargarDocumentoIniciativaMessage;
+                    break;
+                case "ItemCopied":
+                    AccionMessage = Resources.AuditoriaResource.AnexoCopiarItemIniciativaMessage;
+                    break;
+                case "ItemDeleted":
+                    AccionMessage = Resources.AuditoriaResource.AnexoEliminarItemIniciativaMessage;
+                    break;
+                case "ItemMoved":
+                    AccionMessage = Resources.AuditoriaResource.AnexoMoverItemIniciativaMessage;
+                    string[] dataNombre = nombre.Replace("//", "\\").Split('\\');
+                    string[] dataViejo = viejo.Split('\\');
+                    string _nombre = dataNombre.Last();
+                    string _viejo = string.Format("{0} a {1}", dataViejo[dataViejo.Length - 2], dataNombre[dataNombre.Length - 2]);
+                    nombre = _nombre;
+                    viejo = _viejo;
+                    break;
+                case "ItemRenamed":
+                    AccionMessage = Resources.AuditoriaResource.AnexoRenombrarItemIniciativaMessage;
+                    break;
+            }
+
+            using (Entities db = new Entities())
+            {
+                if (!string.IsNullOrEmpty(AccionMessage))
+                {
+                    tblUsuario usuario = db.tblUsuario.Where(x => x.IdUsuario == IdUser).FirstOrDefault();
+                    tblIniciativas iniciativa = db.tblIniciativas.Where(x => x.IdEmpresa == IdEmpresa && x.IdIniciativa == IdIniciativa).FirstOrDefault();
+                    string _Accion = string.Format(AccionMessage, iniciativa.Nombre, nombre, viejo);
+
+                    tblAuditoria regAuditoria = new tblAuditoria
+                    {
+                        Accion = _Accion,
+                        DireccionIP = Request.UserHostAddress,
+                        FechaRegistro = DateTime.UtcNow,
+                        IdDocumento = 0,
+                        IdEmpresa = IdEmpresa,
+                        IdTipoDocumento = 0,
+                        IdUsuario = IdUser,
+                        Mensaje = string.Empty,
+                        Negocios = true,
+                    };
+
+                    db.tblAuditoria.Add(regAuditoria);
+                    usuario.FechaUltimaConexion = DateTime.UtcNow;
+                    usuario.EstadoUsuario = 2;
+                    db.SaveChanges();
+                }
+            }
+
         }
 
 

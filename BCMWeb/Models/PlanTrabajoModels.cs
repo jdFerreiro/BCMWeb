@@ -77,5 +77,22 @@ namespace BCMWeb.Models
         }
         [Display(Name = "Observacion", ResourceType = typeof(Resources.IniciativaResource))]
         public string Observacion { get; set; }
+        public int NroAnexos { get; set; }
+    }
+    public class AnexosIniciativaModel : ModulosUserModel
+    {
+        [Display(Name = "captionIdAnexo", ResourceType = typeof(Resources.IniciativaResource))]
+        public long IdIniciativa { get; set; }
+        public long id { get; set; }
+        [Display(Name = "captionNombreAnexo", ResourceType = typeof(Resources.IniciativaResource))]
+        [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
+        [StringLength(1500, ErrorMessageResourceName = "StringLengthErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource), MinimumLength = 5)]
+        public string Nombre { get; set; }
+        [Display(Name = "captionRutaAnexo", ResourceType = typeof(Resources.IniciativaResource))]
+        [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
+        [StringLength(1500, ErrorMessageResourceName = "StringLengthErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource), MinimumLength = 5)]
+        public string Ruta { get; set; }
+        [Display(Name = "captionFechaRegistro", ResourceType = typeof(Resources.IniciativaResource))]
+        public DateTime? fechaRegistro { get; set; }
     }
 }

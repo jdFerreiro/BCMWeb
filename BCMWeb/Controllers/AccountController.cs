@@ -18,7 +18,7 @@ namespace BCMWeb.Controllers {
 
         [AllowAnonymous]
         public ActionResult Login() {
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, Resources.LoginResource.accountHeader);
+            ViewBag.Title = string.Format("{0} - {1}", Resources.LoginResource.accountHeader, Resources.BCMWebPublic.labelAppTitle);
             return View();
         }
         [HttpPost]
@@ -67,7 +67,7 @@ namespace BCMWeb.Controllers {
                     ViewBag.ErrorMessage = Resources.ErrorResource.LoginFailError;
                 }
             }
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, Resources.LoginResource.accountHeader);
+            ViewBag.Title = string.Format("{0} - {1}", Resources.LoginResource.accountHeader, Resources.BCMWebPublic.labelAppTitle);
             return View(model);
         }
         [SessionExpire]
@@ -221,7 +221,7 @@ namespace BCMWeb.Controllers {
         [AllowAnonymous]
         public ActionResult PrimeraVez()
         {
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, Resources.LoginResource.accountHeader);
+            ViewBag.Title = string.Format("{0} - {1}", Resources.LoginResource.accountHeader, Resources.BCMWebPublic.labelAppTitle);
             RegisterModel model = Metodos.GetUsuario();
             return View(model);
         }
@@ -244,7 +244,7 @@ namespace BCMWeb.Controllers {
                 HttpContext.Response.Cookies.Add(authCookie);
                 return RedirectToAction("Index", "Menu");
             }
-            ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, Resources.LoginResource.accountHeader);
+            ViewBag.Title = string.Format("{0} - {1}", Resources.LoginResource.accountHeader, Resources.BCMWebPublic.labelAppTitle);
             return View(model);
         }
 

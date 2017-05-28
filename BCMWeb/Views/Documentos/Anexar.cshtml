@@ -3,14 +3,15 @@
 @model DocumentoModel
 
 <script type="text/javascript">
-    function ProcesarEvento(tipoEvento, nombre) {
+    function ProcesarEvento(tipoEvento, actual, anterior) {
         $.ajax({
             type: 'POST',
             url: '/FileManager/RegistrarOperacion',
             dataType: 'json',
             data: {
                 Tipo: tipoEvento,
-                nombre: nombre,
+                nombre: actual,
+                viejo: anterior
             },
             success: function (data) {
             },

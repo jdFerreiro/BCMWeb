@@ -38,10 +38,17 @@ namespace BCMWeb.Controllers
         [HttpPost]
         [SessionExpire]
         [HandleError]
-        public JsonResult RegistrarOperacion(string Tipo, string nombre)
+        public JsonResult RegistrarOperacion(string Tipo, string nombre, string viejo = "")
         {
             bool success = true;
-            Auditoria.RegistarOperacionAnexoModulo(Tipo, nombre, true);
+            Auditoria.RegistarOperacionAnexoModulo(Tipo, nombre, viejo, true);
+
+            return Json(new { success });
+        }
+        public JsonResult RegistrarOperacionIniciativa(string Tipo, string nombre, string viejo = "")
+        {
+            bool success = true;
+            Auditoria.RegistarOperacionAnexoIniciativa(Tipo, nombre, viejo, true);
 
             return Json(new { success });
         }
@@ -80,6 +87,38 @@ namespace BCMWeb.Controllers
         public static FileManagerSettings CreateFileManagerDownloadSettings()
         {
             var settings = new FileManagerSettings();
+            settings.SettingsEditing.AllowDownload = true;
+            settings.Name = "FileManager";
+            return settings;
+        }
+    }
+    public class FileManagerPlanTrabajoControllerFileManagerSettings
+    {
+        private static HttpSessionState Session { get { return HttpContext.Current.Session; } }
+        private static HttpServerUtility Server { get { return HttpContext.Current.Server; } }
+
+        private static long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+        private static long IdIniciativa = long.Parse(Session["IdIniciativa"].ToString());
+
+        public static string RootFolder = @"~\Content\FileManager";
+
+        public static string Model
+        {
+            get
+            {
+                IniciativaModel docModel = Metodos.GetEditableIniciativa(IdIniciativa);
+                string OrigPath = Server.MapPath("/");
+                string _rootFolder = string.Format("{0}Content\\FileManager\\AnexosPlanTrabajo\\E{1}\\{2}", OrigPath, IdEmpresa.ToString("000"), docModel.Nombre);
+
+                if (!Directory.Exists(_rootFolder))
+                    Directory.CreateDirectory(_rootFolder);
+
+                return _rootFolder;
+            }
+        }
+        public static FileManagerSettings CreateFileManagerDownloadSettings()
+        {
+            var settings = new DevExpress.Web.Mvc.FileManagerSettings();
             settings.SettingsEditing.AllowDownload = true;
             settings.Name = "FileManager";
             return settings;

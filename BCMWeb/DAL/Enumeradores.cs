@@ -509,15 +509,23 @@ namespace BCMWeb
         [Description("Acceder Anexo Documento Movil")]
         AccederAnexoDocumentoMovil,
         [EnumMember()]
-        [Description("Acceder Anexo Documento Movil")]
+        [Description("Acceder Iniciativas")]
+        MostrarIniciativa,
+        [EnumMember()]
+        [Description("Agregar Iniciativa")]
         AgregarIniciativa,
         [EnumMember()]
-        [Description("Acceder Anexo Documento Movil")]
+        [Description("Actualizar Iniciativa")]
         ActualizarIniciativa,
         [EnumMember()]
-        [Description("Acceder Anexo Documento Movil")]
+        [Description("Eliminar Iniciativa")]
         EliminarIniciativa,
-
+        [EnumMember()]
+        [Description("Agregar Anexo Iniciativa ")]
+        AgregarAnexoIniciativa,
+        [EnumMember()]
+        [Description("Agregar Anexo Iniciativa ")]
+        EliminarAnexoIniciativa,
     }
     [DataContract(Name = "Secciones de Ficha")]
     public enum eSeccionFicha

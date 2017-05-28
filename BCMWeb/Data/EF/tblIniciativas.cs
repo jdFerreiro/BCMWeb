@@ -14,6 +14,12 @@ namespace BCMWeb.Data.EF
     
     public partial class tblIniciativas
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public tblIniciativas()
+        {
+            this.tblIniciativas_Anexo = new HashSet<tblIniciativas_Anexo>();
+        }
+    
         public long IdEmpresa { get; set; }
         public long IdIniciativa { get; set; }
         public Nullable<int> NroIniciativa { get; set; }
@@ -33,5 +39,7 @@ namespace BCMWeb.Data.EF
     
         public virtual tblEmpresa tblEmpresa { get; set; }
         public virtual tblPlanTrabajoEstatus tblPlanTrabajoEstatus { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblIniciativas_Anexo> tblIniciativas_Anexo { get; set; }
     }
 }

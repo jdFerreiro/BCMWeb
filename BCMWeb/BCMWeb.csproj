@@ -199,13 +199,16 @@
     <Content Include="Content\ChartIcons\BtnPrint.png" />
     <Content Include="Content\ChartIcons\BtnSave.png" />
     <Content Include="Content\ChartIcons\BtnSaveWindow.png" />
+    <Content Include="Content\DragDrop.css" />
     <Content Include="Content\Images\AquaHeader.jpg" />
     <Content Include="Content\Images\Banderas\bandera-colombia-300x189.gif" />
     <Content Include="Content\Images\BlackGlassHeader.jpg" />
     <Content Include="Content\Images\Banderas\espana.jpg" />
     <Content Include="Content\Images\GlassHeader.jpg" />
     <Content Include="Content\Images\Banderas\guatemala.png" />
+    <Content Include="Content\Images\Internal\hasAttach.png" />
     <Content Include="Content\Images\Internal\icono-pdf.jpg" />
+    <Content Include="Content\Images\Internal\Noattach.png" />
     <Content Include="Content\Images\Menu\Adiestramiento.png" />
     <Content Include="Content\Images\Menu\Administration.jpg" />
     <Content Include="Content\Images\Menu\BCP.jpg" />
@@ -263,6 +266,7 @@
     <Content Include="Content\Images\Movil.png" />
     <Content Include="Content\Images\seo_analysis_big-403x250.jpg" />
     <Content Include="Content\Images\tornado_163m.jpg" />
+    <Content Include="googlebc525276da55db69.html" />
     <Content Include="Logo-BiaPlus.png" />
     <Content Include="LogosEmpresa\biv_logo.jpg" />
     <Content Include="LogosEmpresa\logo BancaribeCB.jpg" />
@@ -278,6 +282,7 @@
     <Content Include="LogosEmpresa\logojunko.png" />
     <Content Include="LogosEmpresa\logo_bangente.jpg" />
     <Content Include="LogosEmpresa\logo_Credicard.png" />
+    <Content Include="robots.txt" />
     <Content Include="Scripts\ace.js" />
     <Content Include="Scripts\cldr.event.js" />
     <Content Include="Scripts\cldr.js" />
@@ -378,7 +383,6 @@
     <Content Include="Views\Documentos\newCorreoPartialView.cshtml" />
     <Content Include="Views\Documentos\Editor.cshtml" />
     <Content Include="Views\Documentos\OpenDialog.cshtml" />
-    <Content Include="Views\Upload\Index.cshtml" />
     <Content Include="Views\Shared\ModalMode.cshtml" />
     <Content Include="Views\Documentos\EditorPartialView.cshtml" />
     <Content Include="Views\Documentos\GenerarPDF.cshtml" />
@@ -467,8 +471,10 @@
     <Content Include="Views\Procesos\AjustarMTD.cshtml" />
     <Content Include="Views\PlanTrabajo\Iniciativas.cshtml" />
     <Content Include="Views\PlanTrabajo\ContentLeftPartialView.cshtml" />
-    <Content Include="Views\PlanTrabajo\IniciativaPartialView.cshtml" />
     <Content Include="Views\Account\PrimeraVez.cshtml" />
+    <Content Include="Views\PlanTrabajo\AnexosIniciativaPartialView.cshtml" />
+    <Content Include="Views\PlanTrabajo\IniciativaPartialView.cshtml" />
+    <Content Include="Views\PlanTrabajo\FileManagerPartial.cshtml" />
     <None Include="Views\Procesos\AjustarWRT.cshtml" />
     <Content Include="Views\Procesos\AjustarRTOPartialView .cshtml" />
     <Content Include="Views\Procesos\AjustarRTO.cshtml" />
@@ -911,6 +917,9 @@
     <Compile Include="Data\EF\tblIniciativas.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Data\EF\tblIniciativas_Anexo.cs">
+      <DependentUpon>BCMWebEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Data\EF\tblLocalidad.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
@@ -1108,6 +1117,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\GridViewExport.cs" />
+    <Compile Include="Helpers\UploadControlHelpers.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\AdministracionModels.cs" />
     <Compile Include="Models\AuditoriaModels.cs" />
@@ -1132,6 +1142,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\DocsFolder\" />
+    <Folder Include="Content\FileManager\AnexosPlanTrabajo\" />
     <Folder Include="Content\FileManager\Thumbnails\" />
     <Folder Include="PDFDocs\" />
     <Folder Include="Views\AdminDoc\" />

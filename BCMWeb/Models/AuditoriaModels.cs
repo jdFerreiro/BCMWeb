@@ -26,5 +26,6 @@ namespace BCMWeb.Models
         public long IdUsuario { get; set; }
         public string NombreUsuario { get; set; }
         public bool Negocios { get; set; }
+        public string datosmodificados { get; set; }
     }
 }

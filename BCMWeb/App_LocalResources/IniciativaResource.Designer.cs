@@ -61,6 +61,87 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Anexos.
+        /// </summary>
+        public static string captionAnexos {
+            get {
+                return ResourceManager.GetString("captionAnexos", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fecha de Registro.
+        /// </summary>
+        public static string captionFechaRegistro {
+            get {
+                return ResourceManager.GetString("captionFechaRegistro", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Anexar documento.
+        /// </summary>
+        public static string captionHeaderFormAnexos {
+            get {
+                return ResourceManager.GetString("captionHeaderFormAnexos", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Actualización de Iniciativas.
+        /// </summary>
+        public static string captionHeaderFormIniciativas {
+            get {
+                return ResourceManager.GetString("captionHeaderFormIniciativas", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Anexo.
+        /// </summary>
+        public static string captionIdAnexo {
+            get {
+                return ResourceManager.GetString("captionIdAnexo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nombre.
+        /// </summary>
+        public static string captionNombreAnexo {
+            get {
+                return ResourceManager.GetString("captionNombreAnexo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nro. de Anexos.
+        /// </summary>
+        public static string captionNroAnexos {
+            get {
+                return ResourceManager.GetString("captionNroAnexos", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ruta.
+        /// </summary>
+        public static string captionRutaAnexo {
+            get {
+                return ResourceManager.GetString("captionRutaAnexo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Seleccione un documento para cargar....
+        /// </summary>
+        public static string captionUploadBrowseButtonText {
+            get {
+                return ResourceManager.GetString("captionUploadBrowseButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Descripción.
         /// </summary>
         public static string Descripcion {

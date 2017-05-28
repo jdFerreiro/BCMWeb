@@ -3,8 +3,9 @@
 @Html.DevExpress().FileManager(settings =>
 {
     settings.Name = "FileManager";
-    settings.CallbackRouteValues = new { Controller = "Documentos", Action = "FileManagerPartial" };
-    settings.DownloadRouteValues = new { Controller = "Documentos", Action = "FileManagerPartialDownload" };
+    settings.CallbackRouteValues = new { Controller = "PlanTrabajo", Action = "FileManagerPartial" };
+    settings.DownloadRouteValues = new { Controller = "PlanTrabajo", Action = "FileManagerPartialDownload" };
+    settings.Height = Unit.Pixel(200);
 
     settings.Settings.ThumbnailFolder = Url.Content("~/Content/FileManager/Thumbnails");
 
@@ -29,3 +30,4 @@
 
     settings.SettingsFileList.View = DevExpress.Web.FileListView.Thumbnails;
 }).BindToFolder(Model).GetHtml()
+

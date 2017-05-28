@@ -357,6 +357,9 @@
         <EntityTypeShape EntityType="BCMWeb.tblIniciativas" Width="1.5" PointX="21" PointY="137.875" />
         <AssociationConnector Association="BCMWeb.FK_tblIniciativas_tblEmpresa" />
         <AssociationConnector Association="BCMWeb.FK_tblIniciativas_tblPlanTrabajoEstatus" />
+        <EntityTypeShape EntityType="BCMWeb.tblIniciativas_Anexo" Width="1.5" PointX="23.25" PointY="143" />
+        <AssociationConnector Association="BCMWeb.FK_tblIniciativas_Anexo_tblEmpresa" />
+        <AssociationConnector Association="BCMWeb.FK_tblIniciativas_Anexo_tblIniciativas" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

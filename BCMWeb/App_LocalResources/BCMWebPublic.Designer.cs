@@ -151,6 +151,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cargar.
+        /// </summary>
+        public static string captionButtonUpload {
+            get {
+                return ResourceManager.GetString("captionButtonUpload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ver.
         /// </summary>
         public static string captionButtonVer {
