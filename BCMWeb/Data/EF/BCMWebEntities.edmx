@@ -756,6 +756,24 @@
           <Property Name="IdEstatusActividad" Type="smallint" Nullable="false" />
           <Property Name="Descripcion" Type="nvarchar" MaxLength="450" />
         </EntityType>
+        <EntityType Name="tblCultura_PMTProgramacionTipoActualizacion">
+          <Key>
+            <PropertyRef Name="Culture" />
+            <PropertyRef Name="IdTipoActualizacion" />
+          </Key>
+          <Property Name="Culture" Type="nchar" MaxLength="5" Nullable="false" />
+          <Property Name="IdTipoActualizacion" Type="smallint" Nullable="false" />
+          <Property Name="Descripcion" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="tblCultura_PMTProgramacionTipoNotificacion">
+          <Key>
+            <PropertyRef Name="Cultura" />
+            <PropertyRef Name="IdTipoNotificacion" />
+          </Key>
+          <Property Name="Cultura" Type="nchar" MaxLength="5" Nullable="false" />
+          <Property Name="IdTipoNotificacion" Type="smallint" Nullable="false" />
+          <Property Name="Descripcion" Type="nvarchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="tblCultura_TipoCorreo">
           <Key>
             <PropertyRef Name="Culture" />
@@ -1093,6 +1111,24 @@
           <Property Name="IdImpacto" Type="smallint" Nullable="false" />
           <Property Name="Nombre" Type="nvarchar" MaxLength="250" Nullable="false" />
         </EntityType>
+        <EntityType Name="tblIniciativaPrioridad">
+          <Key>
+            <PropertyRef Name="IdEmpresa" />
+            <PropertyRef Name="IdPrioridad" />
+          </Key>
+          <Property Name="IdEmpresa" Type="bigint" Nullable="false" />
+          <Property Name="IdPrioridad" Type="smallint" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="tblIniciativaResponsable">
+          <Key>
+            <PropertyRef Name="IdEmpresa" />
+            <PropertyRef Name="IdResponsable" />
+          </Key>
+          <Property Name="IdEmpresa" Type="bigint" Nullable="false" />
+          <Property Name="IdResponsable" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="150" />
+        </EntityType>
         <EntityType Name="tblIniciativas">
           <Key>
             <PropertyRef Name="IdEmpresa" />
@@ -1105,6 +1141,7 @@
           <Property Name="Descripcion" Type="nvarchar(max)" />
           <Property Name="IdUnidadOrganizativa" Type="bigint" />
           <Property Name="NombreResponsable" Type="nvarchar" MaxLength="1500" />
+          <Property Name="UnidadOrganizativa" Type="nvarchar" MaxLength="1500" />
           <Property Name="FechaInicioEstimada" Type="datetime" />
           <Property Name="FechaInicioReal" Type="datetime" />
           <Property Name="FechaCierreEstimada" Type="datetime" />
@@ -1112,8 +1149,13 @@
           <Property Name="PresupuestoEstimado" Type="money" />
           <Property Name="PresupuestoReal" Type="money" />
           <Property Name="IdEstatusIniciativa" Type="smallint" />
-          <Property Name="Urgente" Type="bit" />
+          <Property Name="IdPrioridad" Type="smallint" />
           <Property Name="Observacion" Type="nvarchar(max)" />
+          <Property Name="MontoAbonado" Type="money" />
+          <Property Name="MontoPendiente" Type="money" />
+          <Property Name="PorcentajeAvance" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="HorasEstimadas" Type="int" />
+          <Property Name="HorasConsumidas" Type="int" />
         </EntityType>
         <EntityType Name="tblIniciativas_Anexo">
           <Key>
@@ -1499,35 +1541,6 @@
           </Key>
           <Property Name="IdEstatusActividad" Type="smallint" Nullable="false" />
         </EntityType>
-        <EntityType Name="tblPMTFrecuencia">
-          <Key>
-            <PropertyRef Name="IdEmpresa" />
-            <PropertyRef Name="IdDocumento" />
-            <PropertyRef Name="IdTipoDocumento" />
-            <PropertyRef Name="IdFrecuencia" />
-          </Key>
-          <Property Name="IdEmpresa" Type="bigint" Nullable="false" />
-          <Property Name="IdDocumento" Type="bigint" Nullable="false" />
-          <Property Name="IdTipoDocumento" Type="bigint" Nullable="false" />
-          <Property Name="IdFrecuencia" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="IdTipoFrecuencia" Type="bigint" Nullable="false" />
-          <Property Name="TipoFrecuencia" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Segmento" Type="nvarchar" MaxLength="450" Nullable="false" />
-        </EntityType>
-        <EntityType Name="tblPMTFrecuenciaParticipante">
-          <Key>
-            <PropertyRef Name="IdEmpresa" />
-            <PropertyRef Name="IdDocumento" />
-            <PropertyRef Name="IdTipoDocumento" />
-            <PropertyRef Name="IdFrecuencia" />
-            <PropertyRef Name="IdCargo" />
-          </Key>
-          <Property Name="IdEmpresa" Type="bigint" Nullable="false" />
-          <Property Name="IdDocumento" Type="bigint" Nullable="false" />
-          <Property Name="IdTipoDocumento" Type="bigint" Nullable="false" />
-          <Property Name="IdFrecuencia" Type="bigint" Nullable="false" />
-          <Property Name="IdCargo" Type="bigint" Nullable="false" />
-        </EntityType>
         <EntityType Name="tblPMTMensajeActualizacion">
           <Key>
             <PropertyRef Name="IdEmpresa" />
@@ -1542,30 +1555,52 @@
         </EntityType>
         <EntityType Name="tblPMTProgramacion">
           <Key>
-            <PropertyRef Name="IdPMTProgramación" />
+            <PropertyRef Name="IdPMTProgramacion" />
           </Key>
-          <Property Name="IdPMTProgramación" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdPMTProgramacion" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IdEmpresa" Type="bigint" Nullable="false" />
-          <Property Name="IdDocumento" Type="bigint" Nullable="false" />
           <Property Name="IdModulo" Type="bigint" Nullable="false" />
           <Property Name="FechaInicio" Type="datetime" Nullable="false" />
           <Property Name="FechaFinal" Type="datetime" Nullable="false" />
           <Property Name="IdEstado" Type="bigint" Nullable="false" />
           <Property Name="Negocios" Type="bit" Nullable="false" />
+          <Property Name="IdTipoActualizacion" Type="smallint" Nullable="false" />
+          <Property Name="IdTipoFrecuencia" Type="bigint" Nullable="false" />
         </EntityType>
-        <EntityType Name="tblPMTProgramacionAuditoria">
+        <EntityType Name="tblPMTProgramacionDocumentos">
           <Key>
+            <PropertyRef Name="IdPMTProgramacion" />
             <PropertyRef Name="IdEmpresa" />
             <PropertyRef Name="IdModulo" />
             <PropertyRef Name="IdDocumento" />
-            <PropertyRef Name="FechaInicioActualizacion" />
           </Key>
+          <Property Name="IdPMTProgramacion" Type="bigint" Nullable="false" />
           <Property Name="IdEmpresa" Type="bigint" Nullable="false" />
           <Property Name="IdModulo" Type="bigint" Nullable="false" />
           <Property Name="IdDocumento" Type="bigint" Nullable="false" />
-          <Property Name="FechaInicioActualizacion" Type="datetime" Nullable="false" />
-          <Property Name="FechaUltimaActualizacion" Type="datetime" Nullable="false" />
-          <Property Name="IdUsuarioActuailiza" Type="bigint" Nullable="false" />
+          <Property Name="IdTipoDocumento" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblPMTProgramacionTipoActualizacion">
+          <Key>
+            <PropertyRef Name="IdTipoActualizacion" />
+          </Key>
+          <Property Name="IdTipoActualizacion" Type="smallint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblPMTProgramacionTipoNotificacion">
+          <Key>
+            <PropertyRef Name="IdTipoNotificacion" />
+          </Key>
+          <Property Name="IdTipoNotificacion" Type="smallint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblPMTProgramacionUsuario">
+          <Key>
+            <PropertyRef Name="IdPMTProgramacion" />
+            <PropertyRef Name="IdUsuario" />
+          </Key>
+          <Property Name="IdPMTProgramacion" Type="bigint" Nullable="false" />
+          <Property Name="IdUsuario" Type="bigint" Nullable="false" />
+          <Property Name="IdTipoNotificacion" Type="smallint" />
+          <Property Name="FechaUltimaNotificacion" Type="datetime" />
         </EntityType>
         <EntityType Name="tblPMTResponsableUpdate">
           <Key>
@@ -1576,8 +1611,8 @@
           <Property Name="IdEmpresa" Type="bigint" Nullable="false" />
           <Property Name="IdModulo" Type="bigint" Nullable="false" />
           <Property Name="IdMensaje" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="FechaActualizar" Type="datetime" Nullable="false" />
-          <Property Name="FechaUltimoEnvio" Type="datetime" Nullable="false" />
+          <Property Name="IdDocumento" Type="bigint" />
+          <Property Name="IdTipoNotificacion" Type="smallint" />
         </EntityType>
         <EntityType Name="tblPMTResponsableUpdate_Correo">
           <Key>
@@ -3054,6 +3089,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_tblCultura_PMTProgramacionTipoNotificacion_tblPMTProgramacionTipoNotificacion">
+          <End Role="tblPMTProgramacionTipoNotificacion" Type="Self.tblPMTProgramacionTipoNotificacion" Multiplicity="1" />
+          <End Role="tblCultura_PMTProgramacionTipoNotificacion" Type="Self.tblCultura_PMTProgramacionTipoNotificacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPMTProgramacionTipoNotificacion">
+              <PropertyRef Name="IdTipoNotificacion" />
+            </Principal>
+            <Dependent Role="tblCultura_PMTProgramacionTipoNotificacion">
+              <PropertyRef Name="IdTipoNotificacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_tblCultura_TipoCorreo_tblTipoCorreo">
           <End Role="tblTipoCorreo" Type="Self.tblTipoCorreo" Multiplicity="1" />
           <End Role="tblCultura_TipoCorreo" Type="Self.tblCultura_TipoCorreo" Multiplicity="*" />
@@ -3640,20 +3687,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_tblIniciativas_Anexo_tblIniciativas">
-          <End Role="tblIniciativas" Type="Self.tblIniciativas" Multiplicity="1" />
-          <End Role="tblIniciativas_Anexo" Type="Self.tblIniciativas_Anexo" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblIniciativas">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdIniciativa" />
-            </Principal>
-            <Dependent Role="tblIniciativas_Anexo">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdIniciativa" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_tblIniciativas_tblEmpresa">
           <End Role="tblEmpresa" Type="Self.tblEmpresa" Multiplicity="1" />
           <End Role="tblIniciativas" Type="Self.tblIniciativas" Multiplicity="*" />
@@ -3663,6 +3696,20 @@
             </Principal>
             <Dependent Role="tblIniciativas">
               <PropertyRef Name="IdEmpresa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblIniciativas_tblIniciativaPrioridad">
+          <End Role="tblIniciativaPrioridad" Type="Self.tblIniciativaPrioridad" Multiplicity="0..1" />
+          <End Role="tblIniciativas" Type="Self.tblIniciativas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblIniciativaPrioridad">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdPrioridad" />
+            </Principal>
+            <Dependent Role="tblIniciativas">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdPrioridad" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4348,56 +4395,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_tblPMTFrecuencia_tblDocumento">
-          <End Role="tblDocumento" Type="Self.tblDocumento" Multiplicity="1" />
-          <End Role="tblPMTFrecuencia" Type="Self.tblPMTFrecuencia" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblDocumento">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdDocumento" />
-              <PropertyRef Name="IdTipoDocumento" />
-            </Principal>
-            <Dependent Role="tblPMTFrecuencia">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdDocumento" />
-              <PropertyRef Name="IdTipoDocumento" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_tblPMTFrecuenciaParticipante_tblCargo">
-          <End Role="tblDocumento" Type="Self.tblDocumento" Multiplicity="1" />
-          <End Role="tblPMTFrecuenciaParticipante" Type="Self.tblPMTFrecuenciaParticipante" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblDocumento">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdDocumento" />
-              <PropertyRef Name="IdTipoDocumento" />
-            </Principal>
-            <Dependent Role="tblPMTFrecuenciaParticipante">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdDocumento" />
-              <PropertyRef Name="IdTipoDocumento" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_tblPMTFrecuenciaParticipante_tblPMTFrecuencia">
-          <End Role="tblPMTFrecuencia" Type="Self.tblPMTFrecuencia" Multiplicity="1" />
-          <End Role="tblPMTFrecuenciaParticipante" Type="Self.tblPMTFrecuenciaParticipante" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblPMTFrecuencia">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdDocumento" />
-              <PropertyRef Name="IdTipoDocumento" />
-              <PropertyRef Name="IdFrecuencia" />
-            </Principal>
-            <Dependent Role="tblPMTFrecuenciaParticipante">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdDocumento" />
-              <PropertyRef Name="IdTipoDocumento" />
-              <PropertyRef Name="IdFrecuencia" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_tblPMTMensajeActualizacion_tblEmpresa">
           <End Role="tblEmpresa" Type="Self.tblEmpresa" Multiplicity="1" />
           <End Role="tblPMTMensajeActualizacion" Type="Self.tblPMTMensajeActualizacion" Multiplicity="*" />
@@ -4426,22 +4423,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_tblPMTProgramacion_tblDocumento">
-          <End Role="tblDocumento" Type="Self.tblDocumento" Multiplicity="1" />
-          <End Role="tblPMTProgramacion" Type="Self.tblPMTProgramacion" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblDocumento">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdDocumento" />
-              <PropertyRef Name="IdTipoDocumento" />
-            </Principal>
-            <Dependent Role="tblPMTProgramacion">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdDocumento" />
-              <PropertyRef Name="IdModulo" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_tblPMTProgramacion_tblEmpresa">
           <End Role="tblEmpresa" Type="Self.tblEmpresa" Multiplicity="1" />
           <End Role="tblPMTProgramacion" Type="Self.tblPMTProgramacion" Multiplicity="*" />
@@ -4454,31 +4435,119 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_tblPMTProgramacionAuditoria_tblDocumento">
+        <Association Name="FK_tblPMTProgramacion_tblModulo">
+          <End Role="tblModulo" Type="Self.tblModulo" Multiplicity="1" />
+          <End Role="tblPMTProgramacion" Type="Self.tblPMTProgramacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblModulo">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdModulo" />
+            </Principal>
+            <Dependent Role="tblPMTProgramacion">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdModulo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPMTProgramacion_tblPMTProgramacionTipoActualizacion">
+          <End Role="tblPMTProgramacionTipoActualizacion" Type="Self.tblPMTProgramacionTipoActualizacion" Multiplicity="1" />
+          <End Role="tblPMTProgramacion" Type="Self.tblPMTProgramacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPMTProgramacionTipoActualizacion">
+              <PropertyRef Name="IdTipoActualizacion" />
+            </Principal>
+            <Dependent Role="tblPMTProgramacion">
+              <PropertyRef Name="IdTipoActualizacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPMTProgramacion_tblTipoFrecuencia">
+          <End Role="tblTipoFrecuencia" Type="Self.tblTipoFrecuencia" Multiplicity="1" />
+          <End Role="tblPMTProgramacion" Type="Self.tblPMTProgramacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblTipoFrecuencia">
+              <PropertyRef Name="IdTipoFrecuencia" />
+            </Principal>
+            <Dependent Role="tblPMTProgramacion">
+              <PropertyRef Name="IdTipoFrecuencia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPMTProgramacionDocumentos_tblDocumento">
           <End Role="tblDocumento" Type="Self.tblDocumento" Multiplicity="1" />
-          <End Role="tblPMTProgramacionAuditoria" Type="Self.tblPMTProgramacionAuditoria" Multiplicity="*" />
+          <End Role="tblPMTProgramacionDocumentos" Type="Self.tblPMTProgramacionDocumentos" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="tblDocumento">
               <PropertyRef Name="IdEmpresa" />
               <PropertyRef Name="IdDocumento" />
               <PropertyRef Name="IdTipoDocumento" />
             </Principal>
-            <Dependent Role="tblPMTProgramacionAuditoria">
+            <Dependent Role="tblPMTProgramacionDocumentos">
               <PropertyRef Name="IdEmpresa" />
               <PropertyRef Name="IdDocumento" />
+              <PropertyRef Name="IdTipoDocumento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPMTProgramacionDocumentos_tblModulo">
+          <End Role="tblModulo" Type="Self.tblModulo" Multiplicity="1" />
+          <End Role="tblPMTProgramacionDocumentos" Type="Self.tblPMTProgramacionDocumentos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblModulo">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdModulo" />
+            </Principal>
+            <Dependent Role="tblPMTProgramacionDocumentos">
+              <PropertyRef Name="IdEmpresa" />
               <PropertyRef Name="IdModulo" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_tblPMTProgramacionAuditoria_tblEmpresa">
-          <End Role="tblEmpresa" Type="Self.tblEmpresa" Multiplicity="1" />
-          <End Role="tblPMTProgramacionAuditoria" Type="Self.tblPMTProgramacionAuditoria" Multiplicity="*" />
+        <Association Name="FK_tblPMTProgramacionDocumentos_tblPMTProgramacion">
+          <End Role="tblPMTProgramacion" Type="Self.tblPMTProgramacion" Multiplicity="1" />
+          <End Role="tblPMTProgramacionDocumentos" Type="Self.tblPMTProgramacionDocumentos" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="tblEmpresa">
-              <PropertyRef Name="IdEmpresa" />
+            <Principal Role="tblPMTProgramacion">
+              <PropertyRef Name="IdPMTProgramacion" />
             </Principal>
-            <Dependent Role="tblPMTProgramacionAuditoria">
-              <PropertyRef Name="IdEmpresa" />
+            <Dependent Role="tblPMTProgramacionDocumentos">
+              <PropertyRef Name="IdPMTProgramacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPMTProgramacionUsuario_tblPMTProgramacion">
+          <End Role="tblPMTProgramacion" Type="Self.tblPMTProgramacion" Multiplicity="1" />
+          <End Role="tblPMTProgramacionUsuario" Type="Self.tblPMTProgramacionUsuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPMTProgramacion">
+              <PropertyRef Name="IdPMTProgramacion" />
+            </Principal>
+            <Dependent Role="tblPMTProgramacionUsuario">
+              <PropertyRef Name="IdPMTProgramacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPMTProgramacionUsuario_tblPMTProgramacionTipoNotificacion">
+          <End Role="tblPMTProgramacionTipoNotificacion" Type="Self.tblPMTProgramacionTipoNotificacion" Multiplicity="0..1" />
+          <End Role="tblPMTProgramacionUsuario" Type="Self.tblPMTProgramacionUsuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPMTProgramacionTipoNotificacion">
+              <PropertyRef Name="IdTipoNotificacion" />
+            </Principal>
+            <Dependent Role="tblPMTProgramacionUsuario">
+              <PropertyRef Name="IdTipoNotificacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPMTProgramacionUsuario_tblUsuario">
+          <End Role="tblUsuario" Type="Self.tblUsuario" Multiplicity="1" />
+          <End Role="tblPMTProgramacionUsuario" Type="Self.tblPMTProgramacionUsuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUsuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="tblPMTProgramacionUsuario">
+              <PropertyRef Name="IdUsuario" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4664,6 +4733,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="r">
+          <End Role="tblPMTProgramacionTipoActualizacion" Type="Self.tblPMTProgramacionTipoActualizacion" Multiplicity="1" />
+          <End Role="tblCultura_PMTProgramacionTipoActualizacion" Type="Self.tblCultura_PMTProgramacionTipoActualizacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPMTProgramacionTipoActualizacion">
+              <PropertyRef Name="IdTipoActualizacion" />
+            </Principal>
+            <Dependent Role="tblCultura_PMTProgramacionTipoActualizacion">
+              <PropertyRef Name="IdTipoActualizacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="BCMWebStoreContainer">
           <EntitySet Name="tblAuditoria" EntityType="Self.tblAuditoria" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblAuditoriaProcesoCritico" EntityType="Self.tblAuditoriaProcesoCritico" Schema="dbo" store:Type="Tables" />
@@ -4722,6 +4803,8 @@
           <EntitySet Name="tblCultura_NivelUsuario" EntityType="Self.tblCultura_NivelUsuario" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblCultura_Pais" EntityType="Self.tblCultura_Pais" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblCultura_PlanTrabajoEstatus" EntityType="Self.tblCultura_PlanTrabajoEstatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblCultura_PMTProgramacionTipoActualizacion" EntityType="Self.tblCultura_PMTProgramacionTipoActualizacion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblCultura_PMTProgramacionTipoNotificacion" EntityType="Self.tblCultura_PMTProgramacionTipoNotificacion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblCultura_TipoCorreo" EntityType="Self.tblCultura_TipoCorreo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblCultura_TipoDireccion" EntityType="Self.tblCultura_TipoDireccion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblCultura_TipoFrecuencia" EntityType="Self.tblCultura_TipoFrecuencia" Schema="dbo" store:Type="Tables" />
@@ -4752,6 +4835,8 @@
           <EntitySet Name="tblEstadoUsuario" EntityType="Self.tblEstadoUsuario" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblFuenteRiesgo" EntityType="Self.tblFuenteRiesgo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblImpactoRiesgo" EntityType="Self.tblImpactoRiesgo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblIniciativaPrioridad" EntityType="Self.tblIniciativaPrioridad" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblIniciativaResponsable" EntityType="Self.tblIniciativaResponsable" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblIniciativas" EntityType="Self.tblIniciativas" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblIniciativas_Anexo" EntityType="Self.tblIniciativas_Anexo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblLocalidad" EntityType="Self.tblLocalidad" Schema="dbo" store:Type="Tables" />
@@ -4783,11 +4868,12 @@
           <EntitySet Name="tblPlanTrabajoAccion" EntityType="Self.tblPlanTrabajoAccion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblPlanTrabajoAuditoria" EntityType="Self.tblPlanTrabajoAuditoria" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblPlanTrabajoEstatus" EntityType="Self.tblPlanTrabajoEstatus" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="tblPMTFrecuencia" EntityType="Self.tblPMTFrecuencia" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="tblPMTFrecuenciaParticipante" EntityType="Self.tblPMTFrecuenciaParticipante" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblPMTMensajeActualizacion" EntityType="Self.tblPMTMensajeActualizacion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblPMTProgramacion" EntityType="Self.tblPMTProgramacion" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="tblPMTProgramacionAuditoria" EntityType="Self.tblPMTProgramacionAuditoria" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblPMTProgramacionDocumentos" EntityType="Self.tblPMTProgramacionDocumentos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblPMTProgramacionTipoActualizacion" EntityType="Self.tblPMTProgramacionTipoActualizacion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblPMTProgramacionTipoNotificacion" EntityType="Self.tblPMTProgramacionTipoNotificacion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblPMTProgramacionUsuario" EntityType="Self.tblPMTProgramacionUsuario" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblPMTResponsableUpdate" EntityType="Self.tblPMTResponsableUpdate" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblPMTResponsableUpdate_Correo" EntityType="Self.tblPMTResponsableUpdate_Correo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblPPEFrecuencia" EntityType="Self.tblPPEFrecuencia" Schema="dbo" store:Type="Tables" />
@@ -5170,6 +5256,10 @@
             <End Role="tblPlanTrabajoEstatus" EntitySet="tblPlanTrabajoEstatus" />
             <End Role="tblCultura_PlanTrabajoEstatus" EntitySet="tblCultura_PlanTrabajoEstatus" />
           </AssociationSet>
+          <AssociationSet Name="FK_tblCultura_PMTProgramacionTipoNotificacion_tblPMTProgramacionTipoNotificacion" Association="Self.FK_tblCultura_PMTProgramacionTipoNotificacion_tblPMTProgramacionTipoNotificacion">
+            <End Role="tblPMTProgramacionTipoNotificacion" EntitySet="tblPMTProgramacionTipoNotificacion" />
+            <End Role="tblCultura_PMTProgramacionTipoNotificacion" EntitySet="tblCultura_PMTProgramacionTipoNotificacion" />
+          </AssociationSet>
           <AssociationSet Name="FK_tblCultura_TipoCorreo_tblTipoCorreo" Association="Self.FK_tblCultura_TipoCorreo_tblTipoCorreo">
             <End Role="tblTipoCorreo" EntitySet="tblTipoCorreo" />
             <End Role="tblCultura_TipoCorreo" EntitySet="tblCultura_TipoCorreo" />
@@ -5350,12 +5440,12 @@
             <End Role="tblEmpresa" EntitySet="tblEmpresa" />
             <End Role="tblIniciativas_Anexo" EntitySet="tblIniciativas_Anexo" />
           </AssociationSet>
-          <AssociationSet Name="FK_tblIniciativas_Anexo_tblIniciativas" Association="Self.FK_tblIniciativas_Anexo_tblIniciativas">
-            <End Role="tblIniciativas" EntitySet="tblIniciativas" />
-            <End Role="tblIniciativas_Anexo" EntitySet="tblIniciativas_Anexo" />
-          </AssociationSet>
           <AssociationSet Name="FK_tblIniciativas_tblEmpresa" Association="Self.FK_tblIniciativas_tblEmpresa">
             <End Role="tblEmpresa" EntitySet="tblEmpresa" />
+            <End Role="tblIniciativas" EntitySet="tblIniciativas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblIniciativas_tblIniciativaPrioridad" Association="Self.FK_tblIniciativas_tblIniciativaPrioridad">
+            <End Role="tblIniciativaPrioridad" EntitySet="tblIniciativaPrioridad" />
             <End Role="tblIniciativas" EntitySet="tblIniciativas" />
           </AssociationSet>
           <AssociationSet Name="FK_tblIniciativas_tblPlanTrabajoEstatus" Association="Self.FK_tblIniciativas_tblPlanTrabajoEstatus">
@@ -5554,18 +5644,6 @@
             <End Role="tblUsuario" EntitySet="tblUsuario" />
             <End Role="tblPlanTrabajoAuditoria" EntitySet="tblPlanTrabajoAuditoria" />
           </AssociationSet>
-          <AssociationSet Name="FK_tblPMTFrecuencia_tblDocumento" Association="Self.FK_tblPMTFrecuencia_tblDocumento">
-            <End Role="tblDocumento" EntitySet="tblDocumento" />
-            <End Role="tblPMTFrecuencia" EntitySet="tblPMTFrecuencia" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tblPMTFrecuenciaParticipante_tblCargo" Association="Self.FK_tblPMTFrecuenciaParticipante_tblCargo">
-            <End Role="tblDocumento" EntitySet="tblDocumento" />
-            <End Role="tblPMTFrecuenciaParticipante" EntitySet="tblPMTFrecuenciaParticipante" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tblPMTFrecuenciaParticipante_tblPMTFrecuencia" Association="Self.FK_tblPMTFrecuenciaParticipante_tblPMTFrecuencia">
-            <End Role="tblPMTFrecuencia" EntitySet="tblPMTFrecuencia" />
-            <End Role="tblPMTFrecuenciaParticipante" EntitySet="tblPMTFrecuenciaParticipante" />
-          </AssociationSet>
           <AssociationSet Name="FK_tblPMTMensajeActualizacion_tblEmpresa" Association="Self.FK_tblPMTMensajeActualizacion_tblEmpresa">
             <End Role="tblEmpresa" EntitySet="tblEmpresa" />
             <End Role="tblPMTMensajeActualizacion" EntitySet="tblPMTMensajeActualizacion" />
@@ -5574,21 +5652,45 @@
             <End Role="tblModulo" EntitySet="tblModulo" />
             <End Role="tblPMTMensajeActualizacion" EntitySet="tblPMTMensajeActualizacion" />
           </AssociationSet>
-          <AssociationSet Name="FK_tblPMTProgramacion_tblDocumento" Association="Self.FK_tblPMTProgramacion_tblDocumento">
-            <End Role="tblDocumento" EntitySet="tblDocumento" />
-            <End Role="tblPMTProgramacion" EntitySet="tblPMTProgramacion" />
-          </AssociationSet>
           <AssociationSet Name="FK_tblPMTProgramacion_tblEmpresa" Association="Self.FK_tblPMTProgramacion_tblEmpresa">
             <End Role="tblEmpresa" EntitySet="tblEmpresa" />
             <End Role="tblPMTProgramacion" EntitySet="tblPMTProgramacion" />
           </AssociationSet>
-          <AssociationSet Name="FK_tblPMTProgramacionAuditoria_tblDocumento" Association="Self.FK_tblPMTProgramacionAuditoria_tblDocumento">
-            <End Role="tblDocumento" EntitySet="tblDocumento" />
-            <End Role="tblPMTProgramacionAuditoria" EntitySet="tblPMTProgramacionAuditoria" />
+          <AssociationSet Name="FK_tblPMTProgramacion_tblModulo" Association="Self.FK_tblPMTProgramacion_tblModulo">
+            <End Role="tblModulo" EntitySet="tblModulo" />
+            <End Role="tblPMTProgramacion" EntitySet="tblPMTProgramacion" />
           </AssociationSet>
-          <AssociationSet Name="FK_tblPMTProgramacionAuditoria_tblEmpresa" Association="Self.FK_tblPMTProgramacionAuditoria_tblEmpresa">
-            <End Role="tblEmpresa" EntitySet="tblEmpresa" />
-            <End Role="tblPMTProgramacionAuditoria" EntitySet="tblPMTProgramacionAuditoria" />
+          <AssociationSet Name="FK_tblPMTProgramacion_tblPMTProgramacionTipoActualizacion" Association="Self.FK_tblPMTProgramacion_tblPMTProgramacionTipoActualizacion">
+            <End Role="tblPMTProgramacionTipoActualizacion" EntitySet="tblPMTProgramacionTipoActualizacion" />
+            <End Role="tblPMTProgramacion" EntitySet="tblPMTProgramacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPMTProgramacion_tblTipoFrecuencia" Association="Self.FK_tblPMTProgramacion_tblTipoFrecuencia">
+            <End Role="tblTipoFrecuencia" EntitySet="tblTipoFrecuencia" />
+            <End Role="tblPMTProgramacion" EntitySet="tblPMTProgramacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPMTProgramacionDocumentos_tblDocumento" Association="Self.FK_tblPMTProgramacionDocumentos_tblDocumento">
+            <End Role="tblDocumento" EntitySet="tblDocumento" />
+            <End Role="tblPMTProgramacionDocumentos" EntitySet="tblPMTProgramacionDocumentos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPMTProgramacionDocumentos_tblModulo" Association="Self.FK_tblPMTProgramacionDocumentos_tblModulo">
+            <End Role="tblModulo" EntitySet="tblModulo" />
+            <End Role="tblPMTProgramacionDocumentos" EntitySet="tblPMTProgramacionDocumentos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPMTProgramacionDocumentos_tblPMTProgramacion" Association="Self.FK_tblPMTProgramacionDocumentos_tblPMTProgramacion">
+            <End Role="tblPMTProgramacion" EntitySet="tblPMTProgramacion" />
+            <End Role="tblPMTProgramacionDocumentos" EntitySet="tblPMTProgramacionDocumentos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPMTProgramacionUsuario_tblPMTProgramacion" Association="Self.FK_tblPMTProgramacionUsuario_tblPMTProgramacion">
+            <End Role="tblPMTProgramacion" EntitySet="tblPMTProgramacion" />
+            <End Role="tblPMTProgramacionUsuario" EntitySet="tblPMTProgramacionUsuario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPMTProgramacionUsuario_tblPMTProgramacionTipoNotificacion" Association="Self.FK_tblPMTProgramacionUsuario_tblPMTProgramacionTipoNotificacion">
+            <End Role="tblPMTProgramacionTipoNotificacion" EntitySet="tblPMTProgramacionTipoNotificacion" />
+            <End Role="tblPMTProgramacionUsuario" EntitySet="tblPMTProgramacionUsuario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPMTProgramacionUsuario_tblUsuario" Association="Self.FK_tblPMTProgramacionUsuario_tblUsuario">
+            <End Role="tblUsuario" EntitySet="tblUsuario" />
+            <End Role="tblPMTProgramacionUsuario" EntitySet="tblPMTProgramacionUsuario" />
           </AssociationSet>
           <AssociationSet Name="FK_tblPMTResponsableUpdate_Correo_tblPMTResponsableUpdate" Association="Self.FK_tblPMTResponsableUpdate_Correo_tblPMTResponsableUpdate">
             <End Role="tblPMTResponsableUpdate" EntitySet="tblPMTResponsableUpdate" />
@@ -5645,6 +5747,10 @@
           <AssociationSet Name="FK_tblVicepresidencia_tblPais" Association="Self.FK_tblVicepresidencia_tblPais">
             <End Role="tblPais" EntitySet="tblPais" />
             <End Role="tblVicepresidencia" EntitySet="tblVicepresidencia" />
+          </AssociationSet>
+          <AssociationSet Name="r" Association="Self.r">
+            <End Role="tblPMTProgramacionTipoActualizacion" EntitySet="tblPMTProgramacionTipoActualizacion" />
+            <End Role="tblCultura_PMTProgramacionTipoActualizacion" EntitySet="tblCultura_PMTProgramacionTipoActualizacion" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -5709,6 +5815,8 @@
           <EntitySet Name="tblCultura_NivelUsuario" EntityType="BCMWeb.tblCultura_NivelUsuario" />
           <EntitySet Name="tblCultura_Pais" EntityType="BCMWeb.tblCultura_Pais" />
           <EntitySet Name="tblCultura_PlanTrabajoEstatus" EntityType="BCMWeb.tblCultura_PlanTrabajoEstatus" />
+          <EntitySet Name="tblCultura_PMTProgramacionTipoActualizacion" EntityType="BCMWeb.tblCultura_PMTProgramacionTipoActualizacion" />
+          <EntitySet Name="tblCultura_PMTProgramacionTipoNotificacion" EntityType="BCMWeb.tblCultura_PMTProgramacionTipoNotificacion" />
           <EntitySet Name="tblCultura_TipoCorreo" EntityType="BCMWeb.tblCultura_TipoCorreo" />
           <EntitySet Name="tblCultura_TipoDireccion" EntityType="BCMWeb.tblCultura_TipoDireccion" />
           <EntitySet Name="tblCultura_TipoFrecuencia" EntityType="BCMWeb.tblCultura_TipoFrecuencia" />
@@ -5739,6 +5847,9 @@
           <EntitySet Name="tblEstadoUsuario" EntityType="BCMWeb.tblEstadoUsuario" />
           <EntitySet Name="tblFuenteRiesgo" EntityType="BCMWeb.tblFuenteRiesgo" />
           <EntitySet Name="tblImpactoRiesgo" EntityType="BCMWeb.tblImpactoRiesgo" />
+          <EntitySet Name="tblIniciativaPrioridad" EntityType="BCMWeb.tblIniciativaPrioridad" />
+          <EntitySet Name="tblIniciativaResponsable" EntityType="BCMWeb.tblIniciativaResponsable" />
+          <EntitySet Name="tblIniciativas_Anexo" EntityType="BCMWeb.tblIniciativas_Anexo" />
           <EntitySet Name="tblLocalidad" EntityType="BCMWeb.tblLocalidad" />
           <EntitySet Name="tblMes" EntityType="BCMWeb.tblMes" />
           <EntitySet Name="tblModulo" EntityType="BCMWeb.tblModulo" />
@@ -5768,11 +5879,11 @@
           <EntitySet Name="tblPlanTrabajoAccion" EntityType="BCMWeb.tblPlanTrabajoAccion" />
           <EntitySet Name="tblPlanTrabajoAuditoria" EntityType="BCMWeb.tblPlanTrabajoAuditoria" />
           <EntitySet Name="tblPlanTrabajoEstatus" EntityType="BCMWeb.tblPlanTrabajoEstatus" />
-          <EntitySet Name="tblPMTFrecuencia" EntityType="BCMWeb.tblPMTFrecuencia" />
-          <EntitySet Name="tblPMTFrecuenciaParticipante" EntityType="BCMWeb.tblPMTFrecuenciaParticipante" />
           <EntitySet Name="tblPMTMensajeActualizacion" EntityType="BCMWeb.tblPMTMensajeActualizacion" />
-          <EntitySet Name="tblPMTProgramacion" EntityType="BCMWeb.tblPMTProgramacion" />
-          <EntitySet Name="tblPMTProgramacionAuditoria" EntityType="BCMWeb.tblPMTProgramacionAuditoria" />
+          <EntitySet Name="tblPMTProgramacionDocumentos" EntityType="BCMWeb.tblPMTProgramacionDocumentos" />
+          <EntitySet Name="tblPMTProgramacionTipoActualizacion" EntityType="BCMWeb.tblPMTProgramacionTipoActualizacion" />
+          <EntitySet Name="tblPMTProgramacionTipoNotificacion" EntityType="BCMWeb.tblPMTProgramacionTipoNotificacion" />
+          <EntitySet Name="tblPMTProgramacionUsuario" EntityType="BCMWeb.tblPMTProgramacionUsuario" />
           <EntitySet Name="tblPMTResponsableUpdate" EntityType="BCMWeb.tblPMTResponsableUpdate" />
           <EntitySet Name="tblPMTResponsableUpdate_Correo" EntityType="BCMWeb.tblPMTResponsableUpdate_Correo" />
           <EntitySet Name="tblPPEFrecuencia" EntityType="BCMWeb.tblPPEFrecuencia" />
@@ -5875,6 +5986,10 @@
             <End Role="tblPersona" EntitySet="tblPersona" />
             <End Role="tblBCPRecuperacionPersonaClave" EntitySet="tblBCPRecuperacionPersonaClave" />
           </AssociationSet>
+          <AssociationSet Name="FK_tblBIAAmenaza_tblBIAProceso" Association="BCMWeb.FK_tblBIAAmenaza_tblBIAProceso">
+            <End Role="tblBIAProceso" EntitySet="tblBIAProceso" />
+            <End Role="tblBIAAmenaza" EntitySet="tblBIAAmenaza" />
+          </AssociationSet>
           <AssociationSet Name="FK_tblBIAAmenaza_tblControlRiesgo" Association="BCMWeb.FK_tblBIAAmenaza_tblControlRiesgo">
             <End Role="tblControlRiesgo" EntitySet="tblControlRiesgo" />
             <End Role="tblBIAAmenaza" EntitySet="tblBIAAmenaza" />
@@ -5935,10 +6050,6 @@
             <End Role="tblUnidadOrganizativa" EntitySet="tblUnidadOrganizativa" />
             <End Role="tblBIADocumento" EntitySet="tblBIADocumento" />
           </AssociationSet>
-          <AssociationSet Name="FK_tblBIAImpactoFinanciero_tblEscala" Association="BCMWeb.FK_tblBIAImpactoFinanciero_tblEscala">
-            <End Role="tblBIADocumento" EntitySet="tblBIADocumento" />
-            <End Role="tblBIAImpactoFinanciero" EntitySet="tblBIAImpactoFinanciero" />
-          </AssociationSet>
           <AssociationSet Name="FK_tblBIAProceso_tblBIADocumento" Association="BCMWeb.FK_tblBIAProceso_tblBIADocumento">
             <End Role="tblBIADocumento" EntitySet="tblBIADocumento" />
             <End Role="tblBIAProceso" EntitySet="tblBIAProceso" />
@@ -5981,6 +6092,10 @@
           </AssociationSet>
           <AssociationSet Name="FK_tblBIAImpactoFinanciero_tblBIAProceso" Association="BCMWeb.FK_tblBIAImpactoFinanciero_tblBIAProceso">
             <End Role="tblBIAProceso" EntitySet="tblBIAProceso" />
+            <End Role="tblBIAImpactoFinanciero" EntitySet="tblBIAImpactoFinanciero" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblBIAImpactoFinanciero_tblEscala" Association="BCMWeb.FK_tblBIAImpactoFinanciero_tblEscala">
+            <End Role="tblEscala" EntitySet="tblEscala" />
             <End Role="tblBIAImpactoFinanciero" EntitySet="tblBIAImpactoFinanciero" />
           </AssociationSet>
           <AssociationSet Name="FK_tblBIAImpactoFinanciero_tblTipoFrecuencia" Association="BCMWeb.FK_tblBIAImpactoFinanciero_tblTipoFrecuencia">
@@ -6187,6 +6302,14 @@
             <End Role="tblPlanTrabajoEstatus" EntitySet="tblPlanTrabajoEstatus" />
             <End Role="tblCultura_PlanTrabajoEstatus" EntitySet="tblCultura_PlanTrabajoEstatus" />
           </AssociationSet>
+          <AssociationSet Name="r" Association="BCMWeb.r">
+            <End Role="tblPMTProgramacionTipoActualizacion" EntitySet="tblPMTProgramacionTipoActualizacion" />
+            <End Role="tblCultura_PMTProgramacionTipoActualizacion" EntitySet="tblCultura_PMTProgramacionTipoActualizacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblCultura_PMTProgramacionTipoNotificacion_tblPMTProgramacionTipoNotificacion" Association="BCMWeb.FK_tblCultura_PMTProgramacionTipoNotificacion_tblPMTProgramacionTipoNotificacion">
+            <End Role="tblPMTProgramacionTipoNotificacion" EntitySet="tblPMTProgramacionTipoNotificacion" />
+            <End Role="tblCultura_PMTProgramacionTipoNotificacion" EntitySet="tblCultura_PMTProgramacionTipoNotificacion" />
+          </AssociationSet>
           <AssociationSet Name="FK_tblCultura_TipoCorreo_tblTipoCorreo" Association="BCMWeb.FK_tblCultura_TipoCorreo_tblTipoCorreo">
             <End Role="tblTipoCorreo" EntitySet="tblTipoCorreo" />
             <End Role="tblCultura_TipoCorreo" EntitySet="tblCultura_TipoCorreo" />
@@ -6259,21 +6382,9 @@
             <End Role="tblDocumento" EntitySet="tblDocumento" />
             <End Role="tblDocumentoPersonaClave" EntitySet="tblDocumentoPersonaClave" />
           </AssociationSet>
-          <AssociationSet Name="FK_tblPMTFrecuencia_tblDocumento" Association="BCMWeb.FK_tblPMTFrecuencia_tblDocumento">
+          <AssociationSet Name="FK_tblPMTProgramacionDocumentos_tblDocumento" Association="BCMWeb.FK_tblPMTProgramacionDocumentos_tblDocumento">
             <End Role="tblDocumento" EntitySet="tblDocumento" />
-            <End Role="tblPMTFrecuencia" EntitySet="tblPMTFrecuencia" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tblPMTFrecuenciaParticipante_tblCargo" Association="BCMWeb.FK_tblPMTFrecuenciaParticipante_tblCargo">
-            <End Role="tblDocumento" EntitySet="tblDocumento" />
-            <End Role="tblPMTFrecuenciaParticipante" EntitySet="tblPMTFrecuenciaParticipante" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tblPMTProgramacion_tblDocumento" Association="BCMWeb.FK_tblPMTProgramacion_tblDocumento">
-            <End Role="tblDocumento" EntitySet="tblDocumento" />
-            <End Role="tblPMTProgramacion" EntitySet="tblPMTProgramacion" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tblPMTProgramacionAuditoria_tblDocumento" Association="BCMWeb.FK_tblPMTProgramacionAuditoria_tblDocumento">
-            <End Role="tblDocumento" EntitySet="tblDocumento" />
-            <End Role="tblPMTProgramacionAuditoria" EntitySet="tblPMTProgramacionAuditoria" />
+            <End Role="tblPMTProgramacionDocumentos" EntitySet="tblPMTProgramacionDocumentos" />
           </AssociationSet>
           <AssociationSet Name="FK_tblPPEFrecuencia_tblDocumento" Association="BCMWeb.FK_tblPPEFrecuencia_tblDocumento">
             <End Role="tblDocumento" EntitySet="tblDocumento" />
@@ -6355,6 +6466,10 @@
             <End Role="tblEmpresa" EntitySet="tblEmpresa" />
             <End Role="tblEmpresaUsuario" EntitySet="tblEmpresaUsuario" />
           </AssociationSet>
+          <AssociationSet Name="FK_tblIniciativas_Anexo_tblEmpresa" Association="BCMWeb.FK_tblIniciativas_Anexo_tblEmpresa">
+            <End Role="tblEmpresa" EntitySet="tblEmpresa" />
+            <End Role="tblIniciativas_Anexo" EntitySet="tblIniciativas_Anexo" />
+          </AssociationSet>
           <AssociationSet Name="FK_tblModulo_NivelUsuario_tblEmpresa" Association="BCMWeb.FK_tblModulo_NivelUsuario_tblEmpresa">
             <End Role="tblEmpresa" EntitySet="tblEmpresa" />
             <End Role="tblModulo_NivelUsuario" EntitySet="tblModulo_NivelUsuario" />
@@ -6386,14 +6501,6 @@
           <AssociationSet Name="FK_tblPMTMensajeActualizacion_tblEmpresa" Association="BCMWeb.FK_tblPMTMensajeActualizacion_tblEmpresa">
             <End Role="tblEmpresa" EntitySet="tblEmpresa" />
             <End Role="tblPMTMensajeActualizacion" EntitySet="tblPMTMensajeActualizacion" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tblPMTProgramacion_tblEmpresa" Association="BCMWeb.FK_tblPMTProgramacion_tblEmpresa">
-            <End Role="tblEmpresa" EntitySet="tblEmpresa" />
-            <End Role="tblPMTProgramacion" EntitySet="tblPMTProgramacion" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tblPMTProgramacionAuditoria_tblEmpresa" Association="BCMWeb.FK_tblPMTProgramacionAuditoria_tblEmpresa">
-            <End Role="tblEmpresa" EntitySet="tblEmpresa" />
-            <End Role="tblPMTProgramacionAuditoria" EntitySet="tblPMTProgramacionAuditoria" />
           </AssociationSet>
           <AssociationSet Name="FK_tblPMTResponsableUpdate_tblEmpresa" Association="BCMWeb.FK_tblPMTResponsableUpdate_tblEmpresa">
             <End Role="tblEmpresa" EntitySet="tblEmpresa" />
@@ -6454,6 +6561,10 @@
           <AssociationSet Name="FK_tblPMTMensajeActualizacion_tblModulo" Association="BCMWeb.FK_tblPMTMensajeActualizacion_tblModulo">
             <End Role="tblModulo" EntitySet="tblModulo" />
             <End Role="tblPMTMensajeActualizacion" EntitySet="tblPMTMensajeActualizacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPMTProgramacionDocumentos_tblModulo" Association="BCMWeb.FK_tblPMTProgramacionDocumentos_tblModulo">
+            <End Role="tblModulo" EntitySet="tblModulo" />
+            <End Role="tblPMTProgramacionDocumentos" EntitySet="tblPMTProgramacionDocumentos" />
           </AssociationSet>
           <AssociationSet Name="FK_tblPMTResponsableUpdate_tblModulo" Association="BCMWeb.FK_tblPMTResponsableUpdate_tblModulo">
             <End Role="tblModulo" EntitySet="tblModulo" />
@@ -6587,9 +6698,13 @@
             <End Role="tblUsuario" EntitySet="tblUsuario" />
             <End Role="tblPlanTrabajoAuditoria" EntitySet="tblPlanTrabajoAuditoria" />
           </AssociationSet>
-          <AssociationSet Name="FK_tblPMTFrecuenciaParticipante_tblPMTFrecuencia" Association="BCMWeb.FK_tblPMTFrecuenciaParticipante_tblPMTFrecuencia">
-            <End Role="tblPMTFrecuencia" EntitySet="tblPMTFrecuencia" />
-            <End Role="tblPMTFrecuenciaParticipante" EntitySet="tblPMTFrecuenciaParticipante" />
+          <AssociationSet Name="FK_tblPMTProgramacionUsuario_tblPMTProgramacionTipoNotificacion" Association="BCMWeb.FK_tblPMTProgramacionUsuario_tblPMTProgramacionTipoNotificacion">
+            <End Role="tblPMTProgramacionTipoNotificacion" EntitySet="tblPMTProgramacionTipoNotificacion" />
+            <End Role="tblPMTProgramacionUsuario" EntitySet="tblPMTProgramacionUsuario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPMTProgramacionUsuario_tblUsuario" Association="BCMWeb.FK_tblPMTProgramacionUsuario_tblUsuario">
+            <End Role="tblUsuario" EntitySet="tblUsuario" />
+            <End Role="tblPMTProgramacionUsuario" EntitySet="tblPMTProgramacionUsuario" />
           </AssociationSet>
           <AssociationSet Name="FK_tblPMTResponsableUpdate_Correo_tblPMTResponsableUpdate" Association="BCMWeb.FK_tblPMTResponsableUpdate_Correo_tblPMTResponsableUpdate">
             <End Role="tblPMTResponsableUpdate" EntitySet="tblPMTResponsableUpdate" />
@@ -6611,31 +6726,43 @@
             <End Role="tblUsuario" EntitySet="tblUsuario" />
             <End Role="tblUsuarioUnidadOrganizativa" EntitySet="tblUsuarioUnidadOrganizativa" />
           </AssociationSet>
-          <AssociationSet Name="FK_tblBIAAmenaza_tblBIAProceso" Association="BCMWeb.FK_tblBIAAmenaza_tblBIAProceso">
-            <End Role="tblBIAProceso" EntitySet="tblBIAProceso" />
-            <End Role="tblBIAAmenaza" EntitySet="tblBIAAmenaza" />
+          <EntitySet Name="tblPMTProgramacion" EntityType="BCMWeb.tblPMTProgramacion" />
+          <AssociationSet Name="FK_tblPMTProgramacion_tblEmpresa" Association="BCMWeb.FK_tblPMTProgramacion_tblEmpresa">
+            <End Role="tblEmpresa" EntitySet="tblEmpresa" />
+            <End Role="tblPMTProgramacion" EntitySet="tblPMTProgramacion" />
           </AssociationSet>
-          <AssociationSet Name="FK_tblBIAImpactoFinanciero_tblEscala1" Association="BCMWeb.FK_tblBIAImpactoFinanciero_tblEscala1">
-            <End Role="tblEscala" EntitySet="tblEscala" />
-            <End Role="tblBIAImpactoFinanciero" EntitySet="tblBIAImpactoFinanciero" />
+          <AssociationSet Name="FK_tblPMTProgramacion_tblModulo" Association="BCMWeb.FK_tblPMTProgramacion_tblModulo">
+            <End Role="tblModulo" EntitySet="tblModulo" />
+            <End Role="tblPMTProgramacion" EntitySet="tblPMTProgramacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPMTProgramacion_tblPMTProgramacionTipoActualizacion" Association="BCMWeb.FK_tblPMTProgramacion_tblPMTProgramacionTipoActualizacion">
+            <End Role="tblPMTProgramacionTipoActualizacion" EntitySet="tblPMTProgramacionTipoActualizacion" />
+            <End Role="tblPMTProgramacion" EntitySet="tblPMTProgramacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPMTProgramacion_tblTipoFrecuencia" Association="BCMWeb.FK_tblPMTProgramacion_tblTipoFrecuencia">
+            <End Role="tblTipoFrecuencia" EntitySet="tblTipoFrecuencia" />
+            <End Role="tblPMTProgramacion" EntitySet="tblPMTProgramacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPMTProgramacionDocumentos_tblPMTProgramacion" Association="BCMWeb.FK_tblPMTProgramacionDocumentos_tblPMTProgramacion">
+            <End Role="tblPMTProgramacion" EntitySet="tblPMTProgramacion" />
+            <End Role="tblPMTProgramacionDocumentos" EntitySet="tblPMTProgramacionDocumentos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPMTProgramacionUsuario_tblPMTProgramacion" Association="BCMWeb.FK_tblPMTProgramacionUsuario_tblPMTProgramacion">
+            <End Role="tblPMTProgramacion" EntitySet="tblPMTProgramacion" />
+            <End Role="tblPMTProgramacionUsuario" EntitySet="tblPMTProgramacionUsuario" />
           </AssociationSet>
           <EntitySet Name="tblIniciativas" EntityType="BCMWeb.tblIniciativas" />
           <AssociationSet Name="FK_tblIniciativas_tblEmpresa" Association="BCMWeb.FK_tblIniciativas_tblEmpresa">
             <End Role="tblEmpresa" EntitySet="tblEmpresa" />
             <End Role="tblIniciativas" EntitySet="tblIniciativas" />
           </AssociationSet>
+          <AssociationSet Name="FK_tblIniciativas_tblIniciativaPrioridad" Association="BCMWeb.FK_tblIniciativas_tblIniciativaPrioridad">
+            <End Role="tblIniciativaPrioridad" EntitySet="tblIniciativaPrioridad" />
+            <End Role="tblIniciativas" EntitySet="tblIniciativas" />
+          </AssociationSet>
           <AssociationSet Name="FK_tblIniciativas_tblPlanTrabajoEstatus" Association="BCMWeb.FK_tblIniciativas_tblPlanTrabajoEstatus">
             <End Role="tblPlanTrabajoEstatus" EntitySet="tblPlanTrabajoEstatus" />
             <End Role="tblIniciativas" EntitySet="tblIniciativas" />
-          </AssociationSet>
-          <EntitySet Name="tblIniciativas_Anexo" EntityType="BCMWeb.tblIniciativas_Anexo" />
-          <AssociationSet Name="FK_tblIniciativas_Anexo_tblEmpresa" Association="BCMWeb.FK_tblIniciativas_Anexo_tblEmpresa">
-            <End Role="tblEmpresa" EntitySet="tblEmpresa" />
-            <End Role="tblIniciativas_Anexo" EntitySet="tblIniciativas_Anexo" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tblIniciativas_Anexo_tblIniciativas" Association="BCMWeb.FK_tblIniciativas_Anexo_tblIniciativas">
-            <End Role="tblIniciativas" EntitySet="tblIniciativas" />
-            <End Role="tblIniciativas_Anexo" EntitySet="tblIniciativas_Anexo" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="tblAuditoria">
@@ -6652,10 +6779,10 @@
           <Property Name="Accion" Type="String" Nullable="false" MaxLength="450" FixedLength="false" Unicode="true" />
           <Property Name="IdUsuario" Type="Int64" />
           <Property Name="Negocios" Type="Boolean" Nullable="false" />
+          <Property Name="DatosModificados" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="tblDocumento" Relationship="BCMWeb.FK_tblAuditoria_tblDocumento" FromRole="tblAuditoria" ToRole="tblDocumento" />
           <NavigationProperty Name="tblEmpresa" Relationship="BCMWeb.FK_tblEmpresa_tblAuditoria_FK1" FromRole="tblAuditoria" ToRole="tblEmpresa" />
           <NavigationProperty Name="tblUsuario" Relationship="BCMWeb.FK_tblUsuario_tblAuditoria_FK1" FromRole="tblAuditoria" ToRole="tblUsuario" />
-          <Property Name="DatosModificados" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="tblAuditoriaProcesoCritico">
           <Key>
@@ -6884,6 +7011,7 @@
           <Property Name="Severidad" Type="Int16" />
           <Property Name="Fuente" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
           <Property Name="Estado" Type="Int16" />
+          <NavigationProperty Name="tblBIAProceso" Relationship="BCMWeb.FK_tblBIAAmenaza_tblBIAProceso" FromRole="tblBIAAmenaza" ToRole="tblBIAProceso" />
           <NavigationProperty Name="tblControlRiesgo" Relationship="BCMWeb.FK_tblBIAAmenaza_tblControlRiesgo" FromRole="tblBIAAmenaza" ToRole="tblControlRiesgo" />
           <NavigationProperty Name="tblDocumento" Relationship="BCMWeb.FK_tblBIAAmenaza_tblDocumento" FromRole="tblBIAAmenaza" ToRole="tblDocumento" />
           <NavigationProperty Name="tblEstadoRiesgo" Relationship="BCMWeb.FK_tblBIAAmenaza_tblEstadoRiesgo" FromRole="tblBIAAmenaza" ToRole="tblEstadoRiesgo" />
@@ -6891,7 +7019,6 @@
           <NavigationProperty Name="tblImpactoRiesgo" Relationship="BCMWeb.FK_tblBIAAmenaza_tblImpactoRiesgo" FromRole="tblBIAAmenaza" ToRole="tblImpactoRiesgo" />
           <NavigationProperty Name="tblProbabilidadRiesgo" Relationship="BCMWeb.FK_tblBIAAmenaza_tblProbabilidadRiesgo" FromRole="tblBIAAmenaza" ToRole="tblProbabilidadRiesgo" />
           <NavigationProperty Name="tblSeveridadRiesgo" Relationship="BCMWeb.FK_tblBIAAmenaza_tblSeveridadRiesgo" FromRole="tblBIAAmenaza" ToRole="tblSeveridadRiesgo" />
-          <NavigationProperty Name="tblBIAProceso" Relationship="BCMWeb.FK_tblBIAAmenaza_tblBIAProceso" FromRole="tblBIAAmenaza" ToRole="tblBIAProceso" />
         </EntityType>
         <EntityType Name="tblBIAAmenazaEvento">
           <Key>
@@ -6993,7 +7120,6 @@
           <Property Name="IdTipoDocumento" Type="Int64" />
           <NavigationProperty Name="tblBIAComentario" Relationship="BCMWeb.FK_tblBIAComentario_tblBIADocumento" FromRole="tblBIADocumento" ToRole="tblBIAComentario" />
           <NavigationProperty Name="tblUnidadOrganizativa" Relationship="BCMWeb.FK_tblBIADocumento_tblUnidadOrganizativa" FromRole="tblBIADocumento" ToRole="tblUnidadOrganizativa" />
-          <NavigationProperty Name="tblBIAImpactoFinanciero" Relationship="BCMWeb.FK_tblBIAImpactoFinanciero_tblEscala" FromRole="tblBIADocumento" ToRole="tblBIAImpactoFinanciero" />
           <NavigationProperty Name="tblBIAProceso" Relationship="BCMWeb.FK_tblBIAProceso_tblBIADocumento" FromRole="tblBIADocumento" ToRole="tblBIAProceso" />
           <NavigationProperty Name="tblDocumento" Relationship="BCMWeb.FK_tblDocumento_tblBIADocumento" FromRole="tblBIADocumento" ToRole="tblDocumento" />
           <NavigationProperty Name="tblEmpresa" Relationship="BCMWeb.FK_tblEmpresa_tblBIADocumento_FK1" FromRole="tblBIADocumento" ToRole="tblEmpresa" />
@@ -7085,10 +7211,9 @@
           <Property Name="Impacto" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="IdEscala" Type="Int64" />
           <Property Name="UnidadTiempo" Type="String" MaxLength="450" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="tblBIADocumento" Relationship="BCMWeb.FK_tblBIAImpactoFinanciero_tblEscala" FromRole="tblBIAImpactoFinanciero" ToRole="tblBIADocumento" />
           <NavigationProperty Name="tblBIAProceso" Relationship="BCMWeb.FK_tblBIAImpactoFinanciero_tblBIAProceso" FromRole="tblBIAImpactoFinanciero" ToRole="tblBIAProceso" />
+          <NavigationProperty Name="tblEscala" Relationship="BCMWeb.FK_tblBIAImpactoFinanciero_tblEscala" FromRole="tblBIAImpactoFinanciero" ToRole="tblEscala" />
           <NavigationProperty Name="tblTipoFrecuencia" Relationship="BCMWeb.FK_tblBIAImpactoFinanciero_tblTipoFrecuencia" FromRole="tblBIAImpactoFinanciero" ToRole="tblTipoFrecuencia" />
-          <NavigationProperty Name="tblEscala" Relationship="BCMWeb.FK_tblBIAImpactoFinanciero_tblEscala1" FromRole="tblBIAImpactoFinanciero" ToRole="tblEscala" />
         </EntityType>
         <EntityType Name="tblBIAImpactoOperacional">
           <Key>
@@ -7193,6 +7318,7 @@
           <Property Name="IdEstadoProceso" Type="Int64" />
           <Property Name="FechaUltimoEstatus" Type="DateTime" Precision="3" />
           <NavigationProperty Name="tblBCPDocumento" Relationship="BCMWeb.FK_tblBCPDocumento_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBCPDocumento" />
+          <NavigationProperty Name="tblBIAAmenaza" Relationship="BCMWeb.FK_tblBIAAmenaza_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIAAmenaza" />
           <NavigationProperty Name="tblBIAAplicacion" Relationship="BCMWeb.FK_tblBIAAplicacion_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIAAplicacion" />
           <NavigationProperty Name="tblBIAClienteProceso" Relationship="BCMWeb.FK_tblBIAClienteProducto_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIAClienteProceso" />
           <NavigationProperty Name="tblBIADocumentacion" Relationship="BCMWeb.FK_tblBIADocumentacion_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIADocumentacion" />
@@ -7215,7 +7341,6 @@
           <NavigationProperty Name="tblBIARTO" Relationship="BCMWeb.FK_tblBIARTO_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIARTO" />
           <NavigationProperty Name="tblBIAUnidadTrabajoProceso" Relationship="BCMWeb.FK_tblBIAUnidadTrabajoProceso_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIAUnidadTrabajoProceso" />
           <NavigationProperty Name="tblBIAWRT" Relationship="BCMWeb.FK_tblBIAWRT_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIAWRT" />
-          <NavigationProperty Name="tblBIAAmenaza" Relationship="BCMWeb.FK_tblBIAAmenaza_tblBIAProceso" FromRole="tblBIAProceso" ToRole="tblBIAAmenaza" />
         </EntityType>
         <EntityType Name="tblBIAProcesoAlterno">
           <Key>
@@ -7531,6 +7656,26 @@
           <Property Name="Descripcion" Type="String" MaxLength="450" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="tblPlanTrabajoEstatus" Relationship="BCMWeb.FK_tblCultura_PlanTrabajoEstatus_tblPlanTrabajoEstatus" FromRole="tblCultura_PlanTrabajoEstatus" ToRole="tblPlanTrabajoEstatus" />
         </EntityType>
+        <EntityType Name="tblCultura_PMTProgramacionTipoActualizacion">
+          <Key>
+            <PropertyRef Name="Culture" />
+            <PropertyRef Name="IdTipoActualizacion" />
+          </Key>
+          <Property Name="Culture" Type="String" Nullable="false" MaxLength="5" FixedLength="true" Unicode="true" />
+          <Property Name="IdTipoActualizacion" Type="Int16" Nullable="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblPMTProgramacionTipoActualizacion" Relationship="BCMWeb.r" FromRole="tblCultura_PMTProgramacionTipoActualizacion" ToRole="tblPMTProgramacionTipoActualizacion" />
+        </EntityType>
+        <EntityType Name="tblCultura_PMTProgramacionTipoNotificacion">
+          <Key>
+            <PropertyRef Name="Cultura" />
+            <PropertyRef Name="IdTipoNotificacion" />
+          </Key>
+          <Property Name="Cultura" Type="String" Nullable="false" MaxLength="5" FixedLength="true" Unicode="true" />
+          <Property Name="IdTipoNotificacion" Type="Int16" Nullable="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblPMTProgramacionTipoNotificacion" Relationship="BCMWeb.FK_tblCultura_PMTProgramacionTipoNotificacion_tblPMTProgramacionTipoNotificacion" FromRole="tblCultura_PMTProgramacionTipoNotificacion" ToRole="tblPMTProgramacionTipoNotificacion" />
+        </EntityType>
         <EntityType Name="tblCultura_TipoCorreo">
           <Key>
             <PropertyRef Name="Culture" />
@@ -7663,10 +7808,7 @@
           <NavigationProperty Name="tblDocumentoContenido" Relationship="BCMWeb.FK_tblDocumentoContenido_tblDocumento" FromRole="tblDocumento" ToRole="tblDocumentoContenido" />
           <NavigationProperty Name="tblDocumentoEntrevista" Relationship="BCMWeb.FK_tblDocumentoEntrevista_tblDocumento" FromRole="tblDocumento" ToRole="tblDocumentoEntrevista" />
           <NavigationProperty Name="tblDocumentoPersonaClave" Relationship="BCMWeb.FK_tblDocumentoPersonaClave_tblDocumento" FromRole="tblDocumento" ToRole="tblDocumentoPersonaClave" />
-          <NavigationProperty Name="tblPMTFrecuencia" Relationship="BCMWeb.FK_tblPMTFrecuencia_tblDocumento" FromRole="tblDocumento" ToRole="tblPMTFrecuencia" />
-          <NavigationProperty Name="tblPMTFrecuenciaParticipante" Relationship="BCMWeb.FK_tblPMTFrecuenciaParticipante_tblCargo" FromRole="tblDocumento" ToRole="tblPMTFrecuenciaParticipante" />
-          <NavigationProperty Name="tblPMTProgramacion" Relationship="BCMWeb.FK_tblPMTProgramacion_tblDocumento" FromRole="tblDocumento" ToRole="tblPMTProgramacion" />
-          <NavigationProperty Name="tblPMTProgramacionAuditoria" Relationship="BCMWeb.FK_tblPMTProgramacionAuditoria_tblDocumento" FromRole="tblDocumento" ToRole="tblPMTProgramacionAuditoria" />
+          <NavigationProperty Name="tblPMTProgramacionDocumentos" Relationship="BCMWeb.FK_tblPMTProgramacionDocumentos_tblDocumento" FromRole="tblDocumento" ToRole="tblPMTProgramacionDocumentos" />
           <NavigationProperty Name="tblPPEFrecuencia" Relationship="BCMWeb.FK_tblPPEFrecuencia_tblDocumento" FromRole="tblDocumento" ToRole="tblPPEFrecuencia" />
         </EntityType>
         <EntityType Name="tblDocumentoAnexo">
@@ -7842,6 +7984,7 @@
           <NavigationProperty Name="tblVicepresidencia" Relationship="BCMWeb.FK_tblEmpresa_tblVicepresidencia_FK1" FromRole="tblEmpresa" ToRole="tblVicepresidencia" />
           <NavigationProperty Name="tblEmpresaModulo" Relationship="BCMWeb.FK_tblEmpresaModulo_tblEmpresa" FromRole="tblEmpresa" ToRole="tblEmpresaModulo" />
           <NavigationProperty Name="tblEmpresaUsuario" Relationship="BCMWeb.FK_tblEmpresaUsuario_tblEmpresa" FromRole="tblEmpresa" ToRole="tblEmpresaUsuario" />
+          <NavigationProperty Name="tblIniciativas_Anexo" Relationship="BCMWeb.FK_tblIniciativas_Anexo_tblEmpresa" FromRole="tblEmpresa" ToRole="tblIniciativas_Anexo" />
           <NavigationProperty Name="tblModulo_NivelUsuario" Relationship="BCMWeb.FK_tblModulo_NivelUsuario_tblEmpresa" FromRole="tblEmpresa" ToRole="tblModulo_NivelUsuario" />
           <NavigationProperty Name="tblModulo" Relationship="BCMWeb.FK_tblModulo_tblEmpresa" FromRole="tblEmpresa" ToRole="tblModulo" />
           <NavigationProperty Name="tblModuloAnexo" Relationship="BCMWeb.FK_tblModuloAnexo_tblEmpresa" FromRole="tblEmpresa" ToRole="tblModuloAnexo" />
@@ -7850,13 +7993,11 @@
           <NavigationProperty Name="tblPlanTrabajo" Relationship="BCMWeb.FK_tblPlanTrabajo_tblEmpresa" FromRole="tblEmpresa" ToRole="tblPlanTrabajo" />
           <NavigationProperty Name="tblPlanTrabajoAccion" Relationship="BCMWeb.FK_tblPlanTrabajoAccion_tblEmpresa" FromRole="tblEmpresa" ToRole="tblPlanTrabajoAccion" />
           <NavigationProperty Name="tblPMTMensajeActualizacion" Relationship="BCMWeb.FK_tblPMTMensajeActualizacion_tblEmpresa" FromRole="tblEmpresa" ToRole="tblPMTMensajeActualizacion" />
-          <NavigationProperty Name="tblPMTProgramacion" Relationship="BCMWeb.FK_tblPMTProgramacion_tblEmpresa" FromRole="tblEmpresa" ToRole="tblPMTProgramacion" />
-          <NavigationProperty Name="tblPMTProgramacionAuditoria" Relationship="BCMWeb.FK_tblPMTProgramacionAuditoria_tblEmpresa" FromRole="tblEmpresa" ToRole="tblPMTProgramacionAuditoria" />
           <NavigationProperty Name="tblPMTResponsableUpdate" Relationship="BCMWeb.FK_tblPMTResponsableUpdate_tblEmpresa" FromRole="tblEmpresa" ToRole="tblPMTResponsableUpdate" />
           <NavigationProperty Name="tblProducto" Relationship="BCMWeb.FK_tblProducto_tblEmpresa" FromRole="tblEmpresa" ToRole="tblProducto" />
           <NavigationProperty Name="tblUsuarioUnidadOrganizativa" Relationship="BCMWeb.FK_tblUsuarioUnidadOrganizativa_tblEmpresa" FromRole="tblEmpresa" ToRole="tblUsuarioUnidadOrganizativa" />
+          <NavigationProperty Name="tblPMTProgramacion" Relationship="BCMWeb.FK_tblPMTProgramacion_tblEmpresa" FromRole="tblEmpresa" ToRole="tblPMTProgramacion" />
           <NavigationProperty Name="tblIniciativas" Relationship="BCMWeb.FK_tblIniciativas_tblEmpresa" FromRole="tblEmpresa" ToRole="tblIniciativas" />
-          <NavigationProperty Name="tblIniciativas_Anexo" Relationship="BCMWeb.FK_tblIniciativas_Anexo_tblEmpresa" FromRole="tblEmpresa" ToRole="tblIniciativas_Anexo" />
         </EntityType>
         <EntityType Name="tblEmpresaModulo">
           <Key>
@@ -7893,6 +8034,7 @@
           <Property Name="Valor" Type="Int16" Nullable="false" />
           <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="FechaRegistro" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="tblBIAImpactoFinanciero" Relationship="BCMWeb.FK_tblBIAImpactoFinanciero_tblEscala" FromRole="tblEscala" ToRole="tblBIAImpactoFinanciero" />
           <NavigationProperty Name="tblBIAImpactoOperacional" Relationship="BCMWeb.FK_tblBIAImpactoOperacional_tblEscala" FromRole="tblEscala" ToRole="tblBIAImpactoOperacional" />
           <NavigationProperty Name="tblBIAMTD" Relationship="BCMWeb.FK_tblBIAMTD_tblEscala" FromRole="tblEscala" ToRole="tblBIAMTD" />
           <NavigationProperty Name="tblBIARPO" Relationship="BCMWeb.FK_tblBIARPO_tblEscala" FromRole="tblEscala" ToRole="tblBIARPO" />
@@ -7900,7 +8042,6 @@
           <NavigationProperty Name="tblBIAWRT" Relationship="BCMWeb.FK_tblBIAWRT_tblEscala" FromRole="tblEscala" ToRole="tblBIAWRT" />
           <NavigationProperty Name="tblEmpresa" Relationship="BCMWeb.FK_tblEmpresa_tblEscala_FK1" FromRole="tblEscala" ToRole="tblEmpresa" />
           <NavigationProperty Name="tblTipoEscala" Relationship="BCMWeb.FK_tblEscala_tblTipoEscala" FromRole="tblEscala" ToRole="tblTipoEscala" />
-          <NavigationProperty Name="tblBIAImpactoFinanciero" Relationship="BCMWeb.FK_tblBIAImpactoFinanciero_tblEscala1" FromRole="tblEscala" ToRole="tblBIAImpactoFinanciero" />
         </EntityType>
         <EntityType Name="tblEstado">
           <Key>
@@ -7982,6 +8123,39 @@
           <NavigationProperty Name="tblBIAAmenaza" Relationship="BCMWeb.FK_tblBIAAmenaza_tblImpactoRiesgo" FromRole="tblImpactoRiesgo" ToRole="tblBIAAmenaza" />
           <NavigationProperty Name="tblBIAEventoRiesgo" Relationship="BCMWeb.FK_tblBIAEventoRiesgo_tblBIAImpactoRiesgo" FromRole="tblImpactoRiesgo" ToRole="tblBIAEventoRiesgo" />
         </EntityType>
+        <EntityType Name="tblIniciativaPrioridad">
+          <Key>
+            <PropertyRef Name="IdEmpresa" />
+            <PropertyRef Name="IdPrioridad" />
+          </Key>
+          <Property Name="IdEmpresa" Type="Int64" Nullable="false" />
+          <Property Name="IdPrioridad" Type="Int16" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblIniciativas" Relationship="BCMWeb.FK_tblIniciativas_tblIniciativaPrioridad" FromRole="tblIniciativaPrioridad" ToRole="tblIniciativas" />
+        </EntityType>
+        <EntityType Name="tblIniciativaResponsable">
+          <Key>
+            <PropertyRef Name="IdEmpresa" />
+            <PropertyRef Name="IdResponsable" />
+          </Key>
+          <Property Name="IdEmpresa" Type="Int64" Nullable="false" />
+          <Property Name="IdResponsable" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="tblIniciativas_Anexo">
+          <Key>
+            <PropertyRef Name="IdEmpresa" />
+            <PropertyRef Name="IdIniciativa" />
+            <PropertyRef Name="IdAnexo" />
+          </Key>
+          <Property Name="IdEmpresa" Type="Int64" Nullable="false" />
+          <Property Name="IdIniciativa" Type="Int64" Nullable="false" />
+          <Property Name="IdAnexo" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="1500" FixedLength="false" Unicode="true" />
+          <Property Name="RutaArchivo" Type="String" MaxLength="1500" FixedLength="false" Unicode="true" />
+          <Property Name="fechaRegistro" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="tblEmpresa" Relationship="BCMWeb.FK_tblIniciativas_Anexo_tblEmpresa" FromRole="tblIniciativas_Anexo" ToRole="tblEmpresa" />
+        </EntityType>
         <EntityType Name="tblLocalidad">
           <Key>
             <PropertyRef Name="IdEmpresa" />
@@ -8031,7 +8205,9 @@
           <NavigationProperty Name="tblModulo_NivelUsuario" Relationship="BCMWeb.FK_tblModulo_NivelUsuario_tblModulo" FromRole="tblModulo" ToRole="tblModulo_NivelUsuario" />
           <NavigationProperty Name="tblModulo_Usuario" Relationship="BCMWeb.FK_tblModulo_Usuario_tblModulo" FromRole="tblModulo" ToRole="tblModulo_Usuario" />
           <NavigationProperty Name="tblPMTMensajeActualizacion" Relationship="BCMWeb.FK_tblPMTMensajeActualizacion_tblModulo" FromRole="tblModulo" ToRole="tblPMTMensajeActualizacion" />
+          <NavigationProperty Name="tblPMTProgramacionDocumentos" Relationship="BCMWeb.FK_tblPMTProgramacionDocumentos_tblModulo" FromRole="tblModulo" ToRole="tblPMTProgramacionDocumentos" />
           <NavigationProperty Name="tblPMTResponsableUpdate" Relationship="BCMWeb.FK_tblPMTResponsableUpdate_tblModulo" FromRole="tblModulo" ToRole="tblPMTResponsableUpdate" />
+          <NavigationProperty Name="tblPMTProgramacion" Relationship="BCMWeb.FK_tblPMTProgramacion_tblModulo" FromRole="tblModulo" ToRole="tblPMTProgramacion" />
         </EntityType>
         <EntityType Name="tblModulo_NivelUsuario">
           <Key>
@@ -8448,39 +8624,6 @@
           <NavigationProperty Name="tblPlanTrabajoAuditoria" Relationship="BCMWeb.FK_tblPlanTrabajoAuditoria_tblPlanTrabajoEstatus" FromRole="tblPlanTrabajoEstatus" ToRole="tblPlanTrabajoAuditoria" />
           <NavigationProperty Name="tblIniciativas" Relationship="BCMWeb.FK_tblIniciativas_tblPlanTrabajoEstatus" FromRole="tblPlanTrabajoEstatus" ToRole="tblIniciativas" />
         </EntityType>
-        <EntityType Name="tblPMTFrecuencia">
-          <Key>
-            <PropertyRef Name="IdEmpresa" />
-            <PropertyRef Name="IdDocumento" />
-            <PropertyRef Name="IdTipoDocumento" />
-            <PropertyRef Name="IdFrecuencia" />
-          </Key>
-          <Property Name="IdEmpresa" Type="Int64" Nullable="false" />
-          <Property Name="IdDocumento" Type="Int64" Nullable="false" />
-          <Property Name="IdTipoDocumento" Type="Int64" Nullable="false" />
-          <Property Name="IdFrecuencia" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IdTipoFrecuencia" Type="Int64" Nullable="false" />
-          <Property Name="TipoFrecuencia" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Segmento" Type="String" Nullable="false" MaxLength="450" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="tblDocumento" Relationship="BCMWeb.FK_tblPMTFrecuencia_tblDocumento" FromRole="tblPMTFrecuencia" ToRole="tblDocumento" />
-          <NavigationProperty Name="tblPMTFrecuenciaParticipante" Relationship="BCMWeb.FK_tblPMTFrecuenciaParticipante_tblPMTFrecuencia" FromRole="tblPMTFrecuencia" ToRole="tblPMTFrecuenciaParticipante" />
-        </EntityType>
-        <EntityType Name="tblPMTFrecuenciaParticipante">
-          <Key>
-            <PropertyRef Name="IdEmpresa" />
-            <PropertyRef Name="IdDocumento" />
-            <PropertyRef Name="IdTipoDocumento" />
-            <PropertyRef Name="IdFrecuencia" />
-            <PropertyRef Name="IdCargo" />
-          </Key>
-          <Property Name="IdEmpresa" Type="Int64" Nullable="false" />
-          <Property Name="IdDocumento" Type="Int64" Nullable="false" />
-          <Property Name="IdTipoDocumento" Type="Int64" Nullable="false" />
-          <Property Name="IdFrecuencia" Type="Int64" Nullable="false" />
-          <Property Name="IdCargo" Type="Int64" Nullable="false" />
-          <NavigationProperty Name="tblDocumento" Relationship="BCMWeb.FK_tblPMTFrecuenciaParticipante_tblCargo" FromRole="tblPMTFrecuenciaParticipante" ToRole="tblDocumento" />
-          <NavigationProperty Name="tblPMTFrecuencia" Relationship="BCMWeb.FK_tblPMTFrecuenciaParticipante_tblPMTFrecuencia" FromRole="tblPMTFrecuenciaParticipante" ToRole="tblPMTFrecuencia" />
-        </EntityType>
         <EntityType Name="tblPMTMensajeActualizacion">
           <Key>
             <PropertyRef Name="IdEmpresa" />
@@ -8495,36 +8638,50 @@
           <NavigationProperty Name="tblEmpresa" Relationship="BCMWeb.FK_tblPMTMensajeActualizacion_tblEmpresa" FromRole="tblPMTMensajeActualizacion" ToRole="tblEmpresa" />
           <NavigationProperty Name="tblModulo" Relationship="BCMWeb.FK_tblPMTMensajeActualizacion_tblModulo" FromRole="tblPMTMensajeActualizacion" ToRole="tblModulo" />
         </EntityType>
-        <EntityType Name="tblPMTProgramacion">
+        <EntityType Name="tblPMTProgramacionDocumentos">
           <Key>
-            <PropertyRef Name="IdPMTProgramación" />
-          </Key>
-          <Property Name="IdPMTProgramación" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IdEmpresa" Type="Int64" Nullable="false" />
-          <Property Name="IdDocumento" Type="Int64" Nullable="false" />
-          <Property Name="IdModulo" Type="Int64" Nullable="false" />
-          <Property Name="FechaInicio" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="FechaFinal" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="IdEstado" Type="Int64" Nullable="false" />
-          <Property Name="Negocios" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="tblDocumento" Relationship="BCMWeb.FK_tblPMTProgramacion_tblDocumento" FromRole="tblPMTProgramacion" ToRole="tblDocumento" />
-          <NavigationProperty Name="tblEmpresa" Relationship="BCMWeb.FK_tblPMTProgramacion_tblEmpresa" FromRole="tblPMTProgramacion" ToRole="tblEmpresa" />
-        </EntityType>
-        <EntityType Name="tblPMTProgramacionAuditoria">
-          <Key>
+            <PropertyRef Name="IdPMTProgramacion" />
             <PropertyRef Name="IdEmpresa" />
             <PropertyRef Name="IdModulo" />
             <PropertyRef Name="IdDocumento" />
-            <PropertyRef Name="FechaInicioActualizacion" />
           </Key>
+          <Property Name="IdPMTProgramacion" Type="Int64" Nullable="false" />
           <Property Name="IdEmpresa" Type="Int64" Nullable="false" />
           <Property Name="IdModulo" Type="Int64" Nullable="false" />
           <Property Name="IdDocumento" Type="Int64" Nullable="false" />
-          <Property Name="FechaInicioActualizacion" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="FechaUltimaActualizacion" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="IdUsuarioActuailiza" Type="Int64" Nullable="false" />
-          <NavigationProperty Name="tblDocumento" Relationship="BCMWeb.FK_tblPMTProgramacionAuditoria_tblDocumento" FromRole="tblPMTProgramacionAuditoria" ToRole="tblDocumento" />
-          <NavigationProperty Name="tblEmpresa" Relationship="BCMWeb.FK_tblPMTProgramacionAuditoria_tblEmpresa" FromRole="tblPMTProgramacionAuditoria" ToRole="tblEmpresa" />
+          <Property Name="IdTipoDocumento" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="tblDocumento" Relationship="BCMWeb.FK_tblPMTProgramacionDocumentos_tblDocumento" FromRole="tblPMTProgramacionDocumentos" ToRole="tblDocumento" />
+          <NavigationProperty Name="tblModulo" Relationship="BCMWeb.FK_tblPMTProgramacionDocumentos_tblModulo" FromRole="tblPMTProgramacionDocumentos" ToRole="tblModulo" />
+          <NavigationProperty Name="tblPMTProgramacion" Relationship="BCMWeb.FK_tblPMTProgramacionDocumentos_tblPMTProgramacion" FromRole="tblPMTProgramacionDocumentos" ToRole="tblPMTProgramacion" />
+        </EntityType>
+        <EntityType Name="tblPMTProgramacionTipoActualizacion">
+          <Key>
+            <PropertyRef Name="IdTipoActualizacion" />
+          </Key>
+          <Property Name="IdTipoActualizacion" Type="Int16" Nullable="false" />
+          <NavigationProperty Name="tblCultura_PMTProgramacionTipoActualizacion" Relationship="BCMWeb.r" FromRole="tblPMTProgramacionTipoActualizacion" ToRole="tblCultura_PMTProgramacionTipoActualizacion" />
+          <NavigationProperty Name="tblPMTProgramacion" Relationship="BCMWeb.FK_tblPMTProgramacion_tblPMTProgramacionTipoActualizacion" FromRole="tblPMTProgramacionTipoActualizacion" ToRole="tblPMTProgramacion" />
+        </EntityType>
+        <EntityType Name="tblPMTProgramacionTipoNotificacion">
+          <Key>
+            <PropertyRef Name="IdTipoNotificacion" />
+          </Key>
+          <Property Name="IdTipoNotificacion" Type="Int16" Nullable="false" />
+          <NavigationProperty Name="tblCultura_PMTProgramacionTipoNotificacion" Relationship="BCMWeb.FK_tblCultura_PMTProgramacionTipoNotificacion_tblPMTProgramacionTipoNotificacion" FromRole="tblPMTProgramacionTipoNotificacion" ToRole="tblCultura_PMTProgramacionTipoNotificacion" />
+          <NavigationProperty Name="tblPMTProgramacionUsuario" Relationship="BCMWeb.FK_tblPMTProgramacionUsuario_tblPMTProgramacionTipoNotificacion" FromRole="tblPMTProgramacionTipoNotificacion" ToRole="tblPMTProgramacionUsuario" />
+        </EntityType>
+        <EntityType Name="tblPMTProgramacionUsuario">
+          <Key>
+            <PropertyRef Name="IdPMTProgramacion" />
+            <PropertyRef Name="IdUsuario" />
+          </Key>
+          <Property Name="IdPMTProgramacion" Type="Int64" Nullable="false" />
+          <Property Name="IdUsuario" Type="Int64" Nullable="false" />
+          <Property Name="IdTipoNotificacion" Type="Int16" />
+          <Property Name="FechaUltimaNotificacion" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="tblPMTProgramacionTipoNotificacion" Relationship="BCMWeb.FK_tblPMTProgramacionUsuario_tblPMTProgramacionTipoNotificacion" FromRole="tblPMTProgramacionUsuario" ToRole="tblPMTProgramacionTipoNotificacion" />
+          <NavigationProperty Name="tblUsuario" Relationship="BCMWeb.FK_tblPMTProgramacionUsuario_tblUsuario" FromRole="tblPMTProgramacionUsuario" ToRole="tblUsuario" />
+          <NavigationProperty Name="tblPMTProgramacion" Relationship="BCMWeb.FK_tblPMTProgramacionUsuario_tblPMTProgramacion" FromRole="tblPMTProgramacionUsuario" ToRole="tblPMTProgramacion" />
         </EntityType>
         <EntityType Name="tblPMTResponsableUpdate">
           <Key>
@@ -8535,8 +8692,8 @@
           <Property Name="IdEmpresa" Type="Int64" Nullable="false" />
           <Property Name="IdModulo" Type="Int64" Nullable="false" />
           <Property Name="IdMensaje" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="FechaActualizar" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="FechaUltimoEnvio" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IdDocumento" Type="Int64" />
+          <Property Name="IdTipoNotificacion" Type="Int16" />
           <NavigationProperty Name="tblEmpresa" Relationship="BCMWeb.FK_tblPMTResponsableUpdate_tblEmpresa" FromRole="tblPMTResponsableUpdate" ToRole="tblEmpresa" />
           <NavigationProperty Name="tblModulo" Relationship="BCMWeb.FK_tblPMTResponsableUpdate_tblModulo" FromRole="tblPMTResponsableUpdate" ToRole="tblModulo" />
           <NavigationProperty Name="tblPMTResponsableUpdate_Correo" Relationship="BCMWeb.FK_tblPMTResponsableUpdate_Correo_tblPMTResponsableUpdate" FromRole="tblPMTResponsableUpdate" ToRole="tblPMTResponsableUpdate_Correo" />
@@ -8582,10 +8739,10 @@
           <Property Name="IdEmpresa" Type="Int64" Nullable="false" />
           <Property Name="IdProbabilidad" Type="Int16" Nullable="false" />
           <Property Name="Nombre" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="EtiquetaGrafico" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="tblBIAAmenaza" Relationship="BCMWeb.FK_tblBIAAmenaza_tblProbabilidadRiesgo" FromRole="tblProbabilidadRiesgo" ToRole="tblBIAAmenaza" />
           <NavigationProperty Name="tblBIAEventoRiesgo" Relationship="BCMWeb.FK_tblBIAEventoRiesgo_tblBIAProbabilidadRiesgo" FromRole="tblProbabilidadRiesgo" ToRole="tblBIAEventoRiesgo" />
           <NavigationProperty Name="tblEmpresa" Relationship="BCMWeb.FK_tblBIAProbabilidadRiesgo_tblEmpresa" FromRole="tblProbabilidadRiesgo" ToRole="tblEmpresa" />
-          <Property Name="EtiquetaGrafico" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="tblProducto">
           <Key>
@@ -8656,6 +8813,7 @@
           <NavigationProperty Name="tblBIAWRT" Relationship="BCMWeb.FK_tblBIAWRT_tblTipoFrecuencia" FromRole="tblTipoFrecuencia" ToRole="tblBIAWRT" />
           <NavigationProperty Name="tblCultura_TipoFrecuencia" Relationship="BCMWeb.FK_tblCultura_TipoFrecuencia_tblTipoFrecuencia" FromRole="tblTipoFrecuencia" ToRole="tblCultura_TipoFrecuencia" />
           <NavigationProperty Name="tblPPEFrecuencia" Relationship="BCMWeb.FK_tblPPEFrecuencia_tblTipoFrecuencia" FromRole="tblTipoFrecuencia" ToRole="tblPPEFrecuencia" />
+          <NavigationProperty Name="tblPMTProgramacion" Relationship="BCMWeb.FK_tblPMTProgramacion_tblTipoFrecuencia" FromRole="tblTipoFrecuencia" ToRole="tblPMTProgramacion" />
         </EntityType>
         <EntityType Name="tblTipoImpacto">
           <Key>
@@ -8742,6 +8900,7 @@
           <NavigationProperty Name="tblModulo_Usuario" Relationship="BCMWeb.FK_tblModulo_Usuario_tblUsuario" FromRole="tblUsuario" ToRole="tblModulo_Usuario" />
           <NavigationProperty Name="tblPersona" Relationship="BCMWeb.FK_tblPersona_tblUsuario" FromRole="tblUsuario" ToRole="tblPersona" />
           <NavigationProperty Name="tblPlanTrabajoAuditoria" Relationship="BCMWeb.FK_tblPlanTrabajoAuditoria_tblUsuario" FromRole="tblUsuario" ToRole="tblPlanTrabajoAuditoria" />
+          <NavigationProperty Name="tblPMTProgramacionUsuario" Relationship="BCMWeb.FK_tblPMTProgramacionUsuario_tblUsuario" FromRole="tblUsuario" ToRole="tblPMTProgramacionUsuario" />
           <NavigationProperty Name="tblPMTResponsableUpdate_Correo" Relationship="BCMWeb.FK_tblPMTResponsableUpdate_Correo_tblUsuario" FromRole="tblUsuario" ToRole="tblPMTResponsableUpdate_Correo" />
           <NavigationProperty Name="tblUsuarioUnidadOrganizativa" Relationship="BCMWeb.FK_tblUsuarioUnidadOrganizativa_tblUsuario" FromRole="tblUsuario" ToRole="tblUsuarioUnidadOrganizativa" />
         </EntityType>
@@ -9059,6 +9218,22 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_tblBIAAmenaza_tblBIAProceso">
+          <End Type="BCMWeb.tblBIAProceso" Role="tblBIAProceso" Multiplicity="1" />
+          <End Type="BCMWeb.tblBIAAmenaza" Role="tblBIAAmenaza" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblBIAProceso">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumentoBia" />
+              <PropertyRef Name="IdProceso" />
+            </Principal>
+            <Dependent Role="tblBIAAmenaza">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumentoBIA" />
+              <PropertyRef Name="IdProceso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_tblBIAAmenaza_tblControlRiesgo">
           <End Type="BCMWeb.tblControlRiesgo" Role="tblControlRiesgo" Multiplicity="0..1" />
           <End Type="BCMWeb.tblBIAAmenaza" Role="tblBIAAmenaza" Multiplicity="*" />
@@ -9285,20 +9460,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_tblBIAImpactoFinanciero_tblEscala">
-          <End Type="BCMWeb.tblBIADocumento" Role="tblBIADocumento" Multiplicity="1" />
-          <End Type="BCMWeb.tblBIAImpactoFinanciero" Role="tblBIAImpactoFinanciero" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblBIADocumento">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdDocumentoBIA" />
-            </Principal>
-            <Dependent Role="tblBIAImpactoFinanciero">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdDocumentoBIA" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_tblBIAProceso_tblBIADocumento">
           <End Type="BCMWeb.tblBIADocumento" Role="tblBIADocumento" Multiplicity="1" />
           <End Type="BCMWeb.tblBIAProceso" Role="tblBIAProceso" Multiplicity="*" />
@@ -9452,6 +9613,20 @@
               <PropertyRef Name="IdEmpresa" />
               <PropertyRef Name="IdDocumentoBIA" />
               <PropertyRef Name="IdProceso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblBIAImpactoFinanciero_tblEscala">
+          <End Type="BCMWeb.tblEscala" Role="tblEscala" Multiplicity="0..1" />
+          <End Type="BCMWeb.tblBIAImpactoFinanciero" Role="tblBIAImpactoFinanciero" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblEscala">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdEscala" />
+            </Principal>
+            <Dependent Role="tblBIAImpactoFinanciero">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdEscala" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -10173,6 +10348,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="r">
+          <End Type="BCMWeb.tblPMTProgramacionTipoActualizacion" Role="tblPMTProgramacionTipoActualizacion" Multiplicity="1" />
+          <End Type="BCMWeb.tblCultura_PMTProgramacionTipoActualizacion" Role="tblCultura_PMTProgramacionTipoActualizacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPMTProgramacionTipoActualizacion">
+              <PropertyRef Name="IdTipoActualizacion" />
+            </Principal>
+            <Dependent Role="tblCultura_PMTProgramacionTipoActualizacion">
+              <PropertyRef Name="IdTipoActualizacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblCultura_PMTProgramacionTipoNotificacion_tblPMTProgramacionTipoNotificacion">
+          <End Type="BCMWeb.tblPMTProgramacionTipoNotificacion" Role="tblPMTProgramacionTipoNotificacion" Multiplicity="1" />
+          <End Type="BCMWeb.tblCultura_PMTProgramacionTipoNotificacion" Role="tblCultura_PMTProgramacionTipoNotificacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPMTProgramacionTipoNotificacion">
+              <PropertyRef Name="IdTipoNotificacion" />
+            </Principal>
+            <Dependent Role="tblCultura_PMTProgramacionTipoNotificacion">
+              <PropertyRef Name="IdTipoNotificacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_tblCultura_TipoCorreo_tblTipoCorreo">
           <End Type="BCMWeb.tblTipoCorreo" Role="tblTipoCorreo" Multiplicity="1" />
           <End Type="BCMWeb.tblCultura_TipoCorreo" Role="tblCultura_TipoCorreo" Multiplicity="*" />
@@ -10413,67 +10612,19 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_tblPMTFrecuencia_tblDocumento">
+        <Association Name="FK_tblPMTProgramacionDocumentos_tblDocumento">
           <End Type="BCMWeb.tblDocumento" Role="tblDocumento" Multiplicity="1" />
-          <End Type="BCMWeb.tblPMTFrecuencia" Role="tblPMTFrecuencia" Multiplicity="*" />
+          <End Type="BCMWeb.tblPMTProgramacionDocumentos" Role="tblPMTProgramacionDocumentos" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="tblDocumento">
               <PropertyRef Name="IdEmpresa" />
               <PropertyRef Name="IdDocumento" />
               <PropertyRef Name="IdTipoDocumento" />
             </Principal>
-            <Dependent Role="tblPMTFrecuencia">
+            <Dependent Role="tblPMTProgramacionDocumentos">
               <PropertyRef Name="IdEmpresa" />
               <PropertyRef Name="IdDocumento" />
               <PropertyRef Name="IdTipoDocumento" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_tblPMTFrecuenciaParticipante_tblCargo">
-          <End Type="BCMWeb.tblDocumento" Role="tblDocumento" Multiplicity="1" />
-          <End Type="BCMWeb.tblPMTFrecuenciaParticipante" Role="tblPMTFrecuenciaParticipante" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblDocumento">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdDocumento" />
-              <PropertyRef Name="IdTipoDocumento" />
-            </Principal>
-            <Dependent Role="tblPMTFrecuenciaParticipante">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdDocumento" />
-              <PropertyRef Name="IdTipoDocumento" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_tblPMTProgramacion_tblDocumento">
-          <End Type="BCMWeb.tblDocumento" Role="tblDocumento" Multiplicity="1" />
-          <End Type="BCMWeb.tblPMTProgramacion" Role="tblPMTProgramacion" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblDocumento">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdDocumento" />
-              <PropertyRef Name="IdTipoDocumento" />
-            </Principal>
-            <Dependent Role="tblPMTProgramacion">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdDocumento" />
-              <PropertyRef Name="IdModulo" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_tblPMTProgramacionAuditoria_tblDocumento">
-          <End Type="BCMWeb.tblDocumento" Role="tblDocumento" Multiplicity="1" />
-          <End Type="BCMWeb.tblPMTProgramacionAuditoria" Role="tblPMTProgramacionAuditoria" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblDocumento">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdDocumento" />
-              <PropertyRef Name="IdTipoDocumento" />
-            </Principal>
-            <Dependent Role="tblPMTProgramacionAuditoria">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdDocumento" />
-              <PropertyRef Name="IdModulo" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -10735,6 +10886,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_tblIniciativas_Anexo_tblEmpresa">
+          <End Type="BCMWeb.tblEmpresa" Role="tblEmpresa" Multiplicity="1" />
+          <End Type="BCMWeb.tblIniciativas_Anexo" Role="tblIniciativas_Anexo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblEmpresa">
+              <PropertyRef Name="IdEmpresa" />
+            </Principal>
+            <Dependent Role="tblIniciativas_Anexo">
+              <PropertyRef Name="IdEmpresa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_tblModulo_NivelUsuario_tblEmpresa">
           <End Type="BCMWeb.tblEmpresa" Role="tblEmpresa" Multiplicity="1" />
           <End Type="BCMWeb.tblModulo_NivelUsuario" Role="tblModulo_NivelUsuario" Multiplicity="*" />
@@ -10829,30 +10992,6 @@
               <PropertyRef Name="IdEmpresa" />
             </Principal>
             <Dependent Role="tblPMTMensajeActualizacion">
-              <PropertyRef Name="IdEmpresa" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_tblPMTProgramacion_tblEmpresa">
-          <End Type="BCMWeb.tblEmpresa" Role="tblEmpresa" Multiplicity="1" />
-          <End Type="BCMWeb.tblPMTProgramacion" Role="tblPMTProgramacion" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblEmpresa">
-              <PropertyRef Name="IdEmpresa" />
-            </Principal>
-            <Dependent Role="tblPMTProgramacion">
-              <PropertyRef Name="IdEmpresa" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_tblPMTProgramacionAuditoria_tblEmpresa">
-          <End Type="BCMWeb.tblEmpresa" Role="tblEmpresa" Multiplicity="1" />
-          <End Type="BCMWeb.tblPMTProgramacionAuditoria" Role="tblPMTProgramacionAuditoria" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblEmpresa">
-              <PropertyRef Name="IdEmpresa" />
-            </Principal>
-            <Dependent Role="tblPMTProgramacionAuditoria">
               <PropertyRef Name="IdEmpresa" />
             </Dependent>
           </ReferentialConstraint>
@@ -11054,6 +11193,20 @@
               <PropertyRef Name="IdModulo" />
             </Principal>
             <Dependent Role="tblPMTMensajeActualizacion">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdModulo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPMTProgramacionDocumentos_tblModulo">
+          <End Type="BCMWeb.tblModulo" Role="tblModulo" Multiplicity="1" />
+          <End Type="BCMWeb.tblPMTProgramacionDocumentos" Role="tblPMTProgramacionDocumentos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblModulo">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdModulo" />
+            </Principal>
+            <Dependent Role="tblPMTProgramacionDocumentos">
               <PropertyRef Name="IdEmpresa" />
               <PropertyRef Name="IdModulo" />
             </Dependent>
@@ -11527,21 +11680,27 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_tblPMTFrecuenciaParticipante_tblPMTFrecuencia">
-          <End Type="BCMWeb.tblPMTFrecuencia" Role="tblPMTFrecuencia" Multiplicity="1" />
-          <End Type="BCMWeb.tblPMTFrecuenciaParticipante" Role="tblPMTFrecuenciaParticipante" Multiplicity="*" />
+        <Association Name="FK_tblPMTProgramacionUsuario_tblPMTProgramacionTipoNotificacion">
+          <End Type="BCMWeb.tblPMTProgramacionTipoNotificacion" Role="tblPMTProgramacionTipoNotificacion" Multiplicity="0..1" />
+          <End Type="BCMWeb.tblPMTProgramacionUsuario" Role="tblPMTProgramacionUsuario" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="tblPMTFrecuencia">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdDocumento" />
-              <PropertyRef Name="IdTipoDocumento" />
-              <PropertyRef Name="IdFrecuencia" />
+            <Principal Role="tblPMTProgramacionTipoNotificacion">
+              <PropertyRef Name="IdTipoNotificacion" />
             </Principal>
-            <Dependent Role="tblPMTFrecuenciaParticipante">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdDocumento" />
-              <PropertyRef Name="IdTipoDocumento" />
-              <PropertyRef Name="IdFrecuencia" />
+            <Dependent Role="tblPMTProgramacionUsuario">
+              <PropertyRef Name="IdTipoNotificacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPMTProgramacionUsuario_tblUsuario">
+          <End Type="BCMWeb.tblUsuario" Role="tblUsuario" Multiplicity="1" />
+          <End Type="BCMWeb.tblPMTProgramacionUsuario" Role="tblPMTProgramacionUsuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUsuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="tblPMTProgramacionUsuario">
+              <PropertyRef Name="IdUsuario" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -11611,33 +11770,97 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_tblBIAAmenaza_tblBIAProceso">
-          <End Type="BCMWeb.tblBIAProceso" Role="tblBIAProceso" Multiplicity="1" />
-          <End Type="BCMWeb.tblBIAAmenaza" Role="tblBIAAmenaza" Multiplicity="*" />
+        <EntityType Name="tblPMTProgramacion">
+          <Key>
+            <PropertyRef Name="IdPMTProgramacion" />
+          </Key>
+          <Property Name="IdPMTProgramacion" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdEmpresa" Type="Int64" Nullable="false" />
+          <Property Name="IdModulo" Type="Int64" Nullable="false" />
+          <Property Name="FechaInicio" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="FechaFinal" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IdEstado" Type="Int64" Nullable="false" />
+          <Property Name="Negocios" Type="Boolean" Nullable="false" />
+          <Property Name="IdTipoActualizacion" Type="Int16" Nullable="false" />
+          <Property Name="IdTipoFrecuencia" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="tblEmpresa" Relationship="BCMWeb.FK_tblPMTProgramacion_tblEmpresa" FromRole="tblPMTProgramacion" ToRole="tblEmpresa" />
+          <NavigationProperty Name="tblModulo" Relationship="BCMWeb.FK_tblPMTProgramacion_tblModulo" FromRole="tblPMTProgramacion" ToRole="tblModulo" />
+          <NavigationProperty Name="tblPMTProgramacionTipoActualizacion" Relationship="BCMWeb.FK_tblPMTProgramacion_tblPMTProgramacionTipoActualizacion" FromRole="tblPMTProgramacion" ToRole="tblPMTProgramacionTipoActualizacion" />
+          <NavigationProperty Name="tblTipoFrecuencia" Relationship="BCMWeb.FK_tblPMTProgramacion_tblTipoFrecuencia" FromRole="tblPMTProgramacion" ToRole="tblTipoFrecuencia" />
+          <NavigationProperty Name="tblPMTProgramacionDocumentos" Relationship="BCMWeb.FK_tblPMTProgramacionDocumentos_tblPMTProgramacion" FromRole="tblPMTProgramacion" ToRole="tblPMTProgramacionDocumentos" />
+          <NavigationProperty Name="tblPMTProgramacionUsuario" Relationship="BCMWeb.FK_tblPMTProgramacionUsuario_tblPMTProgramacion" FromRole="tblPMTProgramacion" ToRole="tblPMTProgramacionUsuario" />
+        </EntityType>
+        <Association Name="FK_tblPMTProgramacion_tblEmpresa">
+          <End Type="BCMWeb.tblEmpresa" Role="tblEmpresa" Multiplicity="1" />
+          <End Type="BCMWeb.tblPMTProgramacion" Role="tblPMTProgramacion" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="tblBIAProceso">
+            <Principal Role="tblEmpresa">
               <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdDocumentoBia" />
-              <PropertyRef Name="IdProceso" />
             </Principal>
-            <Dependent Role="tblBIAAmenaza">
+            <Dependent Role="tblPMTProgramacion">
               <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdDocumentoBIA" />
-              <PropertyRef Name="IdProceso" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_tblBIAImpactoFinanciero_tblEscala1">
-          <End Type="BCMWeb.tblEscala" Role="tblEscala" Multiplicity="0..1" />
-          <End Type="BCMWeb.tblBIAImpactoFinanciero" Role="tblBIAImpactoFinanciero" Multiplicity="*" />
+        <Association Name="FK_tblPMTProgramacion_tblModulo">
+          <End Type="BCMWeb.tblModulo" Role="tblModulo" Multiplicity="1" />
+          <End Type="BCMWeb.tblPMTProgramacion" Role="tblPMTProgramacion" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="tblEscala">
+            <Principal Role="tblModulo">
               <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdEscala" />
+              <PropertyRef Name="IdModulo" />
             </Principal>
-            <Dependent Role="tblBIAImpactoFinanciero">
+            <Dependent Role="tblPMTProgramacion">
               <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdEscala" />
+              <PropertyRef Name="IdModulo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPMTProgramacion_tblPMTProgramacionTipoActualizacion">
+          <End Type="BCMWeb.tblPMTProgramacionTipoActualizacion" Role="tblPMTProgramacionTipoActualizacion" Multiplicity="1" />
+          <End Type="BCMWeb.tblPMTProgramacion" Role="tblPMTProgramacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPMTProgramacionTipoActualizacion">
+              <PropertyRef Name="IdTipoActualizacion" />
+            </Principal>
+            <Dependent Role="tblPMTProgramacion">
+              <PropertyRef Name="IdTipoActualizacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPMTProgramacion_tblTipoFrecuencia">
+          <End Type="BCMWeb.tblTipoFrecuencia" Role="tblTipoFrecuencia" Multiplicity="1" />
+          <End Type="BCMWeb.tblPMTProgramacion" Role="tblPMTProgramacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblTipoFrecuencia">
+              <PropertyRef Name="IdTipoFrecuencia" />
+            </Principal>
+            <Dependent Role="tblPMTProgramacion">
+              <PropertyRef Name="IdTipoFrecuencia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPMTProgramacionDocumentos_tblPMTProgramacion">
+          <End Type="BCMWeb.tblPMTProgramacion" Role="tblPMTProgramacion" Multiplicity="1" />
+          <End Type="BCMWeb.tblPMTProgramacionDocumentos" Role="tblPMTProgramacionDocumentos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPMTProgramacion">
+              <PropertyRef Name="IdPMTProgramacion" />
+            </Principal>
+            <Dependent Role="tblPMTProgramacionDocumentos">
+              <PropertyRef Name="IdPMTProgramacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPMTProgramacionUsuario_tblPMTProgramacion">
+          <End Type="BCMWeb.tblPMTProgramacion" Role="tblPMTProgramacion" Multiplicity="1" />
+          <End Type="BCMWeb.tblPMTProgramacionUsuario" Role="tblPMTProgramacionUsuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPMTProgramacion">
+              <PropertyRef Name="IdPMTProgramacion" />
+            </Principal>
+            <Dependent Role="tblPMTProgramacionUsuario">
+              <PropertyRef Name="IdPMTProgramacion" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -11653,6 +11876,7 @@
           <Property Name="Descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="IdUnidadOrganizativa" Type="Int64" />
           <Property Name="NombreResponsable" Type="String" MaxLength="1500" FixedLength="false" Unicode="true" />
+          <Property Name="UnidadOrganizativa" Type="String" MaxLength="1500" FixedLength="false" Unicode="true" />
           <Property Name="FechaInicioEstimada" Type="DateTime" Precision="3" />
           <Property Name="FechaInicioReal" Type="DateTime" Precision="3" />
           <Property Name="FechaCierreEstimada" Type="DateTime" Precision="3" />
@@ -11660,11 +11884,16 @@
           <Property Name="PresupuestoEstimado" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="PresupuestoReal" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="IdEstatusIniciativa" Type="Int16" />
-          <Property Name="Urgente" Type="Boolean" />
+          <Property Name="IdPrioridad" Type="Int16" />
           <Property Name="Observacion" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MontoAbonado" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="MontoPendiente" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="PorcentajeAvance" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="HorasEstimadas" Type="Int32" />
+          <Property Name="HorasConsumidas" Type="Int32" />
           <NavigationProperty Name="tblEmpresa" Relationship="BCMWeb.FK_tblIniciativas_tblEmpresa" FromRole="tblIniciativas" ToRole="tblEmpresa" />
+          <NavigationProperty Name="tblIniciativaPrioridad" Relationship="BCMWeb.FK_tblIniciativas_tblIniciativaPrioridad" FromRole="tblIniciativas" ToRole="tblIniciativaPrioridad" />
           <NavigationProperty Name="tblPlanTrabajoEstatus" Relationship="BCMWeb.FK_tblIniciativas_tblPlanTrabajoEstatus" FromRole="tblIniciativas" ToRole="tblPlanTrabajoEstatus" />
-          <NavigationProperty Name="tblIniciativas_Anexo" Relationship="BCMWeb.FK_tblIniciativas_Anexo_tblIniciativas" FromRole="tblIniciativas" ToRole="tblIniciativas_Anexo" />
         </EntityType>
         <Association Name="FK_tblIniciativas_tblEmpresa">
           <End Type="BCMWeb.tblEmpresa" Role="tblEmpresa" Multiplicity="1" />
@@ -11678,6 +11907,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_tblIniciativas_tblIniciativaPrioridad">
+          <End Type="BCMWeb.tblIniciativaPrioridad" Role="tblIniciativaPrioridad" Multiplicity="0..1" />
+          <End Type="BCMWeb.tblIniciativas" Role="tblIniciativas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblIniciativaPrioridad">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdPrioridad" />
+            </Principal>
+            <Dependent Role="tblIniciativas">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdPrioridad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_tblIniciativas_tblPlanTrabajoEstatus">
           <End Type="BCMWeb.tblPlanTrabajoEstatus" Role="tblPlanTrabajoEstatus" Multiplicity="0..1" />
           <End Type="BCMWeb.tblIniciativas" Role="tblIniciativas" Multiplicity="*" />
@@ -11687,47 +11930,6 @@
             </Principal>
             <Dependent Role="tblIniciativas">
               <PropertyRef Name="IdEstatusIniciativa" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="tblIniciativas_Anexo">
-          <Key>
-            <PropertyRef Name="IdEmpresa" />
-            <PropertyRef Name="IdIniciativa" />
-            <PropertyRef Name="IdAnexo" />
-          </Key>
-          <Property Name="IdEmpresa" Type="Int64" Nullable="false" />
-          <Property Name="IdIniciativa" Type="Int64" Nullable="false" />
-          <Property Name="IdAnexo" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Nombre" Type="String" MaxLength="1500" FixedLength="false" Unicode="true" />
-          <Property Name="RutaArchivo" Type="String" MaxLength="1500" FixedLength="false" Unicode="true" />
-          <Property Name="fechaRegistro" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="tblEmpresa" Relationship="BCMWeb.FK_tblIniciativas_Anexo_tblEmpresa" FromRole="tblIniciativas_Anexo" ToRole="tblEmpresa" />
-          <NavigationProperty Name="tblIniciativas" Relationship="BCMWeb.FK_tblIniciativas_Anexo_tblIniciativas" FromRole="tblIniciativas_Anexo" ToRole="tblIniciativas" />
-        </EntityType>
-        <Association Name="FK_tblIniciativas_Anexo_tblEmpresa">
-          <End Type="BCMWeb.tblEmpresa" Role="tblEmpresa" Multiplicity="1" />
-          <End Type="BCMWeb.tblIniciativas_Anexo" Role="tblIniciativas_Anexo" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblEmpresa">
-              <PropertyRef Name="IdEmpresa" />
-            </Principal>
-            <Dependent Role="tblIniciativas_Anexo">
-              <PropertyRef Name="IdEmpresa" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_tblIniciativas_Anexo_tblIniciativas">
-          <End Type="BCMWeb.tblIniciativas" Role="tblIniciativas" Multiplicity="1" />
-          <End Type="BCMWeb.tblIniciativas_Anexo" Role="tblIniciativas_Anexo" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblIniciativas">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdIniciativa" />
-            </Principal>
-            <Dependent Role="tblIniciativas_Anexo">
-              <PropertyRef Name="IdEmpresa" />
-              <PropertyRef Name="IdIniciativa" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -12421,6 +12623,24 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="tblCultura_PMTProgramacionTipoActualizacion">
+            <EntityTypeMapping TypeName="BCMWeb.tblCultura_PMTProgramacionTipoActualizacion">
+              <MappingFragment StoreEntitySet="tblCultura_PMTProgramacionTipoActualizacion">
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="IdTipoActualizacion" ColumnName="IdTipoActualizacion" />
+                <ScalarProperty Name="Culture" ColumnName="Culture" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblCultura_PMTProgramacionTipoNotificacion">
+            <EntityTypeMapping TypeName="BCMWeb.tblCultura_PMTProgramacionTipoNotificacion">
+              <MappingFragment StoreEntitySet="tblCultura_PMTProgramacionTipoNotificacion">
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="IdTipoNotificacion" ColumnName="IdTipoNotificacion" />
+                <ScalarProperty Name="Cultura" ColumnName="Cultura" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="tblCultura_TipoCorreo">
             <EntityTypeMapping TypeName="BCMWeb.tblCultura_TipoCorreo">
               <MappingFragment StoreEntitySet="tblCultura_TipoCorreo">
@@ -12743,6 +12963,36 @@
               <MappingFragment StoreEntitySet="tblImpactoRiesgo">
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="IdImpacto" ColumnName="IdImpacto" />
+                <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblIniciativaPrioridad">
+            <EntityTypeMapping TypeName="BCMWeb.tblIniciativaPrioridad">
+              <MappingFragment StoreEntitySet="tblIniciativaPrioridad">
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="IdPrioridad" ColumnName="IdPrioridad" />
+                <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblIniciativaResponsable">
+            <EntityTypeMapping TypeName="BCMWeb.tblIniciativaResponsable">
+              <MappingFragment StoreEntitySet="tblIniciativaResponsable">
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="IdResponsable" ColumnName="IdResponsable" />
+                <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblIniciativas_Anexo">
+            <EntityTypeMapping TypeName="BCMWeb.tblIniciativas_Anexo">
+              <MappingFragment StoreEntitySet="tblIniciativas_Anexo">
+                <ScalarProperty Name="fechaRegistro" ColumnName="fechaRegistro" />
+                <ScalarProperty Name="RutaArchivo" ColumnName="RutaArchivo" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="IdAnexo" ColumnName="IdAnexo" />
+                <ScalarProperty Name="IdIniciativa" ColumnName="IdIniciativa" />
                 <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -13093,30 +13343,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="tblPMTFrecuencia">
-            <EntityTypeMapping TypeName="BCMWeb.tblPMTFrecuencia">
-              <MappingFragment StoreEntitySet="tblPMTFrecuencia">
-                <ScalarProperty Name="Segmento" ColumnName="Segmento" />
-                <ScalarProperty Name="TipoFrecuencia" ColumnName="TipoFrecuencia" />
-                <ScalarProperty Name="IdTipoFrecuencia" ColumnName="IdTipoFrecuencia" />
-                <ScalarProperty Name="IdFrecuencia" ColumnName="IdFrecuencia" />
-                <ScalarProperty Name="IdTipoDocumento" ColumnName="IdTipoDocumento" />
-                <ScalarProperty Name="IdDocumento" ColumnName="IdDocumento" />
-                <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblPMTFrecuenciaParticipante">
-            <EntityTypeMapping TypeName="BCMWeb.tblPMTFrecuenciaParticipante">
-              <MappingFragment StoreEntitySet="tblPMTFrecuenciaParticipante">
-                <ScalarProperty Name="IdCargo" ColumnName="IdCargo" />
-                <ScalarProperty Name="IdFrecuencia" ColumnName="IdFrecuencia" />
-                <ScalarProperty Name="IdTipoDocumento" ColumnName="IdTipoDocumento" />
-                <ScalarProperty Name="IdDocumento" ColumnName="IdDocumento" />
-                <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="tblPMTMensajeActualizacion">
             <EntityTypeMapping TypeName="BCMWeb.tblPMTMensajeActualizacion">
               <MappingFragment StoreEntitySet="tblPMTMensajeActualizacion">
@@ -13128,37 +13354,46 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="tblPMTProgramacion">
-            <EntityTypeMapping TypeName="BCMWeb.tblPMTProgramacion">
-              <MappingFragment StoreEntitySet="tblPMTProgramacion">
-                <ScalarProperty Name="Negocios" ColumnName="Negocios" />
-                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
-                <ScalarProperty Name="FechaFinal" ColumnName="FechaFinal" />
-                <ScalarProperty Name="FechaInicio" ColumnName="FechaInicio" />
-                <ScalarProperty Name="IdModulo" ColumnName="IdModulo" />
+          <EntitySetMapping Name="tblPMTProgramacionDocumentos">
+            <EntityTypeMapping TypeName="BCMWeb.tblPMTProgramacionDocumentos">
+              <MappingFragment StoreEntitySet="tblPMTProgramacionDocumentos">
+                <ScalarProperty Name="IdTipoDocumento" ColumnName="IdTipoDocumento" />
                 <ScalarProperty Name="IdDocumento" ColumnName="IdDocumento" />
+                <ScalarProperty Name="IdModulo" ColumnName="IdModulo" />
                 <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
-                <ScalarProperty Name="IdPMTProgramación" ColumnName="IdPMTProgramación" />
+                <ScalarProperty Name="IdPMTProgramacion" ColumnName="IdPMTProgramacion" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="tblPMTProgramacionAuditoria">
-            <EntityTypeMapping TypeName="BCMWeb.tblPMTProgramacionAuditoria">
-              <MappingFragment StoreEntitySet="tblPMTProgramacionAuditoria">
-                <ScalarProperty Name="IdUsuarioActuailiza" ColumnName="IdUsuarioActuailiza" />
-                <ScalarProperty Name="FechaUltimaActualizacion" ColumnName="FechaUltimaActualizacion" />
-                <ScalarProperty Name="FechaInicioActualizacion" ColumnName="FechaInicioActualizacion" />
-                <ScalarProperty Name="IdDocumento" ColumnName="IdDocumento" />
-                <ScalarProperty Name="IdModulo" ColumnName="IdModulo" />
-                <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
+          <EntitySetMapping Name="tblPMTProgramacionTipoActualizacion">
+            <EntityTypeMapping TypeName="BCMWeb.tblPMTProgramacionTipoActualizacion">
+              <MappingFragment StoreEntitySet="tblPMTProgramacionTipoActualizacion">
+                <ScalarProperty Name="IdTipoActualizacion" ColumnName="IdTipoActualizacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPMTProgramacionTipoNotificacion">
+            <EntityTypeMapping TypeName="BCMWeb.tblPMTProgramacionTipoNotificacion">
+              <MappingFragment StoreEntitySet="tblPMTProgramacionTipoNotificacion">
+                <ScalarProperty Name="IdTipoNotificacion" ColumnName="IdTipoNotificacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPMTProgramacionUsuario">
+            <EntityTypeMapping TypeName="BCMWeb.tblPMTProgramacionUsuario">
+              <MappingFragment StoreEntitySet="tblPMTProgramacionUsuario">
+                <ScalarProperty Name="FechaUltimaNotificacion" ColumnName="FechaUltimaNotificacion" />
+                <ScalarProperty Name="IdTipoNotificacion" ColumnName="IdTipoNotificacion" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="IdPMTProgramacion" ColumnName="IdPMTProgramacion" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="tblPMTResponsableUpdate">
             <EntityTypeMapping TypeName="BCMWeb.tblPMTResponsableUpdate">
               <MappingFragment StoreEntitySet="tblPMTResponsableUpdate">
-                <ScalarProperty Name="FechaUltimoEnvio" ColumnName="FechaUltimoEnvio" />
-                <ScalarProperty Name="FechaActualizar" ColumnName="FechaActualizar" />
+                <ScalarProperty Name="IdTipoNotificacion" ColumnName="IdTipoNotificacion" />
+                <ScalarProperty Name="IdDocumento" ColumnName="IdDocumento" />
                 <ScalarProperty Name="IdMensaje" ColumnName="IdMensaje" />
                 <ScalarProperty Name="IdModulo" ColumnName="IdModulo" />
                 <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
@@ -13358,11 +13593,31 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="tblPMTProgramacion">
+            <EntityTypeMapping TypeName="BCMWeb.tblPMTProgramacion">
+              <MappingFragment StoreEntitySet="tblPMTProgramacion">
+                <ScalarProperty Name="IdTipoFrecuencia" ColumnName="IdTipoFrecuencia" />
+                <ScalarProperty Name="IdTipoActualizacion" ColumnName="IdTipoActualizacion" />
+                <ScalarProperty Name="Negocios" ColumnName="Negocios" />
+                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
+                <ScalarProperty Name="FechaFinal" ColumnName="FechaFinal" />
+                <ScalarProperty Name="FechaInicio" ColumnName="FechaInicio" />
+                <ScalarProperty Name="IdModulo" ColumnName="IdModulo" />
+                <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
+                <ScalarProperty Name="IdPMTProgramacion" ColumnName="IdPMTProgramacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="tblIniciativas">
             <EntityTypeMapping TypeName="BCMWeb.tblIniciativas">
               <MappingFragment StoreEntitySet="tblIniciativas">
+                <ScalarProperty Name="HorasConsumidas" ColumnName="HorasConsumidas" />
+                <ScalarProperty Name="HorasEstimadas" ColumnName="HorasEstimadas" />
+                <ScalarProperty Name="PorcentajeAvance" ColumnName="PorcentajeAvance" />
+                <ScalarProperty Name="MontoPendiente" ColumnName="MontoPendiente" />
+                <ScalarProperty Name="MontoAbonado" ColumnName="MontoAbonado" />
                 <ScalarProperty Name="Observacion" ColumnName="Observacion" />
-                <ScalarProperty Name="Urgente" ColumnName="Urgente" />
+                <ScalarProperty Name="IdPrioridad" ColumnName="IdPrioridad" />
                 <ScalarProperty Name="IdEstatusIniciativa" ColumnName="IdEstatusIniciativa" />
                 <ScalarProperty Name="PresupuestoReal" ColumnName="PresupuestoReal" />
                 <ScalarProperty Name="PresupuestoEstimado" ColumnName="PresupuestoEstimado" />
@@ -13370,23 +13625,12 @@
                 <ScalarProperty Name="FechaCierreEstimada" ColumnName="FechaCierreEstimada" />
                 <ScalarProperty Name="FechaInicioReal" ColumnName="FechaInicioReal" />
                 <ScalarProperty Name="FechaInicioEstimada" ColumnName="FechaInicioEstimada" />
+                <ScalarProperty Name="UnidadOrganizativa" ColumnName="UnidadOrganizativa" />
                 <ScalarProperty Name="NombreResponsable" ColumnName="NombreResponsable" />
                 <ScalarProperty Name="IdUnidadOrganizativa" ColumnName="IdUnidadOrganizativa" />
                 <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="NroIniciativa" ColumnName="NroIniciativa" />
-                <ScalarProperty Name="IdIniciativa" ColumnName="IdIniciativa" />
-                <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblIniciativas_Anexo">
-            <EntityTypeMapping TypeName="BCMWeb.tblIniciativas_Anexo">
-              <MappingFragment StoreEntitySet="tblIniciativas_Anexo">
-                <ScalarProperty Name="fechaRegistro" ColumnName="fechaRegistro" />
-                <ScalarProperty Name="RutaArchivo" ColumnName="RutaArchivo" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-                <ScalarProperty Name="IdAnexo" ColumnName="IdAnexo" />
                 <ScalarProperty Name="IdIniciativa" ColumnName="IdIniciativa" />
                 <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
               </MappingFragment>

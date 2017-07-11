@@ -23,8 +23,8 @@ namespace BCMWeb.Data.EF
         public long IdEmpresa { get; set; }
         public long IdModulo { get; set; }
         public long IdMensaje { get; set; }
-        public System.DateTime FechaActualizar { get; set; }
-        public System.DateTime FechaUltimoEnvio { get; set; }
+        public Nullable<long> IdDocumento { get; set; }
+        public Nullable<short> IdTipoNotificacion { get; set; }
     
         public virtual tblEmpresa tblEmpresa { get; set; }
         public virtual tblModulo tblModulo { get; set; }

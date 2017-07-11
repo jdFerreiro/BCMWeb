@@ -18,7 +18,6 @@ namespace BCMWeb.Data.EF
         public tblBIADocumento()
         {
             this.tblBIAComentario = new HashSet<tblBIAComentario>();
-            this.tblBIAImpactoFinanciero = new HashSet<tblBIAImpactoFinanciero>();
             this.tblBIAProceso = new HashSet<tblBIAProceso>();
         }
     
@@ -32,8 +31,6 @@ namespace BCMWeb.Data.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIAComentario> tblBIAComentario { get; set; }
         public virtual tblUnidadOrganizativa tblUnidadOrganizativa { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblBIAImpactoFinanciero> tblBIAImpactoFinanciero { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIAProceso> tblBIAProceso { get; set; }
         public virtual tblDocumento tblDocumento { get; set; }

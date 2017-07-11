@@ -14,12 +14,6 @@ namespace BCMWeb.Data.EF
     
     public partial class tblIniciativas
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public tblIniciativas()
-        {
-            this.tblIniciativas_Anexo = new HashSet<tblIniciativas_Anexo>();
-        }
-    
         public long IdEmpresa { get; set; }
         public long IdIniciativa { get; set; }
         public Nullable<int> NroIniciativa { get; set; }
@@ -27,6 +21,7 @@ namespace BCMWeb.Data.EF
         public string Descripcion { get; set; }
         public Nullable<long> IdUnidadOrganizativa { get; set; }
         public string NombreResponsable { get; set; }
+        public string UnidadOrganizativa { get; set; }
         public Nullable<System.DateTime> FechaInicioEstimada { get; set; }
         public Nullable<System.DateTime> FechaInicioReal { get; set; }
         public Nullable<System.DateTime> FechaCierreEstimada { get; set; }
@@ -34,12 +29,16 @@ namespace BCMWeb.Data.EF
         public Nullable<decimal> PresupuestoEstimado { get; set; }
         public Nullable<decimal> PresupuestoReal { get; set; }
         public Nullable<short> IdEstatusIniciativa { get; set; }
-        public Nullable<bool> Urgente { get; set; }
+        public Nullable<short> IdPrioridad { get; set; }
         public string Observacion { get; set; }
+        public Nullable<decimal> MontoAbonado { get; set; }
+        public Nullable<decimal> MontoPendiente { get; set; }
+        public Nullable<decimal> PorcentajeAvance { get; set; }
+        public Nullable<int> HorasEstimadas { get; set; }
+        public Nullable<int> HorasConsumidas { get; set; }
     
         public virtual tblEmpresa tblEmpresa { get; set; }
+        public virtual tblIniciativaPrioridad tblIniciativaPrioridad { get; set; }
         public virtual tblPlanTrabajoEstatus tblPlanTrabajoEstatus { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblIniciativas_Anexo> tblIniciativas_Anexo { get; set; }
     }
 }

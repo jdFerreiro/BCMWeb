@@ -295,6 +295,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Frecuencia.
+        /// </summary>
+        public static string captionFrecuencia {
+            get {
+                return ResourceManager.GetString("captionFrecuencia", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No. de Cédula.
         /// </summary>
         public static string captionIdentificacion {
@@ -318,6 +327,15 @@ namespace Resources {
         public static string captionMensaje {
             get {
                 return ResourceManager.GetString("captionMensaje", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Módulo.
+        /// </summary>
+        public static string captionModulo {
+            get {
+                return ResourceManager.GetString("captionModulo", resourceCulture);
             }
         }
         
@@ -369,6 +387,15 @@ namespace Resources {
         /// <summary>
         ///   Looks up a localized string similar to Participantes.
         /// </summary>
+        public static string captionParticipante {
+            get {
+                return ResourceManager.GetString("captionParticipante", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Participantes.
+        /// </summary>
         public static string captionParticipantes {
             get {
                 return ResourceManager.GetString("captionParticipantes", resourceCulture);
@@ -408,6 +435,87 @@ namespace Resources {
         public static string captionProceso {
             get {
                 return ResourceManager.GetString("captionProceso", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Programación de Mantenimiento.
+        /// </summary>
+        public static string captionProgramacion {
+            get {
+                return ResourceManager.GetString("captionProgramacion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Datos de la Programación.
+        /// </summary>
+        public static string captionProgramacionData {
+            get {
+                return ResourceManager.GetString("captionProgramacionData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentos Asociados.
+        /// </summary>
+        public static string captionProgramacionDocumentos {
+            get {
+                return ResourceManager.GetString("captionProgramacionDocumentos", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Estado .
+        /// </summary>
+        public static string captionProgramacionEstadoProgramacion {
+            get {
+                return ResourceManager.GetString("captionProgramacionEstadoProgramacion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fecha de Finalización.
+        /// </summary>
+        public static string captionProgramacionFechaFinal {
+            get {
+                return ResourceManager.GetString("captionProgramacionFechaFinal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fecha de Inicio.
+        /// </summary>
+        public static string captionProgramacionFechaInicio {
+            get {
+                return ResourceManager.GetString("captionProgramacionFechaInicio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Módulo.
+        /// </summary>
+        public static string captionProgramacionModulo {
+            get {
+                return ResourceManager.GetString("captionProgramacionModulo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tipo de Actualización.
+        /// </summary>
+        public static string captionProgramacionTipoActualizacion {
+            get {
+                return ResourceManager.GetString("captionProgramacionTipoActualizacion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Usuarios.
+        /// </summary>
+        public static string captionProgramacionUsuarios {
+            get {
+                return ResourceManager.GetString("captionProgramacionUsuarios", resourceCulture);
             }
         }
         

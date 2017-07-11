@@ -18,6 +18,7 @@ namespace BCMWeb.Data.EF
         public tblBIAProceso()
         {
             this.tblBCPDocumento = new HashSet<tblBCPDocumento>();
+            this.tblBIAAmenaza = new HashSet<tblBIAAmenaza>();
             this.tblBIAAplicacion = new HashSet<tblBIAAplicacion>();
             this.tblBIAClienteProceso = new HashSet<tblBIAClienteProceso>();
             this.tblBIADocumentacion = new HashSet<tblBIADocumentacion>();
@@ -37,7 +38,6 @@ namespace BCMWeb.Data.EF
             this.tblBIARTO = new HashSet<tblBIARTO>();
             this.tblBIAUnidadTrabajoProceso = new HashSet<tblBIAUnidadTrabajoProceso>();
             this.tblBIAWRT = new HashSet<tblBIAWRT>();
-            this.tblBIAAmenaza = new HashSet<tblBIAAmenaza>();
         }
     
         public long IdEmpresa { get; set; }
@@ -54,6 +54,8 @@ namespace BCMWeb.Data.EF
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBCPDocumento> tblBCPDocumento { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblBIAAmenaza> tblBIAAmenaza { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIAAplicacion> tblBIAAplicacion { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -95,7 +97,5 @@ namespace BCMWeb.Data.EF
         public virtual ICollection<tblBIAUnidadTrabajoProceso> tblBIAUnidadTrabajoProceso { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIAWRT> tblBIAWRT { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblBIAAmenaza> tblBIAAmenaza { get; set; }
     }
 }

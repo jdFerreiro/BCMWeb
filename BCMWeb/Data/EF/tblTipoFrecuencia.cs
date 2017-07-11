@@ -25,6 +25,7 @@ namespace BCMWeb.Data.EF
             this.tblBIAWRT = new HashSet<tblBIAWRT>();
             this.tblCultura_TipoFrecuencia = new HashSet<tblCultura_TipoFrecuencia>();
             this.tblPPEFrecuencia = new HashSet<tblPPEFrecuencia>();
+            this.tblPMTProgramacion = new HashSet<tblPMTProgramacion>();
         }
     
         public long IdTipoFrecuencia { get; set; }
@@ -45,5 +46,7 @@ namespace BCMWeb.Data.EF
         public virtual ICollection<tblCultura_TipoFrecuencia> tblCultura_TipoFrecuencia { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblPPEFrecuencia> tblPPEFrecuencia { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblPMTProgramacion> tblPMTProgramacion { get; set; }
     }
 }

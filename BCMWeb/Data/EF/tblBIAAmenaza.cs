@@ -31,6 +31,7 @@ namespace BCMWeb.Data.EF
         public string Fuente { get; set; }
         public Nullable<short> Estado { get; set; }
     
+        public virtual tblBIAProceso tblBIAProceso { get; set; }
         public virtual tblControlRiesgo tblControlRiesgo { get; set; }
         public virtual tblDocumento tblDocumento { get; set; }
         public virtual tblEstadoRiesgo tblEstadoRiesgo { get; set; }
@@ -38,6 +39,5 @@ namespace BCMWeb.Data.EF
         public virtual tblImpactoRiesgo tblImpactoRiesgo { get; set; }
         public virtual tblProbabilidadRiesgo tblProbabilidadRiesgo { get; set; }
         public virtual tblSeveridadRiesgo tblSeveridadRiesgo { get; set; }
-        public virtual tblBIAProceso tblBIAProceso { get; set; }
     }
 }

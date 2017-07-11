@@ -31,12 +31,20 @@
                 viejo: anterior
             },
             success: function (data) {
+                //$(document).forms["IniciativasForm"].submit();
             },
             error: function () {
                 alert("error");
             }
 
         })
+    }
+    function CalcularMontoPendiente() {
+        var _PresupuestoReal = PresupuestoReal.GetValue();
+        var _MontoAbonado = MontoAbonado.GetValue();
+        var _MontoPendiente = _PresupuestoReal - _MontoAbonado;
+
+        MontoPendiente.SetText(_MontoPendiente.toFixed(2));
     }
 </script>
 

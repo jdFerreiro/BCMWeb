@@ -10,4 +10,14 @@ namespace BCMWeb.Models
         public long Id { get; set; }
         public string Descripcion { get; set; }
     }
+    public class TablaModel_int
+    {
+        public int Id { get; set; }
+        public string Descripcion { get; set; }
+    }
+    public class TablaModel_short
+    {
+        public short Id { get; set; }
+        public string Descripcion { get; set; }
+    }
 }

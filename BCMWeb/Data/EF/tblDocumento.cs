@@ -28,10 +28,7 @@ namespace BCMWeb.Data.EF
             this.tblDocumentoContenido = new HashSet<tblDocumentoContenido>();
             this.tblDocumentoEntrevista = new HashSet<tblDocumentoEntrevista>();
             this.tblDocumentoPersonaClave = new HashSet<tblDocumentoPersonaClave>();
-            this.tblPMTFrecuencia = new HashSet<tblPMTFrecuencia>();
-            this.tblPMTFrecuenciaParticipante = new HashSet<tblPMTFrecuenciaParticipante>();
-            this.tblPMTProgramacion = new HashSet<tblPMTProgramacion>();
-            this.tblPMTProgramacionAuditoria = new HashSet<tblPMTProgramacionAuditoria>();
+            this.tblPMTProgramacionDocumentos = new HashSet<tblPMTProgramacionDocumentos>();
             this.tblPPEFrecuencia = new HashSet<tblPPEFrecuencia>();
         }
     
@@ -74,13 +71,7 @@ namespace BCMWeb.Data.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblDocumentoPersonaClave> tblDocumentoPersonaClave { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblPMTFrecuencia> tblPMTFrecuencia { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblPMTFrecuenciaParticipante> tblPMTFrecuenciaParticipante { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblPMTProgramacion> tblPMTProgramacion { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblPMTProgramacionAuditoria> tblPMTProgramacionAuditoria { get; set; }
+        public virtual ICollection<tblPMTProgramacionDocumentos> tblPMTProgramacionDocumentos { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblPPEFrecuencia> tblPPEFrecuencia { get; set; }
     }

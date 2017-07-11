@@ -24,22 +24,34 @@
 <table>
     <tr>
         <td>
-            @Html.DevExpress().Button(b =>
-                    {
-                        b.Name = "botReturn";
-                        b.Text = Resources.BCMWebPublic.botReturnText;
-                        b.ClientSideEvents.Click = "function(s, e) { lp.Show(); document.location='" + DevExpressHelper.GetUrl(new { Controller = "Documento", Action = "Index" }) + "?IdModulo=" + Session["IdModulo"].ToString() + "' }";
+            @if (Session["IdModulo"].ToString().StartsWith("14")) {
+                Html.DevExpress().Button(b =>
+                {
+                    b.Name = "botReturn";
+                    b.Text = Resources.BCMWebPublic.botReturnText;
+                    b.ClientSideEvents.Click = "function(s, e) { lp.Show(); document.location='" + DevExpressHelper.GetUrl(new { Controller = "PlanTrabajo", Action = "Iniciativas" }) + "?modId=" + Session["IdModulo"].ToString() + "' }";
 
-                    }).GetHtml()
+                }).GetHtml();
+            }
+            else
+            {
+                Html.DevExpress().Button(b =>
+                {
+                    b.Name = "botReturn";
+                    b.Text = Resources.BCMWebPublic.botReturnText;
+                    b.ClientSideEvents.Click = "function(s, e) { lp.Show(); document.location='" + DevExpressHelper.GetUrl(new { Controller = "Documento", Action = "Index" }) + "?IdModulo=" + Session["IdModulo"].ToString() + "' }";
+
+                }).GetHtml();
+            }
         </td>
     </tr>
     <tr>
         <td>
             <div style="margin-top: 10px;">
-@using (Html.BeginForm())
-{
-    @Html.Action("FileManagerPartial", "FileManager")
-}
+                @using (Html.BeginForm())
+                {
+                    @Html.Action("FileManagerPartial", "FileManager")
+                }
             </div>
         </td>
     </tr>

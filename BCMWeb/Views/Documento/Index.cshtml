@@ -43,6 +43,18 @@
 
     }).GetHtml()
     </div>
-   @Html.Partial("DocumentoPartialView", Model)
+
+    switch (Model.IdModulo.ToString().Substring(0, (Model.IdModulo.ToString().Length == 7 ? 1 : 2)))
+    {
+        case "4":
+            @Html.Partial("DocumentoBIAPartialView", Model)
+            break;
+        case "7":
+            @Html.Partial("DocumentoBCPPartialView", Model)
+            break;
+        default:
+            @Html.Partial("DocumentoPartialView", Model)
+            break;
+    }
 
 }

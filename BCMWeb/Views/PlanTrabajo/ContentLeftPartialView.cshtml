@@ -49,7 +49,7 @@
         <tr>
             <td>&nbsp;</td>
         </tr>
-        <tr>
+        @*<tr>
             <td>
                 @Html.DevExpress().Menu(s =>
                 {
@@ -68,6 +68,18 @@
                     s.EnableAdaptivity = true;
                     s.ClientSideEvents.ItemClick = "itemMenuClick";
                 }).Bind(Model.SubModulos).GetHtml()
+            </td>
+        </tr>*@
+        <tr>
+            <td>
+                <div style="margin-top: 40px; text-align:center; ">
+                    @Html.DevExpress().Button(b =>
+                    {
+                        b.Name = "botAnexo";
+                        b.Text = Resources.BCMWebPublic.botAnexosText;
+                        b.ClientSideEvents.Click = "function(s, e) { lp.Show(); document.location='" + DevExpressHelper.GetUrl(new { Controller = "FileManager", Action = "Index" }) + "?IdClaseDocumento=" + Model.IdClaseDocumento.ToString() + "&modId=" + Model.IdModuloActual.ToString() + "' }";
+                    }).GetHtml()
+                </div>
             </td>
         </tr>
     </table>

@@ -97,6 +97,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mantenimientos.
+        /// </summary>
+        public static string captionBotonMantenimientos {
+            get {
+                return ResourceManager.GetString("captionBotonMantenimientos", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pruebas y Ejercicios.
+        /// </summary>
+        public static string captionBotonPPE {
+            get {
+                return ResourceManager.GetString("captionBotonPPE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancelar.
         /// </summary>
         public static string captionButtonCancel {

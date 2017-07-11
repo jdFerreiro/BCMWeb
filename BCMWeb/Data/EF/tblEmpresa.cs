@@ -38,6 +38,7 @@ namespace BCMWeb.Data.EF
             this.tblVicepresidencia = new HashSet<tblVicepresidencia>();
             this.tblEmpresaModulo = new HashSet<tblEmpresaModulo>();
             this.tblEmpresaUsuario = new HashSet<tblEmpresaUsuario>();
+            this.tblIniciativas_Anexo = new HashSet<tblIniciativas_Anexo>();
             this.tblModulo_NivelUsuario = new HashSet<tblModulo_NivelUsuario>();
             this.tblModulo = new HashSet<tblModulo>();
             this.tblModuloAnexo = new HashSet<tblModuloAnexo>();
@@ -46,13 +47,11 @@ namespace BCMWeb.Data.EF
             this.tblPlanTrabajo = new HashSet<tblPlanTrabajo>();
             this.tblPlanTrabajoAccion = new HashSet<tblPlanTrabajoAccion>();
             this.tblPMTMensajeActualizacion = new HashSet<tblPMTMensajeActualizacion>();
-            this.tblPMTProgramacion = new HashSet<tblPMTProgramacion>();
-            this.tblPMTProgramacionAuditoria = new HashSet<tblPMTProgramacionAuditoria>();
             this.tblPMTResponsableUpdate = new HashSet<tblPMTResponsableUpdate>();
             this.tblProducto = new HashSet<tblProducto>();
             this.tblUsuarioUnidadOrganizativa = new HashSet<tblUsuarioUnidadOrganizativa>();
+            this.tblPMTProgramacion = new HashSet<tblPMTProgramacion>();
             this.tblIniciativas = new HashSet<tblIniciativas>();
-            this.tblIniciativas_Anexo = new HashSet<tblIniciativas_Anexo>();
         }
     
         public long IdEmpresa { get; set; }
@@ -120,6 +119,8 @@ namespace BCMWeb.Data.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblEmpresaUsuario> tblEmpresaUsuario { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblIniciativas_Anexo> tblIniciativas_Anexo { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblModulo_NivelUsuario> tblModulo_NivelUsuario { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblModulo> tblModulo { get; set; }
@@ -136,18 +137,14 @@ namespace BCMWeb.Data.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblPMTMensajeActualizacion> tblPMTMensajeActualizacion { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblPMTProgramacion> tblPMTProgramacion { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblPMTProgramacionAuditoria> tblPMTProgramacionAuditoria { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblPMTResponsableUpdate> tblPMTResponsableUpdate { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblProducto> tblProducto { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblUsuarioUnidadOrganizativa> tblUsuarioUnidadOrganizativa { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblIniciativas> tblIniciativas { get; set; }
+        public virtual ICollection<tblPMTProgramacion> tblPMTProgramacion { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblIniciativas_Anexo> tblIniciativas_Anexo { get; set; }
+        public virtual ICollection<tblIniciativas> tblIniciativas { get; set; }
     }
 }

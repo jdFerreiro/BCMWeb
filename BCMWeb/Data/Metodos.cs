@@ -10,12 +10,15 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.SqlServer;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using System.Web.SessionState;
+using System.Web.UI;
 using System.Web.UI.WebControls;
 
 namespace BCMWeb
@@ -24,10 +27,12 @@ namespace BCMWeb
     public static class Metodos
     {
         private static HttpSessionState Session { get { return HttpContext.Current.Session; } }
+        private static HttpServerUtility Server { get { return HttpContext.Current.Server; } }
         private static string Culture = HttpContext.Current.Request.UserLanguages[0];
         private static Uri _ContextUrl = HttpContext.Current.Request.Url;
-        private static string _AppUrl = _ContextUrl.AbsoluteUri.Replace(_ContextUrl.AbsolutePath, string.Empty);
+        private static string _AppUrl = _ContextUrl.AbsoluteUri.Replace(_ContextUrl.PathAndQuery, string.Empty);
         private static HttpServerUtility _Server = HttpContext.Current.Server;
+
         private class ValorEscalaSearch
         {
             private short _Valor;
@@ -111,7 +116,7 @@ namespace BCMWeb
         {
 
             List<EmpresaModel> Data = new List<EmpresaModel>();
-            string _AppUrl = _ContextUrl.AbsoluteUri.Replace(_ContextUrl.AbsolutePath, string.Empty);
+            string _AppUrl = _ContextUrl.AbsoluteUri.Replace(_ContextUrl.PathAndQuery, string.Empty);
 
             if (Session != null && Session["UserId"] != null)
             {
@@ -146,6 +151,19 @@ namespace BCMWeb
             }
 
             return Data;
+        }
+        internal static string GetSeveridad(short? urgente)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            short IdPrioridad = (short)urgente;
+            string _Prioridad = Resources.IniciativaResource.textoNormal;
+
+            using (Entities db = new Entities())
+            {
+                _Prioridad = db.tblSeveridadRiesgo.Where(x => x.IdEmpresa == IdEmpresa && x.IdSeveridad == IdPrioridad).FirstOrDefault().Nombre;
+            }
+
+            return _Prioridad;
         }
         public static void SavePerfil(PerfilModelView model)
         {
@@ -197,6 +215,40 @@ namespace BCMWeb
             }
 
             return _NombreEmpresa;
+        }
+        public static IList<ModuloModel> GetModulosPrincipalesEmpresa()
+        {
+            List<ModuloModel> Data = new List<ModuloModel>();
+
+            if (Session != null && Session["IdEmpresa"] != null)
+            {
+                long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+
+                using (Entities db = new Entities())
+                {
+                    Data = (from m in db.tblModulo
+                            where m.IdEmpresa == IdEmpresa && m.IdModuloPadre == 0
+                                    && m.Activo
+                            select new ModuloModel
+                            {
+                                Action = m.Accion,
+                                Activo = m.Activo,
+                                CodigoModulo = (int)m.IdCodigoModulo,
+                                Controller = m.Controller,
+                                Descripcion = m.Descripcion,
+                                IdModulo = m.IdModulo,
+                                IdModuloPadre = 0,
+                                IdTipoElemento = m.IdTipoElemento,
+                                ImageRoot = m.imageRoot,
+                                Negocios = m.Negocios,
+                                Nombre = m.Nombre,
+                                Tecnologia = m.Tecnologia,
+                                Titulo = m.Titulo
+                            }).ToList();
+                }
+            }
+
+            return Data;
         }
         public static IList<ModuloModel> GetModulosPrincipalesEmpresaUsuario()
         {
@@ -319,63 +371,115 @@ namespace BCMWeb
                     .Where(x => x.IdEmpresa == IdEmpresa
                             && x.IdUsuario == IdUser).FirstOrDefault();
 
-                List<tblDocumento> dataDocumentos = (from d in db.tblDocumento
-                                                     where d.IdEmpresa == IdEmpresa && d.IdTipoDocumento == IdTipoDocumento && d.Negocios == Negocios
-                                                     select d).ToList();
+                List<long> Unidades = db.tblUsuarioUnidadOrganizativa
+                                        .Where(x => x.IdEmpresa == IdEmpresa && x.IdUsuario == IdUser)
+                                        .Select(x => x.IdUnidadOrganizativa)
+                                        .ToList();
 
-                foreach (tblDocumento d in dataDocumentos)
+                bool ProgramacionExist = db.tblPMTProgramacion
+                    .Where(x => x.IdEmpresa == IdEmpresa && x.Negocios == Negocios
+                             && x.IdModulo == (IdTipoDocumento * 1000000)).Count() > 0;
+
+                tblPMTProgramacion Programacion = db.tblPMTProgramacion
+                    .Where(x => x.IdEmpresa == IdEmpresa && x.Negocios == Negocios
+                             && x.IdModulo == (IdTipoDocumento & 1000000)
+                             && x.FechaInicio <= DateTime.UtcNow && x.FechaFinal >= DateTime.UtcNow).FirstOrDefault();
+
+                bool CanEdit = ((!ProgramacionExist  && Programacion == null) || (ProgramacionExist && Programacion != null))
+                               && (EmpresaUsuario.IdNivelUsuario == 6 || EmpresaUsuario.IdNivelUsuario == 4 || ModulosEditables > 0);
+
+                Documentos = (from d in db.tblDocumento
+                              where d.IdEmpresa == IdEmpresa && d.IdTipoDocumento == IdTipoDocumento 
+                                                             && d.Negocios == Negocios
+                                                             && (d.IdTipoDocumento == 4 && EmpresaUsuario.IdNivelUsuario != 6 && EmpresaUsuario.IdNivelUsuario != 4
+                                                                    ? Unidades.Contains((long)d.tblBIADocumento
+                                                                                         .Where(x => x.IdEmpresa == d.IdEmpresa && x.IdDocumento == d.IdDocumento && x.IdTipoDocumento == d.IdTipoDocumento)
+                                                                                         .FirstOrDefault().IdUnidadOrganizativa) 
+                                                                    : true)
+                                select d).AsEnumerable()
+                                .Select(d => new DocumentoModel
+                                {
+                                    Editable = CanEdit && d.IdEstadoDocumento != 6,
+                                    Eliminable = d.IdEstadoDocumento != 6 && (EmpresaUsuario.IdNivelUsuario == 6 || EmpresaUsuario.IdNivelUsuario == 4 || ModulosEliminables > 0),
+                                    Estatus = (d.tblEstadoDocumento.tblCultura_EstadoDocumento.Where(x => x.Culture == Culture || x.Culture == "es-VE").FirstOrDefault().Descripcion),
+                                    FechaCreacion = (DateTime)d.FechaCreacion.AddMinutes(Minutos),
+                                    FechaEstadoDocumento = (DateTime)d.FechaEstadoDocumento.AddMinutes(Minutos),
+                                    FechaUltimaModificacion = (DateTime)(d.FechaUltimaModificacion != null ? ((DateTime)d.FechaUltimaModificacion).AddMinutes(Minutos) : d.FechaUltimaModificacion),
+                                    IdDocumento = d.IdDocumento,
+                                    IdEstatus = d.IdEstadoDocumento,
+                                    IdPersonaResponsable = d.IdPersonaResponsable,
+                                    IdTipoDocumento = d.IdTipoDocumento,
+                                    Negocios = d.Negocios,
+                                    NroDocumento = d.NroDocumento,
+                                    NroVersion = d.NroVersion,
+                                    RequiereCertificacion = d.RequiereCertificacion,
+                                    Version = string.Format("{0}.{1}", d.VersionOriginal.ToString(), d.NroVersion.ToString()),
+                                    HasVersion = db.tblDocumento
+                                        .Where(x => x.IdEmpresa == IdEmpresa
+                                                    && x.IdTipoDocumento == IdTipoDocumento
+                                                    && x.NroDocumento == d.NroDocumento
+                                                    && x.NroVersion > d.NroVersion).Count() > 0,
+                                    VersionOriginal = (int)d.VersionOriginal,
+                                    DatosBIA = (d.tblBIADocumento == null || d.tblBIADocumento.Count() == 0
+                                                ? null
+                                                : new DocumentoBIA
+                                                {
+                                                    CadenaServicio = string.Empty,
+                                                    IdCadenaServicio = (long)(d.tblBIADocumento.FirstOrDefault().IdCadenaServicio ?? 0),
+                                                    IdUnidadOrganizativa = (long)(d.tblBIADocumento.FirstOrDefault().IdUnidadOrganizativa ?? 0)
+                                                }),
+                                    DatosBCP = (d.tblBCPDocumento == null || d.tblBCPDocumento.Count() == 0
+                                                ? null
+                                                : new DocumentoBCP
+                                                {
+                                                    IdProceso = (long)(d.tblBCPDocumento.FirstOrDefault().IdProceso ?? 0),
+                                                    IdUnidadOrganizativa = (long)(d.tblBCPDocumento.FirstOrDefault().IdUnidadOrganizativa ?? 0),
+                                                    Proceso = d.tblBCPDocumento.FirstOrDefault().Proceso,
+                                                    Responsable = d.tblBCPDocumento.FirstOrDefault().Responsable,
+                                                    Subproceso = d.tblBCPDocumento.FirstOrDefault().SubProceso,
+                                                }),
+                                }).ToList();
+            }
+
+            return Documentos.OrderBy(x => x.NroDocumento).ThenBy(x => x.Version).ThenBy(x => x.NroVersion).ToList();
+        }
+        public static string getStringProcesos(object dataItem)
+        {
+            StringBuilder sb = new StringBuilder();
+            long IdDocumento = (long)dataItem;
+
+            using (Entities db = new Entities())
+            {
+                List<tblBIAProceso> _procesos = (from d in db.tblBIAProceso
+                                                 where d.tblBIADocumento.IdDocumento == IdDocumento
+                                                 select d).ToList();
+
+                foreach (tblBIAProceso proceso in _procesos)
                 {
-                    long docNroDocumento = d.NroDocumento;
-                    long docVersion = d.NroVersion;
-
-                    bool HasVersion = db.tblDocumento.Where(x => x.IdEmpresa == IdEmpresa
-                                                            && x.IdTipoDocumento == IdTipoDocumento
-                                                            && x.NroDocumento == docNroDocumento
-                                                            && x.NroVersion > docVersion).Count() > 0;
-                    string _EstadoDocumento = string.Empty;
-
-                    if (d.IdEstadoDocumento < 6)
-                    {
-                        _EstadoDocumento = db.tblCultura_EstadoDocumento.Where(x => x.IdEstadoDocumento == 1 && (x.Culture == Culture || x.Culture == "es-VE")).FirstOrDefault().Descripcion;
-                    }
-                    else
-                    {
-                        _EstadoDocumento = d.tblEstadoDocumento.tblCultura_EstadoDocumento.Where(x => x.Culture == Culture || x.Culture == "es-VE").FirstOrDefault().Descripcion;
-                    }
-                    DocumentoModel Documento = new DocumentoModel
-                    {
-                        Editable = d.IdEstadoDocumento != 6 && (EmpresaUsuario.IdNivelUsuario == 6 || EmpresaUsuario.IdNivelUsuario == 4 || ModulosEditables > 0),
-                        Eliminable = d.IdEstadoDocumento != 6 && (EmpresaUsuario.IdNivelUsuario == 6 || EmpresaUsuario.IdNivelUsuario == 4 || ModulosEliminables > 0),
-                        Estatus = _EstadoDocumento,
-                        FechaCreacion = (DateTime)d.FechaCreacion.AddMinutes(Minutos),
-                        FechaEstadoDocumento = (DateTime)d.FechaEstadoDocumento.AddMinutes(Minutos),
-                        FechaUltimaModificacion = (DateTime)(d.FechaUltimaModificacion != null ? ((DateTime)d.FechaUltimaModificacion).AddMinutes(Minutos) : d.FechaUltimaModificacion),
-                        IdDocumento = d.IdDocumento,
-                        IdEstatus = d.IdEstadoDocumento,
-                        IdPersonaResponsable = d.IdPersonaResponsable,
-                        IdTipoDocumento = d.IdTipoDocumento,
-                        Negocios = d.Negocios,
-                        NroDocumento = d.NroDocumento,
-                        NroVersion = d.NroVersion,
-                        RequiereCertificacion = d.RequiereCertificacion,
-                        Version = string.Format("{0}.{1}", d.VersionOriginal.ToString(), d.NroVersion.ToString()),
-                        HasVersion = HasVersion,
-                        VersionOriginal = (int)d.VersionOriginal,
-                    };
-
-
-                    eEstadoDocumento EstadoDocumento = (eEstadoDocumento)Documento.IdEstatus;
-                    string _CodigoInforme = string.Format("{0}_{1}_{2}_{3}.{4}", TipoDocumento, Documento.NroDocumento.ToString("#000"), (EstadoDocumento == eEstadoDocumento.Certificado ? Documento.FechaEstadoDocumento.ToString("MM-yyyy") : DateTime.Now.ToString("MM-yyyy")), Documento.VersionOriginal, Documento.NroVersion);
-                    string _FileName = string.Format("{0}.pdf", _CodigoInforme.Replace("-", "_"));
-                    string _pathFile = String.Format("{0}\\PDFDocs\\{1}", _ServerPath, _FileName);
-
-                    if (System.IO.File.Exists(_pathFile))
-                        Documento.RutaDocumentoPDF = String.Format("{0}/PDFDocs/{1}", _AppUrl, _FileName);
-
-                    Documentos.Add(Documento);
+                    string strItem = string.Format("<tr><td style=\"text-align: center;\">{0}</td><td>{1}</td><td style=\"margin: auto; text-align: center;\">{2}</td></tr>",
+                                                    proceso.NroProceso.ToString(),
+                                                    proceso.Nombre,
+                                                    (!(bool)proceso.Critico ? "<img width=\"15\" src=\"../../Content/Images/boton_Verde.jpg\" />" : "<img width=\"15\" src=\"../../Content/Images/Boton_rojo.png\" />"));
+                    sb.Append(strItem);
                 }
             }
-            return Documentos;
+
+            return sb.ToString();
+        }
+        public static string ConvertirRuta(object dataItem)
+        {
+            StringBuilder sb = new StringBuilder();
+            string Ruta = dataItem.ToString();
+            string imgRuta = string.Empty;
+
+            if (!string.IsNullOrEmpty(Ruta))
+            {
+                imgRuta = "<a href=\"" + Ruta + "\"><img src=\"../../Content/Images/Internal/icono-pdf.jpg\" /></a>";
+                sb.Append(imgRuta);
+            }
+
+
+                return sb.ToString();
         }
         public static bool ValidarEmailUsuario(string email)
         {
@@ -405,6 +509,9 @@ namespace BCMWeb
         public static DocumentoModel GetDocumento(long IdDocumento, int IdTipoDocumento)
         {
             long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            long IdUser = long.Parse(Session["UserId"].ToString());
+            long minModulo = IdTipoDocumento * 1000000;
+            long maxModulo = IdTipoDocumento * 1999999;
 
             string UserTimeZone = Session["UserTimeZone"].ToString();
             int Horas = int.Parse(UserTimeZone.Split(':').First());
@@ -414,41 +521,107 @@ namespace BCMWeb
             DocumentoModel Documento = new DocumentoModel();
             using (Entities db = new Entities())
             {
-                tblDocumento data = (from d in db.tblDocumento
-                                     where d.IdEmpresa == IdEmpresa && d.IdTipoDocumento == IdTipoDocumento && d.IdDocumento == IdDocumento
-                                     select d).FirstOrDefault();
-                string _EstadoDocumento = string.Empty;
+                long ModulosEditables = db.tblModulo_Usuario
+                    .Where(x => x.IdEmpresa == IdEmpresa
+                            && x.IdUsuario == IdUser
+                            && x.IdModulo >= minModulo
+                            && x.IdModulo <= maxModulo
+                            && x.Actualizar).Count();
 
-                if (data == null || data.IdEstadoDocumento < 6)
+                long ModulosEliminables = db.tblModulo_Usuario
+                    .Where(x => x.IdEmpresa == IdEmpresa
+                            && x.IdUsuario == IdUser
+                            && x.IdModulo >= minModulo
+                            && x.IdModulo <= maxModulo
+                            && x.Eliminar).Count();
+
+                tblEmpresaUsuario EmpresaUsuario = db.tblEmpresaUsuario
+                    .Where(x => x.IdEmpresa == IdEmpresa
+                            && x.IdUsuario == IdUser).FirstOrDefault();
+
+                Documento = (from d in db.tblDocumento
+                             where d.IdEmpresa == IdEmpresa && d.IdTipoDocumento == IdTipoDocumento && d.IdDocumento == IdDocumento
+                             select d).AsEnumerable()
+                .Select(d => new DocumentoModel
                 {
-                    _EstadoDocumento = db.tblCultura_EstadoDocumento.Where(x => x.IdEstadoDocumento == 1 && (x.Culture == Culture || x.Culture == "es-VE")).FirstOrDefault().Descripcion;
-                }
-                else
-                {
-                    _EstadoDocumento = data.tblEstadoDocumento.tblCultura_EstadoDocumento.Where(x => x.Culture == Culture || x.Culture == "es-VE").FirstOrDefault().Descripcion;
-                }
+                    Editable = d.IdEstadoDocumento != 6 && (EmpresaUsuario.IdNivelUsuario == 6 || EmpresaUsuario.IdNivelUsuario == 4 || ModulosEditables > 0),
+                    Eliminable = d.IdEstadoDocumento != 6 && (EmpresaUsuario.IdNivelUsuario == 6 || EmpresaUsuario.IdNivelUsuario == 4 || ModulosEliminables > 0),
+                    Estatus = (d.IdEstadoDocumento == 6
+                                ? db.tblCultura_EstadoDocumento.Where(x => x.IdEstadoDocumento == 1 && (x.Culture == Culture || x.Culture == "es-VE")).FirstOrDefault().Descripcion
+                                : d.tblEstadoDocumento.tblCultura_EstadoDocumento.Where(x => x.Culture == Culture || x.Culture == "es-VE").FirstOrDefault().Descripcion),
+                    FechaCreacion = (DateTime)d.FechaCreacion.AddMinutes(Minutos),
+                    FechaEstadoDocumento = (DateTime)d.FechaEstadoDocumento.AddMinutes(Minutos),
+                    FechaUltimaModificacion = (DateTime)(d.FechaUltimaModificacion != null ? ((DateTime)d.FechaUltimaModificacion).AddMinutes(Minutos) : d.FechaUltimaModificacion),
+                    IdDocumento = d.IdDocumento,
+                    IdEstatus = d.IdEstadoDocumento,
+                    IdPersonaResponsable = d.IdPersonaResponsable,
+                    IdTipoDocumento = d.IdTipoDocumento,
+                    Negocios = d.Negocios,
+                    NroDocumento = d.NroDocumento,
+                    NroVersion = d.NroVersion,
+                    RequiereCertificacion = d.RequiereCertificacion,
+                    Version = string.Format("{0}.{1}", d.VersionOriginal.ToString(), d.NroVersion.ToString()),
+                    HasVersion = db.tblDocumento
+                        .Where(x => x.IdEmpresa == IdEmpresa
+                                    && x.IdTipoDocumento == IdTipoDocumento
+                                    && x.NroDocumento == d.NroDocumento
+                                    && x.NroVersion > d.NroVersion).Count() > 0,
+                    VersionOriginal = (int)d.VersionOriginal,
+                    DatosBIA = (d.tblBIADocumento == null || d.tblBIADocumento.Count() == 0
+                                ? null
+                                : new DocumentoBIA
+                                {
+                                    CadenaServicio = string.Empty,
+                                    IdCadenaServicio = (long)(d.tblBIADocumento.FirstOrDefault().IdCadenaServicio ?? 0),
+                                    IdUnidadOrganizativa = (long)(d.tblBIADocumento.FirstOrDefault().IdUnidadOrganizativa ?? 0)
+                                }),
+                    DatosBCP = (d.tblBCPDocumento == null || d.tblBCPDocumento.Count() == 0
+                                ? null
+                                : new DocumentoBCP
+                                {
+                                    IdProceso = (long)(d.tblBCPDocumento.FirstOrDefault().IdProceso ?? 0),
+                                    IdUnidadOrganizativa = (long)(d.tblBCPDocumento.FirstOrDefault().IdUnidadOrganizativa ?? 0),
+                                    Proceso = d.tblBCPDocumento.FirstOrDefault().Proceso,
+                                    Responsable = d.tblBCPDocumento.FirstOrDefault().Responsable,
+                                    Subproceso = d.tblBCPDocumento.FirstOrDefault().SubProceso,
+                                }),
+                }).FirstOrDefault();
+
+                //tblDocumento data = (from d in db.tblDocumento
+                //                     where d.IdEmpresa == IdEmpresa && d.IdTipoDocumento == IdTipoDocumento && d.IdDocumento == IdDocumento
+                //                     select d).FirstOrDefault();
+                //string _EstadoDocumento = string.Empty;
+
+                //if (data == null || data.IdEstadoDocumento < 6)
+                //{
+                //    _EstadoDocumento = db.tblCultura_EstadoDocumento.Where(x => x.IdEstadoDocumento == 1 && (x.Culture == Culture || x.Culture == "es-VE")).FirstOrDefault().Descripcion;
+                //}
+                //else
+                //{
+                //    _EstadoDocumento = data.tblEstadoDocumento.tblCultura_EstadoDocumento.Where(x => x.Culture == Culture || x.Culture == "es-VE").FirstOrDefault().Descripcion;
+                //}
 
 
-                if (data != null)
-                {
-                    Documento = new DocumentoModel
-                    {
-                        Estatus = _EstadoDocumento,
-                        FechaCreacion = (DateTime)data.FechaCreacion.AddMinutes(Minutos),
-                        FechaEstadoDocumento = (DateTime)data.FechaEstadoDocumento.AddMinutes(Minutos),
-                        FechaUltimaModificacion = (DateTime)((DateTime)data.FechaUltimaModificacion).AddMinutes(Minutos),
-                        IdDocumento = data.IdDocumento,
-                        IdEstatus = data.IdEstadoDocumento,
-                        IdPersonaResponsable = data.IdPersonaResponsable,
-                        IdTipoDocumento = data.IdTipoDocumento,
-                        Negocios = data.Negocios,
-                        NroDocumento = data.NroDocumento,
-                        NroVersion = data.NroVersion,
-                        RequiereCertificacion = data.RequiereCertificacion,
-                        Version = string.Format("{0}.{1}", data.VersionOriginal.ToString(), data.NroVersion.ToString()),
-                        VersionOriginal = (int)data.VersionOriginal
-                    };
-                }
+                //if (data != null)
+                //{
+                //    Documento = new DocumentoModel
+                //    {
+                //        Estatus = _EstadoDocumento,
+                //        FechaCreacion = (DateTime)data.FechaCreacion.AddMinutes(Minutos),
+                //        FechaEstadoDocumento = (DateTime)data.FechaEstadoDocumento.AddMinutes(Minutos),
+                //        FechaUltimaModificacion = (DateTime)((DateTime)data.FechaUltimaModificacion).AddMinutes(Minutos),
+                //        IdDocumento = data.IdDocumento,
+                //        IdEstatus = data.IdEstadoDocumento,
+                //        IdPersonaResponsable = data.IdPersonaResponsable,
+                //        IdTipoDocumento = data.IdTipoDocumento,
+                //        Negocios = data.Negocios,
+                //        NroDocumento = data.NroDocumento,
+                //        NroVersion = data.NroVersion,
+                //        RequiereCertificacion = data.RequiereCertificacion,
+                //        Version = string.Format("{0}.{1}", data.VersionOriginal.ToString(), data.NroVersion.ToString()),
+                //        VersionOriginal = (int)data.VersionOriginal
+                //    };
+                //}
             }
             return Documento;
         }
@@ -2793,49 +2966,6 @@ namespace BCMWeb
                             }
                             break;
                         case eSystemModules.PMT:
-                            foreach (tblPMTFrecuencia reg in documentoActual.tblPMTFrecuencia)
-                            {
-                                tblPMTFrecuencia newFrec = new tblPMTFrecuencia
-                                {
-                                    IdDocumento = nuevoDocumento.IdDocumento,
-                                    IdEmpresa = IdEmpresa,
-                                    IdTipoDocumento = IdTipoDocumento,
-                                    IdTipoFrecuencia = reg.IdTipoFrecuencia,
-                                    Segmento = reg.Segmento,
-                                    TipoFrecuencia = reg.TipoFrecuencia
-                                };
-                                db.tblPMTFrecuencia.Add(newFrec);
-
-                                foreach (tblPMTFrecuenciaParticipante frecPart in reg.tblPMTFrecuenciaParticipante)
-                                {
-                                    tblPMTFrecuenciaParticipante newFrecPart = new tblPMTFrecuenciaParticipante
-                                    {
-                                        IdCargo = frecPart.IdCargo,
-                                        IdDocumento = nuevoDocumento.IdDocumento,
-                                        IdEmpresa = IdEmpresa,
-                                        IdFrecuencia = newFrec.IdFrecuencia,
-                                        IdTipoDocumento = IdTipoDocumento
-                                    };
-                                    db.tblPMTFrecuenciaParticipante.Add(newFrecPart);
-                                }
-
-                            }
-
-                            foreach (tblPMTProgramacion regProg in documentoActual.tblPMTProgramacion)
-                            {
-                                tblPMTProgramacion newProg = new tblPMTProgramacion
-                                {
-                                    FechaFinal = regProg.FechaFinal,
-                                    FechaInicio = regProg.FechaInicio,
-                                    IdDocumento = nuevoDocumento.IdDocumento,
-                                    IdEmpresa = IdEmpresa,
-                                    IdEstado = regProg.IdEstado,
-                                    IdModulo = IdTipoDocumento,
-                                    Negocios = nuevoDocumento.Negocios
-                                };
-                                db.tblPMTProgramacion.Add(newProg);
-
-                            }
                             break;
                         case eSystemModules.PPE:
                             foreach (tblPPEFrecuencia reg in documentoActual.tblPPEFrecuencia)
@@ -2866,6 +2996,29 @@ namespace BCMWeb
         {
             long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
             long IdDocumento = long.Parse(Session["IdDocumento"].ToString());
+            List<DocumentoProcesoModel> Procesos = new List<DocumentoProcesoModel>();
+
+            using (Entities db = new Entities())
+            {
+                Procesos = db.tblBIAProceso.Where(x => x.IdEmpresa == IdEmpresa && x.IdDocumentoBia == IdDocumento)
+                    .Select(x => new DocumentoProcesoModel
+                    {
+                        Critico = (bool)x.Critico,
+                        Descripcion = x.Descripcion,
+                        FechaCreacion = (DateTime)x.FechaCreacion,
+                        FechaEstatus = (DateTime)x.FechaUltimoEstatus,
+                        IdEstatus = (long)x.IdEstadoProceso,
+                        IdProceso = x.IdProceso,
+                        Nombre = x.Nombre,
+                        NroProceso = (int)x.NroProceso
+                    }).Distinct().ToList();
+            }
+
+            return Procesos.OrderBy(x => x.NroProceso).ToList();
+        }
+        public static List<DocumentoProcesoModel> GetProcesosDocumento(long IdDocumento)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
             List<DocumentoProcesoModel> Procesos = new List<DocumentoProcesoModel>();
 
             using (Entities db = new Entities())
@@ -4688,27 +4841,42 @@ namespace BCMWeb
 
             using (Entities db = new Entities())
             {
-                Iniciativas = db.tblIniciativas.Where(x => x.IdEmpresa == IdEmpresa)
-                    .Select(x => new IniciativaModel
+                List<tblIniciativas> data = db.tblIniciativas.Where(x => x.IdEmpresa == IdEmpresa).ToList();
+
+                foreach (tblIniciativas x in data)
+                {
+                    string _strPath = string.Format("{0}Content\\FileManager\\AnexosPlanTrabajo\\E{1}\\I{2}", Server.MapPath("/"), IdEmpresa.ToString("000"), x.IdIniciativa);
+                    bool _hasFiles = false;
+
+                    if (Directory.Exists(_strPath))
+                        _hasFiles = Directory.GetFiles(_strPath, "*.*", SearchOption.AllDirectories).Count() > 0;
+
+                    Iniciativas.Add(new IniciativaModel
                     {
-                        Descripcion = x.Descripcion,
-                        FechaCierreEstimada = (DateTime)x.FechaCierreEstimada,
+                        Descripcion = (x.Descripcion != null ? x.Descripcion : string.Empty),
+                        FechaCierreEstimada = x.FechaCierreEstimada,
                         FechaCierreReal = x.FechaCierreReal,
-                        FechaInicioEstimada = (DateTime)x.FechaInicioEstimada,
+                        FechaInicioEstimada = x.FechaInicioEstimada,
                         FechaInicioReal = x.FechaInicioReal,
-                        NroAnexos = 0,
+                        hasFiles = _hasFiles,
+                        HorasEstimadas = x.HorasEstimadas,
+                        HorasInvertidas = x.HorasConsumidas,
                         IdEmpresa = x.IdEmpresa,
                         IdEstatus = (short)x.IdEstatusIniciativa,
                         IdIniciativa = x.IdIniciativa,
-                        IdUnidadOrganizativa = (long)x.IdUnidadOrganizativa,
+                        MontoAbonado = x.MontoAbonado,
+                        MontoPendiente = x.MontoPendiente,
                         Nombre = x.Nombre,
                         NroIniciativa = (int)x.NroIniciativa,
-                        Observacion = x.Observacion,
-                        PresupuestoEstimado = (decimal)x.PresupuestoEstimado,
-                        PresupuestoReal = x.PresupuestoReal,
+                        Observacion = (x.Observacion != null ? x.Observacion : string.Empty),
+                        PorcentajeAvance = x.PorcentajeAvance,
+                        PresupuestoEstimado = (decimal)(x.PresupuestoEstimado != null ? x.PresupuestoEstimado : 0),
+                        PresupuestoReal = (decimal)(x.PresupuestoReal != null ? x.PresupuestoReal : 0),
                         Responsable = x.NombreResponsable,
-                        Urgente = (bool)x.Urgente,
-                    }).ToList();
+                        UnidadOrganizativa = x.UnidadOrganizativa,
+                        Urgente = (short)x.IdPrioridad,
+                    });
+                }
             }
 
             return Iniciativas;
@@ -4720,26 +4888,39 @@ namespace BCMWeb
 
             using (Entities db = new Entities())
             {
-                Iniciativa = db.tblIniciativas.Where(x => x.IdEmpresa == IdEmpresa && x.IdIniciativa == IdIniciativa)
-                    .Select(x => new IniciativaModel
-                    {
-                        Descripcion = x.Descripcion,
-                        FechaCierreEstimada = (DateTime)x.FechaCierreEstimada,
-                        FechaCierreReal = x.FechaCierreReal,
-                        FechaInicioEstimada = (DateTime)x.FechaInicioEstimada,
-                        FechaInicioReal = x.FechaInicioReal,
-                        IdEmpresa = x.IdEmpresa,
-                        IdEstatus = (short)x.IdEstatusIniciativa,
-                        IdIniciativa = x.IdIniciativa,
-                        IdUnidadOrganizativa = (long)x.IdUnidadOrganizativa,
-                        Nombre = x.Nombre,
-                        NroIniciativa = (int)x.NroIniciativa,
-                        Observacion = x.Observacion,
-                        PresupuestoEstimado = (decimal)x.PresupuestoEstimado,
-                        PresupuestoReal = x.PresupuestoReal,
-                        Responsable = x.NombreResponsable,
-                        Urgente = (bool)x.Urgente,
-                    }).FirstOrDefault();
+                tblIniciativas x = db.tblIniciativas.Where(d => d.IdEmpresa == IdEmpresa && d.IdIniciativa == IdIniciativa).FirstOrDefault();
+
+                string _strPath = string.Format("{0}Content\\FileManager\\AnexosPlanTrabajo\\E{1}\\I{2}", Server.MapPath("/"), IdEmpresa.ToString("000"), x.IdIniciativa);
+                bool _hasFiles = false;
+
+                if (Directory.Exists(_strPath))
+                    _hasFiles = Directory.GetFiles(_strPath, "*.*", SearchOption.AllDirectories).Count() > 0;
+
+                Iniciativa = new IniciativaModel
+                {
+                    Descripcion = (x.Descripcion != null ? x.Descripcion : string.Empty),
+                    FechaCierreEstimada = x.FechaCierreEstimada,
+                    FechaCierreReal = x.FechaCierreReal,
+                    FechaInicioEstimada = x.FechaInicioEstimada,
+                    FechaInicioReal = x.FechaInicioReal,
+                    hasFiles = _hasFiles,
+                    HorasEstimadas = x.HorasEstimadas,
+                    HorasInvertidas = x.HorasConsumidas,
+                    IdEmpresa = x.IdEmpresa,
+                    IdEstatus = (short)x.IdEstatusIniciativa,
+                    IdIniciativa = x.IdIniciativa,
+                    MontoAbonado = x.MontoAbonado,
+                    MontoPendiente = x.MontoPendiente,
+                    Nombre = x.Nombre,
+                    NroIniciativa = (int)x.NroIniciativa,
+                    Observacion = (x.Observacion != null ? x.Observacion : string.Empty),
+                    PorcentajeAvance = x.PorcentajeAvance,
+                    PresupuestoEstimado = (decimal)(x.PresupuestoEstimado != null ? x.PresupuestoEstimado : 0),
+                    PresupuestoReal = (decimal)(x.PresupuestoReal != null ? x.PresupuestoReal : 0),
+                    Responsable = x.NombreResponsable,
+                    UnidadOrganizativa = x.UnidadOrganizativa,
+                    Urgente = (short)x.IdPrioridad,
+                };
             }
 
             return Iniciativa;
@@ -4758,16 +4939,21 @@ namespace BCMWeb
                     FechaCierreReal = Iniciativa.FechaCierreReal,
                     FechaInicioEstimada = Iniciativa.FechaInicioEstimada,
                     FechaInicioReal = Iniciativa.FechaInicioReal,
+                    HorasConsumidas = Iniciativa.HorasInvertidas,
+                    HorasEstimadas = Iniciativa.HorasInvertidas,
                     IdEmpresa = IdEmpresa,
                     IdEstatusIniciativa = Iniciativa.IdEstatus,
-                    IdUnidadOrganizativa = Iniciativa.IdUnidadOrganizativa,
+                    IdPrioridad = (short)Iniciativa.Urgente,
+                    MontoAbonado = Iniciativa.MontoAbonado,
+                    MontoPendiente = Iniciativa.MontoPendiente,
                     Nombre = Iniciativa.Nombre,
                     NombreResponsable = Iniciativa.Responsable,
                     NroIniciativa = Numero,
                     Observacion = Iniciativa.Observacion,
+                    PorcentajeAvance = Iniciativa.PorcentajeAvance,
                     PresupuestoEstimado = Iniciativa.PresupuestoEstimado,
                     PresupuestoReal = Iniciativa.PresupuestoReal,
-                    Urgente = (bool)(Iniciativa.Urgente == null ? false : Iniciativa.Urgente)
+                    UnidadOrganizativa = Iniciativa.UnidadOrganizativa,
                 };
 
                 db.tblIniciativas.Add(reg);
@@ -4789,14 +4975,20 @@ namespace BCMWeb
                 reg.FechaCierreReal = Iniciativa.FechaCierreReal;
                 reg.FechaInicioEstimada = Iniciativa.FechaInicioEstimada;
                 reg.FechaInicioReal = Iniciativa.FechaInicioReal;
+                reg.HorasConsumidas = Iniciativa.HorasInvertidas;
+                reg.HorasEstimadas = Iniciativa.HorasEstimadas;
                 reg.IdEstatusIniciativa = Iniciativa.IdEstatus;
-                reg.IdUnidadOrganizativa = Iniciativa.IdUnidadOrganizativa;
-                reg.Nombre = Iniciativa.Nombre;
+                reg.IdPrioridad = Iniciativa.Urgente;
+                reg.MontoAbonado = Iniciativa.MontoAbonado;
+                reg.MontoPendiente = Iniciativa.MontoPendiente;
                 reg.NombreResponsable = Iniciativa.Responsable;
+                reg.Nombre = Iniciativa.Nombre;
+                reg.NombreResponsable = (Iniciativa.Responsable == null ? string.Empty : Iniciativa.Responsable);
                 reg.Observacion = Iniciativa.Observacion;
+                reg.PorcentajeAvance = Iniciativa.PorcentajeAvance;
                 reg.PresupuestoEstimado = Iniciativa.PresupuestoEstimado;
                 reg.PresupuestoReal = Iniciativa.PresupuestoReal;
-                reg.Urgente = Iniciativa.Urgente;
+                reg.UnidadOrganizativa = Iniciativa.UnidadOrganizativa;
 
                 db.SaveChanges();
             }
@@ -4817,82 +5009,111 @@ namespace BCMWeb
             if (reg != null) {
                 if (reg.Descripcion != iniciativa.Descripcion)
                 {
-                    string _valorAnterior = reg.Descripcion;
-                    string _valorActual = iniciativa.Descripcion;
-                    Actualizaciones += string.Format("Descripción de la Iniciativa de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                    string _valorAnterior = (reg.Descripcion == null ? string.Empty : reg.Descripcion);
+                    string _valorActual = (string)(iniciativa.Descripcion == null ? string.Empty : iniciativa.Descripcion);
+                    Actualizaciones += string.Format("Descripción de la iniciativa de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
                 }
                 if (reg.FechaInicioEstimada != iniciativa.FechaInicioEstimada)
                 {
-                    string _valorAnterior = ((DateTime)reg.FechaInicioEstimada).ToString("dd/MM/yyyy");
-                    string _valorActual = ((DateTime)reg.FechaInicioEstimada).ToString("dd/MM/yyyy");
-                    Actualizaciones += string.Format("Fecha de Inicio Estimada de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                    string _valorAnterior = (reg.FechaInicioEstimada == null ? string.Empty : ((DateTime)reg.FechaInicioEstimada).ToString("dd/MM/yyyy"));
+                    string _valorActual = (iniciativa.FechaInicioEstimada == null ? string.Empty : ((DateTime)iniciativa.FechaInicioEstimada).ToString("dd/MM/yyyy"));
+                    Actualizaciones += string.Format("Fecha de inicio estimada de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
                 }
                 if (reg.FechaCierreEstimada != iniciativa.FechaCierreEstimada)
                 {
-                    string _valorAnterior = ((DateTime)reg.FechaCierreEstimada).ToString("dd/MM/yyyy");
-                    string _valorActual = ((DateTime)reg.FechaCierreEstimada).ToString("dd/MM/yyyy");
-                    Actualizaciones += string.Format("Fecha de Cierre Estimada de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                    string _valorAnterior = (reg.FechaCierreEstimada == null ? string.Empty : ((DateTime)reg.FechaCierreEstimada).ToString("dd/MM/yyyy"));
+                    string _valorActual = (iniciativa.FechaCierreEstimada == null ? string.Empty : ((DateTime)iniciativa.FechaCierreEstimada).ToString("dd/MM/yyyy"));
+                    Actualizaciones += string.Format("Fecha de cierre estimada de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
                 }
                 if (reg.FechaInicioReal != iniciativa.FechaInicioReal)
                 {
-                    string _valorAnterior = ((DateTime)reg.FechaInicioReal).ToString("dd/MM/yyyy");
-                    string _valorActual = ((DateTime)reg.FechaInicioReal).ToString("dd/MM/yyyy");
-                    Actualizaciones += string.Format("Fecha de Inicio Real de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                    string _valorAnterior = (reg.FechaInicioReal == null ? string.Empty : ((DateTime)reg.FechaInicioReal).ToString("dd/MM/yyyy"));
+                    string _valorActual = (iniciativa.FechaInicioReal == null ? string.Empty : ((DateTime)iniciativa.FechaInicioReal).ToString("dd/MM/yyyy"));
+                    Actualizaciones += string.Format("Fecha de inicio real de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
                 }
                 if (reg.FechaCierreReal != iniciativa.FechaCierreReal)
                 {
-                    string _valorAnterior = ((DateTime)reg.FechaCierreReal).ToString("dd/MM/yyyy");
-                    string _valorActual = ((DateTime)reg.FechaCierreReal).ToString("dd/MM/yyyy");
-                    Actualizaciones += string.Format("Fecha de Cierre Real de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                    string _valorAnterior = (reg.FechaCierreReal == null ? string.Empty : ((DateTime)reg.FechaCierreReal).ToString("dd/MM/yyyy"));
+                    string _valorActual = (iniciativa.FechaCierreReal == null ? string.Empty : ((DateTime)iniciativa.FechaCierreReal).ToString("dd/MM/yyyy"));
+                    Actualizaciones += string.Format("Fecha de cierre real de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
                 }
                 if (reg.IdEstatusIniciativa != iniciativa.IdEstatus)
                 {
-                    string _valorAnterior = Metodos.GetEstatusIniciativa((short)reg.IdEstatusIniciativa);
-                    string _valorActual = Metodos.GetEstatusIniciativa(iniciativa.IdEstatus);
-                    Actualizaciones += string.Format("Estado de la Iniciativa de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
-                }
-                if (reg.IdUnidadOrganizativa != iniciativa.IdUnidadOrganizativa)
-                {
-                    string _valorAnterior = Metodos.GetUnidadOrganizativaById((long)reg.IdUnidadOrganizativa).NombreCompleto;
-                    string _valorActual = Metodos.GetUnidadOrganizativaById((long)iniciativa.IdUnidadOrganizativa).NombreCompleto;
-                    Actualizaciones += string.Format("Unidad Organizativa de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                    string _valorAnterior = (reg.IdEstatusIniciativa == null ? string.Empty : GetEstatusIniciativa((short)reg.IdEstatusIniciativa));
+                    string _valorActual = (iniciativa.IdEstatus == null ? string.Empty : GetEstatusIniciativa((short)iniciativa.IdEstatus));
+                    Actualizaciones += string.Format("Estado de la iniciativa de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
                 }
                 if (reg.Nombre != iniciativa.Nombre)
                 {
-                    string _valorAnterior = reg.Nombre;
-                    string _valorActual = iniciativa.Nombre;
-                    Actualizaciones += string.Format("Nombre de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                    string _valorAnterior = (reg.Nombre == null ? string.Empty : reg.Nombre);
+                    string _valorActual = (iniciativa.Nombre == null ? string.Empty : iniciativa.Nombre);
+                    Actualizaciones += string.Format("Nombre de la iniciativa de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
                 }
-                if (reg.PresupuestoEstimado != iniciativa.PresupuestoEstimado)
+                if ((reg.PresupuestoEstimado == null ? 0 : reg.PresupuestoEstimado) != (iniciativa.PresupuestoEstimado == null ? 0 : iniciativa.PresupuestoEstimado))
                 {
-                    string _valorAnterior = ((decimal)reg.PresupuestoEstimado).ToString("#.##0.00");
-                    string _valorActual = ((decimal)reg.PresupuestoEstimado).ToString("#.##0.00");
-                    Actualizaciones += string.Format("Presupuesto Estimado de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                    string _valorAnterior = (reg.PresupuestoEstimado == null ? string.Empty : ((decimal)reg.PresupuestoEstimado).ToString("#.##0.00"));
+                    string _valorActual = (iniciativa.PresupuestoEstimado == null ? string.Empty : ((decimal)iniciativa.PresupuestoEstimado).ToString("#.##0.00"));
+                    Actualizaciones += string.Format("Presupuesto estimado de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
                 }
-                if (reg.PresupuestoReal != iniciativa.PresupuestoReal)
+                if ((reg.PresupuestoReal == null ? 0 : reg.PresupuestoReal) != (iniciativa.PresupuestoReal == null ? 0 : iniciativa.PresupuestoReal))
                 {
-                    string _valorAnterior = ((decimal)reg.PresupuestoReal).ToString("#.##0.00");
-                    string _valorActual = ((decimal)reg.PresupuestoReal).ToString("#.##0.00");
-                    Actualizaciones += string.Format("Presupuesto Real de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                    string _valorAnterior = (reg.PresupuestoReal == null ? string.Empty : ((decimal)reg.PresupuestoReal).ToString("#.##0.00"));
+                    string _valorActual = (iniciativa.PresupuestoReal == null ? string.Empty : ((decimal)iniciativa.PresupuestoReal).ToString("#.##0.00"));
+                    Actualizaciones += string.Format("Presupuesto real de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                }
+                if (reg.MontoAbonado != iniciativa.MontoAbonado)
+                {
+                    string _valorAnterior = (reg.MontoAbonado == null ? string.Empty : ((double)reg.MontoAbonado).ToString("#,##0.00"));
+                    string _valorActual = (iniciativa.MontoAbonado == null ? string.Empty : ((double)iniciativa.MontoAbonado).ToString("#,##0.00"));
+                    Actualizaciones += string.Format("Monto abonado de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                }
+                if (reg.MontoPendiente != iniciativa.MontoPendiente)
+                {
+                    string _valorAnterior = (reg.MontoPendiente == null ? string.Empty : ((double)reg.MontoPendiente).ToString("#,##0.00"));
+                    string _valorActual = (iniciativa.MontoPendiente == null ? string.Empty : ((double)iniciativa.MontoPendiente).ToString("#,##0.00"));
+                    Actualizaciones += string.Format("Monto pendiente de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
                 }
                 if (reg.NombreResponsable != iniciativa.Responsable)
                 {
-                    string _valorAnterior = reg.NombreResponsable;
-                    string _valorActual = iniciativa.Responsable;
-                    Actualizaciones += string.Format("Responsable de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                    string _valorAnterior = (reg.NombreResponsable == null ? string.Empty : reg.NombreResponsable);
+                    string _valorActual = (iniciativa.Responsable == null ? string.Empty : iniciativa.Responsable);
+                    Actualizaciones += string.Format("Responsable de la iniciativa de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
                 }
-                if (reg.Urgente != iniciativa.Urgente)
+                if (reg.IdPrioridad != iniciativa.Urgente)
                 {
-                    string _valorAnterior = ((bool)reg.Urgente ? "Urgente" : "Normal");
-                    string _valorActual = ((bool)iniciativa.Urgente ? "Urgente" : "Normal");
-                    Actualizaciones += string.Format("Prioridad de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                    string _valorAnterior = (reg.IdPrioridad == null ? string.Empty : Metodos.GetPrioridadIniciativa(reg.IdPrioridad));
+                    string _valorActual = (iniciativa.Urgente == null ? string.Empty : Metodos.GetPrioridadIniciativa(iniciativa.Urgente));
+                    Actualizaciones += string.Format("Prioridad de la iniciativa de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
                 }
-
+                if (reg.HorasEstimadas != iniciativa.HorasEstimadas)
+                {
+                    string _valorAnterior = (reg.HorasEstimadas == null ? string.Empty : ((int)reg.HorasEstimadas).ToString("#0"));
+                    string _valorActual = (iniciativa.HorasEstimadas == null ? string.Empty : ((int)iniciativa.HorasEstimadas).ToString("#0"));
+                    Actualizaciones += string.Format("Horas estimadas de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                }
+                if (reg.HorasConsumidas != iniciativa.HorasInvertidas)
+                {
+                    string _valorAnterior = (reg.HorasConsumidas == null ? string.Empty : ((int)reg.HorasConsumidas).ToString("#0"));
+                    string _valorActual = (iniciativa.HorasInvertidas == null ? string.Empty : ((int)iniciativa.HorasInvertidas).ToString("#0"));
+                    Actualizaciones += string.Format("Horas invertidas de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                }
+                if (reg.PorcentajeAvance != iniciativa.PorcentajeAvance)
+                {
+                    string _valorAnterior = (reg.PorcentajeAvance == null ? string.Empty : ((double)reg.PorcentajeAvance).ToString("##0.00"));
+                    string _valorActual = (iniciativa.PorcentajeAvance == null ? string.Empty : ((double)iniciativa.PorcentajeAvance).ToString("##0.00"));
+                    Actualizaciones += string.Format("Porcentaje de avance de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                }
                 if (reg.Observacion != iniciativa.Observacion)
                 {
-                    string _valorAnterior = reg.Observacion;
-                    string _valorActual = iniciativa.Observacion;
+                    string _valorAnterior = (reg.Observacion == null ? string.Empty : reg.Observacion);
+                    string _valorActual = (iniciativa.Observacion == null ? string.Empty : iniciativa.Observacion);
                     Actualizaciones += string.Format("Observación de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                }
+                if (reg.UnidadOrganizativa != iniciativa.UnidadOrganizativa)
+                {
+                    string _valorAnterior = (reg.UnidadOrganizativa == null ? string.Empty : reg.UnidadOrganizativa);
+                    string _valorActual = (iniciativa.UnidadOrganizativa == null ? string.Empty : iniciativa.UnidadOrganizativa);
+                    Actualizaciones += string.Format("Unidad Organizativa de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
                 }
             }
 
@@ -4902,6 +5123,18 @@ namespace BCMWeb
                 Actualizaciones = "Información Actualizada" + Environment.NewLine + Environment.NewLine + Actualizaciones;
 
             return Actualizaciones;
+        }
+        public static string GetPrioridadIniciativa(short? idPrioridad)
+        {
+            string _Prioridad = string.Empty;
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+
+            using (Entities db = new Entities())
+            {
+                _Prioridad = db.tblIniciativaPrioridad.Where(x => x.IdEmpresa == IdEmpresa && x.IdPrioridad == idPrioridad).FirstOrDefault().ToString();
+            }
+
+            return _Prioridad;
         }
         public static void DeleteIniciativa(long IdIniciativa)
         {
@@ -4940,6 +5173,22 @@ namespace BCMWeb
                 {
                     Descripcion = x.tblCultura_PlanTrabajoEstatus.Where(y => y.Culture == Culture || y.Culture == "es-VE").FirstOrDefault().Descripcion,
                     Id = x.IdEstatusActividad
+                }).ToList();
+            }
+
+            return data;
+        }
+        public static List<TablaModel> GetPrioridadesIniciativa()
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            List<TablaModel> data = new List<TablaModel>();
+
+            using (Entities db = new Entities())
+            {
+                data = db.tblIniciativaPrioridad.Where(x => x.IdEmpresa == IdEmpresa).Select(x => new TablaModel
+                {
+                    Descripcion = x.Nombre,
+                    Id = x.IdPrioridad
                 }).ToList();
             }
 
@@ -5024,6 +5273,298 @@ namespace BCMWeb
 
             return Anexos;
         }
- 
+        public static List<TablaModel> GetIniciativaResponsables()
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            List<TablaModel> data = new List<TablaModel>();
+
+            using (Entities db = new Entities())
+            {
+                data = db.tblIniciativaResponsable.Where(x => x.IdEmpresa == IdEmpresa).Select(x => new TablaModel
+                {
+                    Descripcion = x.Nombre,
+                    Id = x.IdResponsable
+                }).ToList();
+            }
+
+            return data.OrderBy(x => x.Descripcion).ToList();
+
+        }
+        public static string GetResponsableIniciativa(long IdResponsable)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            string data;
+
+            using (Entities db = new Entities())
+            {
+                data = db.tblIniciativaResponsable.Where(x => x.IdEmpresa == IdEmpresa && x.IdResponsable == IdResponsable).FirstOrDefault().Nombre;
+            }
+
+            return data;
+
+        }
+        public static List<TablaModel_short> GetPMT_Programacion_TipoActualizacion()
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            List<TablaModel_short> data = new List<TablaModel_short>();
+
+            using (Entities db = new Entities())
+            {
+                data = db.tblCultura_PMTProgramacionTipoActualizacion.Where(x => x.Culture == Culture || x.Culture == "es-VE").Select(x => new TablaModel_short
+                {
+                    Descripcion = x.Descripcion,
+                    Id = x.IdTipoActualizacion
+                }).ToList();
+            }
+
+            return data.OrderBy(x => x.Descripcion).ToList();
+
+        }
+        public static List<TablaModel> GetPMT_Programacion_TipoNotificacion()
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            List<TablaModel> data = new List<TablaModel>();
+
+            using (Entities db = new Entities())
+            {
+                data = db.tblCultura_PMTProgramacionTipoNotificacion.Where(x => x.Cultura == Culture || x.Cultura == "es-VE").Select(x => new TablaModel
+                {
+                    Descripcion = x.Descripcion,
+                    Id = x.IdTipoNotificacion
+                }).ToList();
+            }
+
+            return data.OrderBy(x => x.Descripcion).ToList();
+
+        }
+        public static List<ProgramacionModel> GetProgramaciones()
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            List<ProgramacionModel> Programacion = new List<ProgramacionModel>();
+
+            using (Entities db = new Entities())
+            {
+                Programacion = (from d in db.tblPMTProgramacion
+                                let FechaHasta = SqlFunctions.DateAdd("d", -1, d.FechaFinal)
+                               where d.IdEmpresa == IdEmpresa
+                               select new ProgramacionModel
+                               {
+                                   FechaFinal = (DateTime)FechaHasta,
+                                   FechaInicio = d.FechaInicio,
+                                   IdClaseDocumento = (d.Negocios ? 1 : 2),
+                                   IdEmpresa = d.IdEmpresa,
+                                   IdEstadoProgramacion = d.IdEstado,
+                                   IdModuloProgramacion = d.IdModulo,
+                                   IdProgramacion = d.IdPMTProgramacion,
+                                   IdTipoActualizacion = d.IdTipoActualizacion,
+                                   IdTipoFrecuencia = d.IdTipoFrecuencia,
+                               }).ToList();
+            }
+
+            return Programacion;
+        }
+        public static List<ProgramacionDocumentoModel> GetDocumentosProgramacion(long IdProgramacion, long IdTipoDocumento)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            List<ProgramacionDocumentoModel> data = new List<ProgramacionDocumentoModel>();
+
+            if (IdTipoDocumento == 4 || IdTipoDocumento == 7)
+            {
+                using (Entities db = new Entities())
+                {
+
+                    data = db.tblDocumento.Where(x => x.IdEmpresa == IdEmpresa && x.IdTipoDocumento == IdTipoDocumento)
+                        .Select(x => new
+                        {
+                            x.IdEstadoDocumento,
+                            x.FechaEstadoDocumento,
+                            x.IdDocumento,
+                            x.IdEmpresa,
+                            x.IdTipoDocumento,
+                            db.tblModulo.Where(m => m.IdEmpresa == IdEmpresa && m.IdCodigoModulo == x.IdTipoDocumento && m.IdModuloPadre == 0).FirstOrDefault().Nombre,
+                            x.NroDocumento,
+                            x.VersionOriginal,
+                            x.NroVersion,
+                            x.tblPMTProgramacionDocumentos
+                        }).AsEnumerable()
+                        .Select(dc => new ProgramacionDocumentoModel
+                        {
+                            Estado = (eEstadoDocumento)dc.IdEstadoDocumento,
+                            FechaUltimoEstado = dc.FechaEstadoDocumento,
+                            IdDocumento = dc.IdDocumento,
+                            IdModulo = dc.IdTipoDocumento * 1000000,
+                            IdTipoDocumento = dc.IdTipoDocumento,
+                            NombreDocumento = dc.Nombre,
+                            NroDocumento = dc.NroDocumento,
+                            NroVersion = dc.NroVersion,
+                            VersionOriginal = (int)dc.VersionOriginal,
+                            Selected = (dc.tblPMTProgramacionDocumentos != null)
+                        }).ToList();
+                }
+            }
+
+            return data.OrderBy(x => x.NroDocumento).ThenBy(x => x.VersionOriginal).ThenBy(x => x.NroVersion).ToList();
+        }
+        public static List<ProgramacionUsuarioModel> GetUsuariosProgramacion(long IdProgramacion, long IdTipoDocumento)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            List<ProgramacionUsuarioModel> data = new List<ProgramacionUsuarioModel>();
+
+            if (IdTipoDocumento != 4 || IdTipoDocumento != 7)
+            {
+                using (Entities db = new Entities())
+                {
+                    tblPMTProgramacion _programacion = db.tblPMTProgramacion.Where(x => x.IdPMTProgramacion == IdProgramacion).FirstOrDefault();
+
+                    data = (from eu in db.tblEmpresaUsuario
+                            let IdTipoNotificacion = eu.tblUsuario.tblPMTProgramacionUsuario.Where(x => x.IdPMTProgramacion == IdProgramacion).FirstOrDefault().IdTipoNotificacion
+                            let TipoNotificacion = eu.tblUsuario.tblPMTProgramacionUsuario.Where(x => x.IdPMTProgramacion == IdProgramacion).FirstOrDefault().tblPMTProgramacionTipoNotificacion.tblCultura_PMTProgramacionTipoNotificacion.Where(clt => clt.Cultura == Culture || clt.Cultura == "es-VE").FirstOrDefault().Descripcion
+                            where eu.IdEmpresa == IdEmpresa
+                            select new ProgramacionUsuarioModel
+                            {
+                                FechaNotificacion = eu.tblUsuario.tblPMTProgramacionUsuario.Max(p => (DateTime)p.FechaUltimaNotificacion),
+                                IdProgramacion = IdProgramacion,
+                                IdTipoNotificacion = (short)(IdTipoNotificacion ?? 0),
+                                IdUsuario = eu.IdUsuario,
+                                Nombre = eu.tblUsuario.Nombre,
+                                TipoNotificacion = (TipoNotificacion ?? string.Empty),
+                            }).ToList();
+                }
+            }
+
+            return data.OrderBy(x => x.Nombre).ToList();
+        }
+        public static ProgramacionModel GetEditableProgramacion(long IdProgramacion)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            string UserTimeZone = Session["UserTimeZone"].ToString();
+            int Horas = int.Parse(UserTimeZone.Split(':').First());
+            int Minutos = (Math.Abs(Horas) * 60) + int.Parse(UserTimeZone.Split(':').Last());
+            if (Horas < 0) Minutos *= -1;
+
+            ProgramacionModel Programacion = new ProgramacionModel();
+
+            using (Entities db = new Entities())
+            {
+                Programacion = (from d in db.tblPMTProgramacion
+                                let FechaHasta = SqlFunctions.DateAdd("d", -1, d.FechaFinal)
+                                where d.IdEmpresa == IdEmpresa && d.IdPMTProgramacion == IdProgramacion
+                                select new ProgramacionModel
+                                {
+                                    FechaFinal = (DateTime)FechaHasta,
+                                    FechaInicio = d.FechaInicio,
+                                    IdClaseDocumento = (d.Negocios ? 1 : 2),
+                                    IdEmpresa = d.IdEmpresa,
+                                    IdEstadoProgramacion = d.IdEstado,
+                                    IdModuloProgramacion = d.IdModulo,
+                                    IdProgramacion = d.IdPMTProgramacion,
+                                    IdTipoActualizacion = d.IdTipoActualizacion,
+                                    IdTipoFrecuencia = d.IdTipoFrecuencia,
+                                }).FirstOrDefault();
+            }
+
+            return Programacion;
+        }
+        public static void InsertProgramacion(ProgramacionModel Programacion)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            string UserTimeZone = Session["UserTimeZone"].ToString();
+            int Horas = int.Parse(UserTimeZone.Split(':').First());
+            int Minutos = (Math.Abs(Horas) * 60) + int.Parse(UserTimeZone.Split(':').Last());
+            if (Horas > 0) Minutos *= -1;
+
+            using (Entities db = new Entities())
+            {
+                tblPMTProgramacion reg = new tblPMTProgramacion
+                {
+                    FechaFinal = DateTime.Parse(Programacion.FechaFinal.AddDays(1).ToString("yyyy/MM/dd")),
+                    FechaInicio = DateTime.Parse(Programacion.FechaInicio.ToString("yyyy/MM/dd")),
+                    IdEmpresa = IdEmpresa,
+                    IdEstado = Programacion.IdEstadoProgramacion,
+                    IdModulo = Programacion.IdModuloProgramacion,
+                    IdTipoActualizacion = 1, // Programacion.IdTipoActualizacion,
+                    IdTipoFrecuencia = Programacion.IdTipoFrecuencia,
+                    Negocios = Programacion.IdClaseDocumento == 1,
+                };
+
+                db.tblPMTProgramacion.Add(reg);
+
+                db.SaveChanges();
+
+                Auditoria.RegistarProgramacion(eTipoAccion.AgregarProgramacion, reg.IdPMTProgramacion, reg.IdModulo, string.Empty);
+            }
+        }
+        public static void UpdateProgramacion(ProgramacionModel Programacion)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            string UserTimeZone = Session["UserTimeZone"].ToString();
+            int Horas = int.Parse(UserTimeZone.Split(':').First());
+            int Minutos = (Math.Abs(Horas) * 60) + int.Parse(UserTimeZone.Split(':').Last());
+            if (Horas > 0) Minutos *= -1;
+
+            using (Entities db = new Entities())
+            {
+                tblPMTProgramacion reg = db.tblPMTProgramacion.Where(x => x.IdEmpresa == IdEmpresa && x.IdPMTProgramacion == Programacion.IdProgramacion).FirstOrDefault();
+
+                reg.FechaFinal = DateTime.Parse(Programacion.FechaFinal.AddDays(1).ToString("yyyy/MM/dd"));
+                reg.FechaInicio = DateTime.Parse(Programacion.FechaInicio.ToString("yyyy/MM/dd"));
+                reg.IdModulo = Programacion.IdModuloProgramacion;
+                reg.IdTipoActualizacion = 1; // Programacion.IdTipoActualizacion;
+                reg.IdTipoFrecuencia = Programacion.IdTipoFrecuencia;
+
+                db.SaveChanges();
+                Auditoria.RegistarProgramacion(eTipoAccion.ActualizarProgramacion, reg.IdPMTProgramacion, reg.IdModulo, string.Empty);
+            }
+        }
+        public static void DeleteProgramacion(long IdProgramacion)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            string NombreProgramacion = string.Empty;
+
+            using (Entities db = new Entities())
+            {
+                tblPMTProgramacion reg = db.tblPMTProgramacion.Where(x => x.IdEmpresa == IdEmpresa && x.IdPMTProgramacion == IdProgramacion).FirstOrDefault();
+
+                db.tblPMTProgramacionDocumentos.RemoveRange(reg.tblPMTProgramacionDocumentos);
+                db.tblPMTProgramacionUsuario.RemoveRange(reg.tblPMTProgramacionUsuario);
+                db.tblPMTProgramacion.Remove(reg);
+                db.SaveChanges();
+                Auditoria.RegistarProgramacion(eTipoAccion.EliminarProgramacion, reg.IdPMTProgramacion, reg.IdModulo, string.Empty);
+            }
+        }
+        public static List<TablaModel> GetTipoFrecuencia()
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            List<TablaModel> data = new List<TablaModel>();
+
+            using (Entities db = new Entities())
+            {
+                data = db.tblCultura_TipoFrecuencia.Where(x => x.Culture == Culture || x.Culture == "es-VE").Select(x => new TablaModel
+                {
+                    Descripcion = x.Descripcion,
+                    Id = x.IdTipoFrecuencia
+                }).ToList();
+            }
+
+            return data.OrderBy(x => x.Descripcion).ToList();
+
+        }
+        public static List<TablaModel> GetPMTTipoFrecuencia()
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            List<TablaModel> data = new List<TablaModel>();
+
+            using (Entities db = new Entities())
+            {
+                data = db.tblCultura_TipoFrecuencia.Where(x => x.IdTipoFrecuencia > 6 && (x.Culture == Culture || x.Culture == "es-VE")).Select(x => new TablaModel
+                {
+                    Descripcion = x.Descripcion,
+                    Id = x.IdTipoFrecuencia
+                }).ToList();
+            }
+
+            return data.OrderBy(x => x.Descripcion).ToList();
+
+        }
     }
 }

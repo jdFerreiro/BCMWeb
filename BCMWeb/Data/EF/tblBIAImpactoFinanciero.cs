@@ -24,9 +24,8 @@ namespace BCMWeb.Data.EF
         public Nullable<long> IdEscala { get; set; }
         public string UnidadTiempo { get; set; }
     
-        public virtual tblBIADocumento tblBIADocumento { get; set; }
         public virtual tblBIAProceso tblBIAProceso { get; set; }
-        public virtual tblTipoFrecuencia tblTipoFrecuencia { get; set; }
         public virtual tblEscala tblEscala { get; set; }
+        public virtual tblTipoFrecuencia tblTipoFrecuencia { get; set; }
     }
 }

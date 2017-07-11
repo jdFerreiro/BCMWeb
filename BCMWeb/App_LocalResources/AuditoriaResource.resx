@@ -300,4 +300,19 @@
   <data name="CaptionDatosModificados" xml:space="preserve">
     <value>Datos Actualizados</value>
   </data>
+  <data name="EliminarAccionMessage1" xml:space="preserve">
+    <value>Generar PDF del documento {1} versión {2} en el módulo {0}</value>
+  </data>
+  <data name="AgregarProgramacionMessage" xml:space="preserve">
+    <value>Agregar la programación para el módulo {0}</value>
+  </data>
+  <data name="EliminarProgramacionMessage" xml:space="preserve">
+    <value>Eliminar la programación para el módulo {0}</value>
+  </data>
+  <data name="ModificarProgramacionMessage" xml:space="preserve">
+    <value>Actualizar la programación para el módulo {0}</value>
+  </data>
+  <data name="MostrarProgramacionMessage" xml:space="preserve">
+    <value>Consultar la programación de mantenimientos</value>
+  </data>
 </root>

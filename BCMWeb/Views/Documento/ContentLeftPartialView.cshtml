@@ -63,6 +63,37 @@
                             </div>
                         </td>
                     </tr>
+                    @switch (Model.IdModulo.ToString().Length == 8 ? Model.IdModulo.ToString().Substring(0,2) : Model.IdModulo.ToString().Substring(0,1))
+                    {
+                        case "8":
+                            <tr>
+                                <td>
+                                    <div style="margin-top: 40px; text-align:center; ">
+                                        @Html.DevExpress().Button(b =>
+                                   {
+                                       b.Name = "botPPE";
+                                       b.Text = Resources.BCMWebPublic.captionBotonPPE;
+                                       b.ClientSideEvents.Click = "function(s, e) { lp.Show(); document.location='" + DevExpressHelper.GetUrl(new { Controller = "PPE", Action = "Index" }) + "?IdClaseDocumento=" + Model.IdClaseDocumento.ToString() + "&modId=" + Model.IdModulo.ToString() + "' }";
+                                   }).GetHtml()
+                                    </div>
+                                </td>
+                            </tr>
+                            break;
+                        case "9":
+                            <tr>
+                                <td>
+                                    <div style="margin-top: 40px; text-align:center; ">
+                                        @Html.DevExpress().Button(b =>
+                                   {
+                                       b.Name = "botPMT";
+                                       b.Text = Resources.BCMWebPublic.captionBotonMantenimientos;
+                                       b.ClientSideEvents.Click = "function(s, e) { lp.Show(); document.location='" + DevExpressHelper.GetUrl(new { Controller = "PMT", Action = "Index" }) + "?IdClaseDocumento=" + Model.IdClaseDocumento.ToString() + "&modId=" + Model.IdModulo.ToString() + "' }";
+                                   }).GetHtml()
+                                    </div>
+                                </td>
+                            </tr>
+                            break;
+                    }
                 </table>
             </td>
         </tr>

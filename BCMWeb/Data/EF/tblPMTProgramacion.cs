@@ -14,16 +14,30 @@ namespace BCMWeb.Data.EF
     
     public partial class tblPMTProgramacion
     {
-        public long IdPMTProgramación { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public tblPMTProgramacion()
+        {
+            this.tblPMTProgramacionDocumentos = new HashSet<tblPMTProgramacionDocumentos>();
+            this.tblPMTProgramacionUsuario = new HashSet<tblPMTProgramacionUsuario>();
+        }
+    
+        public long IdPMTProgramacion { get; set; }
         public long IdEmpresa { get; set; }
-        public long IdDocumento { get; set; }
         public long IdModulo { get; set; }
         public System.DateTime FechaInicio { get; set; }
         public System.DateTime FechaFinal { get; set; }
         public long IdEstado { get; set; }
         public bool Negocios { get; set; }
+        public short IdTipoActualizacion { get; set; }
+        public long IdTipoFrecuencia { get; set; }
     
-        public virtual tblDocumento tblDocumento { get; set; }
         public virtual tblEmpresa tblEmpresa { get; set; }
+        public virtual tblModulo tblModulo { get; set; }
+        public virtual tblPMTProgramacionTipoActualizacion tblPMTProgramacionTipoActualizacion { get; set; }
+        public virtual tblTipoFrecuencia tblTipoFrecuencia { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblPMTProgramacionDocumentos> tblPMTProgramacionDocumentos { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblPMTProgramacionUsuario> tblPMTProgramacionUsuario { get; set; }
     }
 }

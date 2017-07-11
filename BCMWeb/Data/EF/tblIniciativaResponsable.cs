@@ -12,15 +12,10 @@ namespace BCMWeb.Data.EF
     using System;
     using System.Collections.Generic;
     
-    public partial class tblPMTFrecuenciaParticipante
+    public partial class tblIniciativaResponsable
     {
         public long IdEmpresa { get; set; }
-        public long IdDocumento { get; set; }
-        public long IdTipoDocumento { get; set; }
-        public long IdFrecuencia { get; set; }
-        public long IdCargo { get; set; }
-    
-        public virtual tblDocumento tblDocumento { get; set; }
-        public virtual tblPMTFrecuencia tblPMTFrecuencia { get; set; }
+        public long IdResponsable { get; set; }
+        public string Nombre { get; set; }
     }
 }

@@ -60,9 +60,31 @@ namespace BCMWeb.Models
         public bool RequiereCertificacion { get; set; }
         public bool Editable { get; set; }
         public bool Eliminable { get; set; }
-        public string RutaDocumentoPDF { get; set; }
+        public string RutaDocumentoPDF
+        {
+            get
+            {
+                Uri _ContextUrl = HttpContext.Current.Request.Url;
+                string _AppUrl = _ContextUrl.AbsoluteUri.Replace(_ContextUrl.PathAndQuery, string.Empty);
+                HttpServerUtility _Server = HttpContext.Current.Server;
+                string _ServerPath = _Server.MapPath(".").Replace("\\Account", string.Empty);
+                eSystemModules Modulo = (eSystemModules)IdTipoDocumento;
+                string TipoDocumento = Modulo.ToString();
+                eEstadoDocumento EstadoDocumento = (eEstadoDocumento)IdEstatus;
+                string _CodigoInforme = string.Format("{0}_{1}_{2}_{3}.{4}", TipoDocumento, NroDocumento.ToString("#000"), (EstadoDocumento == eEstadoDocumento.Certificado ? FechaEstadoDocumento.ToString("MM-yyyy") : DateTime.Now.ToString("MM-yyyy")), VersionOriginal, NroVersion);
+                string _FileName = string.Format("{0}.pdf", _CodigoInforme.Replace("-", "_"));
+                string _pathFile = String.Format("{0}\\PDFDocs\\{1}", _ServerPath, _FileName);
+
+                if (System.IO.File.Exists(_pathFile))
+                    return String.Format("{0}/PDFDocs/{1}", _AppUrl, _FileName);
+                else
+                    return string.Empty;
+            }
+        }
         public string Version { get; set; }
         public bool HasVersion { get; set; }
+        public DocumentoBIA DatosBIA { get; set; }
+        public DocumentoBCP DatosBCP { get; set; }
         public List<DocumentoAnexoModel> Anexos { get; set; }
         public List<DocumentoAprobacionModel> Aprobaciones { get; set; }
         public List<DocumentoAuditoriaModel> Auditoria { get; set; }
@@ -71,6 +93,7 @@ namespace BCMWeb.Models
         public List<DocumentoEntrevistaModel> Entrevistas { get; set; }
         public List<DocumentoPersonaClaveModel> PersonasClave { get; set; }
         public List<DocumentoProcesoModel> Procesos { get; set; }
+        
         public bool Updated { get; set; }
         public DocumentoModel()
         {
@@ -82,10 +105,43 @@ namespace BCMWeb.Models
             this.Entrevistas = new List< DocumentoEntrevistaModel>();
             this.PersonasClave = new List<DocumentoPersonaClaveModel>();
             this.Procesos = new List<DocumentoProcesoModel>();
+            this.DatosBIA = new DocumentoBIA();
             this.Updated = false;
     }
 
 }
+    public class DocumentoBCP
+    {
+        public long IdProceso { get; set; }
+        public string Proceso { get; set; }
+        public string Subproceso { get; set; }
+        public long IdUnidadOrganizativa { get; set; }
+        public string UnidadOrganizativa
+        {
+            get
+            {
+                string _unidadOrganizativa = string.Empty;
+                _unidadOrganizativa = Metodos.GetUnidadOrganizativaById(IdUnidadOrganizativa).NombreUnidadOrganizativa;
+                return _unidadOrganizativa;
+            }
+        }
+        public string Responsable { get; set; }
+    }
+    public class DocumentoBIA
+    {
+        public long IdUnidadOrganizativa { get; set; }
+        public string UnidadOrganizativa
+        {
+            get
+            {
+                string _unidadOrganizativa = string.Empty;
+                _unidadOrganizativa = Metodos.GetUnidadOrganizativaById(IdUnidadOrganizativa).NombreUnidadOrganizativa;
+                return _unidadOrganizativa;
+            }
+        }
+        public long IdCadenaServicio { get; set; }
+        public string CadenaServicio { get; set; }
+    }
     public class DocumentoAnexoModel
     {
         public long IdEmpresa { get; set; }
@@ -225,11 +281,11 @@ namespace BCMWeb.Models
         public long IdDocumento { get; set; }
         public long IdTipoDocumento { get; set; }
         public long IdEntrevista { get; set; }
-        [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
+        [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "RequiredErrorFemale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
         [Display(Name = "captionFechaInicio", ResourceType = typeof(Resources.DocumentoResource))]
         [DataType(DataType.DateTime, ErrorMessageResourceName = "InvalidoErrorFemale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
         public DateTime Inicio { get; set; }
-        [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
+        [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "RequiredErrorFemale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
         [Display(Name = "captionFechaFinal", ResourceType = typeof(Resources.DocumentoResource))]
         [DataType(DataType.DateTime, ErrorMessageResourceName = "InvalidoErrorFemale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
         public DateTime Final { get; set; }
@@ -351,4 +407,78 @@ namespace BCMWeb.Models
         public string PersonalClave { get; set; }
         public string Tecnologia { get; set; }
     }
+    public class FrecuenciaModel : ModulosUserModel
+    {
+        [Display(Name = "captionFrecuencia", ResourceType = typeof(Resources.DocumentoResource))]
+        public long IdFrecuencia { get; set; }
+        [Display(Name = "captionFrecuencia", ResourceType = typeof(Resources.DocumentoResource))]
+        [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
+        [StringLength(50, ErrorMessageResourceName = "StringLengthErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource), MinimumLength = 5)]
+        public long TipoFrecuencia { get; set; }
+        [Display(Name = "captionModulo", ResourceType = typeof(Resources.DocumentoResource))]
+        [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
+        public long IdModuloFrecuencia { get; set; }
+        [Display(Name = "captionParticipante", ResourceType = typeof(Resources.DocumentoResource))]
+        public List<long> Participantes { get; set; }
+    }
+    public class ProgramacionModel : ModulosUserModel
+    {
+        [Display(Name = "captionProgramacion", ResourceType = typeof(Resources.DocumentoResource))]
+        public long IdProgramacion { get; set; }
+        [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
+        [Display(Name = "captionProgramacionModulo", ResourceType = typeof(Resources.DocumentoResource))]
+        [Range(1, long.MaxValue, ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
+        public long IdModuloProgramacion { get; set; }
+        [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "RequiredErrorFemale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
+        [Display(Name = "captionProgramacionFechaInicio", ResourceType = typeof(Resources.DocumentoResource))]
+        [DataType(DataType.DateTime, ErrorMessageResourceName = "InvalidoErrorFemale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
+        public DateTime FechaInicio { get; set; }
+        [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "RequiredErrorFemale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
+        [Display(Name = "captionProgramacionFechaFinal", ResourceType = typeof(Resources.DocumentoResource))]
+        [DataType(DataType.DateTime, ErrorMessageResourceName = "InvalidoErrorFemale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
+        public DateTime FechaFinal { get; set; }
+        [Display(Name = "captionProgramacionEstadoProgramacion", ResourceType = typeof(Resources.DocumentoResource))]
+        public long IdEstadoProgramacion { get; set; }
+        //[Required(AllowEmptyStrings = false, ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
+        [Display(Name = "captionProgramacionTipoActualizacion", ResourceType = typeof(Resources.DocumentoResource))]
+        //[Range(1, short.MaxValue, ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
+        public short IdTipoActualizacion { get; set; }
+        [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
+        [Display(Name = "captionFrecuencia", ResourceType = typeof(Resources.DocumentoResource))]
+        [Range(1, long.MaxValue, ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
+        public long IdTipoFrecuencia { get; set; }
+        public long IdTipoDocumento { get; set; }
+    }
+    public class ProgramacionUsuarioModel
+    {
+        public long IdProgramacion { get; set; }
+        public long IdUsuario { get; set; }
+        public string Nombre { get; set; }
+        public DateTime? FechaNotificacion { get; set; }
+        public short IdTipoNotificacion { get; set; }
+        public string TipoNotificacion { get; set; }
+        public bool Selected { get; set; }
+    }
+    public class ProgramacionDocumentoModel
+    {
+        public long IdProgramacion { get; set; }
+        public long IdDocumento { get; set; }
+        public string NombreDocumento { get; set; }
+        public long NroDocumento { get; set; }
+        public long VersionOriginal { get; set; }
+        public long NroVersion { get; set; }
+        public string Documento
+        {
+            get
+            {
+                return string.Format("{0} - No. {1} V:{2}", NombreDocumento, NroDocumento.ToString(), string.Format("{0}.{1}", VersionOriginal.ToString(), NroVersion.ToString()));
+            }
+        }
+        public eEstadoDocumento Estado { get; set; }
+        public DateTime? FechaUltimoEstado { get; set; }
+        public long IdModulo { get; set; }
+        public long IdTipoDocumento { get; set; }
+        public bool Selected { get; set; }
+    }
+
 }

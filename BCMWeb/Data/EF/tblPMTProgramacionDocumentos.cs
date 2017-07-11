@@ -12,16 +12,16 @@ namespace BCMWeb.Data.EF
     using System;
     using System.Collections.Generic;
     
-    public partial class tblPMTProgramacionAuditoria
+    public partial class tblPMTProgramacionDocumentos
     {
+        public long IdPMTProgramacion { get; set; }
         public long IdEmpresa { get; set; }
         public long IdModulo { get; set; }
         public long IdDocumento { get; set; }
-        public System.DateTime FechaInicioActualizacion { get; set; }
-        public System.DateTime FechaUltimaActualizacion { get; set; }
-        public long IdUsuarioActuailiza { get; set; }
+        public long IdTipoDocumento { get; set; }
     
         public virtual tblDocumento tblDocumento { get; set; }
-        public virtual tblEmpresa tblEmpresa { get; set; }
+        public virtual tblModulo tblModulo { get; set; }
+        public virtual tblPMTProgramacion tblPMTProgramacion { get; set; }
     }
 }

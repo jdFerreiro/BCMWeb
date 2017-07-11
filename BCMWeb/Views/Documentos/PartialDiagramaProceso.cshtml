@@ -9,8 +9,10 @@
         {
             switch (Model.IdModuloActual)
             {
-                case 4090100: // Diagrama de Impacto
-                    <td class="leftPane">
+                case 4090100: // Diagrama de Impacto BIA
+                case 7010001: // Diagrama de Impacto BCP OLD
+                case 7020000: // Diagrama de Impacto BCP
+                                <td class="leftPane">
                         <div class="Contenedor Verde">
                             <div class="Titulo">
                                 @Html.Raw(Resources.DiagramaResource.headerEntrada)
@@ -79,8 +81,8 @@
                             }
                         </div>
                     </td>
-                   break;
-                case 4090200: // Diagrama de Tecnología
+                                    break;
+                                case 4090200: // Diagrama de Tecnología
                     <td class="leftPane">
                     </td>
                     <td class="MiddlePane">
@@ -123,8 +125,8 @@
                             }
                        </div>
                     </td>
-                    break;
-                case 4090300:// Diagrama de Personas Claves
+                                    break;
+                                case 4090300:// Diagrama de Personas Claves
                     <td class="leftPane">
                     </td>
                     <td class="MiddlePane">
@@ -167,8 +169,8 @@
                             }
                         </div>
                     </td>
-                    break;
-            }
-        }
+                                        break;
+                                    }
+                                }
     </tr>
 </table>

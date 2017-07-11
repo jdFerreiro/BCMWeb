@@ -22,6 +22,5 @@ namespace BCMWeb.Data.EF
         public Nullable<System.DateTime> fechaRegistro { get; set; }
     
         public virtual tblEmpresa tblEmpresa { get; set; }
-        public virtual tblIniciativas tblIniciativas { get; set; }
     }
 }

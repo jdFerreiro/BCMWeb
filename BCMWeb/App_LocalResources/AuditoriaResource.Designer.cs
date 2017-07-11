@@ -124,6 +124,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Agregar la programación para el módulo {0}.
+        /// </summary>
+        public static string AgregarProgramacionMessage {
+            get {
+                return ResourceManager.GetString("AgregarProgramacionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ingresa a los anexos del documento {1} version {2} en el módulo {0} desde un dispositivo Móvil.
         /// </summary>
         public static string AnexoAccederDocumentoMovilMessage {
@@ -529,11 +538,29 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Generar PDF del documento {1} versión {2} en el módulo {0}.
+        /// </summary>
+        public static string EliminarAccionMessage1 {
+            get {
+                return ResourceManager.GetString("EliminarAccionMessage1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Eliminar la iniciativa {1}.
         /// </summary>
         public static string EliminarIniciativaMessage {
             get {
                 return ResourceManager.GetString("EliminarIniciativaMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Eliminar la programación para el módulo {0}.
+        /// </summary>
+        public static string EliminarProgramacionMessage {
+            get {
+                return ResourceManager.GetString("EliminarProgramacionMessage", resourceCulture);
             }
         }
         
@@ -592,6 +619,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Actualizar la programación para el módulo {0}.
+        /// </summary>
+        public static string ModificarProgramacionMessage {
+            get {
+                return ResourceManager.GetString("ModificarProgramacionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Consultar la sección {0} del documento {1} versión {2}.
         /// </summary>
         public static string MostrarAccionMessage {
@@ -606,6 +642,15 @@ namespace Resources {
         public static string MostrarIniciativaMessage {
             get {
                 return ResourceManager.GetString("MostrarIniciativaMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Consultar la programación de mantenimientos.
+        /// </summary>
+        public static string MostrarProgramacionMessage {
+            get {
+                return ResourceManager.GetString("MostrarProgramacionMessage", resourceCulture);
             }
         }
     }

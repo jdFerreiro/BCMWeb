@@ -18,18 +18,26 @@ namespace BCMWeb.Models
         public string Nombre { get; set; }
         [Display(Name = "Descripcion", ResourceType = typeof(Resources.IniciativaResource))]
         public string Descripcion { get; set; }
+        //[Required(AllowEmptyStrings = false, ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
+        //[Display(Name = "UnidadOrganizativa", ResourceType = typeof(Resources.IniciativaResource))]
+        //[Range(1, long.MaxValue, ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
+        //public long? IdUnidadOrganizativa { get; set; }
+        //[Display(Name = "UnidadOrganizativa", ResourceType = typeof(Resources.IniciativaResource))]
+        //public string UnidadOrganizativa
+        //{
+        //    get
+        //    {
+        //        return IdUnidadOrganizativa == null ? string.Empty : Metodos.GetNombreUnidadCompleto((long)IdUnidadOrganizativa);
+        //    }
+        //}
+        //[Required(AllowEmptyStrings = false, ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
+        //[Display(Name = "Responsable", ResourceType = typeof(Resources.IniciativaResource))]
+        //[Range(1, long.MaxValue, ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
+        //public long? Responsable { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
         [Display(Name = "UnidadOrganizativa", ResourceType = typeof(Resources.IniciativaResource))]
-        [Range(1, int.MaxValue, ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
-        public long? IdUnidadOrganizativa { get; set; }
-        [Display(Name = "UnidadOrganizativa", ResourceType = typeof(Resources.IniciativaResource))]
-        public string UnidadOrganizativa
-        {
-            get
-            {
-                return IdUnidadOrganizativa == null ? string.Empty : Metodos.GetNombreUnidadCompleto((long)IdUnidadOrganizativa);
-            }
-        }
+        [StringLength(1500, ErrorMessageResourceName = "StringLengthErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource), MinimumLength = 5)]
+        public string UnidadOrganizativa { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
         [Display(Name = "Responsable", ResourceType = typeof(Resources.IniciativaResource))]
         [StringLength(1500, ErrorMessageResourceName = "StringLengthErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource), MinimumLength = 5)]
@@ -46,28 +54,34 @@ namespace BCMWeb.Models
         public Nullable<decimal> PresupuestoEstimado { get; set; }
         [Display(Name = "PresupuestoReal", ResourceType = typeof(Resources.IniciativaResource))]
         public Nullable<decimal> PresupuestoReal { get; set; }
+        [Display(Name = "MontoAbonado", ResourceType = typeof(Resources.IniciativaResource))]
+        public Nullable<decimal> MontoAbonado { get; set; }
+        [Display(Name = "MontoPendiente", ResourceType = typeof(Resources.IniciativaResource))]
+        public Nullable<decimal> MontoPendiente { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
         [Display(Name = "Estatus", ResourceType = typeof(Resources.IniciativaResource))]
         [Range(1, short.MaxValue, ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
-        public short IdEstatus { get; set; }
+        public short? IdEstatus { get; set; }
         [Display(Name = "Estatus", ResourceType = typeof(Resources.IniciativaResource))]
+        [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
         public string Estatus
         {
             get
             {
-                return Metodos.GetEstatusIniciativa(IdEstatus);
+                return (IdEstatus == null ? string.Empty : Metodos.GetEstatusIniciativa((short)IdEstatus));
             }
         }
         [Display(Name = "Urgente", ResourceType = typeof(Resources.IniciativaResource))]
-        public Nullable<bool> Urgente { get; set; }
+        [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
+        public Nullable<short> Urgente { get; set; }
         [Display(Name = "Urgente", ResourceType = typeof(Resources.IniciativaResource))]
         public string strUrgente
         {
             get
             {
-                if (Urgente != null && (bool)Urgente)
+                if (Urgente != null)
                 {
-                    return Resources.IniciativaResource.textoUrgente;
+                    return Metodos.GetSeveridad(Urgente);
                 }
                 else
                 {
@@ -77,7 +91,13 @@ namespace BCMWeb.Models
         }
         [Display(Name = "Observacion", ResourceType = typeof(Resources.IniciativaResource))]
         public string Observacion { get; set; }
-        public int NroAnexos { get; set; }
+        [Display(Name = "PorcentajeAvance", ResourceType = typeof(Resources.IniciativaResource))]
+        public Nullable<decimal> PorcentajeAvance { get; set; }
+        [Display(Name = "HorasEstimadas", ResourceType = typeof(Resources.IniciativaResource))]
+        public Nullable<int> HorasEstimadas { get; set; }
+        [Display(Name = "HorasInvertidas", ResourceType = typeof(Resources.IniciativaResource))]
+        public Nullable<int> HorasInvertidas { get; set; }
+        public bool? hasFiles { get; set; }
     }
     public class AnexosIniciativaModel : ModulosUserModel
     {

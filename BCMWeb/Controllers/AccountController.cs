@@ -116,7 +116,7 @@ namespace BCMWeb.Controllers {
                 catch(MembershipCreateUserException e) {
                     ViewBag.ErrorMessage = ErrorCodeToString(e.StatusCode);
                 }
-            }
+            } 
 
             // If we got this far, something failed, redisplay form
             return View(model);

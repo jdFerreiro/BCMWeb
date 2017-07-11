@@ -29,6 +29,8 @@
             MVCxRichEdit richEdit = (MVCxRichEdit)s;
             richEdit.CreateDefaultRibbonTabs(false);
 
+            richEdit.BackColor = System.Drawing.Color.White;
+
             //Custom Open button
             richEdit.RibbonTabs[0].Groups[0].Items.RemoveAll(x => x is RERNewCommand);
             richEdit.RibbonTabs[0].Groups[0].Items.RemoveAll(x => x is REROpenCommand);

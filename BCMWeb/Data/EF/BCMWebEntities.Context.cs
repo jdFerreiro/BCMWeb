@@ -82,6 +82,8 @@ namespace BCMWeb.Data.EF
         public virtual DbSet<tblCultura_NivelUsuario> tblCultura_NivelUsuario { get; set; }
         public virtual DbSet<tblCultura_Pais> tblCultura_Pais { get; set; }
         public virtual DbSet<tblCultura_PlanTrabajoEstatus> tblCultura_PlanTrabajoEstatus { get; set; }
+        public virtual DbSet<tblCultura_PMTProgramacionTipoActualizacion> tblCultura_PMTProgramacionTipoActualizacion { get; set; }
+        public virtual DbSet<tblCultura_PMTProgramacionTipoNotificacion> tblCultura_PMTProgramacionTipoNotificacion { get; set; }
         public virtual DbSet<tblCultura_TipoCorreo> tblCultura_TipoCorreo { get; set; }
         public virtual DbSet<tblCultura_TipoDireccion> tblCultura_TipoDireccion { get; set; }
         public virtual DbSet<tblCultura_TipoFrecuencia> tblCultura_TipoFrecuencia { get; set; }
@@ -112,6 +114,9 @@ namespace BCMWeb.Data.EF
         public virtual DbSet<tblEstadoUsuario> tblEstadoUsuario { get; set; }
         public virtual DbSet<tblFuenteRiesgo> tblFuenteRiesgo { get; set; }
         public virtual DbSet<tblImpactoRiesgo> tblImpactoRiesgo { get; set; }
+        public virtual DbSet<tblIniciativaPrioridad> tblIniciativaPrioridad { get; set; }
+        public virtual DbSet<tblIniciativaResponsable> tblIniciativaResponsable { get; set; }
+        public virtual DbSet<tblIniciativas_Anexo> tblIniciativas_Anexo { get; set; }
         public virtual DbSet<tblLocalidad> tblLocalidad { get; set; }
         public virtual DbSet<tblMes> tblMes { get; set; }
         public virtual DbSet<tblModulo> tblModulo { get; set; }
@@ -141,11 +146,11 @@ namespace BCMWeb.Data.EF
         public virtual DbSet<tblPlanTrabajoAccion> tblPlanTrabajoAccion { get; set; }
         public virtual DbSet<tblPlanTrabajoAuditoria> tblPlanTrabajoAuditoria { get; set; }
         public virtual DbSet<tblPlanTrabajoEstatus> tblPlanTrabajoEstatus { get; set; }
-        public virtual DbSet<tblPMTFrecuencia> tblPMTFrecuencia { get; set; }
-        public virtual DbSet<tblPMTFrecuenciaParticipante> tblPMTFrecuenciaParticipante { get; set; }
         public virtual DbSet<tblPMTMensajeActualizacion> tblPMTMensajeActualizacion { get; set; }
-        public virtual DbSet<tblPMTProgramacion> tblPMTProgramacion { get; set; }
-        public virtual DbSet<tblPMTProgramacionAuditoria> tblPMTProgramacionAuditoria { get; set; }
+        public virtual DbSet<tblPMTProgramacionDocumentos> tblPMTProgramacionDocumentos { get; set; }
+        public virtual DbSet<tblPMTProgramacionTipoActualizacion> tblPMTProgramacionTipoActualizacion { get; set; }
+        public virtual DbSet<tblPMTProgramacionTipoNotificacion> tblPMTProgramacionTipoNotificacion { get; set; }
+        public virtual DbSet<tblPMTProgramacionUsuario> tblPMTProgramacionUsuario { get; set; }
         public virtual DbSet<tblPMTResponsableUpdate> tblPMTResponsableUpdate { get; set; }
         public virtual DbSet<tblPMTResponsableUpdate_Correo> tblPMTResponsableUpdate_Correo { get; set; }
         public virtual DbSet<tblPPEFrecuencia> tblPPEFrecuencia { get; set; }
@@ -168,7 +173,7 @@ namespace BCMWeb.Data.EF
         public virtual DbSet<tblUsuario> tblUsuario { get; set; }
         public virtual DbSet<tblUsuarioUnidadOrganizativa> tblUsuarioUnidadOrganizativa { get; set; }
         public virtual DbSet<tblVicepresidencia> tblVicepresidencia { get; set; }
+        public virtual DbSet<tblPMTProgramacion> tblPMTProgramacion { get; set; }
         public virtual DbSet<tblIniciativas> tblIniciativas { get; set; }
-        public virtual DbSet<tblIniciativas_Anexo> tblIniciativas_Anexo { get; set; }
     }
 }

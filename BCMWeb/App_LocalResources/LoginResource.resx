@@ -159,4 +159,10 @@
   <data name="WelcomeString" xml:space="preserve">
     <value>Bienvenido:</value>
   </data>
+  <data name="HeaderPrimeraVez" xml:space="preserve">
+    <value>Actualización de contraseña</value>
+  </data>
+  <data name="loginPrimeraVezLinea1" xml:space="preserve">
+    <value>Ud. está ingresando por primera vez a la aplicacion, por esta razón le solicitamos que actualice su contraseña con una contraseña que le sea familiar y pueda recordar fácilmente</value>
+  </data>
 </root>

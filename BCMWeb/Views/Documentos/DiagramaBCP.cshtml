@@ -1,0 +1,27 @@
+﻿@using BCMWeb.Models
+
+@model DocumentoDiagrama
+
+@section LeftPanel {
+    @Html.DevExpress().Panel(settings =>
+   {
+       settings.Name = "LeftPane";
+       settings.FixedPosition = PanelFixedPosition.WindowLeft;
+       settings.Collapsible = true;
+       settings.SettingsAdaptivity.CollapseAtWindowInnerWidth = 1023;
+       settings.ControlStyle.CssClass = "leftPane";
+       settings.Styles.Panel.CssClass = "panel";
+       settings.ScrollBars = ScrollBars.Vertical;
+       settings.SetContent(() =>
+       {
+           Html.RenderPartial("ContentLeftPartialView");
+       });
+   }).GetHtml()
+}
+
+@using (Html.BeginForm("DiagramaBCP", "Documentos", FormMethod.Post, htmlAttributes: new { id = "frmDiagrama" }))
+{
+
+    @Html.Partial("PartialDiagramaProceso")
+
+}

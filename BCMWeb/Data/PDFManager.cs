@@ -32,7 +32,7 @@ namespace BCMWeb
         private static HttpServerUtility _Server = HttpContext.Current.Server;
         private static objContenido _Content = new objContenido();
         private static Uri _ContextUrl = HttpContext.Current.Request.Url;
-        private static string _AppUrl = _ContextUrl.AbsoluteUri.Replace(_ContextUrl.AbsolutePath, string.Empty);
+        private static string _AppUrl = _ContextUrl.AbsoluteUri.Replace(_ContextUrl.PathAndQuery, string.Empty);
         private string _strDocURL = string.Empty;
         private static List<objContenido> _TableOfContent = null;
         private static string _ServerPath;

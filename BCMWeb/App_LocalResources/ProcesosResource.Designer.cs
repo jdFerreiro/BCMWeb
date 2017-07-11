@@ -88,6 +88,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tipo de Proceso.
+        /// </summary>
+        public static string captionCritico {
+            get {
+                return ResourceManager.GetString("captionCritico", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Escala.
         /// </summary>
         public static string captionEscala {

@@ -204,11 +204,14 @@
     <Content Include="Content\Images\Banderas\bandera-colombia-300x189.gif" />
     <Content Include="Content\Images\BlackGlassHeader.jpg" />
     <Content Include="Content\Images\Banderas\espana.jpg" />
+    <Content Include="Content\Images\Boton_rojo.png" />
+    <Content Include="Content\Images\boton_Verde.jpg" />
     <Content Include="Content\Images\GlassHeader.jpg" />
     <Content Include="Content\Images\Banderas\guatemala.png" />
+    <Content Include="Content\Images\Internal\emptyfolder.jpg" />
+    <Content Include="Content\Images\Internal\fullfolder.jpg" />
     <Content Include="Content\Images\Internal\hasAttach.png" />
     <Content Include="Content\Images\Internal\icono-pdf.jpg" />
-    <Content Include="Content\Images\Internal\Noattach.png" />
     <Content Include="Content\Images\Menu\Adiestramiento.png" />
     <Content Include="Content\Images\Menu\Administration.jpg" />
     <Content Include="Content\Images\Menu\BCP.jpg" />
@@ -315,6 +318,7 @@
       <DependentUpon>BCMWebEntities.edmx</DependentUpon>
     </Content>
     <None Include="Properties\PublishProfiles\BCMWeb2.pubxml" />
+    <None Include="Properties\PublishProfiles\Local.pubxml" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\MicrosoftAjax.debug.js" />
     <Content Include="Scripts\MicrosoftAjax.js" />
@@ -475,6 +479,18 @@
     <Content Include="Views\PlanTrabajo\AnexosIniciativaPartialView.cshtml" />
     <Content Include="Views\PlanTrabajo\IniciativaPartialView.cshtml" />
     <Content Include="Views\PlanTrabajo\FileManagerPartial.cshtml" />
+    <Content Include="Views\Documentos\Notificacion.cshtml" />
+    <Content Include="Views\Documentos\Frecuencia.cshtml" />
+    <Content Include="Views\Documentos\NotificacionPartialView.cshtml" />
+    <Content Include="Views\Documentos\FrecuenciaPartialView.cshtml" />
+    <Content Include="Views\PMT\ProgramacionPartialView.cshtml" />
+    <Content Include="Views\PMT\ProgramacionDocumentosPartialView.cshtml" />
+    <Content Include="Views\PMT\ProgramacionUsuariosPartialView.cshtml" />
+    <Content Include="Views\PMT\Index.cshtml" />
+    <Content Include="Views\PMT\EditProgramacion.cshtml" />
+    <Content Include="Views\Documento\DocumentoBCPPartialView.cshtml" />
+    <Content Include="Views\Documento\DocumentoBIAPartialView.cshtml" />
+    <Content Include="Views\Documentos\DiagramaBCP.cshtml" />
     <None Include="Views\Procesos\AjustarWRT.cshtml" />
     <Content Include="Views\Procesos\AjustarRTOPartialView .cshtml" />
     <Content Include="Views\Procesos\AjustarRTO.cshtml" />
@@ -644,6 +660,8 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
     <Compile Include="Controllers\PlanTrabajoController.cs" />
+    <Compile Include="Controllers\PMTController.cs" />
+    <Compile Include="Controllers\PPEController.cs" />
     <Compile Include="Controllers\ProcesosController.cs" />
     <Compile Include="Controllers\ReportesController.cs" />
     <Compile Include="Controllers\SeguridadController.cs" />
@@ -824,6 +842,12 @@
     <Compile Include="Data\EF\tblCultura_PlanTrabajoEstatus.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Data\EF\tblCultura_PMTProgramacionTipoActualizacion.cs">
+      <DependentUpon>BCMWebEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\EF\tblCultura_PMTProgramacionTipoNotificacion.cs">
+      <DependentUpon>BCMWebEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Data\EF\tblCultura_TipoCorreo.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
@@ -912,6 +936,12 @@
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\EF\tblImpactoRiesgo.cs">
+      <DependentUpon>BCMWebEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\EF\tblIniciativaPrioridad.cs">
+      <DependentUpon>BCMWebEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\EF\tblIniciativaResponsable.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\EF\tblIniciativas.cs">
@@ -1007,19 +1037,22 @@
     <Compile Include="Data\EF\tblPlanTrabajoEstatus.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Data\EF\tblPMTFrecuencia.cs">
-      <DependentUpon>BCMWebEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\EF\tblPMTFrecuenciaParticipante.cs">
-      <DependentUpon>BCMWebEntities.tt</DependentUpon>
-    </Compile>
     <Compile Include="Data\EF\tblPMTMensajeActualizacion.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\EF\tblPMTProgramacion.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Data\EF\tblPMTProgramacionAuditoria.cs">
+    <Compile Include="Data\EF\tblPMTProgramacionDocumentos.cs">
+      <DependentUpon>BCMWebEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\EF\tblPMTProgramacionTipoActualizacion.cs">
+      <DependentUpon>BCMWebEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\EF\tblPMTProgramacionTipoNotificacion.cs">
+      <DependentUpon>BCMWebEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\EF\tblPMTProgramacionUsuario.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\EF\tblPMTResponsableUpdate.cs">

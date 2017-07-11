@@ -823,6 +823,106 @@ namespace BCMWeb.Controllers
         }
         [SessionExpire]
         [HandleError]
+        public ActionResult DiagramaBCP(long modId)
+        {
+            DocumentoDiagrama model = new DocumentoDiagrama();
+
+            string _modId = modId.ToString();
+            int IdClaseDocumento = int.Parse(Session["IdClaseDocumento"].ToString());
+            int IdVersion = int.Parse(Session["IdVersion"].ToString());
+            int IdTipoDocumento = int.Parse(Session["IdTipoDocumento"].ToString());
+            long IdDocumento = long.Parse(Session["IdDocumento"].ToString());
+            long IdModulo = IdTipoDocumento * 1000000;
+            Session["modId"] = modId;
+
+            DocumentoModel doc = Metodos.GetDocumento(IdDocumento, IdTipoDocumento);
+            if (doc.DatosBCP != null)
+            {
+                DocumentoProcesoModel Proceso = Metodos.GetProceso(doc.DatosBCP.IdProceso);
+                model.Interdependencias = Metodos.GetInterdependenciasDiagrama(model.IdProceso);
+                model.Clientes_Productos = Metodos.GetClientesProductosDiagrama(model.IdProceso);
+                model.Entradas = Metodos.GetEntradasDiagrama(model.IdProceso);
+                model.PersonalClave = Metodos.GetPersonasClaveDiagrama(model.IdProceso);
+                model.Proveedores = Metodos.GetProveedoresDiagrama(model.IdProceso);
+                model.Tecnologia = Metodos.GetTecnologiaDiagrama(model.IdProceso);
+                model.NroProceso = Proceso.NroProceso.ToString();
+                model.Nombre = Proceso.Nombre;
+                model.Descripcion = Proceso.Descripcion;
+            }
+
+            model.IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            model.IdDocumento = IdDocumento;
+            model.IdTipoDocumento = IdTipoDocumento;
+            model.returnPage = Url.Action("Index", "Documento", new { IdModulo });
+            model.IdModulo = IdModulo;
+            model.IdModuloActual = modId;
+            model.Perfil = Metodos.GetPerfilData();
+            model.PageTitle = Metodos.GetModuloName(modId);
+            model.IdProceso = (doc.DatosBCP == null ? 0 : doc.DatosBCP.IdProceso);
+            model.FechaCreacion = doc.FechaCreacion;
+            model.FechaEstadoDocumento = doc.FechaEstadoDocumento;
+            model.FechaUltimaModificacion = doc.FechaUltimaModificacion;
+            model.IdClaseDocumento = doc.IdClaseDocumento;
+            model.IdEstatus = doc.IdEstatus;
+            model.Negocios = doc.Negocios;
+            model.NroDocumento = doc.NroDocumento;
+            model.NroVersion = doc.NroVersion;
+            model.Version = doc.Version;
+            model.VersionOriginal = doc.VersionOriginal;
+
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
+
+            return View(model);
+        }
+        [SessionExpire]
+        [HandleError]
+        [HttpPost]
+        public ActionResult DiagramaBCP(DocumentoDiagrama model)
+        {
+            int IdClaseDocumento = int.Parse(Session["IdClaseDocumento"].ToString());
+            int IdVersion = int.Parse(Session["IdVersion"].ToString());
+            int IdTipoDocumento = int.Parse(Session["IdTipoDocumento"].ToString());
+            long IdDocumento = long.Parse(Session["IdDocumento"].ToString());
+            long IdModulo = IdTipoDocumento * 1000000;
+            long modId = long.Parse(Session["modId"].ToString());
+
+            DocumentoModel doc = Metodos.GetDocumento(IdDocumento, IdTipoDocumento);
+            DocumentoProcesoModel Proceso = Metodos.GetProceso(doc.DatosBCP.IdProceso);
+            model.Interdependencias = Metodos.GetInterdependenciasDiagrama(model.IdProceso);
+            model.Clientes_Productos = Metodos.GetClientesProductosDiagrama(model.IdProceso);
+            model.Entradas = Metodos.GetEntradasDiagrama(model.IdProceso);
+            model.PersonalClave = Metodos.GetPersonasClaveDiagrama(model.IdProceso);
+            model.Proveedores = Metodos.GetProveedoresDiagrama(model.IdProceso);
+            model.Tecnologia = Metodos.GetTecnologiaDiagrama(model.IdProceso);
+            model.NroProceso = Proceso.NroProceso.ToString();
+            model.Nombre = Proceso.Nombre;
+            model.Descripcion = Proceso.Descripcion;
+
+            model.IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            model.IdDocumento = IdDocumento;
+            model.IdTipoDocumento = IdTipoDocumento;
+            model.returnPage = Url.Action("Index", "Documento", new { IdModulo });
+            model.IdModulo = IdModulo;
+            model.IdModuloActual = modId;
+            model.Perfil = Metodos.GetPerfilData();
+            model.PageTitle = Metodos.GetModuloName(modId);
+            model.FechaCreacion = doc.FechaCreacion;
+            model.FechaEstadoDocumento = doc.FechaEstadoDocumento;
+            model.FechaUltimaModificacion = doc.FechaUltimaModificacion;
+            model.IdClaseDocumento = doc.IdClaseDocumento;
+            model.IdEstatus = doc.IdEstatus;
+            model.Negocios = doc.Negocios;
+            model.NroDocumento = doc.NroDocumento;
+            model.NroVersion = doc.NroVersion;
+            model.Version = doc.Version;
+            model.VersionOriginal = doc.VersionOriginal;
+
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
+
+            return View(model);
+        }
+        [SessionExpire]
+        [HandleError]
         public ActionResult PartialProcesosView()
         {
             return PartialView();
@@ -846,6 +946,145 @@ namespace BCMWeb.Controllers
         public ActionResult PartialDiagramaProceso(DocumentoDiagrama model)
         {
             return PartialView();
+        }
+        [SessionExpire]
+        [HandleError]
+        public ActionResult Programacion(long modId)
+        {
+            string _modId = modId.ToString();
+            int IdTipoDocumento = int.Parse(_modId.Substring(0, (_modId.Length == 7 ? 1 : 2)));
+            Session["IdTipoDocumento"] = IdTipoDocumento;
+            Session["modId"] = modId;
+
+            long IdModulo = IdTipoDocumento * 1000000;
+            long IdDocumento = long.Parse(Session["IdDocumento"].ToString());
+            int IdClaseDocumento = int.Parse(Session["IdClaseDocumento"].ToString());
+            int IdVersion = int.Parse(Session["IdVersion"].ToString());
+
+            DocumentoModel model = Metodos.GetDocumento(IdDocumento, IdTipoDocumento);
+            if (model == null)
+                model = new DocumentoModel();
+            byte[] Contenido = Metodos.GetContenidoDocumento(modId);
+
+            model.returnPage = Url.Action("Index", "Documento", new { IdModulo });
+            model.IdModulo = IdModulo;
+            model.IdModuloActual = modId;
+            model.Perfil = Metodos.GetPerfilData();
+            model.PageTitle = Metodos.GetModuloName(modId);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
+
+            return View(model);
+        }
+        [SessionExpire]
+        [HandleError]
+        [HttpPost]
+        public ActionResult ExportProgramacion(ProgramacionModel model)
+        {
+            string _modId = Session["modId"].ToString();
+            long modId = long.Parse(_modId);
+            int IdTipoDocumento = int.Parse(_modId.Substring(0, (_modId.Length == 7 ? 1 : 2)));
+
+            long IdModulo = IdTipoDocumento * 1000000;
+
+            model.IdModulo = IdModulo;
+            model.IdModuloActual = modId;
+            model.Perfil = Metodos.GetPerfilData();
+            model.PageTitle = Metodos.GetModuloName(modId);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
+
+            Session["GridViewData"] = Metodos.GetProgramaciones();
+            return GridViewExportProgramaciones.FormatConditionsExportFormatsInfo[GridViewExportFormat.Xlsx](GridViewExportProgramaciones.FormatConditionsExportGridViewSettings, Metodos.GetProgramaciones());
+
+        }
+        [SessionExpire]
+        [HandleError]
+        public ActionResult ProgramacionPartialView()
+        {
+            return PartialView("ProgramacionPartialView");
+        }
+        [SessionExpire]
+        [HandleError]
+        [HttpPost]
+        public ActionResult ProgramacionDocumentosPartialView(ProgramacionModel model)
+        {
+
+            return PartialView("ProgramacionDocumentosPartialView");
+        }
+        [SessionExpire]
+        [HandleError]
+        [HttpPost]
+        public ActionResult ProgramacionUsuariosPartialView(ProgramacionModel model)
+        {
+
+            return PartialView("ProgramacionUsuariosPartialView");
+        }
+        [SessionExpire]
+        [HandleError]
+        [HttpPost, ValidateInput(false)]
+        public ActionResult EditProgramacionAddNewPartial(ProgramacionModel Programacion)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    Metodos.InsertProgramacion(Programacion);
+                }
+                catch (Exception e)
+                {
+                    ViewData["EditError"] = e.Message;
+                }
+            }
+            else
+            {
+                ViewData["EditError"] = Resources.ErrorPageResource.AllErrors;
+                ViewData["EditableProgramacion"] = Programacion;
+            }
+            Session["GridViewData"] = Metodos.GetProgramaciones();
+            return PartialView("ProgramacionPartialView", Metodos.GetProgramaciones());
+        }
+        [SessionExpire]
+        [HandleError]
+        [HttpPost, ValidateInput(false)]
+        public ActionResult EditProgramacionUpdatePartial(ProgramacionModel Programacion)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    Metodos.UpdateProgramacion(Programacion);
+                }
+                catch (Exception e)
+                {
+                    ViewData["EditError"] = e.Message;
+                }
+            }
+            else
+            {
+                ViewData["EditError"] = Resources.ErrorPageResource.AllErrors;
+                ViewData["EditableProgramacion"] = Programacion;
+            }
+
+            Session["GridViewData"] = Metodos.GetProgramaciones();
+            return PartialView("ProgramacionPartialView", Metodos.GetProgramaciones());
+        }
+        [SessionExpire]
+        [HandleError]
+        [HttpPost, ValidateInput(false)]
+        public ActionResult EditProgramacionDeletePartial(int IdProgramacion)
+        {
+            if (IdProgramacion > 0)
+            {
+                try
+                {
+                    Metodos.DeleteProgramacion(IdProgramacion);
+                }
+                catch (Exception e)
+                {
+                    ViewData["EditError"] = e.Message;
+                }
+            }
+            Session["GridViewData"] = Metodos.GetProgramaciones();
+            return PartialView("ProgramacionPartialView", Metodos.GetProgramaciones());
         }
 
     }

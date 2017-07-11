@@ -294,4 +294,40 @@
   <data name="captionPDFColumn" xml:space="preserve">
     <value>Documento .PDF</value>
   </data>
+  <data name="captionFrecuencia" xml:space="preserve">
+    <value>Frecuencia</value>
+  </data>
+  <data name="captionModulo" xml:space="preserve">
+    <value>Módulo</value>
+  </data>
+  <data name="captionParticipante" xml:space="preserve">
+    <value>Participantes</value>
+  </data>
+  <data name="captionProgramacion" xml:space="preserve">
+    <value>Programación de Mantenimiento</value>
+  </data>
+  <data name="captionProgramacionData" xml:space="preserve">
+    <value>Datos de la Programación</value>
+  </data>
+  <data name="captionProgramacionDocumentos" xml:space="preserve">
+    <value>Documentos Asociados</value>
+  </data>
+  <data name="captionProgramacionEstadoProgramacion" xml:space="preserve">
+    <value>Estado </value>
+  </data>
+  <data name="captionProgramacionFechaFinal" xml:space="preserve">
+    <value>Fecha de Finalización</value>
+  </data>
+  <data name="captionProgramacionFechaInicio" xml:space="preserve">
+    <value>Fecha de Inicio</value>
+  </data>
+  <data name="captionProgramacionModulo" xml:space="preserve">
+    <value>Módulo</value>
+  </data>
+  <data name="captionProgramacionTipoActualizacion" xml:space="preserve">
+    <value>Tipo de Actualización</value>
+  </data>
+  <data name="captionProgramacionUsuarios" xml:space="preserve">
+    <value>Usuarios</value>
+  </data>
 </root>

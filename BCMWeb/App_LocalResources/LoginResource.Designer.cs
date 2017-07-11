@@ -142,6 +142,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Actualización de contraseña.
+        /// </summary>
+        public static string HeaderPrimeraVez {
+            get {
+                return ResourceManager.GetString("HeaderPrimeraVez", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Indique su correo electrónico.
         /// </summary>
         public static string helpTextEmail {
@@ -156,6 +165,15 @@ namespace Resources {
         public static string helpTextPassword {
             get {
                 return ResourceManager.GetString("helpTextPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ud. está ingresando por primera vez a la aplicacion, por esta razón le solicitamos que actualice su contraseña con una contraseña que le sea familiar y pueda recordar fácilmente.
+        /// </summary>
+        public static string loginPrimeraVezLinea1 {
+            get {
+                return ResourceManager.GetString("loginPrimeraVezLinea1", resourceCulture);
             }
         }
         

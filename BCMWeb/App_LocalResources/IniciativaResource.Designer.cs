@@ -79,6 +79,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tiene Anexos.
+        /// </summary>
+        public static string captionHasAnexos {
+            get {
+                return ResourceManager.GetString("captionHasAnexos", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Anexar documento.
         /// </summary>
         public static string captionHeaderFormAnexos {
@@ -111,15 +120,6 @@ namespace Resources {
         public static string captionNombreAnexo {
             get {
                 return ResourceManager.GetString("captionNombreAnexo", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Nro. de Anexos.
-        /// </summary>
-        public static string captionNroAnexos {
-            get {
-                return ResourceManager.GetString("captionNroAnexos", resourceCulture);
             }
         }
         
@@ -205,11 +205,47 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Horas Estimadas.
+        /// </summary>
+        public static string HorasEstimadas {
+            get {
+                return ResourceManager.GetString("HorasEstimadas", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Horas Reales.
+        /// </summary>
+        public static string HorasInvertidas {
+            get {
+                return ResourceManager.GetString("HorasInvertidas", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Iniciativa.
         /// </summary>
         public static string IdIniciativa {
             get {
                 return ResourceManager.GetString("IdIniciativa", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Monto Abonado.
+        /// </summary>
+        public static string MontoAbonado {
+            get {
+                return ResourceManager.GetString("MontoAbonado", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Monto Pendiente.
+        /// </summary>
+        public static string MontoPendiente {
+            get {
+                return ResourceManager.GetString("MontoPendiente", resourceCulture);
             }
         }
         
@@ -232,11 +268,20 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Observación.
+        ///   Looks up a localized string similar to Observaciones.
         /// </summary>
         public static string Observacion {
             get {
                 return ResourceManager.GetString("Observacion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Porcentaje de Avance.
+        /// </summary>
+        public static string PorcentajeAvance {
+            get {
+                return ResourceManager.GetString("PorcentajeAvance", resourceCulture);
             }
         }
         
@@ -277,11 +322,29 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Urgente.
+        ///   Looks up a localized string similar to Prioridad.
         /// </summary>
         public static string textoUrgente {
             get {
                 return ResourceManager.GetString("textoUrgente", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Con archivos asociados.
+        /// </summary>
+        public static string toolTipHasFiles {
+            get {
+                return ResourceManager.GetString("toolTipHasFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sin archivos asociados.
+        /// </summary>
+        public static string toolTipNoHasFiles {
+            get {
+                return ResourceManager.GetString("toolTipNoHasFiles", resourceCulture);
             }
         }
         
@@ -295,7 +358,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Urgente.
+        ///   Looks up a localized string similar to Prioridad.
         /// </summary>
         public static string Urgente {
             get {

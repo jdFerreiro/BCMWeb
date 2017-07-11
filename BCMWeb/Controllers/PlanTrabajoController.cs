@@ -2,6 +2,7 @@
 using DevExpress.Web;
 using DevExpress.Web.Mvc;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Web;
 using System.Web.Mvc;
@@ -68,10 +69,11 @@ namespace BCMWeb.Controllers
         }
         [SessionExpire]
         [HandleError]
+        //[ValidateInput(false)]
         public ActionResult IniciativaPartialView()
         {
             Session["GridViewData"] = Metodos.GetIniciativas();
-            return PartialView("IniciativaPartialView", Metodos.GetIniciativas());
+            return PartialView("IniciativaPartialView");
         }
         [SessionExpire]
         [HandleError]
@@ -162,9 +164,9 @@ namespace BCMWeb.Controllers
         [SessionExpire]
         [HandleError]
         [ValidateInput(false)]
-        public ActionResult FileManagerPartial(long IdIniciativa = 0)
+        public ActionResult FileManagerPartial(string IdIniciativa)
         {
-            if (Session["IdIniciativa"] == null)
+            if (IdIniciativa != null)
                 Session["IdIniciativa"] = IdIniciativa;
             return PartialView("FileManagerPartial", FileManagerPlanTrabajoControllerFileManagerSettings.Model);
         }

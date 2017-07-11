@@ -49,6 +49,7 @@ namespace BCMWeb.Controllers
         {
             bool success = true;
             Auditoria.RegistarOperacionAnexoIniciativa(Tipo, nombre, viejo, true);
+            Session["GridViewData"] = Metodos.GetIniciativas();
 
             return Json(new { success });
         }
@@ -94,11 +95,11 @@ namespace BCMWeb.Controllers
     }
     public class FileManagerPlanTrabajoControllerFileManagerSettings
     {
+        public static string _IdIniciativa { get; set; }
         private static HttpSessionState Session { get { return HttpContext.Current.Session; } }
         private static HttpServerUtility Server { get { return HttpContext.Current.Server; } }
 
         private static long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
-        private static long IdIniciativa = long.Parse(Session["IdIniciativa"].ToString());
 
         public static string RootFolder = @"~\Content\FileManager";
 
@@ -106,9 +107,8 @@ namespace BCMWeb.Controllers
         {
             get
             {
-                IniciativaModel docModel = Metodos.GetEditableIniciativa(IdIniciativa);
-                string OrigPath = Server.MapPath("/");
-                string _rootFolder = string.Format("{0}Content\\FileManager\\AnexosPlanTrabajo\\E{1}\\{2}", OrigPath, IdEmpresa.ToString("000"), docModel.Nombre);
+                string IdIniciativa = Session["IdIniciativa"].ToString();
+                string _rootFolder = string.Format("{0}Content\\FileManager\\AnexosPlanTrabajo\\E{1}\\I{2}", Server.MapPath("/"), IdEmpresa.ToString("000"), IdIniciativa);
 
                 if (!Directory.Exists(_rootFolder))
                     Directory.CreateDirectory(_rootFolder);

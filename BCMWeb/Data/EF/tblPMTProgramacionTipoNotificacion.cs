@@ -12,24 +12,20 @@ namespace BCMWeb.Data.EF
     using System;
     using System.Collections.Generic;
     
-    public partial class tblPMTFrecuencia
+    public partial class tblPMTProgramacionTipoNotificacion
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public tblPMTFrecuencia()
+        public tblPMTProgramacionTipoNotificacion()
         {
-            this.tblPMTFrecuenciaParticipante = new HashSet<tblPMTFrecuenciaParticipante>();
+            this.tblCultura_PMTProgramacionTipoNotificacion = new HashSet<tblCultura_PMTProgramacionTipoNotificacion>();
+            this.tblPMTProgramacionUsuario = new HashSet<tblPMTProgramacionUsuario>();
         }
     
-        public long IdEmpresa { get; set; }
-        public long IdDocumento { get; set; }
-        public long IdTipoDocumento { get; set; }
-        public long IdFrecuencia { get; set; }
-        public long IdTipoFrecuencia { get; set; }
-        public string TipoFrecuencia { get; set; }
-        public string Segmento { get; set; }
+        public short IdTipoNotificacion { get; set; }
     
-        public virtual tblDocumento tblDocumento { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblPMTFrecuenciaParticipante> tblPMTFrecuenciaParticipante { get; set; }
+        public virtual ICollection<tblCultura_PMTProgramacionTipoNotificacion> tblCultura_PMTProgramacionTipoNotificacion { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblPMTProgramacionUsuario> tblPMTProgramacionUsuario { get; set; }
     }
 }

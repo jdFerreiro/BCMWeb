@@ -145,7 +145,7 @@
     <value>Nro. de Iniciativa</value>
   </data>
   <data name="Observacion" xml:space="preserve">
-    <value>Observación</value>
+    <value>Observaciones</value>
   </data>
   <data name="PresupuestoEstimado" xml:space="preserve">
     <value>Presupuesto Estimado</value>
@@ -160,13 +160,13 @@
     <value>Normal</value>
   </data>
   <data name="textoUrgente" xml:space="preserve">
-    <value>Urgente</value>
+    <value>Prioridad</value>
   </data>
   <data name="UnidadOrganizativa" xml:space="preserve">
     <value>Unidad Organizativa</value>
   </data>
   <data name="Urgente" xml:space="preserve">
-    <value>Urgente</value>
+    <value>Prioridad</value>
   </data>
   <data name="GridTitle" xml:space="preserve">
     <value>Relación de Iniciativas</value>
@@ -186,8 +186,8 @@
   <data name="captionRutaAnexo" xml:space="preserve">
     <value>Ruta</value>
   </data>
-  <data name="captionNroAnexos" xml:space="preserve">
-    <value>Nro. de Anexos</value>
+  <data name="captionHasAnexos" xml:space="preserve">
+    <value>Tiene Anexos</value>
   </data>
   <data name="captionHeaderFormAnexos" xml:space="preserve">
     <value>Anexar documento</value>
@@ -197,5 +197,26 @@
   </data>
   <data name="captionUploadBrowseButtonText" xml:space="preserve">
     <value>Seleccione un documento para cargar...</value>
+  </data>
+  <data name="toolTipHasFiles" xml:space="preserve">
+    <value>Con archivos asociados</value>
+  </data>
+  <data name="toolTipNoHasFiles" xml:space="preserve">
+    <value>Sin archivos asociados</value>
+  </data>
+  <data name="HorasEstimadas" xml:space="preserve">
+    <value>Horas Estimadas</value>
+  </data>
+  <data name="HorasInvertidas" xml:space="preserve">
+    <value>Horas Reales</value>
+  </data>
+  <data name="MontoAbonado" xml:space="preserve">
+    <value>Monto Abonado</value>
+  </data>
+  <data name="MontoPendiente" xml:space="preserve">
+    <value>Monto Pendiente</value>
+  </data>
+  <data name="PorcentajeAvance" xml:space="preserve">
+    <value>Porcentaje de Avance</value>
   </data>
 </root>

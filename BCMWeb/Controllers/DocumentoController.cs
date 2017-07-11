@@ -51,7 +51,10 @@ namespace BCMWeb.Controllers
             model.Perfil = Metodos.GetPerfilData();
             model.ModulosPrincipales = Metodos.GetModulosPrincipalesEmpresaUsuario();
             model.PageTitle = Resources.DocumentoResource.DocumentosPageTitle;
+            model.IdModuloActual = model.IdModulo;
             ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
+
+            Session["IdClaseDocumento"] = model.IdClaseDocumento;
 
             return View(model);
         }
@@ -59,6 +62,40 @@ namespace BCMWeb.Controllers
         [SessionExpire]
         [HandleError]
         public ActionResult DocumentoPartialView(DocumentosModel model)
+        {
+            string _IdModulo = Session["modId"].ToString();
+            int IdTipoDocumento = int.Parse(_IdModulo.Substring(0, (_IdModulo.Length == 7 ? 1 : 2)));
+            model.IdClaseDocumento = int.Parse(Session["IdClaseDocumento"].ToString());
+            model.Documentos = Metodos.GetDocumentosModulo(IdTipoDocumento, (model.IdClaseDocumento == 1));
+            model.Perfil = Metodos.GetPerfilData();
+            model.ModulosPrincipales = Metodos.GetModulosPrincipalesEmpresaUsuario();
+            model.PageTitle = Resources.DocumentoResource.DocumentosPageTitle;
+            model.IdModulo = long.Parse(_IdModulo);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
+
+            return PartialView(model);
+        }
+        [HttpPost]
+        [SessionExpire]
+        [HandleError]
+        public ActionResult DocumentoBIAPartialView(DocumentosModel model)
+        {
+            string _IdModulo = Session["modId"].ToString();
+            int IdTipoDocumento = int.Parse(_IdModulo.Substring(0, (_IdModulo.Length == 7 ? 1 : 2)));
+            model.IdClaseDocumento = int.Parse(Session["IdClaseDocumento"].ToString());
+            model.Documentos = Metodos.GetDocumentosModulo(IdTipoDocumento, (model.IdClaseDocumento == 1));
+            model.Perfil = Metodos.GetPerfilData();
+            model.ModulosPrincipales = Metodos.GetModulosPrincipalesEmpresaUsuario();
+            model.PageTitle = Resources.DocumentoResource.DocumentosPageTitle;
+            model.IdModulo = long.Parse(_IdModulo);
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
+
+            return PartialView(model);
+        }
+        [HttpPost]
+        [SessionExpire]
+        [HandleError]
+        public ActionResult DocumentoBCPPartialView(DocumentosModel model)
         {
             string _IdModulo = Session["modId"].ToString();
             int IdTipoDocumento = int.Parse(_IdModulo.Substring(0, (_IdModulo.Length == 7 ? 1 : 2)));

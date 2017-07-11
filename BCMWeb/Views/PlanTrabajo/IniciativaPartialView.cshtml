@@ -11,7 +11,7 @@
         {
             settings.Name = "gvIniciativas";
             settings.KeyFieldName = "IdIniciativa";
-            settings.CallbackRouteValues = new { Controller = "PlanTrabajo", Action = "IniciativaPartialView" };
+            settings.CallbackRouteValues = new { Controller = "PlanTrabajo", Action = "IniciativaPartialView"};
             settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "PlanTrabajo", Action = "EditIniciativaAddNewPartial" };
             settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "PlanTrabajo", Action = "EditIniciativaUpdatePartial" };
             settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "PlanTrabajo", Action = "EditIniciativaDeletePartial" };
@@ -32,9 +32,12 @@
             settings.Settings.ShowFilterRowMenu = true;
             settings.Settings.ShowFooter = true;
 
+            settings.TotalSummary.Add(SummaryItemType.Count, "NroIniciativa").DisplayFormat = "#,##0";
             settings.TotalSummary.Add(SummaryItemType.Sum, "PresupuestoEstimado").DisplayFormat = "#,##0.00";
             settings.TotalSummary.Add(SummaryItemType.Sum, "PresupuestoReal").DisplayFormat = "#,##0.00";
-            settings.TotalSummary.Add(SummaryItemType.Count, "NroIniciativa").DisplayFormat = "#,##0";
+            settings.TotalSummary.Add(SummaryItemType.Sum, "MontoAbonado").DisplayFormat = "#,##0.00";
+            settings.TotalSummary.Add(SummaryItemType.Sum, "MontoPendiente").DisplayFormat = "#,##0.00";
+            settings.TotalSummary.Add(SummaryItemType.Average, "PorcentajeAvance").DisplayFormat = "{0:n2}%";
 
             settings.CommandColumn.Visible = true;
             settings.CommandColumn.ShowNewButton = false;
@@ -45,10 +48,10 @@
             settings.CommandColumn.Width = Unit.Pixel(150);
             settings.CommandColumn.Caption = string.Empty;
 
-            settings.SettingsDetail.AllowOnlyOneMasterRowExpanded = false;
+            settings.SettingsDetail.AllowOnlyOneMasterRowExpanded = true;
             settings.SettingsDetail.ShowDetailRow = true;
             settings.SettingsDetail.ShowDetailButtons = true;
-            
+
             settings.SetDetailRowTemplateContent(c =>
             {
                 using (Html.BeginForm())
@@ -58,11 +61,37 @@
             });
             settings.Columns.Add(c =>
             {
+                c.FieldName = "hasFiles";
+                c.Caption = Resources.IniciativaResource.captionAnexos;
+                c.ColumnType = MVCxGridViewColumnType.CheckBox;
+                c.EditFormSettings.Visible = DevExpress.Utils.DefaultBoolean.False;
+                c.Width = Unit.Pixel(70);
+                c.FixedStyle = GridViewColumnFixedStyle.Left;
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.SetDataItemTemplateContent(tc =>
+                {
+                    bool _hasItems = (bool)DataBinder.Eval(tc.DataItem, "hasFiles");
+                    Html.DevExpress().Button(b =>
+                    {
+                        b.Name = "Button" + tc.KeyValue;
+                        b.Images.Image.Url = (_hasItems ? "~/Content/Images/Internal/hasAttach.png" : "");
+                        //b.Images.Image.Url = (_hasItems ? "~/Content/Images/Internal/fullfolder.jpg" : "~/Content/Images/Internal/emptyfolder.jpg");
+                        //b.Images.Image.ToolTip = (_hasItems ? Resources.IniciativaResource.toolTipHasFiles : Resources.IniciativaResource.toolTipNoHasFiles);
+                        b.Images.Image.Width = Unit.Pixel(35);
+                        b.EnableTheming = false;
+                        b.Text = string.Empty;
+                        b.ClientSideEvents.Click = string.Format("function(s, e){{  gvIniciativas.ExpandDetailRow({0}); }}", tc.VisibleIndex);
+                    }).GetHtml();
+                });
+            });
+            settings.Columns.Add(c =>
+            {
                 c.FieldName = "NroIniciativa";
                 c.Caption = Resources.IniciativaResource.NroIniciativa;
                 c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.HeaderStyle.Wrap = DefaultBoolean.True;
                 c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.FooterCellStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.FixedStyle = GridViewColumnFixedStyle.Left;
                 c.Width = 80;
             });
@@ -86,18 +115,12 @@
             });
             settings.Columns.Add(c =>
             {
-                c.FieldName = "IdUnidadOrganizativa";
+                c.FieldName = "UnidadOrganizativa";
                 c.Caption = Resources.IniciativaResource.UnidadOrganizativa;
                 c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.HeaderStyle.Wrap = DefaultBoolean.True;
                 c.Width = 250;
-                c.EditorProperties().ComboBox(p =>
-                {
-                    p.TextField = "NombreUnidadOrganizativa";
-                    p.ValueField = "IdUnidad";
-                    p.ValueType = typeof(long);
-                    p.DataSource = Metodos.GetUnidadesOrganizativas();
-                });
+                c.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
             });
             settings.Columns.Add(c =>
             {
@@ -152,7 +175,6 @@
             {
                 c.FieldName = "PresupuestoEstimado";
                 c.Caption = Resources.IniciativaResource.PresupuestoEstimado;
-                c.ColumnType = MVCxGridViewColumnType.DateEdit;
                 c.PropertiesEdit.DisplayFormatString = "#,##0.00";
                 c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.HeaderStyle.Wrap = DefaultBoolean.True;
@@ -163,8 +185,57 @@
             {
                 c.FieldName = "PresupuestoReal";
                 c.Caption = Resources.IniciativaResource.PresupuestoReal;
-                c.ColumnType = MVCxGridViewColumnType.DateEdit;
                 c.PropertiesEdit.DisplayFormatString = "#,##0.00";
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Width = 100;
+                c.Settings.AllowAutoFilter = DefaultBoolean.False;
+            });
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "MontoAbonado";
+                c.Caption = Resources.IniciativaResource.MontoAbonado;
+                c.PropertiesEdit.DisplayFormatString = "#,##0.00";
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Width = 100;
+                c.Settings.AllowAutoFilter = DefaultBoolean.False;
+            });
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "MontoPendiente";
+                c.Caption = Resources.IniciativaResource.MontoPendiente;
+                c.PropertiesEdit.DisplayFormatString = "#,##0.00";
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Width = 100;
+                c.Settings.AllowAutoFilter = DefaultBoolean.False;
+            });
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "HorasEstimadas";
+                c.Caption = Resources.IniciativaResource.HorasEstimadas;
+                c.PropertiesEdit.DisplayFormatString = "##0";
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Width = 100;
+                c.Settings.AllowAutoFilter = DefaultBoolean.False;
+            });
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "HorasInvertidas";
+                c.Caption = Resources.IniciativaResource.HorasInvertidas;
+                c.PropertiesEdit.DisplayFormatString = "##0";
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Width = 100;
+                c.Settings.AllowAutoFilter = DefaultBoolean.False;
+            });
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "PorcentajeAvance";
+                c.Caption = Resources.IniciativaResource.PorcentajeAvance;
+                c.PropertiesEdit.DisplayFormatString = "{0:n2}%";
                 c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.HeaderStyle.Wrap = DefaultBoolean.True;
                 c.Width = 100;
@@ -189,9 +260,16 @@
             {
                 c.FieldName = "Urgente";
                 c.Caption = Resources.IniciativaResource.Urgente;
-                c.ColumnType = MVCxGridViewColumnType.CheckBox;
                 c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.EditorProperties().ComboBox(p =>
+                {
+                    p.TextField = "Descripcion";
+                    p.ValueField = "Id";
+                    p.ValueType = typeof(long);
+                    p.DataSource = Metodos.GetPrioridadesIniciativa();
+                });
             });
             settings.Columns.Add(c =>
             {
@@ -241,16 +319,44 @@
                             s.Width = Unit.Pixel(300);
                         });
                     });
+                    //fls.Items.Add(i =>
+                    //{
+                    //    i.FieldName = "IdUnidadOrganizativa";
+                    //    i.Caption = Resources.IniciativaResource.UnidadOrganizativa;
+                    //    i.NestedExtension().ComboBox(s =>
+                    //    {
+                    //        s.Properties.TextField = "NombreUnidadOrganizativa";
+                    //        s.Properties.ValueField = "IdUnidad";
+                    //        s.Properties.ValueType = typeof(long);
+                    //        s.Properties.DataSource = Metodos.GetUnidadesOrganizativas();
+                    //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    //        s.ShowModelErrors = true;
+                    //        s.Width = Unit.Pixel(300);
+                    //    });
+                    //});
+                    //fls.Items.Add(i =>
+                    //{
+                    //    i.FieldName = "Responsable";
+                    //    i.Caption = Resources.IniciativaResource.Responsable;
+                    //    i.NestedExtension().ComboBox(s =>
+                    //    {
+                    //        s.Properties.TextField = "Descripcion";
+                    //        s.Properties.ValueField = "Id";
+                    //        s.Properties.ValueType = typeof(long);
+                    //        s.Properties.DataSource = Metodos.GetIniciativaResponsables();
+                    //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                    //        s.ShowModelErrors = true;
+                    //        s.Width = Unit.Pixel(300);
+                    //    });
+                    //});
                     fls.Items.Add(i =>
                     {
-                        i.FieldName = "IdUnidadOrganizativa";
+                        i.FieldName = "UnidadOrganizativa";
                         i.Caption = Resources.IniciativaResource.UnidadOrganizativa;
-                        i.NestedExtension().ComboBox(s =>
+                        i.NestedExtension().TextBox(s =>
                         {
-                            s.Properties.TextField = "NombreUnidadOrganizativa";
-                            s.Properties.ValueField = "IdUnidad";
-                            s.Properties.ValueType = typeof(long);
-                            s.Properties.DataSource = Metodos.GetUnidadesOrganizativas();
+                            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                            s.ShowModelErrors = true;
                             s.Width = Unit.Pixel(300);
                         });
                     });
@@ -274,6 +380,8 @@
                             s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                             s.ShowModelErrors = true;
                             s.Width = Unit.Pixel(300);
+                            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                            s.ShowModelErrors = true;
                         });
                     });
                     fls.Items.Add(i =>
@@ -285,6 +393,8 @@
                             s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                             s.ShowModelErrors = true;
                             s.Width = Unit.Pixel(300);
+                            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                            s.ShowModelErrors = true;
                         });
                     });
                     fls.Items.Add(i =>
@@ -296,6 +406,8 @@
                             s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                             s.ShowModelErrors = true;
                             s.Width = Unit.Pixel(300);
+                            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                            s.ShowModelErrors = true;
                         });
                     });
                     fls.Items.Add(i =>
@@ -307,6 +419,8 @@
                             s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                             s.ShowModelErrors = true;
                             s.Width = Unit.Pixel(300);
+                            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                            s.ShowModelErrors = true;
                         });
                     });
                     fls.Items.Add(i =>
@@ -315,11 +429,12 @@
                         i.Caption = Resources.IniciativaResource.PresupuestoEstimado;
                         i.NestedExtension().SpinEdit(s =>
                         {
-                            s.Properties.DisplayFormatString = "#,##0.00";
                             s.Properties.MinValue = 0;
                             s.Properties.MaxValue = decimal.MaxValue;
                             s.Properties.SpinButtons.ShowLargeIncrementButtons = true;
                             s.Width = Unit.Pixel(300);
+                            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                            s.ShowModelErrors = true;
                         });
                     });
                     fls.Items.Add(i =>
@@ -328,11 +443,44 @@
                         i.Caption = Resources.IniciativaResource.PresupuestoReal;
                         i.NestedExtension().SpinEdit(s =>
                         {
-                            s.Properties.DisplayFormatString = "#,##0.00";
                             s.Properties.MinValue = 0;
                             s.Properties.MaxValue = decimal.MaxValue;
                             s.Properties.SpinButtons.ShowLargeIncrementButtons = true;
                             s.Width = Unit.Pixel(300);
+                            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                            s.ShowModelErrors = true;
+                            s.Properties.ClientSideEvents.ValueChanged = "CalcularMontoPendiente";
+                        });
+                    });
+                    fls.Items.Add(i =>
+                    {
+                        i.FieldName = "MontoAbonado";
+                        i.Caption = Resources.IniciativaResource.MontoAbonado;
+                        i.NestedExtension().SpinEdit(s =>
+                        {
+                            s.Properties.MinValue = 0;
+                            s.Properties.MaxValue = decimal.MaxValue;
+                            s.Properties.SpinButtons.ShowLargeIncrementButtons = true;
+                            s.Width = Unit.Pixel(300);
+                            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                            s.ShowModelErrors = true;
+                            s.Properties.ClientSideEvents.ValueChanged = "CalcularMontoPendiente";
+                        });
+                    });
+                    fls.Items.Add(i =>
+                    {
+                        i.FieldName = "MontoPendiente";
+                        i.Caption = Resources.IniciativaResource.MontoPendiente;
+                        i.NestedExtension().SpinEdit(s =>
+                        {
+                            s.Properties.DisplayFormatString = "#,##0.00";
+                            s.ReadOnly = true;
+                            s.Properties.MinValue = 0;
+                            s.Properties.MaxValue = decimal.MaxValue;
+                            s.Properties.SpinButtons.ShowLargeIncrementButtons = true;
+                            s.Width = Unit.Pixel(300);
+                            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                            s.ShowModelErrors = true;
                         });
                     });
                     fls.Items.Add(i =>
@@ -346,13 +494,64 @@
                             s.Properties.ValueType = typeof(long);
                             s.Properties.DataSource = Metodos.GetEstadosIniciativa();
                             s.Width = Unit.Pixel(300);
+                            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                            s.ShowModelErrors = true;
                         });
                     });
                     fls.Items.Add(i =>
                     {
                         i.FieldName = "Urgente";
-                        i.NestedExtension().CheckBox(s =>
+                        i.Caption = Resources.IniciativaResource.Urgente;
+                        i.NestedExtension().ComboBox(s =>
                         {
+                            s.Properties.TextField = "Descripcion";
+                            s.Properties.ValueField = "Id";
+                            s.Properties.ValueType = typeof(long);
+                            s.Properties.DataSource = Metodos.GetPrioridadesIniciativa();
+                            s.Width = Unit.Pixel(100);
+                            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                            s.ShowModelErrors = true;
+                        });
+                    });
+                    fls.Items.Add(i =>
+                    {
+                        i.FieldName = "PorcentajeAvance";
+                        i.Caption = Resources.IniciativaResource.PorcentajeAvance;
+                        i.NestedExtension().SpinEdit(s =>
+                        {
+                            s.Properties.MinValue = 0;
+                            s.Properties.MaxValue = 100;
+                            s.Properties.SpinButtons.ShowLargeIncrementButtons = true;
+                            s.Width = Unit.Pixel(300);
+                            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                            s.ShowModelErrors = true;
+                        });
+                    });
+                    fls.Items.AddEmptyItem();
+                    fls.Items.Add(i =>
+                    {
+                        i.FieldName = "HorasEstimadas";
+                        i.Caption = Resources.IniciativaResource.HorasEstimadas;
+                        i.NestedExtension().SpinEdit(s =>
+                        {
+                            s.Properties.MinValue = 0;
+                            s.Properties.MaxValue = int.MaxValue;
+                            s.Properties.SpinButtons.ShowLargeIncrementButtons = true;
+                            s.Width = Unit.Pixel(300);
+                            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                            s.ShowModelErrors = true;
+                        });
+                    });
+                    fls.Items.Add(i =>
+                    {
+                        i.FieldName = "HorasInvertidas";
+                        i.Caption = Resources.IniciativaResource.HorasInvertidas;
+                        i.NestedExtension().SpinEdit(s =>
+                        {
+                            s.Properties.MinValue = 0;
+                            s.Properties.MaxValue = int.MaxValue;
+                            s.Properties.SpinButtons.ShowLargeIncrementButtons = true;
+                            s.Width = Unit.Pixel(300);
                             s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                             s.ShowModelErrors = true;
                         });
@@ -404,4 +603,4 @@
         grid.SetEditErrorText((string)ViewData["EditError"]);
     }
 }
-@grid.Bind(Model).GetHtml()
+@grid.Bind(Session["GridViewData"]).GetHtml()

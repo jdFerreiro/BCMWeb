@@ -385,7 +385,8 @@ namespace BCMWeb
                 {
                     tblUsuario usuario = db.tblUsuario.Where(x => x.IdUsuario == IdUser).FirstOrDefault();
                     tblIniciativas iniciativa = db.tblIniciativas.Where(x => x.IdEmpresa == IdEmpresa && x.IdIniciativa == IdIniciativa).FirstOrDefault();
-                    string _Accion = string.Format(AccionMessage, iniciativa.Nombre, nombre, viejo);
+                    string _NombreIniciativa = string.Format("{0} - {1}", iniciativa.NroIniciativa.ToString(), iniciativa.Nombre);
+                    string _Accion = string.Format(AccionMessage, _NombreIniciativa, nombre, viejo);
 
                     tblAuditoria regAuditoria = new tblAuditoria
                     {
@@ -407,6 +408,63 @@ namespace BCMWeb
                 }
             }
 
+        }
+        [SessionExpire]
+        [HandleError]
+        public static void RegistarProgramacion(eTipoAccion Accion, long IdProgramacion, long IdModuloProgramacion, string DatosActualizados)
+        {
+            long IdUser = long.Parse(Session["UserId"].ToString());
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+
+            using (Entities db = new Entities())
+            {
+                tblModulo moduloPrincipal = db.tblModulo.Where(x => x.IdEmpresa == IdEmpresa && x.IdModulo == 9000000).FirstOrDefault();
+                tblModulo moduloActivo = db.tblModulo.Where(x => x.IdEmpresa == IdEmpresa && x.IdModulo == 9060100).FirstOrDefault();
+                string AccionMessage = string.Empty;
+                string NombreModulo = moduloActivo.Nombre;
+                tblPMTProgramacion reg = null;
+
+                switch (Accion)
+                {
+                    case eTipoAccion.AgregarProgramacion:
+                        AccionMessage = Resources.AuditoriaResource.AgregarProgramacionMessage;
+                        NombreModulo = moduloActivo.Nombre;
+                        reg = db.tblPMTProgramacion.Where(x => x.IdEmpresa == IdEmpresa && x.IdPMTProgramacion == IdProgramacion).FirstOrDefault();
+                        break;
+                    case eTipoAccion.ActualizarProgramacion:
+                        AccionMessage = Resources.AuditoriaResource.ModificarProgramacionMessage;
+                        NombreModulo = moduloActivo.Nombre;
+                        reg = db.tblPMTProgramacion.Where(x => x.IdEmpresa == IdEmpresa && x.IdPMTProgramacion == IdProgramacion).FirstOrDefault();
+                        break;
+                    case eTipoAccion.EliminarProgramacion:
+                        AccionMessage = Resources.AuditoriaResource.EliminarProgramacionMessage;
+                        NombreModulo = moduloActivo.Nombre;
+                        break;
+                }
+
+                tblUsuario usuario = db.tblUsuario.Where(x => x.IdUsuario == IdUser).FirstOrDefault();
+
+                string _Accion = string.Format(AccionMessage, reg.tblModulo.Nombre);
+
+                tblAuditoria regAuditoria = new tblAuditoria
+                {
+                    Accion = _Accion,
+                    DireccionIP = Request.UserHostAddress,
+                    FechaRegistro = DateTime.UtcNow,
+                    IdDocumento = 0,
+                    IdEmpresa = IdEmpresa,
+                    IdTipoDocumento = 0,
+                    IdUsuario = IdUser,
+                    Mensaje = string.Empty,
+                    Negocios = true,
+                    DatosModificados = DatosActualizados
+                };
+
+                db.tblAuditoria.Add(regAuditoria);
+                usuario.FechaUltimaConexion = DateTime.UtcNow;
+                usuario.EstadoUsuario = 2;
+                db.SaveChanges();
+            }
         }
 
 

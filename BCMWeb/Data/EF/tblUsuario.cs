@@ -22,6 +22,7 @@ namespace BCMWeb.Data.EF
             this.tblModulo_Usuario = new HashSet<tblModulo_Usuario>();
             this.tblPersona = new HashSet<tblPersona>();
             this.tblPlanTrabajoAuditoria = new HashSet<tblPlanTrabajoAuditoria>();
+            this.tblPMTProgramacionUsuario = new HashSet<tblPMTProgramacionUsuario>();
             this.tblPMTResponsableUpdate_Correo = new HashSet<tblPMTResponsableUpdate_Correo>();
             this.tblUsuarioUnidadOrganizativa = new HashSet<tblUsuarioUnidadOrganizativa>();
         }
@@ -47,6 +48,8 @@ namespace BCMWeb.Data.EF
         public virtual ICollection<tblPersona> tblPersona { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblPlanTrabajoAuditoria> tblPlanTrabajoAuditoria { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblPMTProgramacionUsuario> tblPMTProgramacionUsuario { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblPMTResponsableUpdate_Correo> tblPMTResponsableUpdate_Correo { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

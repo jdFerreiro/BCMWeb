@@ -681,3 +681,56 @@ html, body {
     border-top: 0!important;
 }
 
+.botDetailsIniciativa {
+    background-image: url('Images/Internal/hasAttach.png');
+    opacity: 1;
+}
+
+.borderContent {
+    display: inline-block;
+    width: 99%;
+    border: 1px solid #000;
+    box-sizing: border-box;
+    border-radius: 5px;
+    margin: 5px;
+    padding: 5px;
+}
+
+.noBorderContent {
+    display: inline-block;
+    width: 99%;
+    box-sizing: border-box;
+    margin: 5px;
+    padding: 5px;
+}
+
+.caption {
+    font-weight: bold;
+}
+
+.tblDocumento {
+    border-collapse: collapse;
+}
+
+.tblDocumento td {
+    padding: 2px 5px 2px 2px;
+}
+
+.Titulo {
+    font-weight: bold;
+    text-align: center;
+}
+
+#divProcesos {
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.tblProcesos {
+    border-collapse: collapse;
+}
+
+.tblProcesos td {
+    border: 1px solid #cecdcd;
+}
