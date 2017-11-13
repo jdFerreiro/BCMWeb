@@ -4,8 +4,6 @@ using DevExpress.XtraCharts;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Web;
 
 namespace BCMWeb.Models
 {
@@ -137,6 +135,8 @@ namespace BCMWeb.Models
         public string Implantado { get; set; }
         public string Implantar { get; set; }
         public int Estado { get; set; }
-
+        public short Probabilidad { get; set; }
+        public short Control { get; set; }
+        public short Impacto { get; set; }
     }
 }

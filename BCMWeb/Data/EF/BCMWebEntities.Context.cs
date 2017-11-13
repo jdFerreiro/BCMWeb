@@ -27,7 +27,6 @@ namespace BCMWeb.Data.EF
     
         public virtual DbSet<tblAuditoria> tblAuditoria { get; set; }
         public virtual DbSet<tblAuditoriaProcesoCritico> tblAuditoriaProcesoCritico { get; set; }
-        public virtual DbSet<tblBCPDocumento> tblBCPDocumento { get; set; }
         public virtual DbSet<tblBCPReanudacionPersonaClave> tblBCPReanudacionPersonaClave { get; set; }
         public virtual DbSet<tblBCPReanudacionTarea> tblBCPReanudacionTarea { get; set; }
         public virtual DbSet<tblBCPReanudacionTareaActividad> tblBCPReanudacionTareaActividad { get; set; }
@@ -81,6 +80,7 @@ namespace BCMWeb.Data.EF
         public virtual DbSet<tblCultura_NivelImpacto> tblCultura_NivelImpacto { get; set; }
         public virtual DbSet<tblCultura_NivelUsuario> tblCultura_NivelUsuario { get; set; }
         public virtual DbSet<tblCultura_Pais> tblCultura_Pais { get; set; }
+        public virtual DbSet<tblCultura_PBEPruebaEstatus> tblCultura_PBEPruebaEstatus { get; set; }
         public virtual DbSet<tblCultura_PlanTrabajoEstatus> tblCultura_PlanTrabajoEstatus { get; set; }
         public virtual DbSet<tblCultura_PMTProgramacionTipoActualizacion> tblCultura_PMTProgramacionTipoActualizacion { get; set; }
         public virtual DbSet<tblCultura_PMTProgramacionTipoNotificacion> tblCultura_PMTProgramacionTipoNotificacion { get; set; }
@@ -112,10 +112,12 @@ namespace BCMWeb.Data.EF
         public virtual DbSet<tblEstadoProceso> tblEstadoProceso { get; set; }
         public virtual DbSet<tblEstadoRiesgo> tblEstadoRiesgo { get; set; }
         public virtual DbSet<tblEstadoUsuario> tblEstadoUsuario { get; set; }
+        public virtual DbSet<tblFormatosEmail> tblFormatosEmail { get; set; }
         public virtual DbSet<tblFuenteRiesgo> tblFuenteRiesgo { get; set; }
         public virtual DbSet<tblImpactoRiesgo> tblImpactoRiesgo { get; set; }
         public virtual DbSet<tblIniciativaPrioridad> tblIniciativaPrioridad { get; set; }
         public virtual DbSet<tblIniciativaResponsable> tblIniciativaResponsable { get; set; }
+        public virtual DbSet<tblIniciativas> tblIniciativas { get; set; }
         public virtual DbSet<tblIniciativas_Anexo> tblIniciativas_Anexo { get; set; }
         public virtual DbSet<tblLocalidad> tblLocalidad { get; set; }
         public virtual DbSet<tblMes> tblMes { get; set; }
@@ -126,18 +128,18 @@ namespace BCMWeb.Data.EF
         public virtual DbSet<tblNivelImpacto> tblNivelImpacto { get; set; }
         public virtual DbSet<tblNivelUsuario> tblNivelUsuario { get; set; }
         public virtual DbSet<tblPais> tblPais { get; set; }
+        public virtual DbSet<tblPBEPruebaEjecucion> tblPBEPruebaEjecucion { get; set; }
         public virtual DbSet<tblPBEPruebaEjecucionEjercicio> tblPBEPruebaEjecucionEjercicio { get; set; }
+        public virtual DbSet<tblPBEPruebaEjecucionEjercicioParticipante> tblPBEPruebaEjecucionEjercicioParticipante { get; set; }
+        public virtual DbSet<tblPBEPruebaEjecucionEjercicioRecurso> tblPBEPruebaEjecucionEjercicioRecurso { get; set; }
         public virtual DbSet<tblPBEPruebaEjecucionParticipante> tblPBEPruebaEjecucionParticipante { get; set; }
-        public virtual DbSet<tblPBEPruebaEjecucionParticipanteCorreo> tblPBEPruebaEjecucionParticipanteCorreo { get; set; }
-        public virtual DbSet<tblPBEPruebaEjecucionParticipanteTelefono> tblPBEPruebaEjecucionParticipanteTelefono { get; set; }
-        public virtual DbSet<tblPBEPruebaEjecucionRecurso> tblPBEPruebaEjecucionRecurso { get; set; }
         public virtual DbSet<tblPBEPruebaEjecucionResultado> tblPBEPruebaEjecucionResultado { get; set; }
+        public virtual DbSet<tblPBEPruebaEstatus> tblPBEPruebaEstatus { get; set; }
         public virtual DbSet<tblPBEPruebaPlanificacion> tblPBEPruebaPlanificacion { get; set; }
         public virtual DbSet<tblPBEPruebaPlanificacionEjercicio> tblPBEPruebaPlanificacionEjercicio { get; set; }
+        public virtual DbSet<tblPBEPruebaPlanificacionEjercicioParticipante> tblPBEPruebaPlanificacionEjercicioParticipante { get; set; }
+        public virtual DbSet<tblPBEPruebaPlanificacionEjercicioRecurso> tblPBEPruebaPlanificacionEjercicioRecurso { get; set; }
         public virtual DbSet<tblPBEPruebaPlanificacionParticipante> tblPBEPruebaPlanificacionParticipante { get; set; }
-        public virtual DbSet<tblPBEPruebaPlanificacionParticipanteCorreo> tblPBEPruebaPlanificacionParticipanteCorreo { get; set; }
-        public virtual DbSet<tblPBEPruebaPlanificacionParticipanteTelefono> tblPBEPruebaPlanificacionParticipanteTelefono { get; set; }
-        public virtual DbSet<tblPBEPruebaPlanificacionRecurso> tblPBEPruebaPlanificacionRecurso { get; set; }
         public virtual DbSet<tblPersona> tblPersona { get; set; }
         public virtual DbSet<tblPersonaCorreo> tblPersonaCorreo { get; set; }
         public virtual DbSet<tblPersonaDireccion> tblPersonaDireccion { get; set; }
@@ -147,6 +149,7 @@ namespace BCMWeb.Data.EF
         public virtual DbSet<tblPlanTrabajoAuditoria> tblPlanTrabajoAuditoria { get; set; }
         public virtual DbSet<tblPlanTrabajoEstatus> tblPlanTrabajoEstatus { get; set; }
         public virtual DbSet<tblPMTMensajeActualizacion> tblPMTMensajeActualizacion { get; set; }
+        public virtual DbSet<tblPMTProgramacion> tblPMTProgramacion { get; set; }
         public virtual DbSet<tblPMTProgramacionDocumentos> tblPMTProgramacionDocumentos { get; set; }
         public virtual DbSet<tblPMTProgramacionTipoActualizacion> tblPMTProgramacionTipoActualizacion { get; set; }
         public virtual DbSet<tblPMTProgramacionTipoNotificacion> tblPMTProgramacionTipoNotificacion { get; set; }
@@ -173,7 +176,7 @@ namespace BCMWeb.Data.EF
         public virtual DbSet<tblUsuario> tblUsuario { get; set; }
         public virtual DbSet<tblUsuarioUnidadOrganizativa> tblUsuarioUnidadOrganizativa { get; set; }
         public virtual DbSet<tblVicepresidencia> tblVicepresidencia { get; set; }
-        public virtual DbSet<tblPMTProgramacion> tblPMTProgramacion { get; set; }
-        public virtual DbSet<tblIniciativas> tblIniciativas { get; set; }
+        public virtual DbSet<tblBCPDocumento> tblBCPDocumento { get; set; }
+        public virtual DbSet<tblCriticidad> tblCriticidad { get; set; }
     }
 }

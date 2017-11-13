@@ -1,0 +1,78 @@
+﻿@using BCMWeb
+@using BCMWeb.Models
+
+@model DocumentoDiagrama
+
+<table class="Diagrama">
+    <tr>
+        <td class="leftPane">
+            <div class="Contenedor Naranja">
+                <div class="Titulo">
+                    @Html.Raw(Resources.DiagramaResource.headerInterdependencia)
+                </div>
+                @{
+                    string _HtmlInterdependencias = Model.Interdependencias;
+                    @(new HtmlString(_HtmlInterdependencias));
+                }
+            </div>
+            <div class="Contenedor Verde">
+                <div class="Titulo">
+                    @Html.Raw(Resources.DiagramaResource.headerEntrada)
+                </div>
+                @{
+                    string _HtmlEntradas = Model.Entradas;
+                    @(new HtmlString(_HtmlEntradas));
+                }
+            </div>
+            <div class="Contenedor Rosado">
+                <div class="Titulo">
+                    @Html.Raw(Resources.DiagramaResource.headerProveedores)
+                </div>
+                @{
+                    string _HtmlProveedores = Model.Proveedores;
+                    @(new HtmlString(_HtmlProveedores));
+                }
+            </div>
+        </td>
+        <td class="MiddlePane">
+            <div class="Contenedor Amarillo">
+                <div class="Titulo">
+                    @Html.Raw(Resources.DiagramaResource.headerProceso)
+                </div>
+                <div class="internal">
+                    <table>
+                        <tr>
+                            <td class="subHeader">@Resources.DiagramaResource.ProcesoHeaderNumero</td>
+                        </tr>
+                        <tr>
+                            <td>@Html.DisplayFor(m => m.NroProceso)</td>
+                        </tr>
+                        <tr>
+                            <td class="subHeader">@Resources.DiagramaResource.ProcesoHeaderNombre</td>
+                        </tr>
+                        <tr>
+                            <td>@Html.DisplayFor(m => m.Nombre)</td>
+                        </tr>
+                        <tr>
+                            <td class="subHeader">@Resources.DiagramaResource.ProcesoHeaderDescripcion</td>
+                        </tr>
+                        <tr>
+                            <td>@Html.DisplayFor(m => m.Descripcion)</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </td>
+        <td class="RightPane">
+            <div class="Contenedor Azul">
+                <div class="Titulo">
+                    @Html.Raw(Resources.DiagramaResource.headerClienteProducto)
+                </div>
+                @{
+                    string _HtmlClientes_Productos = Model.Clientes_Productos;
+                    @(new HtmlString(_HtmlClientes_Productos));
+                }
+            </div>
+        </td>
+    </tr>
+</table>

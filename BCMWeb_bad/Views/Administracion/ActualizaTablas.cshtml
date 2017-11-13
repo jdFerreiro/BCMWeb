@@ -1,0 +1,55 @@
+﻿@using BCMWeb.Models
+
+@model AdministracionModel
+
+<script type="text/javascript">
+    function OnClick(s, e) {
+        lp.Show();
+    }
+</script>
+
+
+@section LeftPanel {
+    @Html.DevExpress().Panel(settings =>
+{
+    settings.Name = "LeftPane";
+    settings.FixedPosition = PanelFixedPosition.WindowLeft;
+    settings.Collapsible = true;
+    settings.SettingsAdaptivity.CollapseAtWindowInnerWidth = 1023;
+    settings.ControlStyle.CssClass = "leftPane";
+    settings.Styles.Panel.CssClass = "panel";
+    settings.SetContent(() =>
+    {
+        Html.RenderPartial("ContentLeftPartialView");
+    });
+}).GetHtml()
+}
+
+@using (Html.BeginForm("ActualizaTablas", "Administracion", FormMethod.Post, htmlAttributes: new { id = "AdminForm" }))
+{
+    @Html.HiddenFor(m => m.IdModulo)
+    @Html.HiddenFor(m => m.IdModuloActual)
+    @Html.HiddenFor(m => m.IdEmpresaSelected)
+    @Html.HiddenFor(m => m.IdModuloActualiza)
+
+<table>
+    <tr>
+        <td style="width: 50%;">
+            @Html.Partial("ComboBoxEmpresa")
+        </td>
+        <td style="width: 50%;">
+            @Html.Partial("ComboBoxModulo")
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            &nbsp;
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+
+        </td>
+    </tr>
+</table>
+}

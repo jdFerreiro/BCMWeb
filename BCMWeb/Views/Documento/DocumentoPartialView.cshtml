@@ -45,46 +45,55 @@ settings =>
         column.CellStyle.Wrap = DefaultBoolean.True;
         column.Settings.AllowDragDrop = DefaultBoolean.False;
         column.Settings.AllowSort = DefaultBoolean.False;
-        column.SetDataItemTemplateContent(c =>
+        column.SetDataItemTemplateContent(r =>
         {
-            if ((bool)DataBinder.Eval(c.DataItem, "Editable") && (bool)DataBinder.Eval(c.DataItem, "Eliminable"))
+            if (int.Parse(DataBinder.Eval(r.DataItem, "IdEstatus").ToString()) == 6)
             {
-                ViewContext.Writer.Write(
-                    Html.ActionLink(Resources.BCMWebPublic.captionButtonVer, "VerDocumento", new { IdDocumento = DataBinder.Eval(c.DataItem, "IdDocumento"), IdClaseDocumento = Model.IdClaseDocumento, IdModulo = Model.IdModulo }, new { onclick = "lp.Show();" }) + "&nbsp;" +
-                    Html.ActionLink(Resources.BCMWebPublic.captionButtonEdit, "EditarDocumento", new { IdDocumento = DataBinder.Eval(c.DataItem, "IdDocumento"), IdClaseDocumento = Model.IdClaseDocumento, IdModulo = Model.IdModulo }, new { onclick = "lp.Show();" }) + "&nbsp;" +
-                    Html.ActionLink(Resources.BCMWebPublic.captionButtonDelete, "EliminarDocumento", new { IdDocumento = DataBinder.Eval(c.DataItem, "IdDocumento"), IdModulo = Model.IdModulo },
-                        new { onclick = "return confirm('" + string.Format(Resources.BCMWebPublic.ConfirmDeleteMessage, DataBinder.Eval(c.DataItem, "NroDocumento")) + "'); lp.Show();" })
-                );
-            }
-            else if ((bool)DataBinder.Eval(c.DataItem, "Editable"))
-            {
-                ViewContext.Writer.Write(
-                    Html.ActionLink(Resources.BCMWebPublic.captionButtonVer, "VerDocumento", new { IdDocumento = DataBinder.Eval(c.DataItem, "IdDocumento"), IdClaseDocumento = Model.IdClaseDocumento, IdModulo = Model.IdModulo }, new { onclick = "lp.Show();" }) + "&nbsp;" +
-                    Html.ActionLink(Resources.BCMWebPublic.captionButtonEdit, "EditarDocumento", new { IdDocumento = DataBinder.Eval(c.DataItem, "IdDocumento"), IdClaseDocumento = Model.IdClaseDocumento, IdModulo = Model.IdModulo }, new { onclick = "lp.Show();" })
-                );
-            }
-            else
-            {
-                if (int.Parse(DataBinder.Eval(c.DataItem, "IdEstatus").ToString()) == 6 && (bool)DataBinder.Eval(c.DataItem, "HasVersion") == false)
+                if ((bool)DataBinder.Eval(r.DataItem, "Editable") && (bool)DataBinder.Eval(r.DataItem, "HasVersion") == false)
                 {
                     ViewContext.Writer.Write(
-                        Html.ActionLink(Resources.BCMWebPublic.captionButtonVer, "VerDocumento", new { IdDocumento = DataBinder.Eval(c.DataItem, "IdDocumento"), IdClaseDocumento = Model.IdClaseDocumento, IdModulo = Model.IdModulo }, new { onclick = "lp.Show();" })
+                        Html.ActionLink(Resources.BCMWebPublic.captionButtonVer, "VerDocumento", new { IdDocumento = DataBinder.Eval(r.DataItem, "IdDocumento"), IdClaseDocumento = Model.IdClaseDocumento, IdModulo = Model.IdModulo }, new { onclick = "lp.Show();" })
                         + "&nbsp;" +
                         Html.ActionLink(Resources.DocumentoResource.NuevaVersionText, "NuevaVersionDocumento",
                             new
                             {
-                                IdDocumento = DataBinder.Eval(c.DataItem, "IdDocumento"),
+                                IdDocumento = DataBinder.Eval(r.DataItem, "IdDocumento"),
                                 IdClaseDocumento = Model.IdClaseDocumento,
                                 IdModulo = Model.IdModulo,
-                                IdVersionActual = DataBinder.Eval(c.DataItem, "VersionOriginal"),
-                                NroVersion = DataBinder.Eval(c.DataItem, "NroVersion")
+                                IdVersionActual = DataBinder.Eval(r.DataItem, "VersionOriginal"),
+                                NroVersion = DataBinder.Eval(r.DataItem, "NroVersion")
                             })
                     );
                 }
                 else
                 {
                     ViewContext.Writer.Write(
-                      Html.ActionLink(Resources.BCMWebPublic.captionButtonVer, "VerDocumento", new { IdDocumento = DataBinder.Eval(c.DataItem, "IdDocumento"), IdClaseDocumento = Model.IdClaseDocumento, IdModulo = Model.IdModulo }, new { onclick = "lp.Show();" })
+                        Html.ActionLink(Resources.BCMWebPublic.captionButtonVer, "VerDocumento", new { IdDocumento = DataBinder.Eval(r.DataItem, "IdDocumento"), IdClaseDocumento = Model.IdClaseDocumento, IdModulo = Model.IdModulo }, new { onclick = "lp.Show();" })
+                    );
+                }
+            }
+            else
+            {
+                if ((bool)DataBinder.Eval(r.DataItem, "Editable") && (bool)DataBinder.Eval(r.DataItem, "Eliminable"))
+                {
+                    ViewContext.Writer.Write(
+                        Html.ActionLink(Resources.BCMWebPublic.captionButtonVer, "VerDocumento", new { IdDocumento = DataBinder.Eval(r.DataItem, "IdDocumento"), IdClaseDocumento = Model.IdClaseDocumento, IdModulo = Model.IdModulo }, new { onclick = "lp.Show();" }) + "&nbsp;" +
+                        Html.ActionLink(Resources.BCMWebPublic.captionButtonEdit, "EditarDocumento", new { IdDocumento = DataBinder.Eval(r.DataItem, "IdDocumento"), IdClaseDocumento = Model.IdClaseDocumento, IdModulo = Model.IdModulo }, new { onclick = "lp.Show();" }) + "&nbsp;" +
+                        Html.ActionLink(Resources.BCMWebPublic.captionButtonDelete, "EliminarDocumento", new { IdDocumento = DataBinder.Eval(r.DataItem, "IdDocumento"), IdModulo = Model.IdModulo },
+                            new { onclick = "return confirm('" + string.Format(Resources.BCMWebPublic.ConfirmDeleteMessage, DataBinder.Eval(r.DataItem, "NroDocumento")) + "'); lp.Show();" })
+                    );
+                }
+                else if ((bool)DataBinder.Eval(r.DataItem, "Editable"))
+                {
+                    ViewContext.Writer.Write(
+                        Html.ActionLink(Resources.BCMWebPublic.captionButtonVer, "VerDocumento", new { IdDocumento = DataBinder.Eval(r.DataItem, "IdDocumento"), IdClaseDocumento = Model.IdClaseDocumento, IdModulo = Model.IdModulo }, new { onclick = "lp.Show();" }) + "&nbsp;" +
+                        Html.ActionLink(Resources.BCMWebPublic.captionButtonEdit, "EditarDocumento", new { IdDocumento = DataBinder.Eval(r.DataItem, "IdDocumento"), IdClaseDocumento = Model.IdClaseDocumento, IdModulo = Model.IdModulo }, new { onclick = "lp.Show();" })
+                    );
+                }
+                else
+                {
+                    ViewContext.Writer.Write(
+                      Html.ActionLink(Resources.BCMWebPublic.captionButtonVer, "VerDocumento", new { IdDocumento = DataBinder.Eval(r.DataItem, "IdDocumento"), IdClaseDocumento = Model.IdClaseDocumento, IdModulo = Model.IdModulo }, new { onclick = "lp.Show();" })
                   );
                 }
             }
@@ -165,6 +174,7 @@ settings =>
                     i.NavigateUrl = (DataBinder.Eval(tc.DataItem, "RutaDocumentoPDF") == null ? string.Empty : DataBinder.Eval(tc.DataItem, "RutaDocumentoPDF").ToString());
                     i.Properties.ImageUrl = "~/Content/Images/Internal/icono-pdf.jpg";
                     i.Properties.ImageHeight = Unit.Pixel(32);
+                    i.Properties.Target = "blank";
                     i.Width = Unit.Pixel(50);
                 }).GetHtml()
             );

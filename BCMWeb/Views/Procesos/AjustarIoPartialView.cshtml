@@ -4,7 +4,7 @@
 settings =>
 {
     settings.Name = "gvProcesosIO";
-    settings.KeyFieldName = "IdEmpresa;IdProceso;IdDocumentoBIA;IdImpacto";
+    settings.KeyFieldName = "IdEmpresa;Impacto";
     settings.CallbackRouteValues = new { Controller = "Procesos", Action = "AjustarIOPartialView" };
     settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "Procesos", Action = "EditIOUpdatePartial" };
 
@@ -36,36 +36,8 @@ settings =>
     settings.Columns.Add(c =>
     {
         c.Settings.AllowSort = DefaultBoolean.True;
-        c.FieldName = "NroProceso";
-        c.Width = Unit.Percentage(15);
-        c.Caption = Resources.ProcesosResource.captionNroProceso;
-        c.CellStyle.Wrap = DefaultBoolean.True;
-        c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
-        c.HeaderStyle.Wrap = DefaultBoolean.True;
-        c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
-        c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
-        c.ColumnType = MVCxGridViewColumnType.TextBox;
-        c.ReadOnly = true;
-    });
-    settings.Columns.Add(c =>
-    {
-        c.Settings.AllowSort = DefaultBoolean.True;
-        c.FieldName = "NombreProceso";
-        c.Width = Unit.Percentage(25);
-        c.Caption = Resources.ProcesosResource.captionNombre;
-        c.CellStyle.Wrap = DefaultBoolean.True;
-        c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
-        c.HeaderStyle.Wrap = DefaultBoolean.True;
-        c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
-        c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
-        c.ColumnType = MVCxGridViewColumnType.Memo;
-        c.ReadOnly = true;
-    });
-    settings.Columns.Add(c =>
-    {
-        c.Settings.AllowSort = DefaultBoolean.True;
         c.FieldName = "Impacto";
-        c.Width = Unit.Percentage(25);
+        c.Width = Unit.Percentage(75);
         c.Caption = Metodos.GetNombreEscala(eTipoEscala.ImpactoOperacional);
         c.CellStyle.Wrap = DefaultBoolean.True;
         c.CellStyle.HorizontalAlign = HorizontalAlign.Justify;
@@ -75,11 +47,12 @@ settings =>
         c.ColumnType = MVCxGridViewColumnType.Memo;
         c.ReadOnly = true;
     });
-    settings.Columns.Add(column =>
+    settings.Columns.Add(c =>
     {
-        column.FieldName = "IdTipoEscala";
-        column.Caption = Resources.ProcesosResource.captionEscala;
-        column.EditorProperties().ComboBox(p =>
+        c.FieldName = "IdEscala";
+        c.Caption = Resources.ProcesosResource.captionEscala;
+        c.Width = Unit.Percentage(15);
+        c.EditorProperties().ComboBox(p =>
         {
             p.TextField = "TipoEscala";
             p.ValueField = "IdTipoEscala";
@@ -87,7 +60,7 @@ settings =>
             p.DataSource = Metodos.GetTipoEscalaGrafico(eTipoEscala.ImpactoOperacional);
         });
     });
-}).Bind(Metodos.GetProcesosAjustarImpacto(eTipoEscala.ImpactoOperacional)).GetHtml()
+}).Bind(Metodos.GetProcesosAjustarIO()).GetHtml()
 
 
 

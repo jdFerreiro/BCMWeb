@@ -2,6 +2,16 @@
 
 @model DocumentoDiagrama
 
+<script>
+function printContent(el){
+    var restorepage = document.body.innerHTML;
+    var printcontent = document.getElementById(el).innerHTML;
+    document.body.innerHTML = printcontent;
+    window.print();
+    document.body.innerHTML = restorepage;
+}
+</script>
+
 @section LeftPanel {
     @Html.DevExpress().Panel(settings =>
    {
@@ -26,6 +36,23 @@
     @Html.HiddenFor(m => m.IdModuloActual)
 
     @Html.Partial("PartialProcesosView")
-    @Html.Partial("PartialDiagramaProceso")
+    <table>
+        <tr>
+            <td>
+                <div style="float: right; margin-right: 10px;">
+                    <input id="printdiv" type="button" value="@Resources.BCMWebPublic.captionButtonImprimir" onclick="printContent('dvPrint')" />
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.Partial("PartialDiagramaProceso")
+            </td>
+        </tr>
+    </table>
+
+    <div id="dvPrint" style="display:none;">
+        @Html.Partial("PartialDiagramaProceso")
+    </div>
 
 }

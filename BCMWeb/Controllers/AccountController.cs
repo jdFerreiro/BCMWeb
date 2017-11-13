@@ -1,23 +1,24 @@
+using BCMWeb.Models;
+using BCMWeb.Security;
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
 using WebMatrix.WebData;
-using BCMWeb.Models;
-using BCMWeb.Security;
-using System.Security.Principal;
-using BCMWeb.Data.EF;
 
-namespace BCMWeb.Controllers {
+namespace BCMWeb.Controllers
+{
     [Authorize]
     //[InitializeSimpleMembership]
-    public class AccountController : Controller {
+    public class AccountController : Controller
+    {
 
         [AllowAnonymous]
-        public ActionResult Login() {
+        public ActionResult Login()
+        {
             ViewBag.Title = string.Format("{0} - {1}", Resources.LoginResource.accountHeader, Resources.BCMWebPublic.labelAppTitle);
             return View();
         }
@@ -72,7 +73,8 @@ namespace BCMWeb.Controllers {
         }
         [SessionExpire]
         [HandleError]
-        public ActionResult LogOff() {
+        public ActionResult LogOff()
+        {
             long UserId = 0;
 
             if (Session["UserId"] != null)
@@ -95,63 +97,78 @@ namespace BCMWeb.Controllers {
 
             Metodos.Logout(UserId);
             Auditoria.RegistrarLogout();
+            Session.Abandon();
+            Session.RemoveAll();
             FormsAuthentication.SignOut();
             return RedirectToAction("Index", "Home");
         }
         [AllowAnonymous]
-        public ActionResult Register() {
+        public ActionResult Register()
+        {
             return View();
         }
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult Register(RegisterModel model) {
-            if(ModelState.IsValid) {
+        public ActionResult Register(RegisterModel model)
+        {
+            if (ModelState.IsValid)
+            {
                 // Attempt to register the user
-                try {
+                try
+                {
                     WebSecurity.CreateUserAndAccount(model.UserName, model.Password);
                     WebSecurity.Login(model.UserName, model.Password);
                     return Redirect("/");
                 }
-                catch(MembershipCreateUserException e) {
+                catch (MembershipCreateUserException e)
+                {
                     ViewBag.ErrorMessage = ErrorCodeToString(e.StatusCode);
                 }
-            } 
+            }
 
             // If we got this far, something failed, redisplay form
             return View(model);
         }
         [SessionExpire]
         [HandleError]
-        public ActionResult ChangePassword() {
+        public ActionResult ChangePassword()
+        {
             return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         [HandleError]
-        public ActionResult ChangePassword(ChangePasswordModel model) {
-            if(ModelState.IsValid) {
+        public ActionResult ChangePassword(ChangePasswordModel model)
+        {
+            if (ModelState.IsValid)
+            {
                 bool changePasswordSucceeded;
-                try {
+                try
+                {
                     changePasswordSucceeded = WebSecurity.ChangePassword(User.Identity.Name, model.OldPassword, model.NewPassword);
                 }
-                catch(Exception) {
+                catch (Exception)
+                {
                     changePasswordSucceeded = false;
                 }
-                if(changePasswordSucceeded) {
+                if (changePasswordSucceeded)
+                {
                     return RedirectToAction("ChangePasswordSuccess");
                 }
-                else {
+                else
+                {
                     ViewBag.ErrorMessage = Resources.ErrorResource.ChangePasswordFailError;
                 }
-                
+
             }
 
             // If we got this far, something failed, redisplay form
             return View(model);
         }
         [HandleError]
-        public ActionResult ChangePasswordSuccess() {
+        public ActionResult ChangePasswordSuccess()
+        {
             return View();
         }
         [AllowAnonymous]
@@ -250,10 +267,12 @@ namespace BCMWeb.Controllers {
 
 
         #region Status Codes
-        private static string ErrorCodeToString(MembershipCreateStatus createStatus) {
+        private static string ErrorCodeToString(MembershipCreateStatus createStatus)
+        {
             // See http://go.microsoft.com/fwlink/?LinkID=177550 for
             // a full list of status codes.
-            switch(createStatus) {
+            switch (createStatus)
+            {
                 case MembershipCreateStatus.DuplicateUserName:
                     return Resources.ErrorResource.DuplicateUserNameError;
 

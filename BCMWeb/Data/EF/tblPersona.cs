@@ -23,8 +23,6 @@ namespace BCMWeb.Data.EF
             this.tblDocumentoAprobacion = new HashSet<tblDocumentoAprobacion>();
             this.tblDocumentoCertificacion = new HashSet<tblDocumentoCertificacion>();
             this.tblDocumentoPersonaClave = new HashSet<tblDocumentoPersonaClave>();
-            this.tblPBEPruebaEjecucionEjercicio = new HashSet<tblPBEPruebaEjecucionEjercicio>();
-            this.tblPBEPruebaPlanificacion = new HashSet<tblPBEPruebaPlanificacion>();
             this.tblPersonaDireccion = new HashSet<tblPersonaDireccion>();
             this.tblPersonaTelefono = new HashSet<tblPersonaTelefono>();
             this.tblPersonaCorreo = new HashSet<tblPersonaCorreo>();
@@ -52,10 +50,6 @@ namespace BCMWeb.Data.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblDocumentoPersonaClave> tblDocumentoPersonaClave { get; set; }
         public virtual tblEmpresa tblEmpresa { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblPBEPruebaEjecucionEjercicio> tblPBEPruebaEjecucionEjercicio { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblPBEPruebaPlanificacion> tblPBEPruebaPlanificacion { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblPersonaDireccion> tblPersonaDireccion { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

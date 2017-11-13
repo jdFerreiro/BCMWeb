@@ -20,9 +20,10 @@ namespace BCMWeb.Data.EF
             this.tblModulo_NivelUsuario = new HashSet<tblModulo_NivelUsuario>();
             this.tblModulo_Usuario = new HashSet<tblModulo_Usuario>();
             this.tblPMTMensajeActualizacion = new HashSet<tblPMTMensajeActualizacion>();
+            this.tblPMTProgramacion = new HashSet<tblPMTProgramacion>();
             this.tblPMTProgramacionDocumentos = new HashSet<tblPMTProgramacionDocumentos>();
             this.tblPMTResponsableUpdate = new HashSet<tblPMTResponsableUpdate>();
-            this.tblPMTProgramacion = new HashSet<tblPMTProgramacion>();
+            this.tblDocumentoContenido = new HashSet<tblDocumentoContenido>();
         }
     
         public long IdEmpresa { get; set; }
@@ -49,10 +50,12 @@ namespace BCMWeb.Data.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblPMTMensajeActualizacion> tblPMTMensajeActualizacion { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblPMTProgramacion> tblPMTProgramacion { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblPMTProgramacionDocumentos> tblPMTProgramacionDocumentos { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblPMTResponsableUpdate> tblPMTResponsableUpdate { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblPMTProgramacion> tblPMTProgramacion { get; set; }
+        public virtual ICollection<tblDocumentoContenido> tblDocumentoContenido { get; set; }
     }
 }

@@ -196,6 +196,7 @@
   <ItemGroup>
     <Content Include="Content\BCMWeb.css" />
     <Content Include="Content\BCMWeb_Menu.css" />
+    <Content Include="Content\BCMWeb_Movil.css" />
     <Content Include="Content\ChartIcons\BtnPrint.png" />
     <Content Include="Content\ChartIcons\BtnSave.png" />
     <Content Include="Content\ChartIcons\BtnSaveWindow.png" />
@@ -212,6 +213,7 @@
     <Content Include="Content\Images\Internal\fullfolder.jpg" />
     <Content Include="Content\Images\Internal\hasAttach.png" />
     <Content Include="Content\Images\Internal\icono-pdf.jpg" />
+    <Content Include="Content\Images\Logo-BiaPlus.png" />
     <Content Include="Content\Images\Menu\Adiestramiento.png" />
     <Content Include="Content\Images\Menu\Administration.jpg" />
     <Content Include="Content\Images\Menu\BCP.jpg" />
@@ -245,6 +247,7 @@
     <Content Include="Content\LogosEmpresa\logojunko.png" />
     <Content Include="Content\LogosEmpresa\logo_bangente.jpg" />
     <Content Include="Content\LogosEmpresa\logo_Credicard.png" />
+    <Content Include="Content\printDiagram.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Data\EF\BCMWebEntities.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -265,7 +268,7 @@
     <Content Include="Content\Images\Disaster Recovery firemen.jpg" />
     <Content Include="Content\Images\disaster_relief.jpg" />
     <Content Include="Content\Images\iStock_000008190739Large.jpg" />
-    <Content Include="Content\Images\Logo-BiaPlus.png" />
+    <Content Include="Content\Images\Logo-BiaPlus old.png" />
     <Content Include="Content\Images\Movil.png" />
     <Content Include="Content\Images\seo_analysis_big-403x250.jpg" />
     <Content Include="Content\Images\tornado_163m.jpg" />
@@ -309,7 +312,9 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\knockout-3.3.0.debug.js" />
     <Content Include="Scripts\knockout-3.3.0.js" />
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
     <EntityDeploy Include="Data\EF\BCMWebEntities.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>BCMWebEntities.Designer.cs</LastGenOutput>
@@ -318,7 +323,6 @@
       <DependentUpon>BCMWebEntities.edmx</DependentUpon>
     </Content>
     <None Include="Properties\PublishProfiles\BCMWeb2.pubxml" />
-    <None Include="Properties\PublishProfiles\Local.pubxml" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\MicrosoftAjax.debug.js" />
     <Content Include="Scripts\MicrosoftAjax.js" />
@@ -327,6 +331,7 @@
     <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
     <Content Include="Scripts\MicrosoftMvcValidation.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="TestEmail.html" />
     <Content Include="Views\Shared\DisplayTemplates\Boolean.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Boolean.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
@@ -481,13 +486,41 @@
     <Content Include="Views\PlanTrabajo\FileManagerPartial.cshtml" />
     <Content Include="Views\Documentos\Notificacion.cshtml" />
     <Content Include="Views\Documentos\Frecuencia.cshtml" />
+    <Content Include="Views\Documentos\Programacion.cshtml" />
     <Content Include="Views\Documentos\NotificacionPartialView.cshtml" />
     <Content Include="Views\Documentos\FrecuenciaPartialView.cshtml" />
-    <Content Include="Views\PMT\ProgramacionPartialView.cshtml" />
-    <Content Include="Views\PMT\ProgramacionDocumentosPartialView.cshtml" />
-    <Content Include="Views\PMT\ProgramacionUsuariosPartialView.cshtml" />
-    <Content Include="Views\PMT\Index.cshtml" />
+    <Content Include="Views\Documentos\ProgramacionPartialView.cshtml" />
     <Content Include="Views\PMT\EditProgramacion.cshtml" />
+    <Content Include="Views\PMT\Index.cshtml" />
+    <Content Include="Views\PMT\ProgramacionDocumentosPartialView.cshtml" />
+    <Content Include="Views\PMT\ProgramacionPartialView.cshtml" />
+    <Content Include="Views\PMT\ProgramacionUsuariosPartialView.cshtml" />
+    <Content Include="Views\PPE\ComboBoxEjercicioEjecucionPartial.cshtml" />
+    <Content Include="Views\PPE\ComboBoxEjercicioPartial.cshtml" />
+    <Content Include="Views\PPE\EditarEjecucion.cshtml" />
+    <Content Include="Views\PPE\EditarPrueba.cshtml" />
+    <Content Include="Views\PPE\EditorAcciones.cshtml" />
+    <Content Include="Views\PPE\EditorHallazgos.cshtml" />
+    <Content Include="Views\PPE\EditorPartialView.cshtml" />
+    <Content Include="Views\PPE\Ejercicios.cshtml" />
+    <Content Include="Views\PPE\EjerciciosEjecucion.cshtml" />
+    <Content Include="Views\PPE\EjerciciosEjecucionPartialView.cshtml" />
+    <Content Include="Views\PPE\EjerciciosPartialView.cshtml" />
+    <Content Include="Views\PPE\Index.cshtml" />
+    <Content Include="Views\PPE\Participantes.cshtml" />
+    <Content Include="Views\PPE\ParticipantesEjecucion.cshtml" />
+    <Content Include="Views\PPE\ParticipantesEjecucionEjercicio.cshtml" />
+    <Content Include="Views\PPE\ParticipantesEjecucionEjercicioPartialView.cshtml" />
+    <Content Include="Views\PPE\ParticipantesEjecucionPartialView.cshtml" />
+    <Content Include="Views\PPE\ParticipantesEjercicio.cshtml" />
+    <Content Include="Views\PPE\ParticipantesEjercicioPartialView.cshtml" />
+    <Content Include="Views\PPE\ParticipantesPartialView.cshtml" />
+    <Content Include="Views\PPE\PruebasPartialView.cshtml" />
+    <Content Include="Views\PPE\RecursosEjecucionEjercicio.cshtml" />
+    <Content Include="Views\PPE\RecursosEjecucionEjercicioPartialView.cshtml" />
+    <Content Include="Views\PPE\RecursosEjercicio.cshtml" />
+    <Content Include="Views\PPE\RecursosEjercicioPartialView.cshtml" />
+    <Content Include="Views\Documento\ComboBoxProcesos.cshtml" />
     <Content Include="Views\Documento\DocumentoBCPPartialView.cshtml" />
     <Content Include="Views\Documento\DocumentoBIAPartialView.cshtml" />
     <Content Include="Views\Documentos\DiagramaBCP.cshtml" />
@@ -504,6 +537,21 @@
     <Content Include="Views\Procesos\ProbabilidadPartialView.cshtml" />
     <Content Include="Views\Procesos\FuentePartialView.cshtml" />
     <Content Include="Views\Procesos\ControlPartialView.cshtml" />
+    <Content Include="Views\Reportes\GraficoGIPartialViewPrint.cshtml" />
+    <Content Include="Views\Reportes\GraficoMTDPartialViewPrint.cshtml" />
+    <Content Include="Views\Reportes\GraficoPUOPartialViewPrint.cshtml" />
+    <Content Include="Views\Reportes\GraficoRCPartialViewPrint.cshtml" />
+    <Content Include="Views\Reportes\GraficoRFPartialViewPrint.cshtml" />
+    <Content Include="Views\Reportes\GraficoRIPartialViewPrint.cshtml" />
+    <Content Include="Views\Reportes\GraficoRPOPartialViewPrint.cshtml" />
+    <Content Include="Views\Reportes\GraficoRPPartialViewPrint.cshtml" />
+    <Content Include="Views\Reportes\GraficoRSPartialViewPrint.cshtml" />
+    <Content Include="Views\Reportes\GraficoRTOPartialViewPrint.cshtml" />
+    <Content Include="Views\Reportes\GraficoWRTPartialViewPrint.cshtml" />
+    <Content Include="Views\Reportes\ProbabilidadPartialViewPrint.cshtml" />
+    <Content Include="Views\Reportes\ImpactoPartialViewPrint.cshtml" />
+    <Content Include="Views\Reportes\ControlPartialViewPrint.cshtml" />
+    <Content Include="Views\Reportes\FuentePartialViewPrint.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -536,6 +584,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>BCMWebPublic.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_LocalResources\BIAFiltroResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BIAFiltroResource.resx</DependentUpon>
     </Compile>
     <Compile Include="App_LocalResources\BSMMovilResource.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -617,6 +670,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>LoginResource.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_LocalResources\MesResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MesResource.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_LocalResources\PDFResource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -626,6 +684,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PerfilResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_LocalResources\PPEResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PPEResource.resx</DependentUpon>
     </Compile>
     <Compile Include="App_LocalResources\ProcedimientoBCPResource.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -809,6 +872,9 @@
     <Compile Include="Data\EF\tblControlRiesgo.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Data\EF\tblCriticidad.cs">
+      <DependentUpon>BCMWebEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Data\EF\tblCultura_Ciudad.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
@@ -837,6 +903,9 @@
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\EF\tblCultura_Pais.cs">
+      <DependentUpon>BCMWebEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\EF\tblCultura_PBEPruebaEstatus.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\EF\tblCultura_PlanTrabajoEstatus.cs">
@@ -932,6 +1001,9 @@
     <Compile Include="Data\EF\tblEstadoUsuario.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Data\EF\tblFormatosEmail.cs">
+      <DependentUpon>BCMWebEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Data\EF\tblFuenteRiesgo.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
@@ -977,22 +1049,25 @@
     <Compile Include="Data\EF\tblPais.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Data\EF\tblPBEPruebaEjecucion.cs">
+      <DependentUpon>BCMWebEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Data\EF\tblPBEPruebaEjecucionEjercicio.cs">
+      <DependentUpon>BCMWebEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\EF\tblPBEPruebaEjecucionEjercicioParticipante.cs">
+      <DependentUpon>BCMWebEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\EF\tblPBEPruebaEjecucionEjercicioRecurso.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\EF\tblPBEPruebaEjecucionParticipante.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Data\EF\tblPBEPruebaEjecucionParticipanteCorreo.cs">
-      <DependentUpon>BCMWebEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\EF\tblPBEPruebaEjecucionParticipanteTelefono.cs">
-      <DependentUpon>BCMWebEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\EF\tblPBEPruebaEjecucionRecurso.cs">
-      <DependentUpon>BCMWebEntities.tt</DependentUpon>
-    </Compile>
     <Compile Include="Data\EF\tblPBEPruebaEjecucionResultado.cs">
+      <DependentUpon>BCMWebEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\EF\tblPBEPruebaEstatus.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\EF\tblPBEPruebaPlanificacion.cs">
@@ -1001,16 +1076,13 @@
     <Compile Include="Data\EF\tblPBEPruebaPlanificacionEjercicio.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Data\EF\tblPBEPruebaPlanificacionEjercicioParticipante.cs">
+      <DependentUpon>BCMWebEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\EF\tblPBEPruebaPlanificacionEjercicioRecurso.cs">
+      <DependentUpon>BCMWebEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Data\EF\tblPBEPruebaPlanificacionParticipante.cs">
-      <DependentUpon>BCMWebEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\EF\tblPBEPruebaPlanificacionParticipanteCorreo.cs">
-      <DependentUpon>BCMWebEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\EF\tblPBEPruebaPlanificacionParticipanteTelefono.cs">
-      <DependentUpon>BCMWebEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\EF\tblPBEPruebaPlanificacionRecurso.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\EF\tblPersona.cs">
@@ -1122,6 +1194,7 @@
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\EmailManager.cs" />
+    <Compile Include="Data\PDFPrueba.cs" />
     <Compile Include="Data\ProcesarDocumento.cs" />
     <Compile Include="DAL\Repository.cs" />
     <Compile Include="DAL\User.cs" />
@@ -1154,6 +1227,7 @@
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\AdministracionModels.cs" />
     <Compile Include="Models\AuditoriaModels.cs" />
+    <Compile Include="Models\BiaDocsFilterModel.cs" />
     <Compile Include="Models\ContactoViewModel.cs" />
     <Compile Include="Models\DocumentoModels.cs" />
     <Compile Include="Models\DocumentoWordModels.cs" />
@@ -1163,6 +1237,7 @@
     <Compile Include="Models\ModuloModels.cs" />
     <Compile Include="Models\PersonaModels.cs" />
     <Compile Include="Models\PlanTrabajoModels.cs" />
+    <Compile Include="Models\PPEModels.cs" />
     <Compile Include="Models\ProcesosModels.cs" />
     <Compile Include="Models\ReporteModels.cs" />
     <Compile Include="Models\SeguridadModels.cs" />
@@ -1171,6 +1246,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Validators\EnsureOneElementAttribute.cs" />
     <Compile Include="Filters\SessionExpireFilterAttribute.cs" />
+    <Compile Include="Validators\ValidacionFechas.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1180,6 +1256,7 @@
     <Folder Include="PDFDocs\" />
     <Folder Include="Views\AdminDoc\" />
     <Folder Include="Views\Error\" />
+    <Folder Include="Views\PlanMantenimiento\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -1209,6 +1286,12 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>BCMWebPublic.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App_LocalResources\BIAFiltroResource.resx">
+      <CustomToolNamespace>Resources</CustomToolNamespace>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>BIAFiltroResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="App_LocalResources\BSMMovilResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -1290,6 +1373,11 @@
       <LastGenOutput>LoginResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Resources</CustomToolNamespace>
     </EmbeddedResource>
+    <EmbeddedResource Include="App_LocalResources\MesResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MesResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources</CustomToolNamespace>
+    </EmbeddedResource>
     <EmbeddedResource Include="App_LocalResources\PDFResource.resx">
       <CustomToolNamespace>Resources</CustomToolNamespace>
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -1299,6 +1387,11 @@
       <CustomToolNamespace>Resources</CustomToolNamespace>
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PerfilResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App_LocalResources\PPEResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PPEResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="App_LocalResources\ProcedimientoBCPResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace BCMWeb.Controllers
@@ -62,6 +61,7 @@ namespace BCMWeb.Controllers
             Auditoria.RegistarAccion(eTipoAccion.Mostrar);
 
             ViewData["IdUnidadOrganizativa"] = 0;
+            Session["IdUnidadOrganizativaPrint"] = 0;
 
             return View(model);
         }
@@ -95,6 +95,7 @@ namespace BCMWeb.Controllers
             }
 
             ViewData["IdUnidadOrganizativa"] = model.IdUnidadOrganizativa;
+            Session["IdUnidadOrganizativaPrint"] = model.IdUnidadOrganizativa;
 
             return View(model);
         }
@@ -137,36 +138,43 @@ namespace BCMWeb.Controllers
             }
 
             ViewData["IdUnidadOrganizativa"] = model.IdUnidadOrganizativa;
+            Session["IdUnidadOrganizativaPrint"] = model.IdUnidadOrganizativa;
 
             return PartialView(model);
         }
         [SessionExpire]
         [HandleError]
-        //public ActionResult CuadroIOPartialView(long IdUnidadOrganizativa, long IdProceso)
-        //{
-        //    ViewData["IdUnidadOrganizativa"] = IdUnidadOrganizativa;
-
-        //    return PartialView("CuadroIOPartialView", Metodos.GetImpactoOperacional(IdUnidadOrganizativa, IdProceso));
-        //}
         public ActionResult CuadroIOPartialView(long IdUnidadOrganizativa)
         {
             ViewData["IdUnidadOrganizativa"] = IdUnidadOrganizativa;
+            Session["IdUnidadOrganizativaPrint"] = IdUnidadOrganizativa;
 
             return PartialView("CuadroIOPartialView", Metodos.GetImpactoOperacional(IdUnidadOrganizativa));
         }
         [SessionExpire]
         [HandleError]
-        //public ActionResult CuadroVIPartialView(long IdUnidadOrganizativa, long IdProceso)
-        //{
-        //    ViewData["IdUnidadOrganizativa"] = IdUnidadOrganizativa;
+        public ActionResult ExportCuadroIO()
+        {
+            long IdUnidadOrganizativa = long.Parse(Session["IdUnidadOrganizativaPrint"].ToString());
+            return GridViewExportReporteCuadroIO.FormatConditionsExportFormatsInfo[GridViewExportFormat.Xlsx](GridViewExportReporteCuadroIO.FormatConditionsExportGridViewSettings, Metodos.GetImpactoOperacional(IdUnidadOrganizativa));
 
-        //    return PartialView("CuadroVIPartialView", Metodos.GetValoresImpacto(IdUnidadOrganizativa, IdProceso));
-        //}
+        }
+        [SessionExpire]
+        [HandleError]
         public ActionResult CuadroVIPartialView(long IdUnidadOrganizativa)
         {
             ViewData["IdUnidadOrganizativa"] = IdUnidadOrganizativa;
+            Session["IdUnidadOrganizativaPrint"] = IdUnidadOrganizativa;
 
             return PartialView("CuadroVIPartialView", Metodos.GetValoresImpacto(IdUnidadOrganizativa));
+        }
+        [SessionExpire]
+        [HandleError]
+        public ActionResult ExportCuadroVI()
+        {
+            long IdUnidadOrganizativa = long.Parse(Session["IdUnidadOrganizativaPrint"].ToString());
+            return GridViewExportReporteCuadroVI.FormatConditionsExportFormatsInfo[GridViewExportFormat.Xlsx](GridViewExportReporteCuadroVI.FormatConditionsExportGridViewSettings, Metodos.GetValoresImpacto(IdUnidadOrganizativa));
+
         }
         [SessionExpire]
         [HandleError]
@@ -187,6 +195,10 @@ namespace BCMWeb.Controllers
             model.Perfil = Metodos.GetPerfilData();
             model.PageTitle = Metodos.GetModuloName(modId);
             ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
+
+            model.DataCuadro = Metodos.GetProcesoMes(model.IdUnidadOrganizativa);
+            ViewData["IdUnidadOrganizativa"] = model.IdUnidadOrganizativa;
+            Session["IdUnidadOrganizativaPrint"] = model.IdUnidadOrganizativa;
 
             Auditoria.RegistarAccion(eTipoAccion.Mostrar);
 
@@ -211,8 +223,17 @@ namespace BCMWeb.Controllers
 
             model.DataCuadro = Metodos.GetProcesoMes(model.IdUnidadOrganizativa);
             ViewData["IdUnidadOrganizativa"] = model.IdUnidadOrganizativa;
+            Session["IdUnidadOrganizativaPrint"] = model.IdUnidadOrganizativa;
 
             return View(model);
+        }
+        [SessionExpire]
+        [HandleError]
+        public ActionResult ExportCuadroPM()
+        {
+            long IdUnidadOrganizativa = long.Parse(Session["IdUnidadOrganizativaPrint"].ToString());
+            return GridViewExportReporteCuadroPM.FormatConditionsExportFormatsInfo[GridViewExportFormat.Xlsx](GridViewExportReporteCuadroPM.FormatConditionsExportGridViewSettings, Metodos.GetProcesoMes(IdUnidadOrganizativa));
+
         }
         [SessionExpire]
         [HandleError]
@@ -527,7 +548,7 @@ namespace BCMWeb.Controllers
                         pcl.Landscape = true;
                         pcl.CreateDocument();
 
-                        using (var exstream = new MemoryStream() )
+                        using (var exstream = new MemoryStream())
                         {
                             pcl.PrintingSystem.ExportToPdf(exstream);
                             byte[] buf = new byte[(int)exstream.Length];
@@ -579,12 +600,14 @@ namespace BCMWeb.Controllers
             DocumentoDiagrama model = new DocumentoDiagrama();
 
             string _modId = modId.ToString();
-            int IdTipoDocumento = int.Parse(_modId.Length == 7  ? _modId.Substring(0,1) : _modId.Substring(0,2));
+            int IdTipoDocumento = int.Parse(_modId.Length == 7 ? _modId.Substring(0, 1) : _modId.Substring(0, 2));
             long IdModulo = IdTipoDocumento * 1000000;
             Session["modId"] = modId;
 
             model.IdModuloActual = modId;
+            model.IdModulo = IdModulo;
             ViewBag.Title = string.Format("{0} - {1}", Metodos.GetModuloName(modId), Resources.BCMWebPublic.labelAppTitle);
+            ViewBag.DataProcesos = Metodos.GetProcesosEmpresa();
 
             return View(model);
         }
@@ -618,6 +641,7 @@ namespace BCMWeb.Controllers
             model.Descripcion = Proceso.Descripcion;
 
             ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
+            ViewBag.DataProcesos = Metodos.GetProcesosEmpresa();
 
             return View(model);
         }
@@ -632,6 +656,7 @@ namespace BCMWeb.Controllers
         [HttpPost]
         public ActionResult PartialProcesosView(DocumentoDiagrama model)
         {
+            ViewBag.DataProcesos = Metodos.GetProcesosEmpresa();
             return PartialView(model);
         }
         [SessionExpire]
@@ -685,6 +710,7 @@ namespace BCMWeb.Controllers
             ViewBag.Title = string.Format("{0} - {1}", Metodos.GetModuloName(modId), Resources.BCMWebPublic.labelAppTitle);
 
             ViewData["IdUnidadOrganizativa"] = 0;
+            Session["IdUnidadOrganizativaRiesgo"] = 0;
             return View(model);
         }
         [SessionExpire]
@@ -695,6 +721,7 @@ namespace BCMWeb.Controllers
             string _modId = model.IdModuloActual.ToString();
             int IdTipoDocumento = int.Parse(_modId.Length == 7 ? _modId.Substring(0, 1) : _modId.Substring(0, 2));
             ViewData["IdUnidadOrganizativa"] = model.IdUnidadOrganizativa;
+            Session["IdUnidadOrganizativaRiesgo"] = model.IdUnidadOrganizativa;
 
             ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, Metodos.GetModuloName(model.IdModuloActual));
             return View(model);
@@ -716,6 +743,38 @@ namespace BCMWeb.Controllers
         {
             List<DataRiesgoControl> Data = Metodos.GetRiesgoControles(IdUnidadOrganizativa);
             return PartialView(Data);
+        }
+        [SessionExpire]
+        [HandleError]
+        public ActionResult ExportTablaRiesgo()
+        {
+            long IdUnidadOrganizativa = long.Parse(Session["IdUnidadOrganizativaRiesgo"].ToString());
+            return GridViewExportTablaRiesgo.FormatConditionsExportFormatsInfo[GridViewExportFormat.Xlsx](GridViewExportTablaRiesgo.FormatConditionsExportGridViewSettings, Metodos.GetRiesgoControles(IdUnidadOrganizativa));
+
+        }
+        [SessionExpire]
+        [HandleError]
+        public ActionResult ExportTablaPUO()
+        {
+            long IdUnidadOrganizativa = long.Parse(Session["IdUnidadOrganizativaPrint"].ToString());
+            return GridViewExportReporteTablaPUO.FormatConditionsExportFormatsInfo[GridViewExportFormat.Xlsx](GridViewExportReporteTablaPUO.FormatConditionsExportGridViewSettings, Metodos.GetNroProcesosByImpactoOperacional());
+
+        }
+        [SessionExpire]
+        [HandleError]
+        public ActionResult ExportTablaVI()
+        {
+            long IdUnidadOrganizativa = long.Parse(Session["IdUnidadOrganizativaPrint"].ToString());
+            return GridViewExportReporteTablaVI.FormatConditionsExportFormatsInfo[GridViewExportFormat.Xlsx](GridViewExportReporteTablaVI.FormatConditionsExportGridViewSettings, Metodos.GetNroProcesosByValorImpacto());
+
+        }
+        [SessionExpire]
+        [HandleError]
+        public ActionResult ExportTablaGI()
+        {
+            long IdUnidadOrganizativa = long.Parse(Session["IdUnidadOrganizativaPrint"].ToString());
+            return GridViewExportReporteTablaGI.FormatConditionsExportFormatsInfo[GridViewExportFormat.Xlsx](GridViewExportReporteTablaGI.FormatConditionsExportGridViewSettings, Metodos.GetNroProcesosByGranImpacto());
+
         }
 
     }

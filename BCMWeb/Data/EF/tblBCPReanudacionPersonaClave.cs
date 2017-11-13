@@ -27,7 +27,7 @@ namespace BCMWeb.Data.EF
         public string DireccionHabitacion { get; set; }
         public Nullable<long> IdPersonaClavePrincipal { get; set; }
     
-        public virtual tblBCPDocumento tblBCPDocumento { get; set; }
         public virtual tblPersona tblPersona { get; set; }
+        public virtual tblBCPDocumento tblBCPDocumento { get; set; }
     }
 }

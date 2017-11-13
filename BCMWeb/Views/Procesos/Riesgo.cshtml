@@ -3,7 +3,7 @@
 @model CriticoModel
 
 <script type="text/javascript">
-    $(document).ready(function() {
+    $(document).ready(function () {
         var ValoresProbabilidad = '@Session["ValoresProbabilidad"]';
         var ValoresImpacto = '@Session["ValoresImpacto"]';
         var ValoresSeveridad = '@Session["ValoresSeveridad"]';
@@ -92,31 +92,31 @@
         }
     });
     function OnBeginGridCallback(s, e) {
-            lp.Show();
+        lp.Show();
+    }
+    function OnEndGridCallback(s, e) {
+        lp.Hide();
+    }
+    function FeaturesSelectionChanged(s, e) {
+        var selectedFeatures = s.GetSelectedValues();
+        switch (s.name) {
+            case "lblProbabilidad":
+                $("#ImpactoFinancieroSelected").val(selectedFeatures);
+                break;
+            case "lblImpacto":
+                $("#ImpactoOperacionalSelected").val(selectedFeatures);
+                break;
+            case "lblSeveridad":
+                $("#MTDSelected").val(selectedFeatures);
+                break;
+            case "lblFuente":
+                $("#RPOSelected").val(selectedFeatures);
+                break;
+            case "lblControl":
+                $("#RTOSelected").val(selectedFeatures);
+                break;
         }
-        function OnEndGridCallback(s, e) {
-            lp.Hide();
-        }
-        function FeaturesSelectionChanged(s, e) {
-            var selectedFeatures = s.GetSelectedValues();
-            switch (s.name) {
-                case "lblProbabilidad":
-                    $("#ImpactoFinancieroSelected").val(selectedFeatures);
-                    break;
-                case "lblImpacto":
-                    $("#ImpactoOperacionalSelected").val(selectedFeatures);
-                    break;
-                case "lblSeveridad":
-                    $("#MTDSelected").val(selectedFeatures);
-                    break;
-                case "lblFuente":
-                    $("#RPOSelected").val(selectedFeatures);
-                    break;
-                case "lblControl":
-                    $("#RTOSelected").val(selectedFeatures);
-                    break;
-            }
-        }
+    }
 </script>
 
 
@@ -148,37 +148,45 @@
     @Html.HiddenFor(m => m.RPOSelected)
     @Html.HiddenFor(m => m.WRTSelected)
 
-    <table cellspacing="5" cellpadding="5" style="width: 100%;">
-        <tr>
-            <td>
-                @Html.Partial("ProbabilidadPartialView")
-            </td>
-            <td>
-                @Html.Partial("ImpactoPartialView")
-            </td>
-            <td>
-                @Html.Partial("SeveridadPartialView")
-            </td>
-            <td>
-                @Html.Partial("FuentePartialView")
-            </td>
-            <td>
-                @Html.Partial("ControlPartialView")
-            </td>
-            <td width="10%" style="text-align: right; vertical-align: bottom;">
-                @Html.DevExpress().Button(b =>
-                   {
-                       b.Name = "botLogin";
-                       b.Text = Resources.ProcesosResource.captionBoton;
-                       b.ClientSideEvents.Click = "function (s,e) { lp.Show(); }";
-                       b.UseSubmitBehavior = true;
-                   }).GetHtml()
-            </td>
-        </tr>
-        <tr>
-            <td colspan="7">
-                @Html.Partial("RiesgoPartialView")
-            </td>
-        </tr>
-    </table>
+    <div style="float:right; margin-top: -20px; margin-right: 10px;">
+        @Html.DevExpress().Button(b =>
+        {
+            b.Name = "botProcess";
+            b.Text = Resources.ProcesosResource.captionBoton;
+            b.ClientSideEvents.Click = "function (s,e) { lp.Show(); }";
+            b.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
+        <table cellspacing="5" cellpadding="5" style="width: 100%;">
+            <tr>
+                <td>
+                    @Html.Partial("ProbabilidadPartialView")
+                </td>
+                <td>
+                    @Html.Partial("ImpactoPartialView")
+                </td>
+                <td>
+                    @Html.Partial("SeveridadPartialView")
+                </td>
+                <td>
+                    @Html.Partial("FuentePartialView")
+                </td>
+                <td>
+                    @Html.Partial("ControlPartialView")
+                </td>
+            </tr>
+            <tr>
+                <td colspan="5" style="padding-right: 10px;">
+                    <div style="float: right;">
+                        @Html.DevExpress().Button(settings =>
+                        {
+                            settings.Name = "btExport";
+                            settings.Text = Resources.BCMWebPublic.stringExportExcel;
+                            settings.RouteValues = new { Controller = "Procesos", Action = "ExportRiesgo" };
+                        }).GetHtml()
+                    </div>
+                    @Html.Partial("RiesgoPartialView")
+                </td>
+            </tr>
+        </table>
 }

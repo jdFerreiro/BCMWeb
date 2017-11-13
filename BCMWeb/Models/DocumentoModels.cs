@@ -1,5 +1,4 @@
-﻿using DevExpress.XtraRichEdit;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -11,11 +10,11 @@ namespace BCMWeb.Models
     public class DocumentosModel : ModulosUserModel
     {
         public long IdDocumentoSelected { get; set; }
-        public IList<DocumentoModel> Documentos { get; set; }
-
+        public IQueryable<DocumentoModel> Documentos { get; set; }
+        public bool EditActive { get; set; }
         public DocumentosModel()
         {
-            Documentos = new List<DocumentoModel>();
+            Documentos = new List<DocumentoModel>().AsQueryable();
         }
     }
     public class DocumentoModel : ModulosUserModel
@@ -53,7 +52,7 @@ namespace BCMWeb.Models
         {
             get
             {
-                return Metodos.GetPersonaById(IdPersonaResponsable);
+                return Metodos.GetShortPersonaById(IdPersonaResponsable);
             }
         }
         [Display(Name = "captionRequiereCertificacion", ResourceType = typeof(Resources.DocumentoResource))]
@@ -93,7 +92,7 @@ namespace BCMWeb.Models
         public List<DocumentoEntrevistaModel> Entrevistas { get; set; }
         public List<DocumentoPersonaClaveModel> PersonasClave { get; set; }
         public List<DocumentoProcesoModel> Procesos { get; set; }
-        
+
         public bool Updated { get; set; }
         public DocumentoModel()
         {
@@ -102,14 +101,14 @@ namespace BCMWeb.Models
             this.Auditoria = new List<DocumentoAuditoriaModel>();
             this.Certificaciones = new List<DocumentoCertificacionModel>();
             this.Contenido = new List<DocumentoContenidoModel>();
-            this.Entrevistas = new List< DocumentoEntrevistaModel>();
+            this.Entrevistas = new List<DocumentoEntrevistaModel>();
             this.PersonasClave = new List<DocumentoPersonaClaveModel>();
             this.Procesos = new List<DocumentoProcesoModel>();
             this.DatosBIA = new DocumentoBIA();
             this.Updated = false;
-    }
+        }
 
-}
+    }
     public class DocumentoBCP
     {
         public long IdProceso { get; set; }
@@ -135,7 +134,8 @@ namespace BCMWeb.Models
             get
             {
                 string _unidadOrganizativa = string.Empty;
-                _unidadOrganizativa = Metodos.GetUnidadOrganizativaById(IdUnidadOrganizativa).NombreUnidadOrganizativa;
+                UnidadOrganizativaModel UOModel = Metodos.GetUnidadOrganizativaById(IdUnidadOrganizativa);
+                _unidadOrganizativa = (UOModel == null ? string.Empty : UOModel.NombreUnidadOrganizativa ?? string.Empty);
                 return _unidadOrganizativa;
             }
         }
@@ -168,7 +168,7 @@ namespace BCMWeb.Models
         {
             get
             {
-                PersonaModel _persona =  Metodos.GetPersonaById(this.IdPersona);
+                PersonaModel _persona = Metodos.GetPersonaById(this.IdPersona);
                 if ((_persona == null || string.IsNullOrEmpty(_persona.Nombre)) && this.IdPersona > 0)
                 {
                     _persona = Metodos.ConvertUsuarioToPersona(this.IdPersona);
@@ -390,6 +390,7 @@ namespace BCMWeb.Models
         public string RTO { get; set; }
         public string RPO { get; set; }
         public string WRT { get; set; }
+        public string Evento { get; set; }
 
     }
     public class DocumentoDiagrama : DocumentoModel

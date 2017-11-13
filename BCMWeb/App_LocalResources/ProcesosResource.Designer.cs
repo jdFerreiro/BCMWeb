@@ -70,11 +70,29 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Amenaza.
+        /// </summary>
+        public static string captionAmenaza {
+            get {
+                return ResourceManager.GetString("captionAmenaza", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Procesar.
         /// </summary>
         public static string captionBoton {
             get {
                 return ResourceManager.GetString("captionBoton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aplicar Criticidad.
+        /// </summary>
+        public static string captionButtonCritico {
+            get {
+                return ResourceManager.GetString("captionButtonCritico", resourceCulture);
             }
         }
         
@@ -102,6 +120,15 @@ namespace Resources {
         public static string captionEscala {
             get {
                 return ResourceManager.GetString("captionEscala", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Evento.
+        /// </summary>
+        public static string captionEvento {
+            get {
+                return ResourceManager.GetString("captionEvento", resourceCulture);
             }
         }
         

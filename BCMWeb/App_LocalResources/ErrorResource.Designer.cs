@@ -214,6 +214,42 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to La {0} no puede ser mayor a {1}.
+        /// </summary>
+        public static string FechaMayorIgualQueFecha {
+            get {
+                return ResourceManager.GetString("FechaMayorIgualQueFecha", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to La {0} no puede ser mayor a la fecha de hoy.
+        /// </summary>
+        public static string FechaMayorIgualQueHoy {
+            get {
+                return ResourceManager.GetString("FechaMayorIgualQueHoy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to La {0} no puede ser menor a {1).
+        /// </summary>
+        public static string FechaMenorIgualQueFecha {
+            get {
+                return ResourceManager.GetString("FechaMenorIgualQueFecha", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to La {0} no puede ser menor a la fecha de hoy.
+        /// </summary>
+        public static string FechaMenorIgualQueHoy {
+            get {
+                return ResourceManager.GetString("FechaMenorIgualQueHoy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The password retrieval answer provided is invalid. Please check the value and try again.
         /// </summary>
         public static string InvalidAnswerError {
@@ -291,6 +327,42 @@ namespace Resources {
         public static string ProviderError {
             get {
                 return ResourceManager.GetString("ProviderError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to La {0} debe estar entre {1} y {2}.
+        /// </summary>
+        public static string RangeErrorFemale {
+            get {
+                return ResourceManager.GetString("RangeErrorFemale", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to El {0} debe estar entre {1} y {2}.
+        /// </summary>
+        public static string RangeErrorMale {
+            get {
+                return ResourceManager.GetString("RangeErrorMale", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Las {0} deben estar entre {1} y {2}.
+        /// </summary>
+        public static string RangeErrorMultipleFemale {
+            get {
+                return ResourceManager.GetString("RangeErrorMultipleFemale", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Los {0} deben estar entre {1} y {2}.
+        /// </summary>
+        public static string RangeErrorMultipleMale {
+            get {
+                return ResourceManager.GetString("RangeErrorMultipleMale", resourceCulture);
             }
         }
         

@@ -35,6 +35,26 @@ settings =>
     settings.EditFormLayoutProperties.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
     settings.EditFormLayoutProperties.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
 
+    settings.HtmlDataCellPrepared = (sender, e) =>
+    {
+        if (e.DataColumn.FieldName == "Estado")
+        {
+            if ((int)e.GetValue("Estado") == 3)
+            {
+                e.Cell.BackColor = System.Drawing.Color.Red;
+            }
+            else if ((int)e.GetValue("Estado") == 2)
+            {
+                e.Cell.BackColor = System.Drawing.Color.Yellow;
+            }
+            else
+            {
+                e.Cell.BackColor = System.Drawing.Color.Green;
+            }
+            e.Cell.Text = string.Empty;
+        }
+    };
+
     settings.Columns.Add(c =>
     {
         c.Settings.AllowSort = DefaultBoolean.True;
@@ -69,10 +89,43 @@ settings =>
         c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
         c.HeaderStyle.Wrap = DefaultBoolean.True;
     });
+    //settings.Columns.Add(c =>
+    //{
+    //    c.Settings.AllowSort = DefaultBoolean.True;
+    //    c.FieldName = "Probabilidad";
+    //    c.Width = Unit.Percentage(5);
+    //    c.Caption = "P";
+    //    c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+    //    c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    //    c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+    //    c.HeaderStyle.Wrap = DefaultBoolean.True;
+    //});
+    //settings.Columns.Add(c =>
+    //{
+    //    c.Settings.AllowSort = DefaultBoolean.True;
+    //    c.FieldName = "Impacto";
+    //    c.Width = Unit.Percentage(5);
+    //    c.Caption = "I";
+    //    c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+    //    c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    //    c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+    //    c.HeaderStyle.Wrap = DefaultBoolean.True;
+    //});
+    //settings.Columns.Add(c =>
+    //{
+    //    c.Settings.AllowSort = DefaultBoolean.True;
+    //    c.FieldName = "Control";
+    //    c.Width = Unit.Percentage(5);
+    //    c.Caption = "C";
+    //    c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+    //    c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    //    c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+    //    c.HeaderStyle.Wrap = DefaultBoolean.True;
+    //});
     settings.Columns.Add(c =>
     {
         c.Settings.AllowSort = DefaultBoolean.True;
-        c.FieldName = "ValoresUnbound";
+        c.FieldName = "Estado";
         c.Width = Unit.Percentage(10);
         c.UnboundType = DevExpress.Data.UnboundColumnType.String;
         c.Caption = Resources.ReporteResource.captionEstado;
@@ -81,25 +134,5 @@ settings =>
         c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
         c.HeaderStyle.Wrap = DefaultBoolean.True;
     });
-    settings.CustomUnboundColumnData = (s, e) =>
-    {
-        if (e.Column.FieldName.Contains("ValoresUnbound"))
-        {
-            int valor = (int)e.GetListSourceFieldValue("Estado");
-            switch (valor)
-            {
-                case 1:
-                    e.Column.CellStyle.BackColor = System.Drawing.Color.Red;
-                    break;
-                case 2:
-                    e.Column.CellStyle.BackColor = System.Drawing.Color.Yellow;
-                    break;
-                case 3:
-                    e.Column.CellStyle.BackColor = System.Drawing.Color.Green;
-                    break;
-            }
-            e.Value = string.Empty;
-        }
-    };
 }).Bind(Model).GetHtml()
 

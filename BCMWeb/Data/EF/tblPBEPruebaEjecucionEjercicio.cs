@@ -17,28 +17,27 @@ namespace BCMWeb.Data.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public tblPBEPruebaEjecucionEjercicio()
         {
-            this.tblPBEPruebaEjecucionParticipante = new HashSet<tblPBEPruebaEjecucionParticipante>();
-            this.tblPBEPruebaEjecucionRecurso = new HashSet<tblPBEPruebaEjecucionRecurso>();
-            this.tblPBEPruebaEjecucionResultado = new HashSet<tblPBEPruebaEjecucionResultado>();
+            this.tblPBEPruebaEjecucionEjercicioParticipante = new HashSet<tblPBEPruebaEjecucionEjercicioParticipante>();
+            this.tblPBEPruebaEjecucionEjercicioRecurso = new HashSet<tblPBEPruebaEjecucionEjercicioRecurso>();
         }
     
         public long IdEmpresa { get; set; }
         public long IdPlanificacion { get; set; }
         public long IdEjercicio { get; set; }
-        public System.DateTime FechaInicio { get; set; }
-        public System.DateTime FechaFinalizacion { get; set; }
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
-        public Nullable<long> IdResponsable { get; set; }
+        public System.DateTime FechaInicio { get; set; }
+        public Nullable<short> IdEstatus { get; set; }
+        public long IdEjercicioPlanificacion { get; set; }
+        public int DuracionHoras { get; set; }
+        public int DuracionMinutos { get; set; }
     
         public virtual tblEmpresa tblEmpresa { get; set; }
-        public virtual tblPBEPruebaPlanificacion tblPBEPruebaPlanificacion { get; set; }
-        public virtual tblPersona tblPersona { get; set; }
+        public virtual tblPBEPruebaEjecucion tblPBEPruebaEjecucion { get; set; }
+        public virtual tblPBEPruebaEstatus tblPBEPruebaEstatus { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblPBEPruebaEjecucionParticipante> tblPBEPruebaEjecucionParticipante { get; set; }
+        public virtual ICollection<tblPBEPruebaEjecucionEjercicioParticipante> tblPBEPruebaEjecucionEjercicioParticipante { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblPBEPruebaEjecucionRecurso> tblPBEPruebaEjecucionRecurso { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblPBEPruebaEjecucionResultado> tblPBEPruebaEjecucionResultado { get; set; }
+        public virtual ICollection<tblPBEPruebaEjecucionEjercicioRecurso> tblPBEPruebaEjecucionEjercicioRecurso { get; set; }
     }
 }

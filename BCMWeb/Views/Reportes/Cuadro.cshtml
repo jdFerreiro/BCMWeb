@@ -43,12 +43,36 @@
                 @switch (Model.IdModuloActual)
                 {
                     case 13010100:
+                        <div style="float: right;">
+                            @Html.DevExpress().Button(settings =>
+                            {
+                                settings.Name = "btExport";
+                                settings.Text = Resources.BCMWebPublic.stringExportExcel;
+                                settings.RouteValues = new { Controller = "Reportes", Action = "ExportCuadroIO" };
+                            }).GetHtml()
+                        </div>
                         Html.RenderAction("CuadroIOPartialView", "Reportes", new { IdUnidadOrganizativa = ViewData["IdUnidadOrganizativa"] });
                         break;
                     case 13010400:
+                        <div style="float: right;">
+                            @Html.DevExpress().Button(settings =>
+                            {
+                                settings.Name = "btExport";
+                                settings.Text = Resources.BCMWebPublic.stringExportExcel;
+                                settings.RouteValues = new { Controller = "Reportes", Action = "ExportCuadroVI" };
+                            }).GetHtml()
+                        </div>
                         Html.RenderAction("CuadroVIPartialView", "Reportes", new { IdUnidadOrganizativa = ViewData["IdUnidadOrganizativa"] });
                         break;
                     case 13010700:
+                        <div style="float: right;">
+                            @Html.DevExpress().Button(settings =>
+                            {
+                                settings.Name = "btExport";
+                                settings.Text = Resources.BCMWebPublic.stringExportExcel;
+                                settings.RouteValues = new { Controller = "Reportes", Action = "ExportCuadroPM" };
+                            }).GetHtml()
+                        </div>
                         Html.RenderAction("CuadroPMPartialView", "Reportes", new { IdUnidadOrganizativa = ViewData["IdUnidadOrganizativa"] });
                         break;
                 }

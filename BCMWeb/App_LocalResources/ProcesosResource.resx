@@ -120,8 +120,14 @@
   <data name="caption" xml:space="preserve">
     <value />
   </data>
+  <data name="captionAmenaza" xml:space="preserve">
+    <value>Amenaza</value>
+  </data>
   <data name="captionBoton" xml:space="preserve">
     <value>Procesar</value>
+  </data>
+  <data name="captionButtonCritico" xml:space="preserve">
+    <value>Aplicar Criticidad</value>
   </data>
   <data name="captionControl" xml:space="preserve">
     <value>Control</value>
@@ -131,6 +137,9 @@
   </data>
   <data name="captionEscala" xml:space="preserve">
     <value>Escala</value>
+  </data>
+  <data name="captionEvento" xml:space="preserve">
+    <value>Evento</value>
   </data>
   <data name="captionFuente" xml:space="preserve">
     <value>Fuente</value>

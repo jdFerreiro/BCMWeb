@@ -1,0 +1,35 @@
+﻿@using BCMWeb.Models
+
+@model ReporteModel
+
+@section LeftPanel {
+    @Html.DevExpress().Panel(settings =>
+{
+    settings.Name = "LeftPane";
+    settings.FixedPosition = PanelFixedPosition.WindowLeft;
+    settings.Collapsible = true;
+    settings.SettingsAdaptivity.CollapseAtWindowInnerWidth = 1023;
+    settings.ControlStyle.CssClass = "leftPane";
+    settings.Styles.Panel.CssClass = "panel";
+    settings.SetContent(() =>
+    {
+        Html.RenderPartial("ContentLeftPartialView");
+    });
+}).GetHtml()
+}
+
+<div class="Grafico">
+    @switch (Model.IdModuloActual)
+    {
+        case 13010200:
+            @Html.Partial("TablaPUOPartialView", Model.DataCuadro)
+            break;
+        case 13010500:
+            @Html.Partial("TablaVIPartialView", Model.DataCuadro)
+            break;
+        case 13010800:
+            @Html.Partial("TablaGIPartialView", Model.DataCuadro)
+            break;
+
+    }
+</div>

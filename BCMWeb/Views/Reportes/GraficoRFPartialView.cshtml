@@ -43,10 +43,10 @@
                 l.ResolveOverlappingMode = ResolveOverlappingMode.Default;
             });
         });
-        t.SetDataMembers("Escala", "Cantidad");
+        t.SetDataMembers("Unidad", "Cantidad");
         t.LabelsVisibility = DefaultBoolean.True;
         t.ToolTipEnabled = DefaultBoolean.True;
-        t.ToolTipHintDataMember = "Unidad";
+        t.ToolTipHintDataMember = "Escala";
         t.ToolTipPointPattern = Resources.ReporteResource.captionUnidad + ": {HINT} \n" + Resources.ReporteResource.captionDescEscala + ": {A}\n" + Resources.ReporteResource.captionCantidad + ": {V}";
     });
 
@@ -56,5 +56,5 @@
         d.AxisY.Title.Text = "";
         d.AxisY.Title.Visibility = DefaultBoolean.True;
     });
-}).Bind(Model, seriesDataMember: "Unidad").GetHtml()
+}).Bind(Model, seriesDataMember: "Escala").GetHtml()
 

@@ -1,8 +1,6 @@
 ﻿using BCMWeb.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace BCMWeb.Controllers
@@ -32,11 +30,13 @@ namespace BCMWeb.Controllers
             model.ModulosPrincipales = Metodos.GetModulosPrincipalesEmpresaUsuario();
             model.Perfil = Metodos.GetPerfilData();
             model.PageTitle = Resources.DocumentoResource.DocumentosPageTitle;
+            model.EditActive = Metodos.EditDocumentoActivo(IdTipoDocumento, (model.IdClaseDocumento == 1));
             ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
 
             Auditoria.RegistarAccion(eTipoAccion.AccesoModuloWeb);
 
             Session["IdClaseDocumento"] = model.IdClaseDocumento;
+            Session["IdTipoDocumento"] = IdTipoDocumento;
 
             return View(model);
         }
@@ -45,18 +45,52 @@ namespace BCMWeb.Controllers
         [HandleError]
         public ActionResult Index(DocumentosModel model)
         {
-            string _IdModulo = model.IdModulo.ToString();
+            string _IdModulo = Session["modId"].ToString();
+            long IdModulo = long.Parse(_IdModulo);
             int IdTipoDocumento = int.Parse(_IdModulo.Substring(0, (_IdModulo.Length == 7 ? 1 : 2)));
-            model.Documentos = Metodos.GetDocumentosModulo(IdTipoDocumento, (model.IdClaseDocumento == 1));
+            model.IdClaseDocumento = int.Parse(Session["IdClaseDocumento"].ToString());
+            model.EditDocumento = false;
+            model.IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            model.IdDocumentoSelected = 0;
+            model.IdModulo = IdModulo;
+            model.IdModuloActual = IdModulo;
+            model.EditActive = Metodos.EditDocumentoActivo(IdTipoDocumento, (model.IdClaseDocumento == 1));
             model.Perfil = Metodos.GetPerfilData();
             model.ModulosPrincipales = Metodos.GetModulosPrincipalesEmpresaUsuario();
             model.PageTitle = Resources.DocumentoResource.DocumentosPageTitle;
-            model.IdModuloActual = model.IdModulo;
+            model.IdModuloActual = long.Parse(_IdModulo);
+            model.Documentos = Metodos.GetDocumentosModulo(IdTipoDocumento, (model.IdClaseDocumento == 1));
+            /*
+             * Aplicar filtro a los documentos 
+            */
+            if (model.FilterEstadoDocumento > 0)
+                model.Documentos = model.Documentos.Where(x => x.IdEstatus == model.FilterEstadoDocumento).ToList().AsQueryable();
+            if (model.FilterIdProceso > 0)
+            {
+                model.Documentos = model.Documentos.Where(x => x.Procesos != null && x.Procesos.Where(p => p.IdProceso == model.FilterIdProceso).Count() > 0).ToList().AsQueryable();
+            }
+            if (model.FilterIdUnidadOrganizativa > 0)
+            {
+                IList<long> UOIds = Metodos.GetRelatedUOIds(model.FilterIdUnidadOrganizativa);
+                model.Documentos = model.Documentos.Where(x => UOIds.Contains(x.DatosBIA.IdUnidadOrganizativa)).ToList().AsQueryable();
+            }
+            if (model.FilterNroDocumento > 0)
+                model.Documentos = model.Documentos.Where(x => x.NroDocumento == model.FilterNroDocumento).ToList().AsQueryable();
+            if (model.FilterProcesoCritico)
+                model.Documentos = model.Documentos.Where(x => x.Procesos != null && x.Procesos.Where(p => p.Critico == model.FilterProcesoCritico).Count() > 0).ToList().AsQueryable();
+            if (model.FilterResponsable > 0)
+                model.Documentos = model.Documentos.Where(x => x.IdPersonaResponsable == model.FilterResponsable).ToList().AsQueryable();
+
             ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
 
-            Session["IdClaseDocumento"] = model.IdClaseDocumento;
-
             return View(model);
+        }
+        [HttpPost]
+        [SessionExpire]
+        [HandleError]
+        public ActionResult FilterBiaDocs(DocumentosModel model)
+        {
+            return PartialView(model);
         }
         [HttpPost]
         [SessionExpire]
@@ -162,4 +196,4 @@ namespace BCMWeb.Controllers
         }
 
     }
-}   
+}

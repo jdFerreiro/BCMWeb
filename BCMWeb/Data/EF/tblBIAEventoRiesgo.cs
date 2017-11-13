@@ -22,10 +22,5 @@ namespace BCMWeb.Data.EF
         public long Severidad { get; set; }
         public long IdEstadoRiesgo { get; set; }
         public long IdFuenteRiesgo { get; set; }
-    
-        public virtual tblControlRiesgo tblControlRiesgo { get; set; }
-        public virtual tblImpactoRiesgo tblImpactoRiesgo { get; set; }
-        public virtual tblProbabilidadRiesgo tblProbabilidadRiesgo { get; set; }
-        public virtual tblEmpresa tblEmpresa { get; set; }
     }
 }

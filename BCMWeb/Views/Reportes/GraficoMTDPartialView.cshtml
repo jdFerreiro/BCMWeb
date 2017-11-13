@@ -7,7 +7,7 @@
 {
     settings.Name = "chart";
     settings.Width = 920;
-    settings.Height = 500;
+    settings.Height = 480;
     settings.BorderOptions.Visibility = DefaultBoolean.False;
     settings.CrosshairEnabled = DefaultBoolean.False;
 
@@ -29,6 +29,7 @@
 
     settings.Series.Template(t =>
     {
+        t.SetDataMembers("Unidad", "Cantidad");
         t.Views().SideBySideBarSeriesView(v =>
         {
             v.SeriesLabel(l =>
@@ -39,19 +40,20 @@
                 l.ResolveOverlappingMode = ResolveOverlappingMode.Default;
             });
         });
-        t.SetDataMembers("Escala", "Cantidad");
         t.LabelsVisibility = DefaultBoolean.True;
         t.ToolTipEnabled = DefaultBoolean.True;
         t.CrosshairEnabled = DefaultBoolean.False;
-        t.ToolTipHintDataMember = "Unidad";
+        t.ToolTipHintDataMember = "Escala";
         t.ToolTipPointPattern = Resources.ReporteResource.captionUnidad + ": {HINT} \n" + Resources.ReporteResource.captionDescEscala + ": {A}\n" + Resources.ReporteResource.captionCantidad + ": {V}";
     });
 
     settings.XYDiagram(d =>
     {
-        d.AxisY.Interlaced = true;
-        d.AxisY.Title.Text = "";
+        d.AxisX.Title.Text = "Escala";
+        d.AxisX.Title.Visibility = DefaultBoolean.True;
+        //d.AxisY.Interlaced = true;
+        d.AxisY.Title.Text = "Cantidad de Procesos";
         d.AxisY.Title.Visibility = DefaultBoolean.True;
     });
-}).Bind(Model, seriesDataMember: "Unidad").GetHtml()
+}).Bind(Model, "Escala").GetHtml()
 

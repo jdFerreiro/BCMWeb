@@ -1,10 +1,6 @@
 ﻿using BCMWeb.Data.EF;
 using BCMWeb.Models;
 using BCMWeb.Security;
-using DevExpress.Data;
-using DevExpress.Utils;
-using DevExpress.Web;
-using DevExpress.Web.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,13 +8,9 @@ using System.Data.Entity;
 using System.Data.Entity.SqlServer;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Text;
 using System.Web;
-using System.Web.Mvc;
-using System.Web.Security;
 using System.Web.SessionState;
-using System.Web.UI;
 using System.Web.UI.WebControls;
 
 namespace BCMWeb
@@ -75,6 +67,7 @@ namespace BCMWeb
                 return obj == _Valor;
             }
         }
+
         public static PerfilModelView GetPerfilData()
         {
             long IdUser = long.Parse(Session["UserId"].ToString());
@@ -112,6 +105,34 @@ namespace BCMWeb
 
             return model;
         }
+
+        public static IList<long> GetRelatedUOIds(long filterIdUnidadOrganizativa)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            List<long> RelatedUOIds = new List<long>();
+
+            using (Entities db = new Entities())
+            {
+                tblUnidadOrganizativa unidad = db.tblUnidadOrganizativa.FirstOrDefault(x => x.IdEmpresa == IdEmpresa && x.IdUnidadOrganizativa == filterIdUnidadOrganizativa);
+                RelatedUOIds.Add(unidad.IdUnidadOrganizativa);
+                long IdUnidadPadre = unidad.IdUnidadOrganizativa;
+
+                while (IdUnidadPadre > 0)
+                {
+                    List<tblUnidadOrganizativa> Unidades = db.tblUnidadOrganizativa.Where(x => x.IdEmpresa == IdEmpresa && RelatedUOIds.Contains(x.IdUnidadPadre) && !RelatedUOIds.Contains(x.IdUnidadOrganizativa)).ToList();
+                    if (Unidades != null && Unidades.Count() > 0)
+                    {
+                        RelatedUOIds.AddRange(Unidades.Select(x => x.IdUnidadOrganizativa));
+                    }
+                    else
+                    {
+                        IdUnidadPadre = 0;
+                    }
+                }
+            }
+            return RelatedUOIds;
+        }
+
         public static IList<EmpresaModel> GetEmpresasUsuario()
         {
 
@@ -152,7 +173,7 @@ namespace BCMWeb
 
             return Data;
         }
-        internal static string GetSeveridad(short? urgente)
+        public static string GetSeveridad(short? urgente)
         {
             long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
             short IdPrioridad = (short)urgente;
@@ -335,7 +356,7 @@ namespace BCMWeb
 
             return Data;
         }
-        public static IList<DocumentoModel> GetDocumentosModulo(int IdTipoDocumento, bool Negocios)
+        public static IQueryable<DocumentoModel> GetDocumentosModulo(int IdTipoDocumento, bool Negocios)
         {
             string _ServerPath = _Server.MapPath(".").Replace("\\Account", string.Empty);
             long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
@@ -381,25 +402,27 @@ namespace BCMWeb
                              && x.IdModulo == (IdTipoDocumento * 1000000)).Count() > 0;
 
                 tblPMTProgramacion Programacion = db.tblPMTProgramacion
-                    .Where(x => x.IdEmpresa == IdEmpresa && x.Negocios == Negocios
-                             && x.IdModulo == (IdTipoDocumento & 1000000)
-                             && x.FechaInicio <= DateTime.UtcNow && x.FechaFinal >= DateTime.UtcNow).FirstOrDefault();
+                    .FirstOrDefault(x => x.IdEmpresa == IdEmpresa
+                                      && x.IdModulo == (IdTipoDocumento * 1000000)
+                                      && x.Negocios == Negocios
+                                      && x.FechaInicio <= DateTime.UtcNow
+                                      && x.FechaFinal >= DateTime.UtcNow);
 
-                bool CanEdit = ((!ProgramacionExist  && Programacion == null) || (ProgramacionExist && Programacion != null))
+                bool CanEdit = ((!ProgramacionExist && Programacion == null) || (ProgramacionExist && Programacion != null))
                                && (EmpresaUsuario.IdNivelUsuario == 6 || EmpresaUsuario.IdNivelUsuario == 4 || ModulosEditables > 0);
 
                 Documentos = (from d in db.tblDocumento
-                              where d.IdEmpresa == IdEmpresa && d.IdTipoDocumento == IdTipoDocumento 
+                              where d.IdEmpresa == IdEmpresa && d.IdTipoDocumento == IdTipoDocumento
                                                              && d.Negocios == Negocios
                                                              && (d.IdTipoDocumento == 4 && EmpresaUsuario.IdNivelUsuario != 6 && EmpresaUsuario.IdNivelUsuario != 4
                                                                     ? Unidades.Contains((long)d.tblBIADocumento
                                                                                          .Where(x => x.IdEmpresa == d.IdEmpresa && x.IdDocumento == d.IdDocumento && x.IdTipoDocumento == d.IdTipoDocumento)
-                                                                                         .FirstOrDefault().IdUnidadOrganizativa) 
+                                                                                         .FirstOrDefault().IdUnidadOrganizativa)
                                                                     : true)
-                                select d).AsEnumerable()
+                              select d).AsEnumerable()
                                 .Select(d => new DocumentoModel
                                 {
-                                    Editable = CanEdit && d.IdEstadoDocumento != 6,
+                                    Editable = CanEdit,
                                     Eliminable = d.IdEstadoDocumento != 6 && (EmpresaUsuario.IdNivelUsuario == 6 || EmpresaUsuario.IdNivelUsuario == 4 || ModulosEliminables > 0),
                                     Estatus = (d.tblEstadoDocumento.tblCultura_EstadoDocumento.Where(x => x.Culture == Culture || x.Culture == "es-VE").FirstOrDefault().Descripcion),
                                     FechaCreacion = (DateTime)d.FechaCreacion.AddMinutes(Minutos),
@@ -438,10 +461,24 @@ namespace BCMWeb
                                                     Responsable = d.tblBCPDocumento.FirstOrDefault().Responsable,
                                                     Subproceso = d.tblBCPDocumento.FirstOrDefault().SubProceso,
                                                 }),
+                                    Procesos = (d.tblBIADocumento == null || d.tblBIADocumento.Count() == 0 || d.tblBIADocumento.FirstOrDefault().tblBIAProceso == null || d.tblBIADocumento.FirstOrDefault().tblBIAProceso.Count() == 0
+                                                ? null
+                                                : d.tblBIADocumento.FirstOrDefault().tblBIAProceso.AsEnumerable()
+                                                    .Select(x => new DocumentoProcesoModel
+                                                    {
+                                                        Critico = x.Critico ?? false,
+                                                        Descripcion = x.Descripcion,
+                                                        FechaCreacion = (DateTime)x.FechaCreacion,
+                                                        FechaEstatus = (DateTime)x.FechaUltimoEstatus,
+                                                        IdEstatus = x.IdEstadoProceso ?? 0,
+                                                        IdProceso = x.IdProceso,
+                                                        Nombre = x.Nombre,
+                                                        NroProceso = x.NroProceso ?? 0
+                                                    }).ToList()),
                                 }).ToList();
             }
 
-            return Documentos.OrderBy(x => x.NroDocumento).ThenBy(x => x.Version).ThenBy(x => x.NroVersion).ToList();
+            return Documentos.OrderBy(x => x.NroDocumento).ThenBy(x => x.Version).ThenBy(x => x.NroVersion).ToList().AsQueryable();
         }
         public static string getStringProcesos(object dataItem)
         {
@@ -453,6 +490,8 @@ namespace BCMWeb
                 List<tblBIAProceso> _procesos = (from d in db.tblBIAProceso
                                                  where d.tblBIADocumento.IdDocumento == IdDocumento
                                                  select d).ToList();
+
+                _procesos = _procesos.OrderBy(x => x.NroProceso).ToList();
 
                 foreach (tblBIAProceso proceso in _procesos)
                 {
@@ -479,7 +518,7 @@ namespace BCMWeb
             }
 
 
-                return sb.ToString();
+            return sb.ToString();
         }
         public static bool ValidarEmailUsuario(string email)
         {
@@ -691,8 +730,8 @@ namespace BCMWeb
                                     db.tblBIAWRT.RemoveRange(procesoBIA.tblBIAWRT.ToList());
                                 }
 
-                                db.tblBIADocumento.Remove(docBIA);
                             }
+                            db.tblBIADocumento.RemoveRange(documento.tblBIADocumento);
                             break;
                         case 7:
 
@@ -749,6 +788,23 @@ namespace BCMWeb
                     }
 
                     db.SaveChanges();
+
+                    List<tblBIAProceso> _procesos = db.tblBIAProceso.Where(x => x.IdEmpresa == IdEmpresa).ToList();
+
+                    foreach (tblBIAProceso proceso in _procesos)
+                    {
+                        long NroDocumento = proceso.tblBIADocumento.tblDocumento.NroDocumento;
+                        int NroProceso = proceso.NroProceso ?? 0;
+                        if (NroProceso > 0)
+                        {
+                            long DocProceso = NroProceso / 100;
+                            if (NroDocumento != DocProceso)
+                                proceso.NroProceso = (int)(NroDocumento * 100 + (NroProceso - (DocProceso * 100)));
+                        }
+
+                    }
+
+                    db.SaveChanges();
                     Eliminado = true;
                 }
                 catch (Exception ex)
@@ -769,7 +825,7 @@ namespace BCMWeb
 
             using (Entities db = new Entities())
             {
-                IdDocumento = (long)db.tblBIAProceso.Where(x => x.IdEmpresa == IdEmpresa && x.IdProceso == idProceso).FirstOrDefault().tblBIADocumento.IdDocumento;
+                IdDocumento = (long)db.tblBIAProceso.FirstOrDefault(x => x.IdEmpresa == IdEmpresa && x.IdProceso == idProceso).tblBIADocumento.IdDocumento;
             }
 
             return IdDocumento;
@@ -903,6 +959,29 @@ namespace BCMWeb
 
             return firstModulo;
         }
+        public static PersonaModel GetShortPersonaById(long IdPersona)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            PersonaModel Persona = new PersonaModel();
+
+            using (Entities db = new Entities())
+            {
+                Persona = (from p in db.tblPersona
+                           where p.IdEmpresa == IdEmpresa && p.IdPersona == IdPersona
+                           select new PersonaModel
+                           {
+                               IdCargoPersona = p.IdCargo ?? 0,
+                               Identificacion = p.Identificacion,
+                               IdPersona = p.IdPersona,
+                               IdUnidadOrganizativaPersona = p.IdUnidadOrganizativa ?? 0,
+                               IdUsuario = p.IdUsuario ?? 0,
+                               Nombre = p.Nombre,
+                               UnidadOrganizativa = (p.tblUnidadOrganizativa == null ? new UnidadOrganizativaModel { IdUnidad = 0, IdUnidadPadre = 0, NombreUnidadOrganizativa = "" } : new UnidadOrganizativaModel { IdUnidad = p.tblUnidadOrganizativa.IdUnidadOrganizativa, IdUnidadPadre = p.tblUnidadOrganizativa.IdUnidadPadre, NombreUnidadOrganizativa = p.tblUnidadOrganizativa.Nombre })
+                           }).FirstOrDefault();
+            }
+
+            return Persona;
+        }
         public static PersonaModel GetPersonaById(long IdPersona)
         {
             long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
@@ -911,50 +990,37 @@ namespace BCMWeb
             using (Entities db = new Entities())
             {
                 Persona = (from p in db.tblPersona
-                           let CorreosPersona = p.tblPersonaCorreo.Select(x => new PersonaEmail
-                           {
-                               Email = x.Correo,
-                               IdPersonaEmail = x.IdPersonaCorreo,
-                               IdTipoEmail = x.IdTipoCorreo,
-                               TipoEmail = x.tblTipoCorreo.tblCultura_TipoCorreo
-                                    .Where(c => c.Culture == Culture || c.Culture == "es-VE")
-                                    .FirstOrDefault().Descripcion
-                           }).ToList()
-                           let DireccionesPersona = p.tblPersonaDireccion.Select(x => new PersonaDireccion
-                           {
-                               IdCiudad = x.IdCiudad,
-                               IdEstado = x.IdEstado,
-                               IdPais = x.IdPais,
-                               IdPersonaDireccion = x.IdPersonaDireccion,
-                               IdTipoDireccion = x.IdTipoDireccion,
-                               TipoDireccion = x.tblTipoDireccion.tblCultura_TipoDireccion
-                                    .Where(c => c.Culture == Culture || c.Culture == "es-VE")
-                                    .FirstOrDefault().Descripcion,
-                               Ubicación = x.Ubicacion
-                           }).ToList()
-                           let TelefonosPersona = p.tblPersonaTelefono.Select(x => new PersonaTelefono
-                           {
-                               NroTelefono = x.Telefono,
-                               IdPersonaTelefono = x.IdPersonaTelefono,
-                               IdTipoTelefono = x.IdTipoTelefono,
-                               TipoTelefono = x.tblTipoTelefono.tblCultura_TipoTelefono
-                                    .Where(c => c.Culture == Culture || c.Culture == "es-VE")
-                                    .FirstOrDefault().Descripcion
-                           }).ToList()
+                               //let CorreosPersona = p.tblPersonaCorreo.Select(x => new PersonaEmail
+                               //{
+                               //    Email = x.Correo,
+                               //    IdPersonaEmail = x.IdPersonaCorreo,
+                               //    IdTipoEmail = x.IdTipoCorreo,
+                               //    TipoEmail = x.tblTipoCorreo.tblCultura_TipoCorreo
+                               //         .Where(c => c.Culture == Culture || c.Culture == "es-VE")
+                               //         .FirstOrDefault().Descripcion
+                               //}).ToList()
+                               //let TelefonosPersona = p.tblPersonaTelefono.Select(x => new PersonaTelefono
+                               //{
+                               //    NroTelefono = x.Telefono,
+                               //    IdPersonaTelefono = x.IdPersonaTelefono,
+                               //    IdTipoTelefono = x.IdTipoTelefono,
+                               //    TipoTelefono = x.tblTipoTelefono.tblCultura_TipoTelefono
+                               //         .Where(c => c.Culture == Culture || c.Culture == "es-VE")
+                               //         .FirstOrDefault().Descripcion
+                               //}).ToList()
                            where p.IdEmpresa == IdEmpresa && p.IdPersona == IdPersona
                            select new PersonaModel
                            {
-                               Cargo = new CargoModel { IdCargo = p.tblCargo.IdCargo, NombreCargo = p.tblCargo.Descripcion },
-                               CorreosElectronicos = CorreosPersona,
-                               Direcciones = DireccionesPersona,
-                               IdCargoPersona = (long)p.IdCargo,
+                               //Cargo = (p.tblCargo == null ? new CargoModel { IdCargo = 0, NombreCargo = "" } : new CargoModel { IdCargo = p.tblCargo.IdCargo, NombreCargo = p.tblCargo.Descripcion }),
+                               //CorreosElectronicos = CorreosPersona,
+                               //IdCargoPersona = (long)(p.IdCargo ?? 0),
                                Identificacion = p.Identificacion,
-                               IdPersona = p.IdPersona,
-                               IdUnidadOrganizativaPersona = (long)p.IdUnidadOrganizativa,
-                               IdUsuario = (long)p.IdUsuario,
+                               //IdPersona = p.IdPersona,
+                               //IdUnidadOrganizativaPersona = (long)(p.IdUnidadOrganizativa ?? 0),
+                               //IdUsuario = (long)(p.IdUsuario ?? 0),
                                Nombre = p.Nombre,
-                               Telefonos = TelefonosPersona,
-                               UnidadOrganizativa = new UnidadOrganizativaModel { IdUnidad = p.tblUnidadOrganizativa.IdUnidadOrganizativa, IdUnidadPadre = p.tblUnidadOrganizativa.IdUnidadPadre, NombreUnidadOrganizativa = p.tblUnidadOrganizativa.Nombre }
+                               //Telefonos = TelefonosPersona,
+                               //UnidadOrganizativa = new UnidadOrganizativaModel { IdUnidad = p.tblUnidadOrganizativa.IdUnidadOrganizativa, IdUnidadPadre = p.tblUnidadOrganizativa.IdUnidadPadre, NombreUnidadOrganizativa = p.tblUnidadOrganizativa.Nombre }
                            }).FirstOrDefault();
             }
 
@@ -968,8 +1034,9 @@ namespace BCMWeb
 
             using (Entities db = new Entities())
             {
+                long _idDocBIA = db.tblBIAProceso.FirstOrDefault(e => e.IdEmpresa == IdEmpresa && e.IdProceso == idProceso).IdDocumentoBia;
                 List<tblBIAAplicacion> Data = db.tblBIAAplicacion
-                    .Where(x => x.IdEmpresa == IdEmpresa && x.IdDocumentoBIA == IdDocumento && x.IdProceso == idProceso)
+                    .Where(x => x.IdEmpresa == IdEmpresa && x.IdDocumentoBIA == _idDocBIA && x.IdProceso == idProceso)
                     .ToList();
                 foreach (tblBIAAplicacion Reg in Data)
                 {
@@ -992,8 +1059,9 @@ namespace BCMWeb
 
             using (Entities db = new Entities())
             {
+                long _idDocBIA = db.tblBIAProceso.FirstOrDefault(e => e.IdEmpresa == IdEmpresa && e.IdProceso == idProceso).IdDocumentoBia;
                 List<tblBIAProveedor> Data = db.tblBIAProveedor
-                    .Where(x => x.IdEmpresa == IdEmpresa && x.IdDocumentoBIA == IdDocumento && x.IdProceso == idProceso)
+                    .Where(x => x.IdEmpresa == IdEmpresa && x.IdDocumentoBIA == _idDocBIA && x.IdProceso == idProceso)
                     .ToList();
                 foreach (tblBIAProveedor Reg in Data)
                 {
@@ -1018,8 +1086,9 @@ namespace BCMWeb
 
             using (Entities db = new Entities())
             {
+                long _idDocBIA = db.tblBIAProceso.FirstOrDefault(e => e.IdEmpresa == IdEmpresa && e.IdProceso == idProceso).IdDocumentoBia;
                 List<tblBIAPersonaClave> Data = db.tblBIAPersonaClave
-                    .Where(x => x.IdEmpresa == IdEmpresa && x.IdDocumentoBIA == IdDocumento && x.IdProceso == idProceso)
+                    .Where(x => x.IdEmpresa == IdEmpresa && x.IdDocumentoBIA == _idDocBIA && x.IdProceso == idProceso)
                     .ToList();
                 foreach (tblBIAPersonaClave Reg in Data)
                 {
@@ -1052,18 +1121,19 @@ namespace BCMWeb
 
             using (Entities db = new Entities())
             {
+                long _idDocBIA = db.tblBIAProceso.FirstOrDefault(e => e.IdEmpresa == IdEmpresa && e.IdProceso == idProceso).IdDocumentoBia;
                 List<tblBIAEntrada> Data = db.tblBIAEntrada
-                    .Where(x => x.IdEmpresa == IdEmpresa && x.IdDocumentoBIA == IdDocumento && x.IdProceso == idProceso)
+                    .Where(x => x.IdEmpresa == IdEmpresa && x.IdDocumentoBIA == _idDocBIA && x.IdProceso == idProceso)
                     .ToList();
                 foreach (tblBIAEntrada Reg in Data)
                 {
                     Result += "<div class=\"internal\"><table>";
                     Result += string.Format("<tr><td class=\"subHeader\">{0}</td></tr>", Resources.DiagramaResource.EntradaUnidadHeader);
-                    Result += string.Format("<tr><td>{0}</td></tr>", Reg.Unidad);
+                    Result += string.Format("<tr><td>{0}</td></tr>", Reg.Unidad.Replace("\r\n", "<br />"));
                     Result += string.Format("<tr><td class=\"subHeader\">{0}</td></tr>", Resources.DiagramaResource.EntradaProcesoHeader);
-                    Result += string.Format("<tr><td>{0}</td></tr>", Reg.Evento);
+                    Result += string.Format("<tr><td>{0}</td></tr>", Reg.Evento.Replace("\r\n", "<br />"));
                     Result += string.Format("<tr><td class=\"subHeader\">{0}</td></tr>", Resources.DiagramaResource.EntradaResponsableHeader);
-                    Result += string.Format("<tr><td>{0}</td></tr>", Reg.Responsable);
+                    Result += string.Format("<tr><td>{0}</td></tr>", Reg.Responsable.Replace("\r\n", "<br />"));
                     Result += "</table></div>";
                 }
             }
@@ -1077,8 +1147,9 @@ namespace BCMWeb
 
             using (Entities db = new Entities())
             {
+                long _idDocBIA = db.tblBIAProceso.FirstOrDefault(e => e.IdEmpresa == IdEmpresa && e.IdProceso == idProceso).IdDocumentoBia;
                 List<tblBIAClienteProceso> Data = db.tblBIAClienteProceso
-                    .Where(x => x.IdEmpresa == IdEmpresa && x.IdDocumentoBIA == IdDocumento && x.IdProceso == idProceso)
+                    .Where(x => x.IdEmpresa == IdEmpresa && x.IdDocumentoBIA == _idDocBIA && x.IdProceso == idProceso)
                     .ToList();
                 foreach (tblBIAClienteProceso Reg in Data)
                 {
@@ -1104,8 +1175,9 @@ namespace BCMWeb
 
             using (Entities db = new Entities())
             {
+                long _idDocBIA = db.tblBIAProceso.FirstOrDefault(e => e.IdEmpresa == IdEmpresa && e.IdProceso == idProceso).IdDocumentoBia;
                 List<tblBIAInterdependencia> Interdependencias = db.tblBIAInterdependencia
-                    .Where(x => x.IdEmpresa == IdEmpresa && x.IdDocumentoBIA == IdDocumento && x.IdProceso == idProceso)
+                    .Where(x => x.IdEmpresa == IdEmpresa && x.IdDocumentoBIA == _idDocBIA && x.IdProceso == idProceso)
                     .ToList();
                 foreach (tblBIAInterdependencia Interdependencia in Interdependencias)
                 {
@@ -1134,9 +1206,8 @@ namespace BCMWeb
 
             using (Entities db = new Entities())
             {
-                tblBIAProceso _proceso = db.tblBIAProceso.Where(x => x.IdEmpresa == IdEmpresa &&
-                                                                     x.IdDocumentoBia == IdDocumento &&
-                                                                     x.IdProceso == idProceso).FirstOrDefault();
+                tblBIAProceso _proceso = db.tblBIAProceso.FirstOrDefault(x => x.IdEmpresa == IdEmpresa &&
+                                                                     x.IdProceso == idProceso);
 
                 if (_proceso != null)
                 {
@@ -1437,19 +1508,27 @@ namespace BCMWeb
 
             using (Entities db = new Entities())
             {
-                if (IdProceso == 0)
+                if (IdUnidadOrganizativa > 0)
                 {
-                    GranImpacto = db.tblBIAGranImpacto
-                       .Where(x => x.IdEmpresa == IdEmpresa && IdsUO.Contains((long)x.tblBIAProceso.tblBIADocumento.IdUnidadOrganizativa))
-                       .Distinct().ToList();
+                    if (IdProceso == 0)
+                    {
+                        GranImpacto = db.tblBIAGranImpacto
+                           .Where(x => x.IdEmpresa == IdEmpresa && IdsUO.Contains((long)x.tblBIAProceso.tblBIADocumento.IdUnidadOrganizativa))
+                           .Distinct().ToList();
+                    }
+                    else
+                    {
+                        GranImpacto = db.tblBIAGranImpacto
+                           .Where(x => x.IdEmpresa == IdEmpresa && IdsUO.Contains((long)x.tblBIAProceso.tblBIADocumento.IdUnidadOrganizativa) && x.IdProceso == IdProceso)
+                           .Distinct().ToList();
+                    }
                 }
                 else
                 {
                     GranImpacto = db.tblBIAGranImpacto
-                       .Where(x => x.IdEmpresa == IdEmpresa && IdsUO.Contains((long)x.tblBIAProceso.tblBIADocumento.IdUnidadOrganizativa) && x.IdProceso == IdProceso)
+                       .Where(x => x.IdEmpresa == IdEmpresa)
                        .Distinct().ToList();
                 }
-
                 foreach (tblBIAGranImpacto Impacto in GranImpacto.OrderBy(x => x.tblBIAProceso.Nombre).ToList())
                 {
                     if (Impacto.IdMes == 1)
@@ -2007,11 +2086,11 @@ namespace BCMWeb
                             docBCP = new tblBCPDocumento
                             {
                                 IdDocumento = IdDocumento,
-                                IdDocumentoBIA = docuBIA.IdDocumentoBIA,
+                                IdDocumentoBIA = 0,
                                 IdEmpresa = IdEmpresa,
                                 IdProceso = null,
                                 IdTipoDocumento = IdTipoDocumento,
-                                IdUnidadOrganizativa = docuBIA.IdUnidadOrganizativa,
+                                IdUnidadOrganizativa = 0,
                                 Proceso = string.Empty,
                                 Responsable = string.Empty,
                                 SubProceso = string.Empty
@@ -2188,18 +2267,20 @@ namespace BCMWeb
                     db.SaveChanges();
                 }
 
-                Aprobaciones = db.tblDocumentoAprobacion.Select(x => new DocumentoAprobacionModel
-                {
-                    Aprobado = (bool)x.Aprobado,
-                    FechaAprobacion = (x.Fecha != null ? (DateTime)DbFunctions.AddMinutes(x.Fecha, Minutos) : x.Fecha),
-                    IdAprobacion = x.IdAprobacion,
-                    IdDocumento = x.IdDocumento,
-                    IdEmpresa = x.IdEmpresa,
-                    IdPersona = (long)x.IdPersona,
-                    IdTipoDocumento = x.IdTipoDocumento,
-                    Procesado = x.Procesado,
-                    Responsable = (x.IdPersona == x.tblDocumento.IdPersonaResponsable)
-                }).ToList();
+                Aprobaciones = db.tblDocumentoAprobacion
+                    .Where(x => x.IdEmpresa == IdEmpresa && x.IdDocumento == IdDocumento)
+                    .Select(x => new DocumentoAprobacionModel
+                    {
+                        Aprobado = (bool)(x.Aprobado ?? false),
+                        FechaAprobacion = (x.Fecha != null ? (DateTime)DbFunctions.AddMinutes(x.Fecha, Minutos) : x.Fecha),
+                        IdAprobacion = x.IdAprobacion,
+                        IdDocumento = x.IdDocumento,
+                        IdEmpresa = x.IdEmpresa,
+                        IdPersona = (long)x.IdPersona,
+                        IdTipoDocumento = x.IdTipoDocumento,
+                        Procesado = x.Procesado,
+                        Responsable = (x.IdPersona == x.tblDocumento.IdPersonaResponsable)
+                    }).ToList();
             }
 
             return Aprobaciones;
@@ -2254,18 +2335,20 @@ namespace BCMWeb
                     db.SaveChanges();
                 }
 
-                Certificaciones = db.tblDocumentoCertificacion.Select(x => new DocumentoCertificacionModel
-                {
-                    Certificado = (bool)x.Certificado,
-                    FechaCertificacion = (x.Fecha != null ? (DateTime)DbFunctions.AddMinutes(x.Fecha, Minutos) : x.Fecha),
-                    IdCertificacion = x.IdCertificacion,
-                    IdDocumento = x.IdDocumento,
-                    IdEmpresa = x.IdEmpresa,
-                    IdPersona = (long)x.IdPersona,
-                    IdTipoDocumento = x.IdTipoDocumento,
-                    Procesado = x.Procesado,
-                    Responsable = (x.IdPersona == x.tblDocumento.IdPersonaResponsable)
-                }).ToList();
+                Certificaciones = db.tblDocumentoCertificacion
+                    .Where(x => x.IdEmpresa == IdEmpresa && x.IdTipoDocumento == IdTipoDocumento && x.IdDocumento == IdDocumento)
+                    .Select(x => new DocumentoCertificacionModel
+                    {
+                        Certificado = (bool)x.Certificado,
+                        FechaCertificacion = (x.Fecha != null ? (DateTime)DbFunctions.AddMinutes(x.Fecha, Minutos) : x.Fecha),
+                        IdCertificacion = x.IdCertificacion,
+                        IdDocumento = x.IdDocumento,
+                        IdEmpresa = x.IdEmpresa,
+                        IdPersona = (long)x.IdPersona,
+                        IdTipoDocumento = x.IdTipoDocumento,
+                        Procesado = x.Procesado,
+                        Responsable = (x.IdPersona == x.tblDocumento.IdPersonaResponsable)
+                    }).ToList();
             }
 
             return Certificaciones;
@@ -3000,7 +3083,8 @@ namespace BCMWeb
 
             using (Entities db = new Entities())
             {
-                Procesos = db.tblBIAProceso.Where(x => x.IdEmpresa == IdEmpresa && x.IdDocumentoBia == IdDocumento)
+                long _idDocBIA = db.tblBIADocumento.FirstOrDefault(e => e.IdEmpresa == IdEmpresa && e.IdDocumento == IdDocumento).IdDocumentoBIA;
+                Procesos = db.tblBIAProceso.Where(x => x.IdEmpresa == IdEmpresa && x.IdDocumentoBia == _idDocBIA)
                     .Select(x => new DocumentoProcesoModel
                     {
                         Critico = (bool)x.Critico,
@@ -3049,16 +3133,23 @@ namespace BCMWeb
                 Procesos = db.tblBIAProceso.Where(x => x.IdEmpresa == IdEmpresa)
                     .Select(x => new DocumentoProcesoModel
                     {
-                        Critico = (bool)x.Critico,
+                        Critico = x.Critico ?? false,
                         Descripcion = x.Descripcion,
                         FechaCreacion = (DateTime)x.FechaCreacion,
                         FechaEstatus = (DateTime)x.FechaUltimoEstatus,
-                        IdEstatus = (long)x.IdEstadoProceso,
+                        IdEstatus = x.IdEstadoProceso ?? 0,
                         IdProceso = x.IdProceso,
                         Nombre = x.Nombre,
-                        NroProceso = (int)x.NroProceso
+                        NroProceso = x.NroProceso ?? 0
                     }).Distinct().ToList();
             }
+
+            Procesos.Add(new DocumentoProcesoModel
+            {
+                IdProceso = 0,
+                Nombre = Resources.DocumentoResource.AllDataMale,
+                NroProceso = 0
+            });
 
             return Procesos.OrderBy(x => x.Nombre).ToList();
         }
@@ -3455,7 +3546,8 @@ namespace BCMWeb
                 {
                     objGraphIO objRes;
                     long IdUnidadPrincipal = GetUnidadPrincipal(objInfo.IdUnidad);
-                    objRes = Resultado.Find(delegate (objGraphIO objCIO) {
+                    objRes = Resultado.Find(delegate (objGraphIO objCIO)
+                    {
                         return (objCIO.IdUnidad == IdUnidadPrincipal)
                             && (objCIO.Escala == objInfo.ValorEscala);
                     });
@@ -3499,7 +3591,8 @@ namespace BCMWeb
                 {
                     objGraphIO objRes;
                     long IdUnidadPrincipal = GetUnidadPrincipal(objInfo.IdUnidad);
-                    objRes = Resultado.Find(delegate (objGraphIO objCIO) {
+                    objRes = Resultado.Find(delegate (objGraphIO objCIO)
+                    {
                         return (objCIO.IdUnidad == IdUnidadPrincipal)
                             && (objCIO.Escala == objInfo.ValorEscala);
                     });
@@ -3543,7 +3636,8 @@ namespace BCMWeb
                 {
                     objGraphIO objRes;
                     long IdUnidadPrincipal = GetUnidadPrincipal(objInfo.IdUnidad);
-                    objRes = Resultado.Find(delegate (objGraphIO objCIO) {
+                    objRes = Resultado.Find(delegate (objGraphIO objCIO)
+                    {
                         return (objCIO.IdUnidad == IdUnidadPrincipal)
                             && (objCIO.Escala == objInfo.ValorEscala);
                     });
@@ -3587,7 +3681,8 @@ namespace BCMWeb
                 {
                     objGraphIO objRes;
                     long IdUnidadPrincipal = GetUnidadPrincipal(objInfo.IdUnidad);
-                    objRes = Resultado.Find(delegate (objGraphIO objCIO) {
+                    objRes = Resultado.Find(delegate (objGraphIO objCIO)
+                    {
                         return (objCIO.IdUnidad == IdUnidadPrincipal)
                             && (objCIO.Escala == objInfo.ValorEscala);
                     });
@@ -3633,7 +3728,8 @@ namespace BCMWeb
                 {
                     objGraphIO objRes;
                     long IdUnidadPrincipal = GetUnidadPrincipal(objInfo.IdUnidad);
-                    objRes = Resultado.Find(delegate (objGraphIO objCIO) {
+                    objRes = Resultado.Find(delegate (objGraphIO objCIO)
+                    {
                         return (objCIO.IdUnidad == IdUnidadPrincipal)
                             && (objCIO.Escala == objInfo.ValorEscala);
                     });
@@ -3758,7 +3854,7 @@ namespace BCMWeb
                     .Select(x => new TipoEscalaGrafico
                     {
                         IdTipoEscala = x.IdEscala,
-                        TipoEscala = x.Descripcion
+                        TipoEscala = x.Valor + " - " + x.Descripcion
                     }).ToList();
             }
 
@@ -3813,7 +3909,8 @@ namespace BCMWeb
                 {
                     objGraphIO objRes;
                     long IdUnidadPrincipal = GetUnidadPrincipal(objInfo.IdUnidad);
-                    objRes = Resultado.Find(delegate (objGraphIO objCIO) {
+                    objRes = Resultado.Find(delegate (objGraphIO objCIO)
+                    {
                         return (objCIO.IdUnidad == IdUnidadPrincipal)
                             && (objCIO.Escala == objInfo.ValorEscala);
                     });
@@ -3921,9 +4018,10 @@ namespace BCMWeb
                 {
                     objGraphIO objRes;
                     long IdUnidadPrincipal = GetUnidadPrincipal(objInfo.IdUnidad);
-                    objRes = Resultado.Find(delegate (objGraphIO objCIO) {
+                    objRes = Resultado.Find(delegate (objGraphIO objCIO)
+                    {
                         return (objCIO.IdUnidad == IdUnidadPrincipal)
-                            && (objCIO.Escala == objInfo.ValorEscala);
+                            && (objCIO.IdEscala == objInfo.IdEscala);
                     });
                     if (objRes == null)
                     {
@@ -4067,11 +4165,14 @@ namespace BCMWeb
                     .Select(x => new DataRiesgoControl
                     {
                         Amenaza = x.Descripcion,
+                        Control = x.Control ?? 0,
                         Estado = (int)x.Estado,
                         Evento = x.Evento,
+                        Impacto = x.Impacto ?? 0,
                         Implantado = x.TipoControlImplantado,
                         Implantar = x.ControlesImplantar,
-                        NroProceso = (int)db.tblBIAProceso.Where(y => y.IdEmpresa == x.IdEmpresa && y.IdDocumentoBia == x.IdDocumentoBIA && y.IdProceso == x.IdProceso).FirstOrDefault().NroProceso
+                        NroProceso = (int)db.tblBIAProceso.Where(y => y.IdEmpresa == x.IdEmpresa && y.IdDocumentoBia == x.IdDocumentoBIA && y.IdProceso == x.IdProceso).FirstOrDefault().NroProceso,
+                        Probabilidad = x.Probabilidad ?? 0,
                     }).ToList();
             }
 
@@ -4153,7 +4254,8 @@ namespace BCMWeb
                 {
                     objGraphIO objRes;
                     long IdUnidadPrincipal = GetUnidadPrincipal(objInfo.IdUnidad);
-                    objRes = Resultado.Find(delegate (objGraphIO objCIO) {
+                    objRes = Resultado.Find(delegate (objGraphIO objCIO)
+                    {
                         return (objCIO.IdUnidad == IdUnidadPrincipal)
                             && (objCIO.Escala == objInfo.ValorEscala);
                     });
@@ -4198,7 +4300,8 @@ namespace BCMWeb
                 {
                     objGraphIO objRes;
                     long IdUnidadPrincipal = GetUnidadPrincipal(objInfo.IdUnidad);
-                    objRes = Resultado.Find(delegate (objGraphIO objCIO) {
+                    objRes = Resultado.Find(delegate (objGraphIO objCIO)
+                    {
                         return (objCIO.IdUnidad == IdUnidadPrincipal)
                             && (objCIO.Escala == objInfo.ValorEscala);
                     });
@@ -4243,7 +4346,8 @@ namespace BCMWeb
                 {
                     objGraphIO objRes;
                     long IdUnidadPrincipal = GetUnidadPrincipal(objInfo.IdUnidad);
-                    objRes = Resultado.Find(delegate (objGraphIO objCIO) {
+                    objRes = Resultado.Find(delegate (objGraphIO objCIO)
+                    {
                         return (objCIO.IdUnidad == IdUnidadPrincipal)
                             && (objCIO.Escala == objInfo.ValorEscala);
                     });
@@ -4288,7 +4392,8 @@ namespace BCMWeb
                 {
                     objGraphIO objRes;
                     long IdUnidadPrincipal = GetUnidadPrincipal(objInfo.IdUnidad);
-                    objRes = Resultado.Find(delegate (objGraphIO objCIO) {
+                    objRes = Resultado.Find(delegate (objGraphIO objCIO)
+                    {
                         return (objCIO.IdUnidad == IdUnidadPrincipal)
                             && (objCIO.Escala == objInfo.ValorEscala);
                     });
@@ -4333,7 +4438,8 @@ namespace BCMWeb
                 {
                     objGraphIO objRes;
                     long IdUnidadPrincipal = GetUnidadPrincipal(objInfo.IdUnidad);
-                    objRes = Resultado.Find(delegate (objGraphIO objCIO) {
+                    objRes = Resultado.Find(delegate (objGraphIO objCIO)
+                    {
                         return (objCIO.IdUnidad == IdUnidadPrincipal)
                             && (objCIO.Escala == objInfo.ValorEscala);
                     });
@@ -4439,149 +4545,130 @@ namespace BCMWeb
 
             return data;
         }
-        public static List<ProcesoImpactoModel> GetProcesosAjustarImpacto(eTipoEscala TipoEscala)
+        public static List<ProcesoValoresModel> GetProcesosAjustarIF()
         {
             long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
-            List<ProcesoImpactoModel> Procesos = new List<ProcesoImpactoModel>();
+            using (Entities db = new Entities())
+            {
+
+                // List<tblBIAProceso> _Procesos = db.tblBIAProceso.Where(x => x.IdEmpresa == IdEmpresa).ToList();
+
+                List<ProcesoValoresModel> _IF = new List<ProcesoValoresModel>();
+
+                _IF = db.tblBIAImpactoFinanciero.Where(x => x.IdEmpresa == IdEmpresa)
+                             .Select(x => new ProcesoValoresModel
+                             {
+                                 IdEmpresa = IdEmpresa,
+                                 IdImpacto = x.IdImpactoFinanciero,
+                                 IdDocumentoBIA = x.IdDocumentoBIA,
+                                 IdProceso = x.IdProceso,
+                                 Impacto = x.Impacto,
+                                 IdTipoEscala = x.IdEscala ?? 0,
+                                 NombreProceso = x.tblBIAProceso.Nombre,
+                                 NroProceso = x.tblBIAProceso.NroProceso ?? 0,
+                             }).ToList();
+                return _IF.OrderBy(x => x.NroProceso).ToList();
+
+            }
+
+        }
+        public static List<ProcesoImpactoModel> GetProcesosAjustarIO()
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            using (Entities db = new Entities())
+            {
+                // List<tblBIAProceso> _Procesos = db.tblBIAProceso.Where(x => x.IdEmpresa == IdEmpresa).ToList();
+
+                List<ProcesoImpactoModel> _IO = new List<ProcesoImpactoModel>();
+                _IO = db.tblBIAImpactoOperacional.Where(x => x.IdEmpresa == IdEmpresa)
+                                .Select(x => new ProcesoImpactoModel
+                                {
+                                    IdEmpresa = IdEmpresa,
+                                    Impacto = x.ImpactoOperacional,
+                                    IdEscala = x.IdEscala ?? 0
+                                }).Distinct().ToList();
+                return _IO.OrderBy(x => x.Impacto).ToList();
+
+            }
+
+        }
+        public static List<ProcesoValoresModel> GetProcesosAjustarValores(eTipoEscala TipoEscala)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+
 
             using (Entities db = new Entities())
             {
-                List<tblBIAProceso> _Procesos = db.tblBIAProceso.Where(x => x.IdEmpresa == IdEmpresa).ToList();
+                // List<tblBIAProceso> _Procesos = db.tblBIAProceso.Where(x => x.IdEmpresa == IdEmpresa).ToList();
 
-                foreach (tblBIAProceso _Proceso in _Procesos)
+                switch (TipoEscala)
                 {
-                    ProcesoImpactoModel _ImpactoModel = new ProcesoImpactoModel
-                    {
-                        IdDocumentoBIA = _Proceso.IdDocumentoBia,
-                        IdEmpresa = _Proceso.IdEmpresa,
-                        IdProceso = _Proceso.IdProceso,
-                        NroProceso = (int)_Proceso.NroProceso,
-                        NombreProceso = _Proceso.Nombre,
-                    };
-
-                    switch (TipoEscala)
-                    {
-                        case eTipoEscala.ImpactoFinanciero:
-                            tblBIAImpactoFinanciero _ImpactoF =
-                                db.tblBIAImpactoFinanciero.Where(x => x.IdEmpresa == IdEmpresa
-                                                                    && x.IdDocumentoBIA == _Proceso.IdDocumentoBia
-                                                                    && x.IdProceso == _Proceso.IdProceso).FirstOrDefault();
-
-                            if (_ImpactoF != null)
-                            {
-                                _ImpactoModel.IdImpacto = _ImpactoF.IdImpactoFinanciero;
-                                _ImpactoModel.Impacto = _ImpactoF.Impacto;
-                                _ImpactoModel.IdTipoEscala = (long)(_ImpactoF.IdEscala == null ? 0 : _ImpactoF.IdEscala);
-                            }
-                            else
-                            {
-                                _ImpactoModel.IdImpacto = 0;
-                                _ImpactoModel.Impacto = string.Empty;
-                                _ImpactoModel.IdTipoEscala = 0;
-                            }
-                            break;
-                        case eTipoEscala.ImpactoOperacional:
-                            tblBIAImpactoOperacional _ImpactoO =
-                                db.tblBIAImpactoOperacional.Where(x => x.IdEmpresa == IdEmpresa
-                                                                    && x.IdDocumentoBIA == _Proceso.IdDocumentoBia
-                                                                    && x.IdProceso == _Proceso.IdProceso).FirstOrDefault();
-
-                            if (_ImpactoO != null)
-                            {
-                                _ImpactoModel.IdImpacto = _ImpactoO.IdImpactoOperacional;
-                                _ImpactoModel.Impacto = _ImpactoO.ImpactoOperacional;
-                                _ImpactoModel.IdTipoEscala = (long)(_ImpactoO.IdEscala == null ? 0 : _ImpactoO.IdEscala);
-                            }
-                            else
-                            {
-                                _ImpactoModel.IdImpacto = 0;
-                                _ImpactoModel.Impacto = string.Empty;
-                                _ImpactoModel.IdTipoEscala = 0;
-                            }
-                            break;
-                        case eTipoEscala.MTD:
-                            tblBIAMTD _MTD =
-                                db.tblBIAMTD.Where(x => x.IdEmpresa == IdEmpresa
-                                                                    && x.IdDocumentoBIA == _Proceso.IdDocumentoBia
-                                                                    && x.IdProceso == _Proceso.IdProceso).FirstOrDefault();
-
-                            if (_MTD != null)
-                            {
-                                _ImpactoModel.IdImpacto = _MTD.IdMTD;
-                                _ImpactoModel.Impacto = _MTD.Observacion;
-                                _ImpactoModel.IdTipoEscala = (long)(_MTD.IdEscala == null ? 0 : _MTD.IdEscala);
-                            }
-                            else
-                            {
-                                _ImpactoModel.IdImpacto = 0;
-                                _ImpactoModel.Impacto = string.Empty;
-                                _ImpactoModel.IdTipoEscala = 0;
-                            }
-                            break;
-                        case eTipoEscala.RPO:
-                            tblBIARPO _RPO =
-                                db.tblBIARPO.Where(x => x.IdEmpresa == IdEmpresa
-                                                                    && x.IdDocumentoBIA == _Proceso.IdDocumentoBia
-                                                                    && x.IdProceso == _Proceso.IdProceso).FirstOrDefault();
-
-                            if (_RPO != null)
-                            {
-                                _ImpactoModel.IdImpacto = _RPO.IdRPO;
-                                _ImpactoModel.Impacto = _RPO.Observacion;
-                                _ImpactoModel.IdTipoEscala = _RPO.IdEscala;
-                            }
-                            else
-                            {
-                                _ImpactoModel.IdImpacto = 0;
-                                _ImpactoModel.Impacto = string.Empty;
-                                _ImpactoModel.IdTipoEscala = 0;
-                            }
-                            break;
-                        case eTipoEscala.RTO:
-                            tblBIARTO _RTO =
-                                db.tblBIARTO.Where(x => x.IdEmpresa == IdEmpresa
-                                                                    && x.IdDocumentoBIA == _Proceso.IdDocumentoBia
-                                                                    && x.IdProceso == _Proceso.IdProceso).FirstOrDefault();
-
-                            if (_RTO != null)
-                            {
-                                _ImpactoModel.IdImpacto = _RTO.IdRTO;
-                                _ImpactoModel.Impacto = _RTO.Observacion;
-                                _ImpactoModel.IdTipoEscala = _RTO.IdEscala;
-                            }
-                            else
-                            {
-                                _ImpactoModel.IdImpacto = 0;
-                                _ImpactoModel.Impacto = string.Empty;
-                                _ImpactoModel.IdTipoEscala = 0;
-                            }
-                            break;
-                        case eTipoEscala.WRT:
-                            tblBIAWRT _WRT =
-                                db.tblBIAWRT.Where(x => x.IdEmpresa == IdEmpresa
-                                                                    && x.IdDocumentoBIA == _Proceso.IdDocumentoBia
-                                                                    && x.IdProceso == _Proceso.IdProceso).FirstOrDefault();
-
-                            if (_WRT != null)
-                            {
-                                _ImpactoModel.IdImpacto = _WRT.IdWRT;
-                                _ImpactoModel.Impacto = _WRT.Observacion;
-                                _ImpactoModel.IdTipoEscala = (long)(_WRT.IdEscala == null ? 0 : _WRT.IdEscala);
-                            }
-                            else
-                            {
-                                _ImpactoModel.IdImpacto = 0;
-                                _ImpactoModel.Impacto = string.Empty;
-                                _ImpactoModel.IdTipoEscala = 0;
-                            }
-                            break;
-                    }
-
-                    Procesos.Add(_ImpactoModel);
+                    case eTipoEscala.MTD:
+                        List<ProcesoValoresModel> _MTD = new List<ProcesoValoresModel>();
+                        _MTD = db.tblBIAMTD.Where(x => x.IdEmpresa == IdEmpresa)
+                                     .Select(x => new ProcesoValoresModel
+                                     {
+                                         IdEmpresa = IdEmpresa,
+                                         IdDocumentoBIA = x.IdDocumentoBIA,
+                                         IdImpacto = x.IdMTD,
+                                         IdProceso = x.IdProceso,
+                                         IdTipoEscala = x.IdEscala ?? 0,
+                                         Impacto = x.Observacion,
+                                         NombreProceso = x.tblBIAProceso.Nombre,
+                                         NroProceso = x.tblBIAProceso.NroProceso ?? 0
+                                     }).Distinct().ToList();
+                        return _MTD.OrderBy(x => x.NroProceso).ToList();
+                    case eTipoEscala.RPO:
+                        List<ProcesoValoresModel> _RPO = new List<ProcesoValoresModel>();
+                        _RPO = db.tblBIARPO.Where(x => x.IdEmpresa == IdEmpresa)
+                                     .Select(x => new ProcesoValoresModel
+                                     {
+                                         IdEmpresa = IdEmpresa,
+                                         IdDocumentoBIA = x.IdDocumentoBIA,
+                                         IdImpacto = x.IdRPO,
+                                         IdProceso = x.IdProceso,
+                                         IdTipoEscala = x.IdEscala,
+                                         Impacto = x.Observacion,
+                                         NombreProceso = x.tblBIAProceso.Nombre,
+                                         NroProceso = x.tblBIAProceso.NroProceso ?? 0
+                                     }).Distinct().ToList();
+                        return _RPO.OrderBy(x => x.NroProceso).ToList();
+                    case eTipoEscala.RTO:
+                        List<ProcesoValoresModel> _RTO = new List<ProcesoValoresModel>();
+                        _RTO = db.tblBIARTO.Where(x => x.IdEmpresa == IdEmpresa)
+                                     .Select(x => new ProcesoValoresModel
+                                     {
+                                         IdEmpresa = IdEmpresa,
+                                         IdDocumentoBIA = x.IdDocumentoBIA,
+                                         IdImpacto = x.IdRTO,
+                                         IdProceso = x.IdProceso,
+                                         IdTipoEscala = x.IdEscala,
+                                         Impacto = x.Observacion,
+                                         NombreProceso = x.tblBIAProceso.Nombre,
+                                         NroProceso = x.tblBIAProceso.NroProceso ?? 0
+                                     }).Distinct().ToList();
+                        return _RTO.OrderBy(x => x.NroProceso).ToList();
+                    case eTipoEscala.WRT:
+                        List<ProcesoValoresModel> _WRT = new List<ProcesoValoresModel>();
+                        _WRT = db.tblBIAWRT.Where(x => x.IdEmpresa == IdEmpresa)
+                                     .Select(x => new ProcesoValoresModel
+                                     {
+                                         IdEmpresa = IdEmpresa,
+                                         IdDocumentoBIA = x.IdDocumentoBIA,
+                                         IdImpacto = x.IdWRT,
+                                         IdProceso = x.IdProceso,
+                                         IdTipoEscala = x.IdEscala ?? 0,
+                                         Impacto = x.Observacion,
+                                         NombreProceso = x.tblBIAProceso.Nombre,
+                                         NroProceso = x.tblBIAProceso.NroProceso ?? 0
+                                     }).Distinct().ToList();
+                        return _WRT.OrderBy(x => x.NroProceso).ToList();
+                    default:
+                        return null;
                 }
+
             }
 
-            return Procesos.OrderBy(x => x.NombreProceso).ToList();
         }
         public static List<TipoEscalaGrafico> GetDataComboEscala(eTipoEscala TipoEscala)
         {
@@ -4651,6 +4738,7 @@ namespace BCMWeb
             List<string> ValoresRTO = (Session["ValoresRTO"] != null ? Session["ValoresRTO"].ToString().Split(',').ToList() : new List<string>());
             List<string> ValoresRPO = (Session["ValoresRPO"] != null ? Session["ValoresRPO"].ToString().Split(',').ToList() : new List<string>());
             List<string> ValoresWRT = (Session["ValoresWRT"] != null ? Session["ValoresWRT"].ToString().Split(',').ToList() : new List<string>());
+            bool _firstTime = (ValoresIF.Count() == 0 && ValoresIO.Count() == 0 && ValoresMTD.Count() == 0 && ValoresRTO.Count() == 0 && ValoresRPO.Count() == 0 && ValoresWRT.Count() == 0);
 
             using (Entities db = new Entities())
             {
@@ -4662,16 +4750,17 @@ namespace BCMWeb
                             let RPO = (from d in db.tblBIARPO where d.IdEmpresa == x.IdEmpresa && d.IdDocumentoBIA == x.IdDocumentoBia && d.IdProceso == x.IdProceso select d).FirstOrDefault()
                             let RTO = (from d in db.tblBIARTO where d.IdEmpresa == x.IdEmpresa && d.IdDocumentoBIA == x.IdDocumentoBia && d.IdProceso == x.IdProceso select d).FirstOrDefault()
                             let WRT = (from d in db.tblBIAWRT where d.IdEmpresa == x.IdEmpresa && d.IdDocumentoBIA == x.IdDocumentoBia && d.IdProceso == x.IdProceso select d).FirstOrDefault()
-                            let selected = (ValoresIF.Contains((ImpFin == null || ImpFin.IdEscala == null ? long.MaxValue.ToString() : ImpFin.IdEscala.ToString())) ||
-                                            ValoresIO.Contains((ImpOper == null || ImpOper.IdEscala == null ? long.MaxValue.ToString() : ImpOper.IdEscala.ToString())) ||
-                                            ValoresMTD.Contains((MTD == null || MTD.IdEscala == null ? long.MaxValue.ToString() : MTD.IdEscala.ToString())) ||
-                                            ValoresRPO.Contains((RPO == null ? long.MaxValue.ToString() : RPO.IdEscala.ToString())) ||
-                                            ValoresRTO.Contains((RTO == null ? long.MaxValue.ToString() : RTO.IdEscala.ToString())) ||
-                                            ValoresWRT.Contains((WRT == null || WRT.IdEscala == null ? long.MaxValue.ToString() : WRT.IdEscala.ToString())))
+                            let selected = (ValoresIF.Contains((ImpFin == null || ImpFin.IdEscala == null ? long.MaxValue.ToString() : ImpFin.IdEscala.ToString())) &&
+                                            ValoresIO.Contains((ImpOper == null || ImpOper.IdEscala == null ? long.MaxValue.ToString() : ImpOper.IdEscala.ToString())) &&
+                                            ValoresMTD.Contains((MTD == null || MTD.IdEscala == null ? long.MaxValue.ToString() : MTD.IdEscala.ToString())) &&
+                                            ValoresRPO.Contains((RPO == null ? long.MaxValue.ToString() : RPO.IdEscala.ToString())) &&
+                                            ValoresRTO.Contains((RTO == null ? long.MaxValue.ToString() : RTO.IdEscala.ToString())) &&
+                                            ValoresWRT.Contains((WRT == null || WRT.IdEscala == null ? long.MaxValue.ToString() : WRT.IdEscala.ToString())) &&
+                                            !_firstTime) || (x.Critico ?? false) == true
                             where x.IdEmpresa == IdEmpresa
                             select new DocumentoProcesoModel
                             {
-                                Critico = (bool)x.Critico,
+                                Critico = selected,
                                 Descripcion = x.Descripcion,
                                 FechaCreacion = (DateTime)x.FechaCreacion,
                                 FechaEstatus = (DateTime)x.FechaUltimoEstatus,
@@ -4779,11 +4868,11 @@ namespace BCMWeb
         {
             long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
             List<DocumentoProcesoModel> Procesos = new List<DocumentoProcesoModel>();
-            List<string> ValoresProbabilidad = (Session["ValoresProbabilidad"] != null ? Session["ValoresProbabilidad"].ToString().Split(',').ToList() : new List<string>());
-            List<string> ValoresImpacto = (Session["ValoresImpacto"] != null ? Session["ValoresImpacto"].ToString().Split(',').ToList() : new List<string>());
-            List<string> ValoresSeveridad = (Session["ValoresSeveridad"] != null ? Session["ValoresSeveridad"].ToString().Split(',').ToList() : new List<string>());
-            List<string> ValoresFuente = (Session["ValoresFuente"] != null ? Session["ValoresFuente"].ToString().Split(',').ToList() : new List<string>());
-            List<string> ValoresControl = (Session["ValoresControl"] != null ? Session["ValoresControl"].ToString().Split(',').ToList() : new List<string>());
+            List<string> ValoresProbabilidad = (Session["ValoresProbabilidad"] != null ? Session["ValoresProbabilidad"].ToString().Split(',').Where(x => !string.IsNullOrEmpty(x)).ToList() : new List<string>());
+            List<string> ValoresImpacto = (Session["ValoresImpacto"] != null ? Session["ValoresImpacto"].ToString().Split(',').Where(x => !string.IsNullOrEmpty(x)).ToList() : new List<string>());
+            List<string> ValoresSeveridad = (Session["ValoresSeveridad"] != null ? Session["ValoresSeveridad"].ToString().Split(',').Where(x => !string.IsNullOrEmpty(x)).ToList() : new List<string>());
+            List<string> ValoresFuente = (Session["ValoresFuente"] != null ? Session["ValoresFuente"].ToString().Split(',').Where(x => !string.IsNullOrEmpty(x)).ToList() : new List<string>());
+            List<string> ValoresControl = (Session["ValoresControl"] != null ? Session["ValoresControl"].ToString().Split(',').Where(x => !string.IsNullOrEmpty(x)).ToList() : new List<string>());
 
             using (Entities db = new Entities())
             {
@@ -4803,6 +4892,7 @@ namespace BCMWeb
                             {
                                 Critico = (bool)x.tblBIAProceso.Critico,
                                 Descripcion = x.tblBIAProceso.Descripcion,
+                                Evento = x.Evento,
                                 FechaCreacion = (DateTime)x.tblBIAProceso.FechaCreacion,
                                 FechaEstatus = (DateTime)x.tblBIAProceso.FechaUltimoEstatus,
                                 IdEstatus = (long)x.tblBIAProceso.IdEstadoProceso,
@@ -4815,11 +4905,15 @@ namespace BCMWeb
                                 RPO = escalaFuente,
                                 RTO = escalaControl,
                                 Selected = selected,
-                                WRT = String.Empty,
+                                WRT = x.Descripcion,
                             }).Distinct().ToList();
             }
 
-            return Procesos.OrderByDescending(x => x.Selected).ThenBy(x => x.NroProceso).ToList();
+            //return Procesos.OrderByDescending(x => x.Selected).ThenBy(x => x.NroProceso).ToList();
+            if (ValoresControl.Count() > 0 || ValoresFuente.Count() > 0 || ValoresImpacto.Count() > 0 || ValoresProbabilidad.Count() > 0 || ValoresSeveridad.Count() > 0)
+                return Procesos.Where(x => x.Selected).OrderBy(x => x.NroProceso).ToList();
+            else
+                return Procesos.OrderBy(x => x.NroProceso).ToList();
         }
         public static string GetEstatusIniciativa(long IdEstatus)
         {
@@ -5006,7 +5100,8 @@ namespace BCMWeb
 
             string Actualizaciones = string.Empty;
 
-            if (reg != null) {
+            if (reg != null)
+            {
                 if (reg.Descripcion != iniciativa.Descripcion)
                 {
                     string _valorAnterior = (reg.Descripcion == null ? string.Empty : reg.Descripcion);
@@ -5152,7 +5247,7 @@ namespace BCMWeb
                 db.tblIniciativas.Remove(reg);
 
                 List<tblIniciativas> Iniciativas = db.tblIniciativas.Where(x => x.IdEmpresa == IdEmpresa && x.NroIniciativa > NroIniciativa).ToList();
-                
+
                 foreach (tblIniciativas Iniciativa in Iniciativas.OrderBy(x => x.NroIniciativa).ToList())
                 {
                     Iniciativa.NroIniciativa -= 1;
@@ -5259,7 +5354,7 @@ namespace BCMWeb
 
             using (Entities db = new Entities())
             {
-                Anexos = db.tblIniciativas_Anexo.Where(x => x.IdEmpresa == IdEmpresa && x.IdIniciativa == IdIniciativa) 
+                Anexos = db.tblIniciativas_Anexo.Where(x => x.IdEmpresa == IdEmpresa && x.IdIniciativa == IdIniciativa)
                     .Select(x => new AnexosIniciativaModel
                     {
                         fechaRegistro = x.fechaRegistro,
@@ -5310,11 +5405,12 @@ namespace BCMWeb
 
             using (Entities db = new Entities())
             {
-                data = db.tblCultura_PMTProgramacionTipoActualizacion.Where(x => x.Culture == Culture || x.Culture == "es-VE").Select(x => new TablaModel_short
-                {
-                    Descripcion = x.Descripcion,
-                    Id = x.IdTipoActualizacion
-                }).ToList();
+                data = db.tblCultura_PMTProgramacionTipoActualizacion.Where(x => x.Culture == Culture || x.Culture == "es-VE")
+                         .Select(x => new TablaModel_short
+                         {
+                             Descripcion = x.Descripcion,
+                             Id = x.IdTipoActualizacion
+                         }).ToList();
             }
 
             return data.OrderBy(x => x.Descripcion).ToList();
@@ -5346,19 +5442,19 @@ namespace BCMWeb
             {
                 Programacion = (from d in db.tblPMTProgramacion
                                 let FechaHasta = SqlFunctions.DateAdd("d", -1, d.FechaFinal)
-                               where d.IdEmpresa == IdEmpresa
-                               select new ProgramacionModel
-                               {
-                                   FechaFinal = (DateTime)FechaHasta,
-                                   FechaInicio = d.FechaInicio,
-                                   IdClaseDocumento = (d.Negocios ? 1 : 2),
-                                   IdEmpresa = d.IdEmpresa,
-                                   IdEstadoProgramacion = d.IdEstado,
-                                   IdModuloProgramacion = d.IdModulo,
-                                   IdProgramacion = d.IdPMTProgramacion,
-                                   IdTipoActualizacion = d.IdTipoActualizacion,
-                                   IdTipoFrecuencia = d.IdTipoFrecuencia,
-                               }).ToList();
+                                where d.IdEmpresa == IdEmpresa
+                                select new ProgramacionModel
+                                {
+                                    FechaFinal = (DateTime)FechaHasta,
+                                    FechaInicio = d.FechaInicio,
+                                    IdClaseDocumento = (d.Negocios ? 1 : 2),
+                                    IdEmpresa = d.IdEmpresa,
+                                    IdEstadoProgramacion = d.IdEstado,
+                                    IdModuloProgramacion = d.IdModulo,
+                                    IdProgramacion = d.IdPMTProgramacion,
+                                    IdTipoActualizacion = d.IdTipoActualizacion,
+                                    IdTipoFrecuencia = d.IdTipoFrecuencia,
+                                }).ToList();
             }
 
             return Programacion;
@@ -5566,5 +5662,1658 @@ namespace BCMWeb
             return data.OrderBy(x => x.Descripcion).ToList();
 
         }
+        public static List<PruebaModel> GetPruebas()
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+            List<PruebaModel> Pruebas = new List<PruebaModel>();
+
+            string UserTimeZone = Session["UserTimeZone"].ToString();
+            int Horas = int.Parse(UserTimeZone.Split(':').First());
+            int Minutos = (Math.Abs(Horas) * 60) + int.Parse(UserTimeZone.Split(':').Last());
+            if (Horas < 0) Minutos *= -1;
+
+            string _ServerPath = Server.MapPath(".").Replace("\\PPE", string.Empty);
+
+            using (Entities db = new Entities())
+            {
+                Pruebas = (from d in db.tblPBEPruebaPlanificacion
+                           let FechaI = SqlFunctions.DateAdd("mi", Minutos, d.FechaInicio)
+                           where d.IdEmpresa == IdEmpresa && d.Negocios == (IdTipoPruebas == 1)
+                           select d)
+                           .AsEnumerable()
+                           .Select(d => new PruebaModel
+                           {
+                               FechaInicio = d.FechaInicio.AddMinutes(Minutos),
+                               IdClaseDocumento = IdTipoPruebas,
+                               IdEmpresa = d.IdEmpresa,
+                               IdEstatus = (short)d.IdEstatus,
+                               IdPrueba = d.IdPlanificacion,
+                               Nombre = d.Prueba,
+                               Ubicacion = d.Lugar,
+                               Proposito = d.Propósito,
+                           })
+                           .ToList();
+            }
+
+            return Pruebas;
+        }
+        public static PruebaModel GetPrueba(long IdPrueba)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+            PruebaModel Prueba = new PruebaModel();
+
+            string UserTimeZone = Session["UserTimeZone"].ToString();
+            int Horas = int.Parse(UserTimeZone.Split(':').First());
+            int Minutos = (Math.Abs(Horas) * 60) + int.Parse(UserTimeZone.Split(':').Last());
+            if (Horas < 0) Minutos *= -1;
+
+            using (Entities db = new Entities())
+            {
+                Prueba = (from d in db.tblPBEPruebaPlanificacion
+                          let FechaI = SqlFunctions.DateAdd("mi", Minutos, d.FechaInicio)
+                          where d.IdEmpresa == IdEmpresa && d.Negocios == (IdTipoPruebas == 1) && d.IdPlanificacion == IdPrueba
+                          select new PruebaModel
+                          {
+                              FechaInicio = (DateTime)FechaI,
+                              IdClaseDocumento = IdTipoPruebas,
+                              IdEmpresa = d.IdEmpresa,
+                              IdEstatus = (short)d.IdEstatus,
+                              IdPrueba = d.IdPlanificacion,
+                              Nombre = d.Prueba,
+                              Ubicacion = d.Lugar,
+                              Proposito = d.Propósito,
+                          }).FirstOrDefault();
+            }
+
+            return Prueba;
+        }
+        public static long AddPrueba(PruebaModel data)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+            long IdPrueba = -1;
+
+            string UserTimeZone = Session["UserTimeZone"].ToString();
+            int Horas = int.Parse(UserTimeZone.Split(':').First());
+            int Minutos = (Math.Abs(Horas) * 60) + int.Parse(UserTimeZone.Split(':').Last());
+            if (Horas > 0) Minutos *= -1;
+
+            using (Entities db = new Entities())
+            {
+                tblPBEPruebaPlanificacion reg = new tblPBEPruebaPlanificacion
+                {
+                    FechaInicio = data.FechaInicio.AddMinutes(Minutos),
+                    IdEmpresa = IdEmpresa,
+                    Lugar = data.Ubicacion,
+                    Negocios = data.IdClaseDocumento == 1,
+                    Propósito = data.Proposito,
+                    Prueba = data.Nombre,
+                    IdEstatus = -1,
+                };
+
+                db.tblPBEPruebaPlanificacion.Add(reg);
+                db.SaveChanges();
+
+                IdPrueba = reg.IdPlanificacion;
+            }
+
+            return IdPrueba;
+        }
+        public static void UpdatePrueba(PruebaModel data)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+            long IdPrueba = data.IdPrueba;
+
+            string UserTimeZone = Session["UserTimeZone"].ToString();
+            int Horas = int.Parse(UserTimeZone.Split(':').First());
+            int Minutos = (Math.Abs(Horas) * 60) + int.Parse(UserTimeZone.Split(':').Last());
+            if (Horas > 0) Minutos *= -1;
+
+            using (Entities db = new Entities())
+            {
+                tblPBEPruebaPlanificacion reg = db.tblPBEPruebaPlanificacion.Where(x => x.IdEmpresa == IdEmpresa && x.IdPlanificacion == IdPrueba).FirstOrDefault();
+                reg.FechaInicio = data.FechaInicio.AddMinutes(Minutos);
+                reg.Lugar = data.Ubicacion;
+                reg.Propósito = data.Proposito;
+                reg.Prueba = data.Nombre;
+
+                db.SaveChanges();
+            }
+
+        }
+        public static List<TablaModel_short> GetEmpresasPruebaParticipantes(long IdPrueba)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+
+            List<TablaModel_short> Empresas = new List<TablaModel_short>();
+
+            using (Entities db = new Entities())
+            {
+                Empresas = (from d in db.tblPBEPruebaPlanificacionParticipante
+                            where d.IdEmpresa == IdEmpresa && d.IdPlanificacion == IdPrueba
+                            orderby d.Empresa
+                            select d.Empresa).Distinct().AsEnumerable()
+                            .Select(x => new TablaModel_short
+                            {
+                                Descripcion = x
+                            }).ToList();
+            }
+
+            return Empresas;
+        }
+        public static List<PruebaParticipanteModel> GetPruebaParticipantes(long idPrueba)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+
+            List<PruebaParticipanteModel> Participantes = new List<PruebaParticipanteModel>();
+
+            using (Entities db = new Entities())
+            {
+                Participantes = (from d in db.tblPBEPruebaPlanificacionParticipante
+                                 where d.IdEmpresa == IdEmpresa && d.IdPlanificacion == idPrueba
+                                 select new PruebaParticipanteModel
+                                 {
+                                     CorreoElectronico = d.Correo,
+                                     EmpresaParticipante = d.Empresa,
+                                     IdClaseDocumento = IdTipoPruebas,
+                                     IdEmpresa = IdEmpresa,
+                                     IdParticipante = d.IdParticipante,
+                                     IdPrueba = d.IdPlanificacion,
+                                     NombreParticipante = d.Nombre,
+                                     NroTelefono = d.Telefono,
+                                     Planificado = true,
+                                     Responsable = d.Responsable,
+                                     Utilizado = db.tblPBEPruebaEjecucionEjercicioParticipante.Where(x => x.IdParticipante == d.IdParticipante).Count() > 0,
+                                 }).ToList();
+            }
+
+            return Participantes;
+        }
+        public static PruebaParticipanteModel GetPruebaParticipante(long IdPrueba, long IdParticipante)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+
+            PruebaParticipanteModel Participante = new PruebaParticipanteModel();
+
+            using (Entities db = new Entities())
+            {
+                Participante = (from d in db.tblPBEPruebaPlanificacionParticipante
+                                where d.IdEmpresa == IdEmpresa && d.IdPlanificacion == IdPrueba && d.IdParticipante == IdParticipante
+                                select new PruebaParticipanteModel
+                                {
+                                    CorreoElectronico = d.Correo,
+                                    EmpresaParticipante = d.Empresa,
+                                    IdClaseDocumento = IdTipoPruebas,
+                                    IdEmpresa = IdEmpresa,
+                                    IdParticipante = d.IdParticipante,
+                                    IdPrueba = d.IdPlanificacion,
+                                    NombreParticipante = d.Nombre,
+                                    NroTelefono = d.Telefono,
+                                    Planificado = true,
+                                    Responsable = d.Responsable,
+                                    Utilizado = db.tblPBEPruebaEjecucionEjercicioParticipante.Where(x => x.IdParticipante == d.IdParticipante).Count() > 0,
+                                }).FirstOrDefault();
+            }
+
+            return Participante;
+        }
+        public static long AddParticipante(PruebaParticipanteModel data)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+            long IdPrueba = long.Parse(Session["IdPrueba"].ToString());
+            long IdParticipante = 0;
+
+            using (Entities db = new Entities())
+            {
+                tblPBEPruebaPlanificacionParticipante reg = new tblPBEPruebaPlanificacionParticipante
+                {
+                    Correo = data.CorreoElectronico,
+                    Empresa = data.EmpresaParticipante,
+                    IdEmpresa = IdEmpresa,
+                    IdPlanificacion = IdPrueba,
+                    Nombre = data.NombreParticipante,
+                    Responsable = data.Responsable,
+                    Telefono = data.NroTelefono,
+                };
+
+                db.tblPBEPruebaPlanificacionParticipante.Add(reg);
+                db.SaveChanges();
+
+                IdParticipante = reg.IdParticipante;
+            }
+
+            return IdParticipante;
+        }
+        public static void UpdateParticipante(PruebaParticipanteModel data)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+            long IdPrueba = long.Parse(Session["IdPrueba"].ToString());
+
+            using (Entities db = new Entities())
+            {
+                tblPBEPruebaPlanificacionParticipante reg = db.tblPBEPruebaPlanificacionParticipante.Where(x => x.IdEmpresa == IdEmpresa && x.IdPlanificacion == IdPrueba && x.IdParticipante == data.IdParticipante).FirstOrDefault();
+                reg.Correo = data.CorreoElectronico;
+                reg.Empresa = data.EmpresaParticipante;
+                reg.Nombre = data.NombreParticipante;
+                reg.Responsable = data.Responsable;
+                reg.Telefono = data.NroTelefono;
+
+                db.SaveChanges();
+            }
+
+        }
+        public static void DeleteParticipante(long IdParticipante)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            long IdPrueba = long.Parse(Session["IdPrueba"].ToString());
+
+            using (Entities db = new Entities())
+            {
+                tblPBEPruebaPlanificacionParticipante reg = db.tblPBEPruebaPlanificacionParticipante.Where(x => x.IdEmpresa == IdEmpresa && x.IdPlanificacion == IdPrueba && x.IdParticipante == IdParticipante).FirstOrDefault();
+
+                db.tblPBEPruebaPlanificacionEjercicioParticipante.RemoveRange(reg.tblPBEPruebaPlanificacionEjercicioParticipante);
+                db.tblPBEPruebaPlanificacionParticipante.Remove(reg);
+
+                db.SaveChanges();
+            }
+
+        }
+        public static List<PruebaEjercicioModel> GetPruebaEjercicios(long idPrueba)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+
+            List<PruebaEjercicioModel> Ejercicios = new List<PruebaEjercicioModel>();
+
+            using (Entities db = new Entities())
+            {
+                Ejercicios = (from d in db.tblPBEPruebaPlanificacionEjercicio
+                              where d.IdEmpresa == IdEmpresa && d.IdPlanificacion == idPrueba
+                              select new PruebaEjercicioModel
+                              {
+                                  Descripcion = d.Descripcion,
+                                  DuracionHoras = d.DuracionHoras,
+                                  DuracionMinutos = d.DuracionMinutos,
+                                  Ejecutado = db.tblPBEPruebaEjecucionEjercicio.Where(x => x.IdEmpresa == IdEmpresa && x.IdPlanificacion == idPrueba && x.IdEjercicio == d.IdEjercicio).Count() > 0,
+                                  Inicio = d.FechaInicio,
+                                  IdClaseDocumento = IdTipoPruebas,
+                                  IdEmpresa = IdEmpresa,
+                                  IdEjercicio = d.IdEjercicio,
+                                  IdPrueba = d.IdPlanificacion,
+                                  Nombre = d.Nombre,
+                              }).ToList();
+            }
+
+            return Ejercicios;
+        }
+        public static PruebaEjercicioModel GetPruebaEjercicio(long IdPrueba, long IdEjercicio)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+
+            PruebaEjercicioModel Ejercicio = new PruebaEjercicioModel();
+
+            using (Entities db = new Entities())
+            {
+                Ejercicio = (from d in db.tblPBEPruebaPlanificacionEjercicio
+                             where d.IdEmpresa == IdEmpresa && d.IdPlanificacion == IdPrueba && d.IdEjercicio == IdEjercicio
+                             select new PruebaEjercicioModel
+                             {
+                                 Descripcion = d.Descripcion,
+                                 DuracionHoras = d.DuracionHoras,
+                                 DuracionMinutos = d.DuracionMinutos,
+                                 Ejecutado = db.tblPBEPruebaEjecucionEjercicio.Where(x => x.IdEmpresa == IdEmpresa && x.IdPlanificacion == IdPrueba && x.IdEjercicio == d.IdEjercicio).Count() > 0,
+                                 Inicio = d.FechaInicio,
+                                 IdClaseDocumento = IdTipoPruebas,
+                                 IdEmpresa = IdEmpresa,
+                                 IdEjercicio = d.IdEjercicio,
+                                 IdPrueba = d.IdPlanificacion,
+                                 Nombre = d.Nombre,
+                             }).FirstOrDefault();
+            }
+
+            return Ejercicio;
+        }
+        public static long AddEjercicio(PruebaEjercicioModel data)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+            long IdPrueba = long.Parse(Session["IdPrueba"].ToString());
+            long IdEjercicio = 0;
+
+            using (Entities db = new Entities())
+            {
+                tblPBEPruebaPlanificacionEjercicio reg = new tblPBEPruebaPlanificacionEjercicio
+                {
+                    Descripcion = data.Descripcion,
+                    DuracionHoras = data.DuracionHoras,
+                    DuracionMinutos = data.DuracionMinutos,
+                    FechaInicio = data.Inicio,
+                    IdEmpresa = IdEmpresa,
+                    IdPlanificacion = IdPrueba,
+                    Nombre = data.Nombre,
+                };
+
+                db.tblPBEPruebaPlanificacionEjercicio.Add(reg);
+                db.SaveChanges();
+
+                IdEjercicio = reg.IdEjercicio;
+            }
+
+            return IdEjercicio;
+        }
+        public static void UpdateEjercicio(PruebaEjercicioModel data)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+            long IdPrueba = long.Parse(Session["IdPrueba"].ToString());
+
+            using (Entities db = new Entities())
+            {
+                tblPBEPruebaPlanificacionEjercicio reg = db.tblPBEPruebaPlanificacionEjercicio.Where(x => x.IdEmpresa == IdEmpresa && x.IdPlanificacion == IdPrueba && x.IdEjercicio == data.IdEjercicio).FirstOrDefault();
+                reg.Descripcion = data.Descripcion;
+                reg.DuracionHoras = data.DuracionHoras;
+                reg.DuracionMinutos = data.DuracionMinutos;
+                reg.FechaInicio = data.Inicio;
+                reg.Nombre = data.Nombre;
+
+                db.SaveChanges();
+            }
+
+        }
+        public static void DeleteEjercicio(long idEjercicio)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+            long IdPrueba = long.Parse(Session["IdPrueba"].ToString());
+
+            using (Entities db = new Entities())
+            {
+                tblPBEPruebaPlanificacionEjercicio reg = db.tblPBEPruebaPlanificacionEjercicio.Where(x => x.IdEmpresa == IdEmpresa && x.IdPlanificacion == IdPrueba && x.IdEjercicio == idEjercicio).FirstOrDefault();
+
+                if (reg.tblPBEPruebaPlanificacionEjercicioParticipante != null && reg.tblPBEPruebaPlanificacionEjercicioParticipante.Count() > 0)
+                    db.tblPBEPruebaPlanificacionEjercicioParticipante.RemoveRange(reg.tblPBEPruebaPlanificacionEjercicioParticipante);
+                if (reg.tblPBEPruebaPlanificacionEjercicioRecurso != null && reg.tblPBEPruebaPlanificacionEjercicioRecurso.Count() > 0)
+                    db.tblPBEPruebaPlanificacionEjercicioRecurso.RemoveRange(reg.tblPBEPruebaPlanificacionEjercicioRecurso);
+
+                db.tblPBEPruebaPlanificacionEjercicio.Remove(reg);
+                db.SaveChanges();
+            }
+
+        }
+        public static List<PruebaParticipanteEjercicioModel> GetPruebaParticipantesEjercicio(long idPrueba, long idEjercicio)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+
+            List<PruebaParticipanteEjercicioModel> data = new List<PruebaParticipanteEjercicioModel>();
+
+            using (Entities db = new Entities())
+            {
+                data = (from d in db.tblPBEPruebaPlanificacionEjercicioParticipante
+                        where d.IdEmpresa == IdEmpresa && d.IdPlanificacion == idPrueba && d.IdEjercicio == idEjercicio
+                        select new PruebaParticipanteEjercicioModel
+                        {
+                            IdEjercicio = idEjercicio,
+                            IdParticipante = d.IdParticipante,
+                            Responsable = d.Responsable
+                        }).ToList();
+            }
+
+            return data;
+        }
+        public static PruebaParticipanteEjercicioModel GetPruebaParticipanteEjercicio(long IdPrueba, long IdEjercicio, long idParticipante)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+
+            PruebaParticipanteEjercicioModel data = new PruebaParticipanteEjercicioModel();
+
+            using (Entities db = new Entities())
+            {
+                data = (from d in db.tblPBEPruebaPlanificacionEjercicioParticipante
+                        where d.IdEmpresa == IdEmpresa && d.IdPlanificacion == IdPrueba && d.IdEjercicio == IdEjercicio && d.IdParticipante == idParticipante
+                        select new PruebaParticipanteEjercicioModel
+                        {
+                            IdEjercicio = d.IdEjercicio,
+                            IdParticipante = d.IdParticipante,
+                            Responsable = d.Responsable
+                        }).FirstOrDefault();
+            }
+
+            return data;
+        }
+        public static long AddParticipanteEjercicio(PruebaParticipanteEjercicioModel data)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+            long IdPrueba = long.Parse(Session["IdPrueba"].ToString());
+            long IdParticipante = 0;
+
+            using (Entities db = new Entities())
+            {
+                tblPBEPruebaPlanificacionEjercicioParticipante reg = new tblPBEPruebaPlanificacionEjercicioParticipante
+                {
+                    IdEjercicio = data.IdEjercicio,
+                    IdEmpresa = IdEmpresa,
+                    IdParticipante = data.IdParticipante,
+                    IdPlanificacion = IdPrueba,
+                    Responsable = data.Responsable
+                };
+
+                db.tblPBEPruebaPlanificacionEjercicioParticipante.Add(reg);
+                db.SaveChanges();
+
+                IdParticipante = reg.IdParticipante;
+            }
+
+            return IdParticipante;
+        }
+        public static void UpdateParticipanteEjercicio(PruebaParticipanteEjercicioModel data)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+            long IdPrueba = long.Parse(Session["IdPrueba"].ToString());
+
+            using (Entities db = new Entities())
+            {
+                tblPBEPruebaPlanificacionEjercicioParticipante reg = db.tblPBEPruebaPlanificacionEjercicioParticipante
+                    .Where(x => x.IdEmpresa == IdEmpresa && x.IdPlanificacion == IdPrueba
+                        && x.IdEjercicio == data.IdEjercicio && x.IdParticipante == data.IdParticipante).FirstOrDefault();
+
+                reg.Responsable = data.Responsable;
+                db.SaveChanges();
+            }
+
+        }
+        public static void DeleteParticipanteEjercicio(long idEjercicio, long idParticipante)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+            long IdPrueba = long.Parse(Session["IdPrueba"].ToString());
+
+            using (Entities db = new Entities())
+            {
+                tblPBEPruebaPlanificacionEjercicioParticipante reg = db.tblPBEPruebaPlanificacionEjercicioParticipante
+                    .Where(x => x.IdEmpresa == IdEmpresa && x.IdPlanificacion == IdPrueba
+                        && x.IdEjercicio == idEjercicio && x.IdParticipante == idParticipante).FirstOrDefault();
+
+                db.tblPBEPruebaPlanificacionEjercicioParticipante.Remove(reg);
+                db.SaveChanges();
+            }
+
+        }
+        public static List<PruebaRecursoEjercicioModel> GetPruebaRecursosEjercicio(long idPrueba, long idEjercicio)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+
+            List<PruebaRecursoEjercicioModel> data = new List<PruebaRecursoEjercicioModel>();
+
+            using (Entities db = new Entities())
+            {
+                data = (from d in db.tblPBEPruebaPlanificacionEjercicioRecurso
+                        where d.IdEmpresa == IdEmpresa && d.IdPlanificacion == idPrueba && d.IdEjercicio == idEjercicio
+                        select new PruebaRecursoEjercicioModel
+                        {
+                            Cantidad = d.Cantidad,
+                            Descripcion = d.Descripcion,
+                            IdEjercicio = idEjercicio,
+                            IdRecurso = d.IdRecurso,
+                            Nombre = d.Nombre,
+                            Responsable = d.Responsable
+                        }).ToList();
+            }
+
+            return data;
+        }
+        public static PruebaRecursoEjercicioModel GetPruebaRecursoEjercicio(long idPrueba, long idEjercicio, long idRecurso)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+
+            PruebaRecursoEjercicioModel data = new PruebaRecursoEjercicioModel();
+
+            using (Entities db = new Entities())
+            {
+                data = (from d in db.tblPBEPruebaPlanificacionEjercicioRecurso
+                        where d.IdEmpresa == IdEmpresa && d.IdPlanificacion == idPrueba && d.IdEjercicio == idEjercicio && d.IdRecurso == idRecurso
+                        select new PruebaRecursoEjercicioModel
+                        {
+                            Cantidad = d.Cantidad,
+                            Descripcion = d.Descripcion,
+                            IdEjercicio = idEjercicio,
+                            IdRecurso = d.IdRecurso,
+                            Nombre = d.Nombre,
+                            Responsable = d.Responsable
+                        }).FirstOrDefault();
+            }
+
+            return data;
+        }
+        public static long AddRecursoEjercicio(PruebaRecursoEjercicioModel data)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+            long IdPrueba = long.Parse(Session["IdPrueba"].ToString());
+            long IdRecurso = 0;
+
+            using (Entities db = new Entities())
+            {
+                tblPBEPruebaPlanificacionEjercicioRecurso reg = new tblPBEPruebaPlanificacionEjercicioRecurso
+                {
+                    Cantidad = data.Cantidad,
+                    Descripcion = data.Descripcion,
+                    IdEjercicio = data.IdEjercicio,
+                    IdEmpresa = IdEmpresa,
+                    IdRecurso = data.IdRecurso,
+                    IdPlanificacion = IdPrueba,
+                    Nombre = data.Nombre,
+                    Responsable = data.Responsable
+                };
+
+                db.tblPBEPruebaPlanificacionEjercicioRecurso.Add(reg);
+                db.SaveChanges();
+
+                IdRecurso = reg.IdRecurso;
+            }
+
+            return IdRecurso;
+        }
+        public static void UpdateRecursoEjercicio(PruebaRecursoEjercicioModel data)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+            long IdPrueba = long.Parse(Session["IdPrueba"].ToString());
+
+            using (Entities db = new Entities())
+            {
+                tblPBEPruebaPlanificacionEjercicioRecurso reg = db.tblPBEPruebaPlanificacionEjercicioRecurso
+                    .Where(x => x.IdEmpresa == IdEmpresa && x.IdPlanificacion == IdPrueba
+                        && x.IdEjercicio == data.IdEjercicio && x.IdRecurso == data.IdRecurso).FirstOrDefault();
+
+                reg.Cantidad = data.Cantidad;
+                reg.Descripcion = data.Descripcion;
+                reg.Nombre = data.Nombre;
+                reg.Responsable = data.Responsable;
+                db.SaveChanges();
+            }
+
+        }
+        public static void DeleteRecursoEjercicio(long idEjercicio, long idRecurso)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+            long IdPrueba = long.Parse(Session["IdPrueba"].ToString());
+
+            using (Entities db = new Entities())
+            {
+                tblPBEPruebaPlanificacionEjercicioRecurso reg = db.tblPBEPruebaPlanificacionEjercicioRecurso
+                    .Where(x => x.IdEmpresa == IdEmpresa && x.IdPlanificacion == IdPrueba
+                        && x.IdEjercicio == idEjercicio && x.IdRecurso == idRecurso).FirstOrDefault();
+
+                db.tblPBEPruebaPlanificacionEjercicioRecurso.Remove(reg);
+                db.SaveChanges();
+            }
+
+        }
+        public static void ActivarPrueba(long idPrueba)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            using (Entities db = new Entities())
+            {
+                tblPBEPruebaPlanificacion prueba = db.tblPBEPruebaPlanificacion
+                    .FirstOrDefault(e => e.IdEmpresa == IdEmpresa && e.IdPlanificacion == idPrueba);
+
+                prueba.IdEstatus = 0;
+                db.SaveChanges();
+            }
+        }
+        public static void SuspenderPrueba(long idPrueba)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            using (Entities db = new Entities())
+            {
+                tblPBEPruebaPlanificacion prueba = db.tblPBEPruebaPlanificacion
+                    .FirstOrDefault(e => e.IdEmpresa == IdEmpresa && e.IdPlanificacion == idPrueba);
+
+                prueba.IdEstatus = 3;
+                db.SaveChanges();
+            }
+        }
+        public static List<TablaModel_int> GetEstadoEjecucion()
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            List<TablaModel_int> data = new List<TablaModel_int>();
+
+            using (Entities db = new Entities())
+            {
+                data = db.tblCultura_PBEPruebaEstatus
+                         .Where(x => x.IdEstatus > 0 && (x.Cultura == Culture || x.Cultura == "es-VE"))
+                         .Select(x => new TablaModel_int
+                         {
+                             Descripcion = x.Descripcion,
+                             Id = x.IdEstatus
+                         }).ToList();
+            }
+
+            return data.OrderBy(x => x.Descripcion).ToList();
+
+        }
+        public static PruebaEjecucionModel GetEjecucion(long IdPrueba)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+            PruebaEjecucionModel datos = new PruebaEjecucionModel();
+
+            string UserTimeZone = Session["UserTimeZone"].ToString();
+            int Horas = int.Parse(UserTimeZone.Split(':').First());
+            int Minutos = (Math.Abs(Horas) * 60) + int.Parse(UserTimeZone.Split(':').Last());
+            if (Horas < 0) Minutos *= -1;
+
+            using (Entities db = new Entities())
+            {
+                if (db.tblPBEPruebaEjecucion.Count(e => e.IdEmpresa == IdEmpresa && e.IdPlanificacion == IdPrueba) == 0)
+                {
+                    tblPBEPruebaPlanificacion data =
+                        (from d in db.tblPBEPruebaPlanificacion
+                         where d.IdEmpresa == IdEmpresa && d.IdPlanificacion == IdPrueba
+                         select d).FirstOrDefault();
+
+                    db.tblPBEPruebaEjecucion.Add(new tblPBEPruebaEjecucion
+                    {
+                        FechaInicio = data.FechaInicio,
+                        IdPlanificacion = IdPrueba,
+                        Lugar = data.Lugar,
+                        IdEmpresa = data.IdEmpresa,
+                    });
+
+                    List<tblPBEPruebaEjecucionParticipante> dataP = new List<tblPBEPruebaEjecucionParticipante>();
+                    List<tblPBEPruebaEjecucionEjercicio> dataE = new List<tblPBEPruebaEjecucionEjercicio>();
+
+                    List<tblPBEPruebaPlanificacionParticipante> dataPP =
+                        (from d in db.tblPBEPruebaPlanificacionParticipante
+                         where d.IdEmpresa == IdEmpresa && d.IdPlanificacion == IdPrueba
+                         select d).ToList();
+
+                    List<tblPBEPruebaPlanificacionEjercicio> dataPE =
+                        (from d in db.tblPBEPruebaPlanificacionEjercicio
+                         where d.IdEmpresa == IdEmpresa && d.IdPlanificacion == IdPrueba
+                         select d).ToList();
+
+                    foreach (tblPBEPruebaPlanificacionParticipante d in dataPP)
+                    {
+                        dataP.Add(new tblPBEPruebaEjecucionParticipante
+                        {
+                            Correo = d.Correo,
+                            Empresa = d.Empresa,
+                            IdEmpresa = d.IdEmpresa,
+                            IdPlanificacion = d.IdPlanificacion,
+                            IdPlanificacionParticipante = d.IdParticipante,
+                            Nombre = d.Nombre,
+                            Responsable = d.Responsable,
+                            Telefono = d.Telefono,
+                        });
+                    }
+                    db.tblPBEPruebaEjecucionParticipante.AddRange(dataP);
+
+                    foreach (tblPBEPruebaPlanificacionEjercicio d in dataPE)
+                    {
+                        dataE.Add(new tblPBEPruebaEjecucionEjercicio
+                        {
+                            Descripcion = d.Descripcion,
+                            DuracionHoras = d.DuracionHoras,
+                            DuracionMinutos = d.DuracionMinutos,
+                            FechaInicio = d.FechaInicio,
+                            IdEmpresa = d.IdEmpresa,
+                            IdEstatus = 0,
+                            IdEjercicioPlanificacion = d.IdEjercicio,
+                            IdPlanificacion = d.IdPlanificacion,
+                            Nombre = d.Nombre,
+                        });
+                    }
+                    db.tblPBEPruebaEjecucionEjercicio.AddRange(dataE);
+                    db.SaveChanges();
+
+                    List<tblPBEPruebaEjecucionEjercicioParticipante> dataEP = new List<tblPBEPruebaEjecucionEjercicioParticipante>();
+                    List<tblPBEPruebaEjecucionEjercicioRecurso> dataER = new List<tblPBEPruebaEjecucionEjercicioRecurso>();
+
+                    List<tblPBEPruebaPlanificacionEjercicioParticipante> dataPEP =
+                        (from d in db.tblPBEPruebaPlanificacionEjercicioParticipante
+                         where d.IdEmpresa == IdEmpresa && d.IdPlanificacion == IdPrueba
+                         select d).ToList();
+
+                    List<tblPBEPruebaPlanificacionEjercicioRecurso> dataPER =
+                        (from d in db.tblPBEPruebaPlanificacionEjercicioRecurso
+                         where d.IdEmpresa == IdEmpresa && d.IdPlanificacion == IdPrueba
+                         select d).ToList();
+
+                    foreach (tblPBEPruebaPlanificacionEjercicioParticipante d in dataPEP)
+                    {
+                        dataEP.Add(new tblPBEPruebaEjecucionEjercicioParticipante
+                        {
+                            IdEmpresa = IdEmpresa,
+                            IdEjercicio = db.tblPBEPruebaEjecucionEjercicio
+                                            .FirstOrDefault(e => e.IdEjercicioPlanificacion == d.IdEjercicio).IdEjercicio,
+                            IdPlanificacion = IdPrueba,
+                            IdParticipante = db.tblPBEPruebaEjecucionParticipante
+                                               .FirstOrDefault(e => e.IdEmpresa == IdEmpresa
+                                                                   && e.IdPlanificacion == IdPrueba
+                                                                   && e.IdPlanificacionParticipante == d.IdParticipante)
+                                               .IdParticipante,
+                            Responsable = d.Responsable,
+                        });
+                    }
+
+                    foreach (tblPBEPruebaPlanificacionEjercicioRecurso d in dataPER)
+                    {
+                        dataER.Add(new tblPBEPruebaEjecucionEjercicioRecurso
+                        {
+                            Cantidad = d.Cantidad,
+                            Descripcion = d.Descripcion,
+                            IdEjercicio = db.tblPBEPruebaEjecucionEjercicio
+                                             .FirstOrDefault(e => e.IdEjercicioPlanificacion == d.IdEjercicio).IdEjercicio,
+                            IdEmpresa = IdEmpresa,
+                            IdPlanificacion = IdPrueba,
+                            Nombre = d.Nombre,
+                            Responsable = d.Responsable,
+                        });
+                    }
+
+                    db.tblPBEPruebaEjecucionEjercicioParticipante.AddRange(dataEP);
+                    db.tblPBEPruebaEjecucionEjercicioRecurso.AddRange(dataER);
+                    db.SaveChanges();
+
+                }
+                datos = (from d in db.tblPBEPruebaEjecucion
+                         let FechaI = SqlFunctions.DateAdd("mi", Minutos, d.FechaInicio)
+                         where d.IdEmpresa == IdEmpresa && d.IdPlanificacion == IdPrueba
+                         select new PruebaEjecucionModel
+                         {
+                             FechaInicio = (DateTime)FechaI,
+                             IdClaseDocumento = IdTipoPruebas,
+                             IdEmpresa = d.IdEmpresa,
+                             IdPrueba = d.IdPlanificacion,
+                             Nombre = d.tblPBEPruebaPlanificacion.Prueba,
+                             Proposito = d.tblPBEPruebaPlanificacion.Propósito,
+                             Ubicacion = d.Lugar,
+                         }).FirstOrDefault();
+            }
+
+            return datos;
+        }
+        public static void UpdateEjecucion(PruebaEjecucionModel data)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+            long IdPrueba = data.IdPrueba;
+
+            string UserTimeZone = Session["UserTimeZone"].ToString();
+            int Horas = int.Parse(UserTimeZone.Split(':').First());
+            int Minutos = (Math.Abs(Horas) * 60) + int.Parse(UserTimeZone.Split(':').Last());
+            if (Horas > 0) Minutos *= -1;
+
+            using (Entities db = new Entities())
+            {
+                tblPBEPruebaEjecucion reg = db.tblPBEPruebaEjecucion.Where(x => x.IdEmpresa == IdEmpresa && x.IdPlanificacion == IdPrueba).FirstOrDefault();
+                if (reg == null)
+                {
+                    reg = new tblPBEPruebaEjecucion
+                    {
+                        IdEmpresa = IdEmpresa,
+                        IdPlanificacion = IdPrueba,
+                        FechaInicio = data.FechaInicio.AddMinutes(Minutos),
+                        Lugar = data.Ubicacion,
+                    };
+
+                    db.tblPBEPruebaEjecucion.Add(reg);
+                }
+                else
+                {
+                    reg.FechaInicio = data.FechaInicio.AddMinutes(Minutos);
+                    reg.Lugar = data.Ubicacion;
+                }
+
+                db.SaveChanges();
+            }
+
+        }
+        public static List<TablaModel_short> GetEmpresasPruebaEjecucionParticipantes(long IdPrueba)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+
+            List<TablaModel_short> Empresas = new List<TablaModel_short>();
+
+            using (Entities db = new Entities())
+            {
+                if (db.tblPBEPruebaEjecucionParticipante.Count(e => e.IdEmpresa == IdEmpresa && e.IdPlanificacion == IdPrueba) == 0)
+                {
+                    List<tblPBEPruebaEjecucionParticipante> dataPrueba =
+                        (from d in db.tblPBEPruebaPlanificacionParticipante
+                         where d.IdEmpresa == IdEmpresa && d.IdPlanificacion == IdPrueba
+                         select new tblPBEPruebaEjecucionParticipante()
+                         {
+                             Correo = d.Correo,
+                             Empresa = d.Empresa,
+                             IdEmpresa = d.IdEmpresa,
+                             IdPlanificacion = d.IdPlanificacion,
+                             IdPlanificacionParticipante = d.IdParticipante,
+                             Nombre = d.Nombre,
+                             Responsable = d.Responsable,
+                             Telefono = d.Telefono,
+                         }).ToList();
+
+                    db.tblPBEPruebaEjecucionParticipante.AddRange(dataPrueba);
+                }
+                Empresas = (from d in db.tblPBEPruebaEjecucionParticipante
+                            where d.IdEmpresa == IdEmpresa && d.IdPlanificacion == IdPrueba
+                            orderby d.Empresa
+                            select d.Empresa).Distinct().AsEnumerable()
+                            .Select(x => new TablaModel_short
+                            {
+                                Descripcion = x
+                            }).ToList();
+            }
+
+            return Empresas;
+        }
+        public static List<PruebaParticipanteModel> GetPruebaEjecucionParticipantes(long idPrueba)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+
+            List<PruebaParticipanteModel> Participantes = new List<PruebaParticipanteModel>();
+
+            using (Entities db = new Entities())
+            {
+                Participantes = (from d in db.tblPBEPruebaEjecucionParticipante
+                                 where d.IdEmpresa == IdEmpresa && d.IdPlanificacion == idPrueba
+                                 select new PruebaParticipanteModel
+                                 {
+                                     CorreoElectronico = d.Correo,
+                                     EmpresaParticipante = d.Empresa,
+                                     IdClaseDocumento = IdTipoPruebas,
+                                     IdEmpresa = IdEmpresa,
+                                     IdParticipante = d.IdParticipante,
+                                     IdPrueba = d.IdPlanificacion,
+                                     NombreParticipante = d.Nombre,
+                                     NroTelefono = d.Telefono,
+                                     Planificado = true,
+                                     Responsable = d.Responsable,
+                                     Utilizado = db.tblPBEPruebaEjecucionEjercicioParticipante.Where(x => x.IdParticipante == d.IdParticipante).Count() > 0,
+                                 }).ToList();
+            }
+
+            return Participantes;
+        }
+        public static PruebaParticipanteModel GetPruebaEjecucionParticipante(long IdPrueba, long IdParticipante)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+
+            PruebaParticipanteModel Participante = new PruebaParticipanteModel();
+
+            using (Entities db = new Entities())
+            {
+                Participante = (from d in db.tblPBEPruebaEjecucionParticipante
+                                where d.IdEmpresa == IdEmpresa && d.IdPlanificacion == IdPrueba && d.IdParticipante == IdParticipante
+                                select new PruebaParticipanteModel
+                                {
+                                    CorreoElectronico = d.Correo,
+                                    EmpresaParticipante = d.Empresa,
+                                    IdClaseDocumento = IdTipoPruebas,
+                                    IdEmpresa = IdEmpresa,
+                                    IdParticipante = d.IdParticipante,
+                                    IdPrueba = d.IdPlanificacion,
+                                    NombreParticipante = d.Nombre,
+                                    NroTelefono = d.Telefono,
+                                    Planificado = true,
+                                    Responsable = d.Responsable,
+                                    Utilizado = db.tblPBEPruebaEjecucionEjercicioParticipante.Where(x => x.IdParticipante == d.IdParticipante).Count() > 0,
+                                }).FirstOrDefault();
+            }
+
+            return Participante;
+        }
+        public static long AddParticipanteEjecucion(PruebaParticipanteModel data)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+            long IdPrueba = long.Parse(Session["IdPrueba"].ToString());
+            long IdParticipante = 0;
+
+            using (Entities db = new Entities())
+            {
+                tblPBEPruebaEjecucionParticipante reg = new tblPBEPruebaEjecucionParticipante
+                {
+                    Correo = data.CorreoElectronico,
+                    Empresa = data.EmpresaParticipante,
+                    IdEmpresa = IdEmpresa,
+                    IdPlanificacion = IdPrueba,
+                    Nombre = data.NombreParticipante,
+                    Responsable = data.Responsable,
+                    Telefono = data.NroTelefono,
+                };
+
+                db.tblPBEPruebaEjecucionParticipante.Add(reg);
+                db.SaveChanges();
+
+                IdParticipante = reg.IdParticipante;
+            }
+
+            return IdParticipante;
+        }
+        public static void UpdateParticipanteEjecucion(PruebaParticipanteModel data)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+            long IdPrueba = long.Parse(Session["IdPrueba"].ToString());
+
+            using (Entities db = new Entities())
+            {
+                tblPBEPruebaEjecucionParticipante reg = db.tblPBEPruebaEjecucionParticipante.Where(x => x.IdEmpresa == IdEmpresa && x.IdPlanificacion == IdPrueba && x.IdParticipante == data.IdParticipante).FirstOrDefault();
+                reg.Correo = data.CorreoElectronico;
+                reg.Empresa = data.EmpresaParticipante;
+                reg.Nombre = data.NombreParticipante;
+                reg.Responsable = data.Responsable;
+                reg.Telefono = data.NroTelefono;
+
+                db.SaveChanges();
+            }
+
+        }
+        public static void DeleteParticipanteEjecucion(long IdParticipante)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            long IdPrueba = long.Parse(Session["IdPrueba"].ToString());
+
+            using (Entities db = new Entities())
+            {
+                tblPBEPruebaEjecucionParticipante reg = db.tblPBEPruebaEjecucionParticipante.Where(x => x.IdEmpresa == IdEmpresa && x.IdPlanificacion == IdPrueba && x.IdParticipante == IdParticipante).FirstOrDefault();
+
+                db.tblPBEPruebaEjecucionEjercicioParticipante.RemoveRange(reg.tblPBEPruebaEjecucionEjercicioParticipante);
+                db.tblPBEPruebaEjecucionParticipante.Remove(reg);
+
+                db.SaveChanges();
+            }
+
+        }
+        public static List<PruebaEjercicioEjecucionModel> GetPruebaEjerciciosEjecucion(long idPrueba)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+
+            List<PruebaEjercicioEjecucionModel> Ejercicios = new List<PruebaEjercicioEjecucionModel>();
+
+            using (Entities db = new Entities())
+            {
+                Ejercicios = (from d in db.tblPBEPruebaEjecucionEjercicio
+                              where d.IdEmpresa == IdEmpresa && d.IdPlanificacion == idPrueba
+                              select new PruebaEjercicioEjecucionModel
+                              {
+                                  Descripcion = d.Descripcion,
+                                  DuracionHoras = d.DuracionHoras,
+                                  DuracionMinutos = d.DuracionMinutos,
+                                  Ejecutado = d.IdEstatus > 0 && d.IdEstatus < 3,
+                                  Inicio = d.FechaInicio,
+                                  IdClaseDocumento = IdTipoPruebas,
+                                  IdEmpresa = IdEmpresa,
+                                  IdEjercicio = d.IdEjercicio,
+                                  IdPrueba = d.IdPlanificacion,
+                                  IdStatus = d.IdEstatus ?? 0,
+                                  Nombre = d.Nombre,
+                              }).ToList();
+            }
+
+            return Ejercicios;
+        }
+        public static PruebaEjercicioEjecucionModel GetPruebaEjercicioEjecucion(long IdPrueba, long IdEjercicio)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+
+            PruebaEjercicioEjecucionModel Ejercicio = new PruebaEjercicioEjecucionModel();
+
+            using (Entities db = new Entities())
+            {
+                Ejercicio = (from d in db.tblPBEPruebaEjecucionEjercicio
+                             where d.IdEmpresa == IdEmpresa && d.IdPlanificacion == IdPrueba && d.IdEjercicio == IdEjercicio
+                             select new PruebaEjercicioEjecucionModel
+                             {
+                                 Descripcion = d.Descripcion,
+                                 DuracionHoras = d.DuracionHoras,
+                                 DuracionMinutos = d.DuracionMinutos,
+                                 Ejecutado = db.tblPBEPruebaEjecucionEjercicio.Where(x => x.IdEmpresa == IdEmpresa && x.IdPlanificacion == IdPrueba && x.IdEjercicio == d.IdEjercicio).Count() > 0,
+                                 Inicio = d.FechaInicio,
+                                 IdClaseDocumento = IdTipoPruebas,
+                                 IdEmpresa = IdEmpresa,
+                                 IdEjercicio = d.IdEjercicio,
+                                 IdPrueba = d.IdPlanificacion,
+                                 IdStatus = d.IdEstatus ?? 0,
+                                 Nombre = d.Nombre,
+                             }).FirstOrDefault();
+            }
+
+            return Ejercicio;
+        }
+        public static long AddEjercicioEjecucion(PruebaEjercicioEjecucionModel data)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+            long IdPrueba = long.Parse(Session["IdPrueba"].ToString());
+            long IdEjercicio = 0;
+
+            using (Entities db = new Entities())
+            {
+                tblPBEPruebaEjecucionEjercicio reg = new tblPBEPruebaEjecucionEjercicio
+                {
+                    Descripcion = data.Descripcion,
+                    DuracionHoras = data.DuracionHoras,
+                    DuracionMinutos = data.DuracionMinutos,
+                    FechaInicio = data.Inicio,
+                    IdEmpresa = IdEmpresa,
+                    IdPlanificacion = IdPrueba,
+                    IdEjercicio = IdEjercicio,
+                    IdEstatus = data.IdStatus,
+                    Nombre = data.Nombre,
+                };
+
+                db.tblPBEPruebaEjecucionEjercicio.Add(reg);
+                db.SaveChanges();
+
+                IdEjercicio = reg.IdEjercicio;
+            }
+
+            return IdEjercicio;
+        }
+        public static void UpdateEjercicioEjecucion(PruebaEjercicioEjecucionModel data)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+            long IdPrueba = long.Parse(Session["IdPrueba"].ToString());
+
+            using (Entities db = new Entities())
+            {
+                tblPBEPruebaEjecucionEjercicio reg = db.tblPBEPruebaEjecucionEjercicio.Where(x => x.IdEmpresa == IdEmpresa && x.IdPlanificacion == IdPrueba && x.IdEjercicio == data.IdEjercicio).FirstOrDefault();
+                reg.Descripcion = data.Descripcion;
+                reg.DuracionHoras = data.DuracionHoras;
+                reg.DuracionMinutos = data.DuracionMinutos;
+                reg.FechaInicio = data.Inicio;
+                reg.IdEstatus = data.IdStatus;
+                reg.Nombre = data.Nombre;
+
+                db.SaveChanges();
+            }
+
+        }
+        public static void DeleteEjercicioEjecucion(long idEjercicio)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+            long IdPrueba = long.Parse(Session["IdPrueba"].ToString());
+
+            using (Entities db = new Entities())
+            {
+                tblPBEPruebaEjecucionEjercicio reg = db.tblPBEPruebaEjecucionEjercicio.Where(x => x.IdEmpresa == IdEmpresa && x.IdPlanificacion == IdPrueba && x.IdEjercicio == idEjercicio).FirstOrDefault();
+
+                if (reg.tblPBEPruebaEjecucionEjercicioParticipante != null && reg.tblPBEPruebaEjecucionEjercicioParticipante.Count() > 0)
+                    db.tblPBEPruebaEjecucionEjercicioParticipante.RemoveRange(reg.tblPBEPruebaEjecucionEjercicioParticipante);
+                if (reg.tblPBEPruebaEjecucionEjercicioRecurso != null && reg.tblPBEPruebaEjecucionEjercicioRecurso.Count() > 0)
+                    db.tblPBEPruebaEjecucionEjercicioRecurso.RemoveRange(reg.tblPBEPruebaEjecucionEjercicioRecurso);
+
+                db.tblPBEPruebaEjecucionEjercicio.Remove(reg);
+                db.SaveChanges();
+            }
+
+        }
+        public static List<PruebaParticipanteEjercicioModel> GetPruebaParticipantesEjercicioEjecucion(long idPrueba, long idEjercicio)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+
+            List<PruebaParticipanteEjercicioModel> data = new List<PruebaParticipanteEjercicioModel>();
+
+            using (Entities db = new Entities())
+            {
+                data = (from d in db.tblPBEPruebaEjecucionEjercicioParticipante
+                        where d.IdEmpresa == IdEmpresa && d.IdPlanificacion == idPrueba && d.IdEjercicio == idEjercicio
+                        select new PruebaParticipanteEjercicioModel
+                        {
+                            IdEjercicio = idEjercicio,
+                            IdParticipante = d.IdParticipante,
+                            Responsable = d.Responsable
+                        }).ToList();
+            }
+
+            return data;
+        }
+        public static PruebaParticipanteEjercicioModel GetPruebaParticipanteEjercicioEjecucion(long IdPrueba, long IdEjercicio, long idParticipante)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+
+            PruebaParticipanteEjercicioModel data = new PruebaParticipanteEjercicioModel();
+
+            using (Entities db = new Entities())
+            {
+                data = (from d in db.tblPBEPruebaEjecucionEjercicioParticipante
+                        where d.IdEmpresa == IdEmpresa && d.IdPlanificacion == IdPrueba && d.IdEjercicio == IdEjercicio && d.IdParticipante == idParticipante
+                        select new PruebaParticipanteEjercicioModel
+                        {
+                            IdEjercicio = d.IdEjercicio,
+                            IdParticipante = d.IdParticipante,
+                            Responsable = d.Responsable
+                        }).FirstOrDefault();
+            }
+
+            return data;
+        }
+        public static long AddParticipanteEjercicioEjecucion(PruebaParticipanteEjercicioModel data)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+            long IdPrueba = long.Parse(Session["IdPrueba"].ToString());
+            long IdParticipante = 0;
+
+            using (Entities db = new Entities())
+            {
+                tblPBEPruebaEjecucionEjercicioParticipante reg = new tblPBEPruebaEjecucionEjercicioParticipante
+                {
+                    IdEjercicio = data.IdEjercicio,
+                    IdEmpresa = IdEmpresa,
+                    IdParticipante = data.IdParticipante,
+                    IdPlanificacion = IdPrueba,
+                    Responsable = data.Responsable
+                };
+
+                db.tblPBEPruebaEjecucionEjercicioParticipante.Add(reg);
+                db.SaveChanges();
+
+                IdParticipante = reg.IdParticipante;
+            }
+
+            return IdParticipante;
+        }
+        public static void UpdateParticipanteEjercicioEjecucion(PruebaParticipanteEjercicioModel data)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+            long IdPrueba = long.Parse(Session["IdPrueba"].ToString());
+
+            using (Entities db = new Entities())
+            {
+                tblPBEPruebaEjecucionEjercicioParticipante reg = db.tblPBEPruebaEjecucionEjercicioParticipante
+                    .Where(x => x.IdEmpresa == IdEmpresa && x.IdPlanificacion == IdPrueba
+                        && x.IdEjercicio == data.IdEjercicio && x.IdParticipante == data.IdParticipante).FirstOrDefault();
+
+                reg.Responsable = data.Responsable;
+                db.SaveChanges();
+            }
+
+        }
+        public static void DeleteParticipanteEjercicioEjecucion(long idEjercicio, long idParticipante)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+            long IdPrueba = long.Parse(Session["IdPrueba"].ToString());
+
+            using (Entities db = new Entities())
+            {
+                tblPBEPruebaEjecucionEjercicioParticipante reg = db.tblPBEPruebaEjecucionEjercicioParticipante
+                    .Where(x => x.IdEmpresa == IdEmpresa && x.IdPlanificacion == IdPrueba
+                        && x.IdEjercicio == idEjercicio && x.IdParticipante == idParticipante).FirstOrDefault();
+
+                db.tblPBEPruebaEjecucionEjercicioParticipante.Remove(reg);
+                db.SaveChanges();
+            }
+
+        }
+        public static List<PruebaRecursoEjercicioModel> GetPruebaRecursosEjecucionEjercicio(long idPrueba, long idEjercicio)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+
+            List<PruebaRecursoEjercicioModel> data = new List<PruebaRecursoEjercicioModel>();
+
+            using (Entities db = new Entities())
+            {
+                data = (from d in db.tblPBEPruebaEjecucionEjercicioRecurso
+                        where d.IdEmpresa == IdEmpresa && d.IdPlanificacion == idPrueba && d.IdEjercicio == idEjercicio
+                        select new PruebaRecursoEjercicioModel
+                        {
+                            Cantidad = d.Cantidad,
+                            Descripcion = d.Descripcion,
+                            IdEjercicio = idEjercicio,
+                            IdRecurso = d.IdRecurso,
+                            Nombre = d.Nombre,
+                            Responsable = d.Responsable
+                        }).ToList();
+            }
+
+            return data;
+        }
+        public static PruebaRecursoEjercicioModel GetPruebaRecursoEjecucionEjercicio(long idPrueba, long idEjercicio, long idRecurso)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+
+            PruebaRecursoEjercicioModel data = new PruebaRecursoEjercicioModel();
+
+            using (Entities db = new Entities())
+            {
+                data = (from d in db.tblPBEPruebaPlanificacionEjercicioRecurso
+                        where d.IdEmpresa == IdEmpresa && d.IdPlanificacion == idPrueba && d.IdEjercicio == idEjercicio && d.IdRecurso == idRecurso
+                        select new PruebaRecursoEjercicioModel
+                        {
+                            Cantidad = d.Cantidad,
+                            Descripcion = d.Descripcion,
+                            IdEjercicio = idEjercicio,
+                            IdRecurso = d.IdRecurso,
+                            Nombre = d.Nombre,
+                            Responsable = d.Responsable
+                        }).FirstOrDefault();
+            }
+
+            return data;
+        }
+        public static long AddRecursoEjecucionEjercicio(PruebaRecursoEjercicioModel data)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+            long IdPrueba = long.Parse(Session["IdPrueba"].ToString());
+            long IdRecurso = 0;
+
+            using (Entities db = new Entities())
+            {
+                tblPBEPruebaEjecucionEjercicioRecurso reg = new tblPBEPruebaEjecucionEjercicioRecurso
+                {
+                    Cantidad = data.Cantidad,
+                    Descripcion = data.Descripcion,
+                    IdEjercicio = data.IdEjercicio,
+                    IdEmpresa = IdEmpresa,
+                    IdRecurso = data.IdRecurso,
+                    IdPlanificacion = IdPrueba,
+                    Nombre = data.Nombre,
+                    Responsable = data.Responsable
+                };
+
+                db.tblPBEPruebaEjecucionEjercicioRecurso.Add(reg);
+                db.SaveChanges();
+
+                IdRecurso = reg.IdRecurso;
+            }
+
+            return IdRecurso;
+        }
+        public static void UpdateRecursoEjecucionEjercicio(PruebaRecursoEjercicioModel data)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+            long IdPrueba = long.Parse(Session["IdPrueba"].ToString());
+
+            using (Entities db = new Entities())
+            {
+                tblPBEPruebaEjecucionEjercicioRecurso reg = db.tblPBEPruebaEjecucionEjercicioRecurso
+                    .Where(x => x.IdEmpresa == IdEmpresa && x.IdPlanificacion == IdPrueba
+                        && x.IdEjercicio == data.IdEjercicio && x.IdRecurso == data.IdRecurso).FirstOrDefault();
+
+                reg.Cantidad = data.Cantidad;
+                reg.Descripcion = data.Descripcion;
+                reg.Nombre = data.Nombre;
+                reg.Responsable = data.Responsable;
+                db.SaveChanges();
+            }
+
+        }
+        public static void DeleteRecursoEjecucionEjercicio(long idEjercicio, long idRecurso)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+            long IdPrueba = long.Parse(Session["IdPrueba"].ToString());
+
+            using (Entities db = new Entities())
+            {
+                tblPBEPruebaEjecucionEjercicioRecurso reg = db.tblPBEPruebaEjecucionEjercicioRecurso
+                    .Where(x => x.IdEmpresa == IdEmpresa && x.IdPlanificacion == IdPrueba
+                        && x.IdEjercicio == idEjercicio && x.IdRecurso == idRecurso).FirstOrDefault();
+
+                db.tblPBEPruebaEjecucionEjercicioRecurso.Remove(reg);
+                db.SaveChanges();
+            }
+
+        }
+        public static byte[] GetHallazgoEjecucion(long IdPrueba)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+            byte[] data = new byte[] { };
+
+            using (Entities db = new Entities())
+            {
+
+                tblPBEPruebaEjecucionResultado datos = db.tblPBEPruebaEjecucionResultado
+                    .FirstOrDefault(e => e.IdEmpresa == IdEmpresa && e.IdPlanificacion == IdPrueba && e.IdContenido == 1);
+
+                data = (datos != null ? datos.Contenido ?? null : null);
+
+            }
+
+            return data;
+        }
+        public static byte[] GetAccionesEjecucion(long IdPrueba)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+            byte[] data = new byte[] { };
+
+            using (Entities db = new Entities())
+            {
+
+                tblPBEPruebaEjecucionResultado datos = db.tblPBEPruebaEjecucionResultado
+                    .FirstOrDefault(e => e.IdEmpresa == IdEmpresa && e.IdPlanificacion == IdPrueba && e.IdContenido == 2);
+
+                data = (datos != null ? datos.Contenido ?? null : null);
+
+            }
+
+            return data;
+        }
+        public static bool UpdateResultadoEjecucion(long IdPrueba, long IdContenido, byte[] Contenido)
+        {
+            bool Updated = false;
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+
+            using (Entities db = new Entities())
+            {
+                tblPBEPruebaEjecucionResultado resultado = db.tblPBEPruebaEjecucionResultado
+                    .FirstOrDefault(e => e.IdEmpresa == IdEmpresa && e.IdPlanificacion == IdPrueba && e.IdContenido == IdContenido);
+
+                if (resultado == null)
+                {
+                    resultado = new tblPBEPruebaEjecucionResultado
+                    {
+                        Contenido = Contenido,
+                        IdContenido = IdContenido,
+                        IdEmpresa = IdEmpresa,
+                        IdPlanificacion = IdPrueba,
+                    };
+
+                    db.tblPBEPruebaEjecucionResultado.Add(resultado);
+                }
+                else
+                {
+                    resultado.Contenido = Contenido;
+                }
+
+                db.SaveChanges();
+                Updated = true;
+            }
+
+            return Updated;
+        }
+        public static void FinalizarPrueba(long idPrueba)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            using (Entities db = new Entities())
+            {
+                tblPBEPruebaPlanificacion prueba = db.tblPBEPruebaPlanificacion
+                    .FirstOrDefault(e => e.IdEmpresa == IdEmpresa && e.IdPlanificacion == idPrueba);
+
+                int Satisfactorios = db.tblPBEPruebaEjecucionEjercicio
+                    .Count(e => e.IdEmpresa == IdEmpresa && e.IdPlanificacion == idPrueba && e.IdEstatus == 1);
+                int Fallidos = db.tblPBEPruebaEjecucionEjercicio
+                    .Count(e => e.IdEmpresa == IdEmpresa && e.IdPlanificacion == idPrueba && e.IdEstatus > 1);
+
+                if (Fallidos > Satisfactorios)
+                    prueba.IdEstatus = 2;
+                else
+                    prueba.IdEstatus = 1;
+
+                db.SaveChanges();
+            }
+        }
+        public static void EliminarPrueba(long idPrueba)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            using (Entities db = new Entities())
+            {
+                db.tblPBEPruebaEjecucionResultado.RemoveRange(db.tblPBEPruebaEjecucionResultado.Where(x => x.IdEmpresa == IdEmpresa && x.IdPlanificacion == idPrueba).ToList());
+                db.tblPBEPruebaEjecucionEjercicioRecurso.RemoveRange(db.tblPBEPruebaEjecucionEjercicioRecurso.Where(x => x.IdEmpresa == IdEmpresa && x.IdPlanificacion == idPrueba).ToList());
+                db.tblPBEPruebaEjecucionEjercicioParticipante.RemoveRange(db.tblPBEPruebaEjecucionEjercicioParticipante.Where(x => x.IdEmpresa == IdEmpresa && x.IdPlanificacion == idPrueba).ToList());
+                db.tblPBEPruebaEjecucionEjercicio.RemoveRange(db.tblPBEPruebaEjecucionEjercicio.Where(x => x.IdEmpresa == IdEmpresa && x.IdPlanificacion == idPrueba).ToList());
+                db.tblPBEPruebaEjecucionParticipante.RemoveRange(db.tblPBEPruebaEjecucionParticipante.Where(x => x.IdEmpresa == IdEmpresa && x.IdPlanificacion == idPrueba).ToList());
+                db.tblPBEPruebaEjecucion.RemoveRange(db.tblPBEPruebaEjecucion.Where(x => x.IdEmpresa == IdEmpresa && x.IdPlanificacion == idPrueba).ToList());
+                db.tblPBEPruebaPlanificacionEjercicioRecurso.RemoveRange(db.tblPBEPruebaPlanificacionEjercicioRecurso.Where(x => x.IdEmpresa == IdEmpresa && x.IdPlanificacion == idPrueba).ToList());
+                db.tblPBEPruebaPlanificacionEjercicioParticipante.RemoveRange(db.tblPBEPruebaPlanificacionEjercicioParticipante.Where(x => x.IdEmpresa == IdEmpresa && x.IdPlanificacion == idPrueba).ToList());
+                db.tblPBEPruebaPlanificacionEjercicio.RemoveRange(db.tblPBEPruebaPlanificacionEjercicio.Where(x => x.IdEmpresa == IdEmpresa && x.IdPlanificacion == idPrueba).ToList());
+                db.tblPBEPruebaPlanificacionParticipante.RemoveRange(db.tblPBEPruebaPlanificacionParticipante.Where(x => x.IdEmpresa == IdEmpresa && x.IdPlanificacion == idPrueba).ToList());
+                db.tblPBEPruebaPlanificacion.RemoveRange(db.tblPBEPruebaPlanificacion.Where(x => x.IdEmpresa == IdEmpresa && x.IdPlanificacion == idPrueba).ToList());
+                db.SaveChanges();
+            }
+        }
+        public static bool EditDocumentoActivo(int IdTipoDocumento, bool Negocios)
+        {
+            long IdUser = long.Parse(Session["UserId"].ToString());
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            long minModulo = IdTipoDocumento * 1000000;
+            long maxModulo = IdTipoDocumento * 1999999;
+            bool CanEdit = false;
+
+            using (Entities db = new Entities())
+            {
+                long ModulosEditables = db.tblModulo_Usuario
+                     .Where(x => x.IdEmpresa == IdEmpresa
+                             && x.IdUsuario == IdUser
+                             && x.IdModulo >= minModulo
+                             && x.IdModulo <= maxModulo
+                             && x.Actualizar).Count();
+
+                long ModulosEliminables = db.tblModulo_Usuario
+                    .Where(x => x.IdEmpresa == IdEmpresa
+                            && x.IdUsuario == IdUser
+                            && x.IdModulo >= minModulo
+                            && x.IdModulo <= maxModulo
+                            && x.Eliminar).Count();
+
+                tblEmpresaUsuario EmpresaUsuario = db.tblEmpresaUsuario
+                    .Where(x => x.IdEmpresa == IdEmpresa
+                            && x.IdUsuario == IdUser).FirstOrDefault();
+
+                List<long> Unidades = db.tblUsuarioUnidadOrganizativa
+                                        .Where(x => x.IdEmpresa == IdEmpresa && x.IdUsuario == IdUser)
+                                        .Select(x => x.IdUnidadOrganizativa)
+                                        .ToList();
+
+                bool ProgramacionExist = db.tblPMTProgramacion
+                    .Where(x => x.IdEmpresa == IdEmpresa && x.Negocios == Negocios
+                             && x.IdModulo == (IdTipoDocumento * 1000000)).Count() > 0;
+
+                tblPMTProgramacion Programacion = db.tblPMTProgramacion
+                    .FirstOrDefault(x => x.IdEmpresa == IdEmpresa
+                                      && x.IdModulo == (IdTipoDocumento * 1000000)
+                                      && x.Negocios == Negocios
+                                      && x.FechaInicio <= DateTime.UtcNow
+                                      && x.FechaFinal >= DateTime.UtcNow);
+
+                CanEdit = ((!ProgramacionExist && Programacion == null) || (ProgramacionExist && Programacion != null))
+                               && (EmpresaUsuario.IdNivelUsuario == 6 || EmpresaUsuario.IdNivelUsuario == 4 || ModulosEditables > 0);
+            }
+
+            return CanEdit;
+        }
+        public static List<TablaModel> GetEstatusDocumento()
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            List<TablaModel> data = new List<TablaModel>();
+
+            using (Entities db = new Entities())
+            {
+                data = db.tblCultura_EstadoDocumento.Where(x => x.Culture == Culture || x.Culture == "es-VE").Select(x => new TablaModel
+                {
+                    Descripcion = x.Descripcion,
+                    Id = x.IdEstadoDocumento
+                }).ToList();
+            }
+
+            data.Add(new TablaModel
+            {
+                Id = 0,
+                Descripcion = Resources.DocumentoResource.AllDataMale,
+            });
+
+            return data.OrderBy(x => x.Descripcion).ToList();
+
+        }
+        public static IList<UnidadOrganizativaModel> GetUnidadesOrganizativasByName()
+        {
+            List<UnidadOrganizativaModel> Data = new List<UnidadOrganizativaModel>();
+
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+
+            using (Entities db = new Entities())
+            {
+                Data = db.tblUnidadOrganizativa.Where(x => x.IdEmpresa == IdEmpresa)
+                    .Select(x => new UnidadOrganizativaModel()
+                    {
+                        IdUnidad = x.IdUnidadOrganizativa,
+                        IdUnidadPadre = x.IdUnidadPadre,
+                        NombreUnidadOrganizativa = x.Nombre
+                    }).ToList();
+            }
+
+            return Data.OrderBy(x => x.NombreUnidadOrganizativa).ToList();
+        }
+        public static List<TablaModel> GetResponsablesTipoDocumento()
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoDocumento = int.Parse(Session["IdTipoDocumento"].ToString());
+            int IdClaseDocumento = int.Parse(Session["IdClaseDocumento"].ToString());
+            List<TablaModel> data = new List<TablaModel>();
+
+            using (Entities db = new Entities())
+            {
+                data = (from d in db.tblDocumento
+                        join p in db.tblPersona on d.IdPersonaResponsable equals p.IdPersona
+                        where d.IdEmpresa == IdEmpresa && d.IdTipoDocumento == IdTipoDocumento && d.Negocios == (IdClaseDocumento == 1)
+                        select p)
+                        .AsEnumerable()
+                        .Select(to => new TablaModel
+                        {
+                            Descripcion = string.IsNullOrEmpty(to.Nombre) ? string.Format("Responsable Id {0}", to.IdPersona.ToString()) : to.Nombre,
+                            Id = to.IdPersona
+                        }).Distinct().ToList();
+            }
+
+            data.Add(new TablaModel
+            {
+                Id = 0,
+                Descripcion = Resources.DocumentoResource.AllDataMale,
+            });
+
+            return data.OrderBy(x => x.Descripcion).ToList();
+
+        }
+        public static IList<UnidadOrganizativaModel> GetUnidadesOrganizativasByUser(bool forFilter)
+        {
+            List<UnidadOrganizativaModel> Data = new List<UnidadOrganizativaModel>();
+
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            long IdUser = long.Parse(Session["UserId"].ToString());
+
+            using (Entities db = new Entities())
+            {
+                Data = db.tblUsuarioUnidadOrganizativa.Where(x => x.IdEmpresa == IdEmpresa && x.IdUsuario == IdUser)
+                    .Select(x => new UnidadOrganizativaModel()
+                    {
+                        IdUnidad = x.tblUnidadOrganizativa.IdUnidadOrganizativa,
+                        IdUnidadPadre = x.tblUnidadOrganizativa.IdUnidadPadre,
+                        NombreUnidadOrganizativa = x.tblUnidadOrganizativa.Nombre
+                    }).ToList();
+            }
+
+            if (forFilter)
+            {
+                Data.Add(new UnidadOrganizativaModel
+                {
+                    IdUnidad = 0,
+                    IdUnidadPadre = 0,
+                    NombreUnidadOrganizativa = Resources.DocumentoResource.AllDataFemale,
+                });
+            }
+
+            return Data.OrderBy(x => x.NombreUnidadOrganizativa).ToList();
+        }
+        public static string GetNombreMes(int Mes)
+        {
+            switch (Mes)
+            {
+                case 1:
+                    return Resources.MesResource.Enero;
+                case 2:
+                    return Resources.MesResource.Febrero;
+                case 3:
+                    return Resources.MesResource.Marzo;
+                case 4:
+                    return Resources.MesResource.Abril;
+                case 5:
+                    return Resources.MesResource.Mayo;
+                case 6:
+                    return Resources.MesResource.Junio;
+                case 7:
+                    return Resources.MesResource.Julio;
+                case 8:
+                    return Resources.MesResource.Agosto;
+                case 9:
+                    return Resources.MesResource.Septiembre;
+                case 10:
+                    return Resources.MesResource.Octubre;
+                case 11:
+                    return Resources.MesResource.Noviembre;
+                case 12:
+                    return Resources.MesResource.Diciembre;
+                default:
+                    return string.Empty;
+
+            }
+        }
+        public static bool CanActivate(long idPrueba)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            long IdUser = long.Parse(Session["UserId"].ToString());
+            bool _CanActivate = false;
+
+            using (Entities db = new Entities())
+            {
+                tblPBEPruebaPlanificacion _prueba = db.tblPBEPruebaPlanificacion.FirstOrDefault(x => x.IdEmpresa == IdEmpresa && x.IdPlanificacion == idPrueba);
+
+                if (_prueba != null)
+                {
+                    _CanActivate = _prueba.tblPBEPruebaPlanificacionParticipante.Count() > 0
+                                && _prueba.tblPBEPruebaPlanificacionEjercicio.Count() > 0;
+
+                    foreach (tblPBEPruebaPlanificacionEjercicio ejercicio in _prueba.tblPBEPruebaPlanificacionEjercicio)
+                    {
+                        if (ejercicio.tblPBEPruebaPlanificacionEjercicioParticipante.Count() == 0
+                            || ejercicio.tblPBEPruebaPlanificacionEjercicioRecurso.Count() == 0)
+                        {
+                            _CanActivate = false;
+                            break;
+                        }
+                    }
+
+                }
+            }
+
+            return _CanActivate;
+        }
+
+
     }
 }

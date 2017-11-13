@@ -225,4 +225,28 @@
   <data name="EliminadoErrorMessage" xml:space="preserve">
     <value>El usuario ha sido Eliminado. Por favor comuníquese con el administrador.</value>
   </data>
+  <data name="FechaMayorIgualQueFecha" xml:space="preserve">
+    <value>La {0} no puede ser mayor a {1}</value>
+  </data>
+  <data name="FechaMayorIgualQueHoy" xml:space="preserve">
+    <value>La {0} no puede ser mayor a la fecha de hoy</value>
+  </data>
+  <data name="FechaMenorIgualQueFecha" xml:space="preserve">
+    <value>La {0} no puede ser menor a {1)</value>
+  </data>
+  <data name="FechaMenorIgualQueHoy" xml:space="preserve">
+    <value>La {0} no puede ser menor a la fecha de hoy</value>
+  </data>
+  <data name="RangeErrorFemale" xml:space="preserve">
+    <value>La {0} debe estar entre {1} y {2}</value>
+  </data>
+  <data name="RangeErrorMale" xml:space="preserve">
+    <value>El {0} debe estar entre {1} y {2}</value>
+  </data>
+  <data name="RangeErrorMultipleFemale" xml:space="preserve">
+    <value>Las {0} deben estar entre {1} y {2}</value>
+  </data>
+  <data name="RangeErrorMultipleMale" xml:space="preserve">
+    <value>Los {0} deben estar entre {1} y {2}</value>
+  </data>
 </root>

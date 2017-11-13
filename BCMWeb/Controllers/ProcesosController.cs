@@ -3,7 +3,6 @@ using BCMWeb.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace BCMWeb.Controllers
@@ -26,7 +25,7 @@ namespace BCMWeb.Controllers
 
             Session["modId"] = modId;
 
-            ProcesoImpactoModel model = new ProcesoImpactoModel();
+            ProcesoValoresModel model = new ProcesoValoresModel();
             string _modId = modId.ToString();
             int IdTipoDocumento = int.Parse(_modId.Substring(0, (_modId.Length == 7 ? 1 : 2)));
             long IdModulo = IdTipoDocumento * 1000000;
@@ -44,7 +43,7 @@ namespace BCMWeb.Controllers
         [SessionExpire]
         [HandleError]
         [HttpPost]
-        public ActionResult AjustarIF(ProcesoImpactoModel model)
+        public ActionResult AjustarIF(ProcesoValoresModel model)
         {
             long modId = long.Parse(Session["modId"].ToString());
             string _modId = Session["modId"].ToString();
@@ -62,44 +61,31 @@ namespace BCMWeb.Controllers
         }
         [SessionExpire]
         [HandleError]
-        public ActionResult AjustarIFPartialView(ProcesoImpactoModel model)
+        public ActionResult AjustarIFPartialView(ProcesoValoresModel model)
         {
             return PartialView();
         }
         [HttpPost, ValidateInput(false)]
-        public ActionResult EditIfUpdatePartial(ProcesoImpactoModel dataImpacto)
+        public ActionResult EditIfUpdatePartial(ProcesoValoresModel dataImpacto)
         {
             if (ModelState.IsValid)
             {
                 using (Entities db = new Entities())
                 {
-                    if (dataImpacto.IdImpacto == 0)
+                    if (dataImpacto.IdTipoEscala > 0)
                     {
-                        tblBIAImpactoFinanciero reg = new tblBIAImpactoFinanciero()
+                        tblBIAProceso _proceso = db.tblBIAProceso.FirstOrDefault(x => x.IdEmpresa == dataImpacto.IdEmpresa
+                                                                            && x.IdProceso == dataImpacto.IdProceso);
+
+                        if (_proceso != null)
                         {
-                            Descripcion = string.Empty,
-                            IdDocumentoBIA = dataImpacto.IdDocumentoBIA,
-                            IdEmpresa = dataImpacto.IdEmpresa,
-                            IdEscala = dataImpacto.IdTipoEscala,
-                            IdProceso = dataImpacto.IdProceso,
-                            IdTipoFrecuencia = 9,
-                            Impacto = (dataImpacto.Impacto == null ? string.Empty : dataImpacto.Impacto),
-                            UnidadTiempo = string.Empty
-                        };
-
-                        db.tblBIAImpactoFinanciero.Add(reg);
+                            var regs = db.tblBIAImpactoFinanciero.FirstOrDefault(x => x.IdEmpresa == dataImpacto.IdEmpresa
+                                                                              && x.IdDocumentoBIA == _proceso.IdDocumentoBia
+                                                                              && x.IdProceso == dataImpacto.IdProceso);
+                            regs.IdEscala = dataImpacto.IdTipoEscala;
+                            db.SaveChanges();
+                        }
                     }
-                    else
-                    {
-                        tblBIAImpactoFinanciero reg = db.tblBIAImpactoFinanciero.Where(x => x.IdEmpresa == dataImpacto.IdEmpresa
-                                                                                           && x.IdDocumentoBIA == dataImpacto.IdDocumentoBIA
-                                                                                           && x.IdProceso == dataImpacto.IdProceso
-                                                                                           && x.IdImpactoFinanciero == dataImpacto.IdImpacto).FirstOrDefault();
-
-                        reg.IdEscala = dataImpacto.IdTipoEscala;
-                    }
-
-                    db.SaveChanges();
                 }
             }
             else
@@ -161,33 +147,12 @@ namespace BCMWeb.Controllers
             {
                 using (Entities db = new Entities())
                 {
-                    if (dataImpacto.IdImpacto == 0)
+                    if (dataImpacto.IdEscala > 0)
                     {
-                        tblBIAImpactoOperacional reg = new tblBIAImpactoOperacional()
-                        {
-                            Descripcion = string.Empty,
-                            IdDocumentoBIA = dataImpacto.IdDocumentoBIA,
-                            IdEmpresa = dataImpacto.IdEmpresa,
-                            IdEscala = dataImpacto.IdTipoEscala,
-                            IdProceso = dataImpacto.IdProceso,
-                            IdTipoFrecuencia = 9,
-                            ImpactoOperacional = (dataImpacto.Impacto == null ? string.Empty : dataImpacto.Impacto),
-                            UnidadTiempo = string.Empty
-                        };
-
-                        db.tblBIAImpactoOperacional.Add(reg);
+                        var regs = db.tblBIAImpactoOperacional.Where(x => x.ImpactoOperacional == dataImpacto.Impacto).ToList();
+                        regs.ForEach(x => x.IdEscala = dataImpacto.IdEscala);
+                        db.SaveChanges();
                     }
-                    else
-                    {
-                        tblBIAImpactoOperacional reg = db.tblBIAImpactoOperacional.Where(x => x.IdEmpresa == dataImpacto.IdEmpresa
-                                                                                           && x.IdDocumentoBIA == dataImpacto.IdDocumentoBIA
-                                                                                           && x.IdProceso == dataImpacto.IdProceso
-                                                                                           && x.IdImpactoOperacional== dataImpacto.IdImpacto).FirstOrDefault();
-
-                        reg.IdEscala = dataImpacto.IdTipoEscala;
-                    }
-
-                    db.SaveChanges();
                 }
             }
             else
@@ -243,7 +208,7 @@ namespace BCMWeb.Controllers
             return PartialView();
         }
         [HttpPost, ValidateInput(false)]
-        public ActionResult EditMTDUpdatePartial(ProcesoImpactoModel dataImpacto)
+        public ActionResult EditMTDUpdatePartial(ProcesoValoresModel dataImpacto)
         {
             if (ModelState.IsValid)
             {
@@ -329,7 +294,7 @@ namespace BCMWeb.Controllers
             return PartialView();
         }
         [HttpPost, ValidateInput(false)]
-        public ActionResult EditRTOUpdatePartial(ProcesoImpactoModel dataImpacto)
+        public ActionResult EditRTOUpdatePartial(ProcesoValoresModel dataImpacto)
         {
             if (ModelState.IsValid)
             {
@@ -415,7 +380,7 @@ namespace BCMWeb.Controllers
             return PartialView();
         }
         [HttpPost, ValidateInput(false)]
-        public ActionResult EditRPOUpdatePartial(ProcesoImpactoModel dataImpacto)
+        public ActionResult EditRPOUpdatePartial(ProcesoValoresModel dataImpacto)
         {
             if (ModelState.IsValid)
             {
@@ -501,7 +466,7 @@ namespace BCMWeb.Controllers
             return PartialView();
         }
         [HttpPost, ValidateInput(false)]
-        public ActionResult EditWRTUpdatePartial(ProcesoImpactoModel dataImpacto)
+        public ActionResult EditWRTUpdatePartial(ProcesoValoresModel dataImpacto)
         {
             if (ModelState.IsValid)
             {
@@ -560,12 +525,12 @@ namespace BCMWeb.Controllers
 
             Auditoria.RegistarAccion(eTipoAccion.Mostrar);
 
-            Session["ValoresIF"] = "";
-            Session["ValoresIO"] = "";
-            Session["ValoresMTD"] = "";
-            Session["ValoresRTO"] = "";
-            Session["ValoresRPO"] = "";
-            Session["ValoresWRT"] = "";
+            Session["ValoresIF"] = null;
+            Session["ValoresIO"] = null;
+            Session["ValoresMTD"] = null;
+            Session["ValoresRTO"] = null;
+            Session["ValoresRPO"] = null;
+            Session["ValoresWRT"] = null;
 
             return View(model);
         }
@@ -593,6 +558,147 @@ namespace BCMWeb.Controllers
             Session["ValoresWRT"] = model.WRTSelected;
 
             return View(model);
+        }
+        [SessionExpire]
+        [HandleError]
+        [HttpPost]
+        public ActionResult UpdateCriticos(CriticoModel model)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            long modId = long.Parse(Session["modId"].ToString());
+            string _modId = Session["modId"].ToString();
+            int IdTipoDocumento = int.Parse(_modId.Substring(0, (_modId.Length == 7 ? 1 : 2)));
+
+            IList<string> ValoresIF = (Session["ValoresIF"] != null ? Session["ValoresIF"].ToString().Split(',').ToList() : new List<string>());
+            IList<string> ValoresIO = (Session["ValoresIO"] != null ? Session["ValoresIO"].ToString().Split(',').ToList() : new List<string>());
+            IList<string> ValoresMTD = (Session["ValoresMTD"] != null ? Session["ValoresMTD"].ToString().Split(',').ToList() : new List<string>());
+            IList<string> ValoresRTO = (Session["ValoresRTO"] != null ? Session["ValoresRTO"].ToString().Split(',').ToList() : new List<string>());
+            IList<string> ValoresRPO = (Session["ValoresRPO"] != null ? Session["ValoresRPO"].ToString().Split(',').ToList() : new List<string>());
+            IList<string> ValoresWRT = (Session["ValoresWRT"] != null ? Session["ValoresWRT"].ToString().Split(',').ToList() : new List<string>());
+
+            IQueryable<DocumentoProcesoModel> _Procesos = Metodos.GetProcesosByImpacto().AsQueryable();
+            using (Entities db = new Entities())
+            {
+                foreach (DocumentoProcesoModel _proceso in _Procesos)
+                {
+                    tblBIAProceso proceso = db.tblBIAProceso.FirstOrDefault(x => x.IdEmpresa == IdEmpresa && x.IdProceso == _proceso.IdProceso);
+                    if (proceso != null)
+                    {
+                        proceso.Critico = _proceso.Selected;
+                    }
+
+                }
+
+                if (ValoresIF.Count() > 0)
+                {
+                    foreach (string valor in ValoresIF)
+                    {
+                        long _valor = long.Parse(valor);
+                        tblEscala _escala = db.tblEscala.FirstOrDefault(x => x.IdEmpresa == IdEmpresa && x.IdTipoEscala == 1 && x.IdEscala == _valor);
+                        string _Descripcion = _escala.Descripcion;
+                        tblCriticidad _criticidad = new tblCriticidad
+                        {
+                            DescripcionEscala = _Descripcion,
+                            IdEmpresa = IdEmpresa,
+                            IdTipoEscala = _escala.IdEscala,
+                            FechaAplicacion = DateTime.UtcNow,
+                        };
+                        db.tblCriticidad.Add(_criticidad);
+                    }
+                }
+                if (ValoresIO.Count() > 0)
+                {
+                    foreach (string valor in ValoresIO)
+                    {
+                        long _valor = long.Parse(valor);
+                        tblEscala _escala = db.tblEscala.FirstOrDefault(x => x.IdEmpresa == IdEmpresa && x.IdTipoEscala == 2 && x.IdEscala == _valor);
+                        string _Descripcion = _escala.Descripcion;
+                        tblCriticidad _criticidad = new tblCriticidad
+                        {
+                            DescripcionEscala = _Descripcion,
+                            IdEmpresa = IdEmpresa,
+                            IdTipoEscala = _escala.IdEscala,
+                            FechaAplicacion = DateTime.UtcNow,
+                        };
+                        db.tblCriticidad.Add(_criticidad);
+                    }
+                }
+                if (ValoresMTD.Count() > 0)
+                {
+                    foreach (string valor in ValoresMTD)
+                    {
+                        long _valor = long.Parse(valor);
+                        tblEscala _escala = db.tblEscala.FirstOrDefault(x => x.IdEmpresa == IdEmpresa && x.IdTipoEscala == 3 && x.IdEscala == _valor);
+                        string _Descripcion = _escala.Descripcion;
+                        tblCriticidad _criticidad = new tblCriticidad
+                        {
+                            DescripcionEscala = _Descripcion,
+                            IdEmpresa = IdEmpresa,
+                            IdTipoEscala = _escala.IdEscala,
+                            FechaAplicacion = DateTime.UtcNow,
+                        };
+                        db.tblCriticidad.Add(_criticidad);
+                    }
+                }
+                if (ValoresRTO.Count() > 0)
+                {
+                    foreach (string valor in ValoresRTO)
+                    {
+                        long _valor = long.Parse(valor);
+                        tblEscala _escala = db.tblEscala.FirstOrDefault(x => x.IdEmpresa == IdEmpresa && x.IdTipoEscala == 4 && x.IdEscala == _valor);
+                        string _Descripcion = _escala.Descripcion;
+                        tblCriticidad _criticidad = new tblCriticidad
+                        {
+                            DescripcionEscala = _Descripcion,
+                            IdEmpresa = IdEmpresa,
+                            IdTipoEscala = _escala.IdEscala,
+                            FechaAplicacion = DateTime.UtcNow,
+                        };
+                        db.tblCriticidad.Add(_criticidad);
+                    }
+                }
+                if (ValoresRPO.Count() > 0)
+                {
+                    foreach (string valor in ValoresRPO)
+                    {
+                        long _valor = long.Parse(valor);
+                        tblEscala _escala = db.tblEscala.FirstOrDefault(x => x.IdEmpresa == IdEmpresa && x.IdTipoEscala == 5 && x.IdEscala == _valor);
+                        string _Descripcion = _escala.Descripcion;
+                        tblCriticidad _criticidad = new tblCriticidad
+                        {
+                            DescripcionEscala = _Descripcion,
+                            IdEmpresa = IdEmpresa,
+                            IdTipoEscala = _escala.IdEscala,
+                            FechaAplicacion = DateTime.UtcNow,
+                        };
+                        db.tblCriticidad.Add(_criticidad);
+                    }
+                }
+                if (ValoresWRT.Count() > 0)
+                {
+                    foreach (string valor in ValoresWRT)
+                    {
+                        long _valor = long.Parse(valor);
+                        tblEscala _escala = db.tblEscala.FirstOrDefault(x => x.IdEmpresa == IdEmpresa && x.IdTipoEscala == 6 && x.IdEscala == _valor);
+                        string _Descripcion = _escala.Descripcion;
+                        tblCriticidad _criticidad = new tblCriticidad
+                        {
+                            DescripcionEscala = _Descripcion,
+                            IdEmpresa = IdEmpresa,
+                            IdTipoEscala = _escala.IdEscala,
+                            FechaAplicacion = DateTime.UtcNow,
+                        };
+                        db.tblCriticidad.Add(_criticidad);
+                    }
+                }
+
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("Criticos", new
+            {
+                modId
+            });
         }
         [SessionExpire]
         [HandleError]
@@ -683,8 +789,8 @@ namespace BCMWeb.Controllers
             Session["ValoresProbabilidad"] = model.ImpactoFinancieroSelected;
             Session["ValoresImpacto"] = model.ImpactoOperacionalSelected;
             Session["ValoresSeveridad"] = model.MTDSelected;
-            Session["ValoresFuente"] = model.RTOSelected;
-            Session["ValoresControl"] = model.RPOSelected;
+            Session["ValoresFuente"] = model.RPOSelected;
+            Session["ValoresControl"] = model.RTOSelected;
 
             return View(model);
         }
@@ -723,6 +829,20 @@ namespace BCMWeb.Controllers
         public ActionResult RiesgoPartialView(CriticoModel model)
         {
             return PartialView();
+        }
+        [SessionExpire]
+        [HandleError]
+        public ActionResult ExportCriticos()
+        {
+            return GridViewExportCriticos.FormatConditionsExportFormatsInfo[GridViewExportFormat.Xlsx](GridViewExportCriticos.FormatConditionsExportGridViewSettings, Metodos.GetProcesosByImpacto());
+
+        }
+        [SessionExpire]
+        [HandleError]
+        public ActionResult ExportRiesgo()
+        {
+            return GridViewExportRiesgo.FormatConditionsExportFormatsInfo[GridViewExportFormat.Xlsx](GridViewExportRiesgo.FormatConditionsExportGridViewSettings, Metodos.GetProcesosByRiesgo());
+
         }
     }
 }

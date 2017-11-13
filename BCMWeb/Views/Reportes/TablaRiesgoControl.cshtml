@@ -19,36 +19,21 @@
 }).GetHtml()
 }
 
-@*<div style="margin-bottom: 8px; float:right; position: relative;">
-    @Html.DevExpress().Menu(settings =>
-    {
-        settings.Name = "toolbar";
-        settings.ShowAsToolbar = true;
-
-        settings.Items.Add(new MVCxMenuItem(string.Empty, "mnuPrint", "~/Content/ChartIcons/BtnPrint.png")
-        {
-            ToolTip = Resources.ReporteResource.ToolTipPrintButton
-        });
-        MVCxMenuItem mnuFormat = new MVCxMenuItem();
-        mnuFormat.Name = "mnuFormat";
-
-        DevExpress.Web.MenuItemStyle itemStyle = new DevExpress.Web.MenuItemStyle();
-        itemStyle.Assign(mnuFormat.ItemStyle);
-        itemStyle.Paddings.Padding = new Unit(2, UnitType.Pixel);
-        itemStyle.Paddings.PaddingBottom = new Unit(1, UnitType.Pixel);
-
-        mnuFormat.ItemStyle.Assign(itemStyle);
-
-        settings.Items.Add(mnuFormat);
-        settings.ClientSideEvents.ItemClick = "function(s, e) { chart.GetPrintOptions().SetSizeMode('Zoom'); chart.Print(); }";
-    }).GetHtml()
-</div>*@
-
 @using (Html.BeginForm("TablaRiesgoControl", "Reportes", FormMethod.Post, htmlAttributes: new { id = "TablaForm" }))
 {
     @Html.HiddenFor(m => m.IdModulo)
     @Html.HiddenFor(m => m.IdModuloActual)
     @Html.HiddenFor(m => m.IdUnidadOrganizativa)
+
+    <div style="float: right;">
+        @Html.DevExpress().Button(settings =>
+   {
+       settings.Name = "btExport";
+       settings.Text = Resources.BCMWebPublic.stringExportExcel;
+       settings.RouteValues = new { Controller = "Reportes", Action = "ExportTablaRiesgo" };
+       //settings.UseSubmitBehavior = true;
+   }).GetHtml()
+    </div>
 
     <div style="margin-bottom: 10px;">
         @Html.Partial("ComboBoxUnidadOrganizativa")

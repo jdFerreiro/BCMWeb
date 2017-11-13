@@ -3,7 +3,7 @@
 @model CriticoModel
 
 <script type="text/javascript">
-    $(document).ready(function() {
+    $(document).ready(function () {
         var valoresIF = '@Session["ValoresIF"]';
         var valoresIO = '@Session["ValoresIO"]';
         var valoresMTD = '@Session["ValoresMTD"]';
@@ -12,6 +12,7 @@
         var valoresWRT = '@Session["ValoresWRT"]';
 
         if (valoresIF != null && valoresIF != "") {
+            alert(valoresIF);
             valores = valoresIF;
             if (valores.indexOf(",") == -1) {
                 var item = lbImpactoFinanciero.FindItemByValue(valores);
@@ -109,34 +110,34 @@
         }
     });
     function OnBeginGridCallback(s, e) {
-            lp.Show();
+        lp.Show();
+    }
+    function OnEndGridCallback(s, e) {
+        lp.Hide();
+    }
+    function FeaturesSelectionChanged(s, e) {
+        var selectedFeatures = s.GetSelectedValues();
+        switch (s.name) {
+            case "lbImpactoFinanciero":
+                $("#ImpactoFinancieroSelected").val(selectedFeatures);
+                break;
+            case "lbImpactoOperacional":
+                $("#ImpactoOperacionalSelected").val(selectedFeatures);
+                break;
+            case "lbMTD":
+                $("#MTDSelected").val(selectedFeatures);
+                break;
+            case "lbRPO":
+                $("#RPOSelected").val(selectedFeatures);
+                break;
+            case "lbRTO":
+                $("#RTOSelected").val(selectedFeatures);
+                break;
+            case "lbWRT":
+                $("#WRTSelected").val(selectedFeatures);
+                break;
         }
-        function OnEndGridCallback(s, e) {
-            lp.Hide();
-        }
-        function FeaturesSelectionChanged(s, e) {
-            var selectedFeatures = s.GetSelectedValues();
-            switch (s.name) {
-                case "lbImpactoFinanciero":
-                    $("#ImpactoFinancieroSelected").val(selectedFeatures);
-                    break;
-                case "lbImpactoOperacional":
-                    $("#ImpactoOperacionalSelected").val(selectedFeatures);
-                    break;
-                case "lbMTD":
-                    $("#MTDSelected").val(selectedFeatures);
-                    break;
-                case "lbRPO":
-                    $("#RPOSelected").val(selectedFeatures);
-                    break;
-                case "lbRTO":
-                    $("#RTOSelected").val(selectedFeatures);
-                    break;
-                case "lbWRT":
-                    $("#WRTSelected").val(selectedFeatures);
-                    break;
-            }
-        }
+    }
 </script>
 
 
@@ -168,6 +169,15 @@
     @Html.HiddenFor(m => m.RPOSelected)
     @Html.HiddenFor(m => m.WRTSelected)
 
+    <div style="float:right; margin-top: -20px; margin-right: 10px;">
+        @Html.DevExpress().Button(b =>
+        {
+            b.Name = "botProcess";
+            b.Text = Resources.BCMWebPublic.captionButtonFilter;
+            b.ClientSideEvents.Click = "function (s,e) { lp.Show(); }";
+            b.UseSubmitBehavior = true;
+        }).GetHtml()
+    </div>
     <table cellspacing="5" cellpadding="5" style="width: 100%;">
         <tr>
             <td>
@@ -188,20 +198,30 @@
             <td>
                 @Html.Partial("WRTPartialView")
             </td>
-            <td width="10%" style="text-align: right; vertical-align: bottom;">
-                @Html.DevExpress().Button(b =>
-                   {
-                       b.Name = "botLogin";
-                       b.Text = Resources.ProcesosResource.captionBoton;
-                       b.ClientSideEvents.Click = "function (s,e) { lp.Show(); }";
-                       b.UseSubmitBehavior = true;
-                   }).GetHtml()
-            </td>
         </tr>
         <tr>
-            <td colspan="7">
+            <td colspan="6" style="padding-right: 10px;">
+                <div style="float:left; margin-top: 5px;">
+                    @Html.DevExpress().Button(b =>
+                        {
+                            b.Name = "botUpdate";
+                            b.Text = Resources.ProcesosResource.captionButtonCritico;
+                            b.ClientSideEvents.Click = "function (s,e) { lp.Show(); }";
+                            b.RouteValues = new { Controller = "Procesos", Action = "UpdateCriticos" };
+                            b.UseSubmitBehavior = true;
+                        }).GetHtml()
+                </div>
+                <div style="float: right; margin-top: 5px;">
+                    @Html.DevExpress().Button(settings =>
+               {
+                   settings.Name = "btExport";
+                   settings.Text = Resources.BCMWebPublic.stringExportExcel;
+                   settings.RouteValues = new { Controller = "Procesos", Action = "ExportCriticos" };
+               }).GetHtml()
+                </div>
                 @Html.Partial("CriticosPartialView")
             </td>
         </tr>
     </table>
+
 }

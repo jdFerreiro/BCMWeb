@@ -18,7 +18,6 @@ namespace BCMWeb.Data.EF
         public tblProbabilidadRiesgo()
         {
             this.tblBIAAmenaza = new HashSet<tblBIAAmenaza>();
-            this.tblBIAEventoRiesgo = new HashSet<tblBIAEventoRiesgo>();
         }
     
         public long IdEmpresa { get; set; }
@@ -28,8 +27,6 @@ namespace BCMWeb.Data.EF
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIAAmenaza> tblBIAAmenaza { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblBIAEventoRiesgo> tblBIAEventoRiesgo { get; set; }
         public virtual tblEmpresa tblEmpresa { get; set; }
     }
 }

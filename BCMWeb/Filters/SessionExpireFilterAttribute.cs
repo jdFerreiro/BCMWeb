@@ -15,25 +15,28 @@ namespace BCMWeb
             if (ctx.Session["UserId"] == null)
             {
 
+                filterContext.Result = new RedirectResult("~/Account/Login");
+
                 IPrincipal user = ctx.User;
                 IIdentity userIdentity = user.Identity;
 
-                FormsIdentity id = (FormsIdentity)user.Identity;
-                FormsAuthenticationTicket ticket = id.Ticket;
-
-                if (ticket != null)
+                if (userIdentity.IsAuthenticated)
                 {
-                    long IdUser = long.Parse(ticket.UserData);
-                    if (IdUser > 0)
-                    {
-                        Metodos.Logout(IdUser);
+                    FormsIdentity id = (FormsIdentity)user.Identity;
+                    FormsAuthenticationTicket ticket = id.Ticket;
 
-                        filterContext.Result = new RedirectResult("~/Account/Login");
-                        FormsAuthentication.SignOut();
-                        return;
+                    if (ticket != null)
+                    {
+                        long IdUser = long.Parse(ticket.UserData);
+                        if (IdUser > 0)
+                        {
+                            Metodos.Logout(IdUser);
+
+                            FormsAuthentication.SignOut();
+                            return;
+                        }
                     }
                 }
-
                 base.OnActionExecuting(filterContext);
             }
         }

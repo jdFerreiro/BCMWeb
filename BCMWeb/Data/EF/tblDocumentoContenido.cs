@@ -22,5 +22,6 @@ namespace BCMWeb.Data.EF
         public Nullable<System.DateTime> FechaCreacion { get; set; }
     
         public virtual tblDocumento tblDocumento { get; set; }
+        public virtual tblModulo tblModulo { get; set; }
     }
 }

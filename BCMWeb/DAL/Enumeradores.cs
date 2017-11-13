@@ -527,8 +527,14 @@ namespace BCMWeb
         [Description("Agregar Anexo Iniciativa ")]
         EliminarAnexoIniciativa,
         [EnumMember()]
-        [Description("Acceder Programacion")]
-        MostrarProgramacion,
+        [Description("Agregar Frecuencia")]
+        AgregarFrecuencia,
+        [EnumMember()]
+        [Description("Actualizar Frecuencia")]
+        ActualizarFrecuencia,
+        [EnumMember()]
+        [Description("Eliminar Frecuencia")]
+        EliminarFrecuencia,
         [EnumMember()]
         [Description("Agregar Programación")]
         AgregarProgramacion,
@@ -538,6 +544,15 @@ namespace BCMWeb
         [EnumMember()]
         [Description("Eliminar Programación")]
         EliminarProgramacion,
+        [EnumMember()]
+        [Description("Agregar Notificación")]
+        AgregarNotificacion,
+        [EnumMember()]
+        [Description("Actualizar Notificación")]
+        ActualizarNotificacion,
+        [EnumMember()]
+        [Description("Eliminar Notificación")]
+        EliminarNotificacion,
     }
     [DataContract(Name = "Secciones de Ficha")]
     public enum eSeccionFicha
@@ -576,19 +591,6 @@ namespace BCMWeb
         [EnumMember()]
         [Description("Inactivo")]
         Eliminado = 3,
-    }
-    [DataContract(Name = "Tipo Notificación")]
-    public enum eTipoNotificacion : short
-    {
-        CorreoElectrónico = 1,
-        MensajeSMS = 2,
-        Ambos = 3
-    }
-    [DataContract(Name = "Tipo Actualización")]
-    public enum eTipoActualizacion : short
-    {
-        General = 1,
-        Particular = 2,
     }
 
 }

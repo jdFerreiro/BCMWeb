@@ -1,19 +1,20 @@
-﻿using iTextSharp.text.pdf;
+﻿using BCMWeb.Data.EF;
+using DevExpress.XtraRichEdit;
 using iTextSharp.text;
+using iTextSharp.text.pdf;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
-using BCMWeb.Data.EF;
 using System.Web.SessionState;
-using System.IO;
-using DevExpress.XtraRichEdit;
 
 namespace BCMWeb
 {
     public class PDFManager
     {
         internal static HttpSessionState Session { get { return HttpContext.Current.Session; } }
+        internal static string Culture = HttpContext.Current.Request.UserLanguages[0];
 
         #region "Variables"
         private string _pathFile;
@@ -53,6 +54,8 @@ namespace BCMWeb
         private static Phrase _Phrase;
         private static string _FechaDocumento = DateTime.UtcNow.AddHours(-4).AddMinutes(-30).ToString("dd/MM/yyyy");
         private static PdfWriter _pdfWrite;
+        //private static Paragraph _parrafo;
+        //private static string _pbeInformeTitle;
 
         private static Dictionary<string, Dictionary<string, string>> _htmlStyles = new Dictionary<string, Dictionary<string, string>>();
         #endregion
@@ -215,6 +218,30 @@ namespace BCMWeb
 
             FileStream _fileStream = new FileStream(_tempFile, FileMode.Create);
             MemoryStream _msData = new MemoryStream(contenido.ContenidoBin.ToArray());
+
+            _reServer.Document.LoadDocument(_msData, DevExpress.XtraRichEdit.DocumentFormat.OpenXml);
+            _reServer.ExportToPdf(_ms);
+            _reServer.EndUpdate();
+
+            _ms.WriteTo(_fileStream);
+            _ms.Close();
+            _msData.Close();
+            _fileStream.Close();
+        }
+        private void GenerarPDF_Temporal(byte[] ContenidoBin, string _tempFileName)
+        {
+            RichEditDocumentServer _reServer = new RichEditDocumentServer();
+            MemoryStream _ms = new MemoryStream();
+
+            string _tempFile = string.Format("{0}/{1}", _tempFilePath, _tempFileName);
+
+            if (File.Exists(_tempFile))
+            {
+                File.Delete(_tempFile);
+            }
+
+            FileStream _fileStream = new FileStream(_tempFile, FileMode.Create);
+            MemoryStream _msData = new MemoryStream(ContenidoBin.ToArray());
 
             _reServer.Document.LoadDocument(_msData, DevExpress.XtraRichEdit.DocumentFormat.OpenXml);
             _reServer.ExportToPdf(_ms);
@@ -451,7 +478,7 @@ namespace BCMWeb
             try
             {
                 if (!Directory.Exists(_tempFilePath)) Directory.CreateDirectory(_tempFilePath);
-                
+
                 long IdDocumento = long.Parse(Session["IdDocumento"].ToString());
                 long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
                 long IdUsuario = long.Parse(Session["UserId"].ToString());
@@ -484,7 +511,7 @@ namespace BCMWeb
                         _FileName = string.Format("{0}.pdf", _CodigoInforme.Replace("-", "_"));
                         _pathFile = String.Format("{0}\\PDFDocs\\{1}", _ServerPath, _FileName);
                         _strDocURL = String.Format("{0}/PDFDocs/{1}", _AppUrl, _FileName);
-                        string _LogoEmpresaPath = string.Format("{0}{1}", _ServerPath, dataDocumento.tblEmpresa.LogoURL.Replace("/","\\"));
+                        string _LogoEmpresaPath = string.Format("{0}{1}", _ServerPath, dataDocumento.tblEmpresa.LogoURL.Replace("/", "\\"));
 
                         _ImagenEmpresa = Image.GetInstance(_LogoEmpresaPath);
                         _ImagenEmpresa.Alignment = Element.ALIGN_CENTER;
@@ -610,7 +637,6 @@ namespace BCMWeb
                             _TableHeader = HeaderDocs(writer.PageNumber, _Titulo);
                             break;
                         case "PPE":
-                        case "PBE":
                             _Titulo = Resources.PDFResource.PPETituloString;
                             _TableHeader = HeaderDocs(writer.PageNumber, _Titulo);
                             break;
@@ -719,6 +745,7 @@ namespace BCMWeb
                 }
             }
         }
+
         internal class objFilaTabla
         {
             public List<objCeldaTabla> Valores { get; set; }

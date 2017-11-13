@@ -22,9 +22,15 @@
     }
 
         #slideshow > div img {
-            width: 620px;
-            height: 320px;
+            width: 100%;
+            height: 100%;
         }
+
+.Contenedor {
+    width: 100%;
+    margin: 0 auto;
+    overflow: hidden;
+}
 
 table {
     width: 100%;
@@ -328,7 +334,7 @@ h4 {
         width: 30%;
     }
 
-     .Diagrama .MiddlePane {
+    .Diagrama .MiddlePane {
         width: 40%;
     }
 
@@ -336,10 +342,11 @@ h4 {
         width: 30%;
     }
 
-   .Diagrama .Contenedor {
+    .Diagrama .Contenedor {
+        max-width: 90%;
         padding: 10px;
         border-radius: 10px;
-        margin: 10px;
+        margin: auto;
     }
 
         .Diagrama .Contenedor .Titulo {
@@ -381,7 +388,7 @@ h4 {
         position: absolute;
     }
 
-     .Grafico .MiddlePane {
+    .Grafico .MiddlePane {
         width: 75%;
         float: right;
     }
@@ -400,39 +407,50 @@ h4 {
         margin: 5px;
     }
 
-.Grafico .MTD {
-    margin: 5px;
-    width: 45%;
-    position: relative;
-    float: left;
-    padding: 5px;
-    border: 1px solid #000;
-    border-radius: 5px;
+    .Grafico .MTD {
+        margin: 5px;
+        width: 45%;
+        position: relative;
+        float: left;
+        padding: 5px;
+        border: 1px solid #000;
+        border-radius: 5px;
+    }
+
+    .Grafico .RTO {
+        margin: 5px;
+        width: 45%;
+        position: relative;
+        float: left;
+        padding: 5px;
+        border: 1px solid #000;
+        border-radius: 5px;
+    }
+
+    .Grafico .RPO {
+        margin: 5px;
+        width: 45%;
+        position: relative;
+        float: right;
+        padding: 5px;
+        border: 1px solid #000;
+        border-radius: 5px;
+    }
+
+    .Grafico .WRT {
+        margin: 5px;
+        width: 45%;
+        position: relative;
+        float: right;
+        padding: 5px;
+        border: 1px solid #000;
+        border-radius: 5px;
+    }
+
+.diagImpacto {
+    width: 100%;
 }
-.Grafico .RTO {
-    margin: 5px;
-    width: 45%;
-    position: relative;
-    float: left;
-    padding: 5px;
-    border: 1px solid #000;
-    border-radius: 5px;
-}
-.Grafico .RPO {
-    margin: 5px;
-    width: 45%;
-    position: relative;
-    float: right;
-    padding: 5px;
-    border: 1px solid #000;
-    border-radius: 5px;
-}
-.Grafico .WRT {
-    margin: 5px;
-    width: 45%;
-    position: relative;
-    float: right;
-    padding: 5px;
-    border: 1px solid #000;
-    border-radius: 5px;
+
+.diagImpacto td {
+    width: 33%;
 }

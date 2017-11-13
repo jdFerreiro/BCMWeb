@@ -18,7 +18,6 @@ namespace BCMWeb.Data.EF
         public tblDocumento()
         {
             this.tblAuditoria = new HashSet<tblAuditoria>();
-            this.tblBCPDocumento = new HashSet<tblBCPDocumento>();
             this.tblBIAAmenaza = new HashSet<tblBIAAmenaza>();
             this.tblBIADocumento = new HashSet<tblBIADocumento>();
             this.tblBIAPersonaClave = new HashSet<tblBIAPersonaClave>();
@@ -30,6 +29,7 @@ namespace BCMWeb.Data.EF
             this.tblDocumentoPersonaClave = new HashSet<tblDocumentoPersonaClave>();
             this.tblPMTProgramacionDocumentos = new HashSet<tblPMTProgramacionDocumentos>();
             this.tblPPEFrecuencia = new HashSet<tblPPEFrecuencia>();
+            this.tblBCPDocumento = new HashSet<tblBCPDocumento>();
         }
     
         public long IdEmpresa { get; set; }
@@ -48,8 +48,6 @@ namespace BCMWeb.Data.EF
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblAuditoria> tblAuditoria { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblBCPDocumento> tblBCPDocumento { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIAAmenaza> tblBIAAmenaza { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -74,5 +72,7 @@ namespace BCMWeb.Data.EF
         public virtual ICollection<tblPMTProgramacionDocumentos> tblPMTProgramacionDocumentos { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblPPEFrecuencia> tblPPEFrecuencia { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblBCPDocumento> tblBCPDocumento { get; set; }
     }
 }

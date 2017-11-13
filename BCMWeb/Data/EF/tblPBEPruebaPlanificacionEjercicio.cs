@@ -14,13 +14,26 @@ namespace BCMWeb.Data.EF
     
     public partial class tblPBEPruebaPlanificacionEjercicio
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public tblPBEPruebaPlanificacionEjercicio()
+        {
+            this.tblPBEPruebaPlanificacionEjercicioParticipante = new HashSet<tblPBEPruebaPlanificacionEjercicioParticipante>();
+            this.tblPBEPruebaPlanificacionEjercicioRecurso = new HashSet<tblPBEPruebaPlanificacionEjercicioRecurso>();
+        }
+    
         public long IdEmpresa { get; set; }
         public long IdPlanificacion { get; set; }
         public long IdEjercicio { get; set; }
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
-        public System.DateTime FechaPlanificacion { get; set; }
+        public System.DateTime FechaInicio { get; set; }
+        public int DuracionHoras { get; set; }
+        public int DuracionMinutos { get; set; }
     
         public virtual tblPBEPruebaPlanificacion tblPBEPruebaPlanificacion { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblPBEPruebaPlanificacionEjercicioParticipante> tblPBEPruebaPlanificacionEjercicioParticipante { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblPBEPruebaPlanificacionEjercicioRecurso> tblPBEPruebaPlanificacionEjercicioRecurso { get; set; }
     }
 }

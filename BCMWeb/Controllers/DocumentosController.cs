@@ -3,7 +3,6 @@ using BCMWeb.Models;
 using DevExpress.Web;
 using DevExpress.Web.Mvc;
 using DevExpress.Web.Office;
-using DevExpress.XtraRichEdit;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -110,7 +109,7 @@ namespace BCMWeb.Controllers
                 });
 
                 string Email = (persona.CorreosElectronicos.Where(x => x.IdTipoEmail == 1).FirstOrDefault() != null ? persona.CorreosElectronicos.Where(x => x.IdTipoEmail == 1).FirstOrDefault().Email : string.Empty);
-                string Direccion = (persona.Direcciones.Where(x => x.IdTipoDireccion == 1).FirstOrDefault() != null ? persona.Direcciones.Where(x => x.IdTipoDireccion == 1).FirstOrDefault().Ubicación: string.Empty);
+                string Direccion = (persona.Direcciones.Where(x => x.IdTipoDireccion == 1).FirstOrDefault() != null ? persona.Direcciones.Where(x => x.IdTipoDireccion == 1).FirstOrDefault().Ubicación : string.Empty);
                 string Oficina = (persona.Telefonos.Where(x => x.IdTipoTelefono == 1).FirstOrDefault() != null ? persona.Telefonos.Where(x => x.IdTipoTelefono == 1).FirstOrDefault().NroTelefono : string.Empty);
                 string Habitacion = (persona.Telefonos.Where(x => x.IdTipoTelefono == 2).FirstOrDefault() != null ? persona.Telefonos.Where(x => x.IdTipoTelefono == 2).FirstOrDefault().NroTelefono : string.Empty);
                 string Movil = (persona.Telefonos.Where(x => x.IdTipoTelefono == 3).FirstOrDefault() != null ? persona.Telefonos.Where(x => x.IdTipoTelefono == 3).FirstOrDefault().NroTelefono : string.Empty);
@@ -403,15 +402,15 @@ namespace BCMWeb.Controllers
         [HandleError]
         public ActionResult Editor(long modId)
         {
-            string _modId = modId.ToString();
-            int IdTipoDocumento = int.Parse(_modId.Substring(0, (_modId.Length == 7 ? 1 : 2)));
-            Session["IdTipoDocumento"] = IdTipoDocumento;
-            Session["modId"] = modId;
-
-            long IdModulo = IdTipoDocumento * 1000000;
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
             long IdDocumento = long.Parse(Session["IdDocumento"].ToString());
             int IdClaseDocumento = int.Parse(Session["IdClaseDocumento"].ToString());
             int IdVersion = int.Parse(Session["IdVersion"].ToString());
+            string _modId = modId.ToString();
+            int IdTipoDocumento = int.Parse(_modId.Substring(0, (_modId.Length == 7 ? 1 : 2)));
+            long IdModulo = IdTipoDocumento * 1000000;
+            Session["IdTipoDocumento"] = IdTipoDocumento;
+            Session["modId"] = modId;
 
             DocumentoModel model = Metodos.GetDocumento(IdDocumento, IdTipoDocumento);
             if (model == null)
@@ -551,7 +550,7 @@ namespace BCMWeb.Controllers
             DocumentoModel model = Metodos.GetDocumento(IdDocumento, IdTipoDocumento);
             model.returnPage = Url.Action("Index", "Documento", new { IdModulo });
             model.IdModulo = IdTipoDocumento * 1000000;
-            model.IdModuloActual = 0;
+            model.IdModuloActual = IdTipoDocumento * 1000000;
             model.Perfil = Metodos.GetPerfilData();
             model.PageTitle = Metodos.GetModuloName(99010300);
             ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
@@ -565,7 +564,7 @@ namespace BCMWeb.Controllers
             Auditoria.RegistarAccion(eTipoAccion.GenerarPDF);
             PDFManager _pdfManager = new PDFManager();
             string _rutaDocumento = _pdfManager.GenerarPDF_Documento(true);
-            return Json( new { _rutaDocumento });
+            return Json(new { _rutaDocumento });
         }
         [SessionExpire]
         [HandleError]
@@ -604,7 +603,7 @@ namespace BCMWeb.Controllers
             long IdModulo = IdTipoDocumento * 1000000;
             Metodos.IniciarAprobacion();
 
-            return RedirectToAction("Index","Documento",new { IdModulo });
+            return RedirectToAction("Index", "Documento", new { IdModulo });
         }
         [SessionExpire]
         [HandleError]
@@ -748,6 +747,7 @@ namespace BCMWeb.Controllers
             Session["modId"] = modId;
 
             DocumentoModel doc = Metodos.GetDocumento(IdDocumento, IdTipoDocumento);
+            List<DocumentoProcesoModel> _Procesos = Metodos.GetProcesosDocumento();
 
             model.IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
             model.IdDocumento = IdDocumento;
@@ -768,6 +768,21 @@ namespace BCMWeb.Controllers
             model.NroVersion = doc.NroVersion;
             model.Version = doc.Version;
             model.VersionOriginal = doc.VersionOriginal;
+
+            if (_Procesos != null && _Procesos.Count > 0)
+            {
+                DocumentoProcesoModel Proceso = _Procesos.First();
+                model.IdProceso = Proceso.IdProceso;
+                model.Interdependencias = Metodos.GetInterdependenciasDiagrama(model.IdProceso);
+                model.Clientes_Productos = Metodos.GetClientesProductosDiagrama(model.IdProceso);
+                model.Entradas = Metodos.GetEntradasDiagrama(model.IdProceso);
+                model.PersonalClave = Metodos.GetPersonasClaveDiagrama(model.IdProceso);
+                model.Proveedores = Metodos.GetProveedoresDiagrama(model.IdProceso);
+                model.Tecnologia = Metodos.GetTecnologiaDiagrama(model.IdProceso);
+                model.NroProceso = Proceso.NroProceso.ToString();
+                model.Nombre = Proceso.Nombre;
+                model.Descripcion = Proceso.Descripcion;
+            }
 
             ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
 
@@ -836,19 +851,6 @@ namespace BCMWeb.Controllers
             Session["modId"] = modId;
 
             DocumentoModel doc = Metodos.GetDocumento(IdDocumento, IdTipoDocumento);
-            if (doc.DatosBCP != null)
-            {
-                DocumentoProcesoModel Proceso = Metodos.GetProceso(doc.DatosBCP.IdProceso);
-                model.Interdependencias = Metodos.GetInterdependenciasDiagrama(model.IdProceso);
-                model.Clientes_Productos = Metodos.GetClientesProductosDiagrama(model.IdProceso);
-                model.Entradas = Metodos.GetEntradasDiagrama(model.IdProceso);
-                model.PersonalClave = Metodos.GetPersonasClaveDiagrama(model.IdProceso);
-                model.Proveedores = Metodos.GetProveedoresDiagrama(model.IdProceso);
-                model.Tecnologia = Metodos.GetTecnologiaDiagrama(model.IdProceso);
-                model.NroProceso = Proceso.NroProceso.ToString();
-                model.Nombre = Proceso.Nombre;
-                model.Descripcion = Proceso.Descripcion;
-            }
 
             model.IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
             model.IdDocumento = IdDocumento;
@@ -870,6 +872,20 @@ namespace BCMWeb.Controllers
             model.Version = doc.Version;
             model.VersionOriginal = doc.VersionOriginal;
 
+            if (doc.DatosBCP != null)
+            {
+                DocumentoProcesoModel Proceso = Metodos.GetProceso(model.IdProceso);
+                model.Interdependencias = Metodos.GetInterdependenciasDiagrama(model.IdProceso);
+                model.Clientes_Productos = Metodos.GetClientesProductosDiagrama(model.IdProceso);
+                model.Entradas = Metodos.GetEntradasDiagrama(model.IdProceso);
+                model.PersonalClave = Metodos.GetPersonasClaveDiagrama(model.IdProceso);
+                model.Proveedores = Metodos.GetProveedoresDiagrama(model.IdProceso);
+                model.Tecnologia = Metodos.GetTecnologiaDiagrama(model.IdProceso);
+                model.NroProceso = Proceso.NroProceso.ToString();
+                model.Nombre = Proceso.Nombre;
+                model.Descripcion = Proceso.Descripcion;
+            }
+
             ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
 
             return View(model);
@@ -888,12 +904,12 @@ namespace BCMWeb.Controllers
 
             DocumentoModel doc = Metodos.GetDocumento(IdDocumento, IdTipoDocumento);
             DocumentoProcesoModel Proceso = Metodos.GetProceso(doc.DatosBCP.IdProceso);
-            model.Interdependencias = Metodos.GetInterdependenciasDiagrama(model.IdProceso);
-            model.Clientes_Productos = Metodos.GetClientesProductosDiagrama(model.IdProceso);
-            model.Entradas = Metodos.GetEntradasDiagrama(model.IdProceso);
-            model.PersonalClave = Metodos.GetPersonasClaveDiagrama(model.IdProceso);
-            model.Proveedores = Metodos.GetProveedoresDiagrama(model.IdProceso);
-            model.Tecnologia = Metodos.GetTecnologiaDiagrama(model.IdProceso);
+            model.Interdependencias = Metodos.GetInterdependenciasDiagrama(Proceso.IdProceso);
+            model.Clientes_Productos = Metodos.GetClientesProductosDiagrama(Proceso.IdProceso);
+            model.Entradas = Metodos.GetEntradasDiagrama(Proceso.IdProceso);
+            model.PersonalClave = Metodos.GetPersonasClaveDiagrama(Proceso.IdProceso);
+            model.Proveedores = Metodos.GetProveedoresDiagrama(Proceso.IdProceso);
+            model.Tecnologia = Metodos.GetTecnologiaDiagrama(Proceso.IdProceso);
             model.NroProceso = Proceso.NroProceso.ToString();
             model.Nombre = Proceso.Nombre;
             model.Descripcion = Proceso.Descripcion;
@@ -1093,10 +1109,11 @@ namespace BCMWeb.Controllers
         private static HttpSessionState Session { get { return HttpContext.Current.Session; } }
         private static HttpServerUtility Server { get { return HttpContext.Current.Server; } }
 
-        private static long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
-        private static int IdTipoDocumento = int.Parse(Session["IdTipoDocumento"].ToString());
-        private static int IdDocumento = int.Parse(Session["IdDocumento"].ToString());
-        private static long IdModulo = long.Parse(Session["IdModulo"].ToString());
+        private static long IdEmpresa;
+        private static int IdTipoDocumento;
+        private static int IdDocumento;
+        private static long IdModulo;
+
 
         public static string RootFolder = @"~\Content\FileManager";
 
@@ -1104,11 +1121,17 @@ namespace BCMWeb.Controllers
         {
             get
             {
+
+                IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+                IdTipoDocumento = int.Parse(Session["IdTipoDocumento"].ToString());
+                IdDocumento = int.Parse(Session["IdDocumento"].ToString());
+                IdModulo = long.Parse(Session["IdModulo"].ToString());
+
                 DocumentoModel docModel = Metodos.GetDocumento(IdDocumento, IdTipoDocumento);
                 FileManagerModel model = new FileManagerModel();
 
                 string _Modulo = Metodos.GetModuloName(IdModulo);
-                string _docFolder = string.Format("{0}_{1}", docModel.NroDocumento.ToString("000"), docModel.Version);
+                string _docFolder = string.Format("{0}_{1}_{2}", IdTipoDocumento.ToString(), docModel.NroDocumento.ToString("000"), docModel.Version);
                 string _rootFolder = string.Format("~\\Content\\FileManager\\E{0}\\Documentos\\{1}", IdEmpresa.ToString("000"), _docFolder);
                 string path = Server.MapPath(_rootFolder);
 

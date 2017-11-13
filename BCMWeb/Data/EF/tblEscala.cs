@@ -23,6 +23,7 @@ namespace BCMWeb.Data.EF
             this.tblBIARPO = new HashSet<tblBIARPO>();
             this.tblBIARTO = new HashSet<tblBIARTO>();
             this.tblBIAWRT = new HashSet<tblBIAWRT>();
+            this.tblCriticidad = new HashSet<tblCriticidad>();
         }
     
         public long IdEmpresa { get; set; }
@@ -31,6 +32,7 @@ namespace BCMWeb.Data.EF
         public short Valor { get; set; }
         public string Descripcion { get; set; }
         public Nullable<System.DateTime> FechaRegistro { get; set; }
+        public Nullable<int> PosicionEscala { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIAImpactoFinanciero> tblBIAImpactoFinanciero { get; set; }
@@ -46,5 +48,7 @@ namespace BCMWeb.Data.EF
         public virtual ICollection<tblBIAWRT> tblBIAWRT { get; set; }
         public virtual tblEmpresa tblEmpresa { get; set; }
         public virtual tblTipoEscala tblTipoEscala { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblCriticidad> tblCriticidad { get; set; }
     }
 }
