@@ -184,10 +184,10 @@
     <value>Planificación de la Prueba</value>
   </data>
   <data name="captionButtonExec" xml:space="preserve">
-    <value>Ejecución</value>
+    <value>Registrar Ejecución</value>
   </data>
   <data name="captionButtonPlan" xml:space="preserve">
-    <value>Planificación</value>
+    <value>Editar Planificación</value>
   </data>
   <data name="captionEjecutado" xml:space="preserve">
     <value>Ejecutado</value>
@@ -284,5 +284,8 @@
   </data>
   <data name="captionDuracionPlan" xml:space="preserve">
     <value>Duración Planificada</value>
+  </data>
+  <data name="captionButtonExecUpdate" xml:space="preserve">
+    <value>Actualizar Ejecución</value>
   </data>
 </root>

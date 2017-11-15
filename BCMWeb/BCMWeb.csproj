@@ -212,6 +212,7 @@
     <Content Include="Content\Images\Internal\emptyfolder.jpg" />
     <Content Include="Content\Images\Internal\fullfolder.jpg" />
     <Content Include="Content\Images\Internal\hasAttach.png" />
+    <Content Include="Content\Images\Internal\icono-pdf-def.jpg" />
     <Content Include="Content\Images\Internal\icono-pdf.jpg" />
     <Content Include="Content\Images\Logo-BiaPlus.png" />
     <Content Include="Content\Images\Menu\Adiestramiento.png" />

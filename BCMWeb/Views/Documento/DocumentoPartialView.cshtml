@@ -172,7 +172,7 @@ settings =>
                     i.ClientVisible = (DataBinder.Eval(tc.DataItem, "RutaDocumentoPDF") != null && !String.IsNullOrEmpty(DataBinder.Eval(tc.DataItem, "RutaDocumentoPDF").ToString()));
                     i.Name = String.Format("hlPDF_{0}", DataBinder.Eval(tc.DataItem, "IdDocumento"));
                     i.NavigateUrl = (DataBinder.Eval(tc.DataItem, "RutaDocumentoPDF") == null ? string.Empty : DataBinder.Eval(tc.DataItem, "RutaDocumentoPDF").ToString());
-                    i.Properties.ImageUrl = "~/Content/Images/Internal/icono-pdf.jpg";
+                    i.Properties.ImageUrl = "~/Content/Images/Internal/icono-pdf-def.jpg";
                     i.Properties.ImageHeight = Unit.Pixel(32);
                     i.Properties.Target = "blank";
                     i.Width = Unit.Pixel(50);

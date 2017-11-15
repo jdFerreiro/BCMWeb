@@ -513,7 +513,7 @@ namespace BCMWeb
 
             if (!string.IsNullOrEmpty(Ruta))
             {
-                imgRuta = "<a href=\"" + Ruta + "\"><img src=\"../../Content/Images/Internal/icono-pdf.jpg\" /></a>";
+                imgRuta = "<a href=\"" + Ruta + "\"><img src=\"../../Content/Images/Internal/icono-pdf-def.jpg\" /></a>";
                 sb.Append(imgRuta);
             }
 

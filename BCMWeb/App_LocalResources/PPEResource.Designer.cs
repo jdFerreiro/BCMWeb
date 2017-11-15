@@ -61,11 +61,20 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ejecución.
+        ///   Looks up a localized string similar to Registrar Ejecución.
         /// </summary>
         public static string captionButtonExec {
             get {
                 return ResourceManager.GetString("captionButtonExec", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Actualizar Ejecución.
+        /// </summary>
+        public static string captionButtonExecUpdate {
+            get {
+                return ResourceManager.GetString("captionButtonExecUpdate", resourceCulture);
             }
         }
         
@@ -88,7 +97,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Planificación.
+        ///   Looks up a localized string similar to Editar Planificación.
         /// </summary>
         public static string captionButtonPlan {
             get {

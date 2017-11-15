@@ -33,7 +33,7 @@
                         var linkInfo = string.Format("function(s, e) {{ OnButtonClick(s, e, ''{0}''); }}", Url.Action("Start", "PPE", new { IdPrueba = DataBinder.Eval(tc.DataItem, "IdPrueba") }));
 
                         ViewContext.Writer.Write(
-                            Html.ActionLink(Resources.PPEResource.captionButtonExec, "EditarEjecucion", new { IdPrueba = DataBinder.Eval(tc.DataItem, "IdPrueba") }, new { onclick = "lp.Show();" }) + "<br />" +
+                            Html.ActionLink(Resources.PPEResource.captionButtonExecUpdate, "EditarEjecucion", new { IdPrueba = DataBinder.Eval(tc.DataItem, "IdPrueba") }, new { onclick = "lp.Show();" }) + "<br />" +
                             //Html.ActionLink(Resources.BCMWebPublic.captionButtonInforme, "Index", new { IdClaseDocumento = long.Parse(Session["IdClaseDocumento"].ToString()), modId = long.Parse(Session["modId"].ToString()) }, new { onclick = "OnButtonClick('"+ Url.Action("Start", "PPE", new { IdPrueba = DataBinder.Eval(tc.DataItem, "IdPrueba") }) + "')" }) + "<br />" +
                             Html.ActionLink(Resources.BCMWebPublic.captionButtonDelete, "EliminarPrueba", new { IdPrueba = DataBinder.Eval(tc.DataItem, "IdPrueba") },
                                 new { onclick = "return confirm('" + string.Format(Resources.PPEResource.ConfirmDeleteMessage, DataBinder.Eval(tc.DataItem, "Nombre")) + "')" })
@@ -42,17 +42,17 @@
                     else if (short.Parse(DataBinder.Eval(tc.DataItem, "IdEstatus").ToString()) == 0)
                     {
                         ViewContext.Writer.Write(
-                            Html.ActionLink(Resources.BCMWebPublic.captionButtonInforme, "GenerarInforme", new { IdPrueba = DataBinder.Eval(tc.DataItem, "IdPrueba") }, new { onclick = "lp.Show();" }) + "<br />" +
                             Html.ActionLink(Resources.PPEResource.captionButtonExec, "EditarEjecucion", new { IdPrueba = DataBinder.Eval(tc.DataItem, "IdPrueba") }, new { onclick = "lp.Show();" }) + "<br />" +
                             Html.ActionLink(Resources.BCMWebPublic.captionButtonDelete, "EliminarPrueba", new { IdPrueba = DataBinder.Eval(tc.DataItem, "IdPrueba") },
-                                new { onclick = "return confirm('" + string.Format(Resources.PPEResource.ConfirmDeleteMessage, DataBinder.Eval(tc.DataItem, "Nombre")) + "')" }) + "<br/>" +
-                            Html.ActionLink(Resources.PPEResource.captionButtonSuspender, "SuspenderPrueba", new { IdPrueba = DataBinder.Eval(tc.DataItem, "IdPrueba") },
-                                new { onclick = "return confirm('" + string.Format(Resources.PPEResource.confirmSuspenderMessage, DataBinder.Eval(tc.DataItem, "Nombre")) + "')" })
+                                new { onclick = "return confirm('" + string.Format(Resources.PPEResource.ConfirmDeleteMessage, DataBinder.Eval(tc.DataItem, "Nombre")) + "')" })
+                            //Html.ActionLink(Resources.PPEResource.captionButtonSuspender, "SuspenderPrueba", new { IdPrueba = DataBinder.Eval(tc.DataItem, "IdPrueba") },
+                            //    new { onclick = "return confirm('" + string.Format(Resources.PPEResource.confirmSuspenderMessage, DataBinder.Eval(tc.DataItem, "Nombre")) + "')" })
                         );
                     }
                     else
                     {
                         ViewContext.Writer.Write(
+                            Html.ActionLink(Resources.BCMWebPublic.captionButtonInforme, "GenerarInforme", new { IdPrueba = DataBinder.Eval(tc.DataItem, "IdPrueba") }, new { onclick = "lp.Show();" }) + "<br />" +
                             Html.ActionLink(Resources.PPEResource.captionButtonPlan, "EditarPrueba", new { IdPrueba = DataBinder.Eval(tc.DataItem, "IdPrueba"), Ejecucion = false }, new { onclick = "lp.Show();" }) + "<br />" +
                             Html.ActionLink(Resources.BCMWebPublic.captionButtonDelete, "EliminarPrueba", new { IdPrueba = DataBinder.Eval(tc.DataItem, "IdPrueba") },
                                 new { onclick = "return confirm('" + string.Format(Resources.PPEResource.ConfirmDeleteMessage, DataBinder.Eval(tc.DataItem, "Nombre")) + "')" })
@@ -126,8 +126,8 @@
                             i.ClientVisible = (DataBinder.Eval(tc.DataItem, "RutaDocumentoPDF") != null && !String.IsNullOrEmpty(DataBinder.Eval(tc.DataItem, "RutaDocumentoPDF").ToString()));
                             i.Name = String.Format("hlPDF_{0}", DataBinder.Eval(tc.DataItem, "IdPrueba"));
                             i.NavigateUrl = (DataBinder.Eval(tc.DataItem, "RutaDocumentoPDF") == null ? string.Empty : DataBinder.Eval(tc.DataItem, "RutaDocumentoPDF").ToString());
-                            i.Properties.ImageUrl = "~/Content/Images/Internal/icono-pdf.jpg";
-                            i.Properties.ImageHeight = Unit.Pixel(32);
+                            i.Properties.ImageUrl = (short.Parse(DataBinder.Eval(tc.DataItem, "IdEstatus").ToString()) > 0 ? "~/Content/Images/Internal/icono-pdf-def.jpg" : "~/Content/Images/Internal/icono-pdf.jpg");
+                            i.Properties.ImageHeight = Unit.Pixel(60);
                             i.Properties.Target = "blank";
                             i.Width = Unit.Pixel(50);
                         }).GetHtml()

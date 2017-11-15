@@ -160,7 +160,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Informe.
+        ///   Looks up a localized string similar to Informe Preliminar.
         /// </summary>
         public static string captionButtonInforme {
             get {

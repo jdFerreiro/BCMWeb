@@ -199,8 +199,8 @@
                     });
                     fls.Items.AddEmptyItem();
                 })
-                                .Bind(ViewData["EditableProgramacion"] ?? c.DataItem)
-                                .Render();
+                    .Bind(ViewData["EditableProgramacion"] ?? c.DataItem)
+                    .Render();
             });
 
             settings.InitNewRow = (s, e) =>
