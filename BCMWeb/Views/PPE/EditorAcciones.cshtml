@@ -19,6 +19,8 @@
         }
     };
     function docChange(s, e) {
+        btnFinalizar.SetVisible(false);
+        btnCancel.SetVisible(true);
         var item = RichEdit.GetRibbon().GetItemByName("botSave");
         item.SetEnabled(true);
     }
@@ -58,6 +60,17 @@
                    btnSettings.Style[HtmlTextWriterStyle.MarginTop] = "10px";
                    btnSettings.Style[HtmlTextWriterStyle.MarginLeft] = "5px";
                    btnSettings.ClientSideEvents.Click = "function(s, e) { lp.Show(); document.location='" + Url.Action("Index", "PPE", new { IdClaseDocumento = long.Parse(Session["IdClaseDocumento"].ToString()), modId = long.Parse(Session["modId"].ToString()) }) + "' }";
+               }).GetHtml()
+                </td>
+                <td>
+                    @Html.DevExpress().Button(btnSettings =>
+               {
+                   btnSettings.Name = "btnCancel";
+                   btnSettings.Text = Resources.BCMWebPublic.captionButtonCancel;
+                   btnSettings.Style[HtmlTextWriterStyle.MarginTop] = "10px";
+                   btnSettings.Style[HtmlTextWriterStyle.MarginLeft] = "5px";
+                   btnSettings.ClientSideEvents.Click = "function(s, e) { lp.Show(); document.location='" + Url.Action("EditorAcciones", "PPE", new { IdPrueba = Session["IdPrueba"].ToString() }) + "' }";
+                   btnSettings.ClientVisible = false;
                }).GetHtml()
                 </td>
                 <td>

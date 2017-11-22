@@ -187,6 +187,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Observación.
+        /// </summary>
+        public static string captionObservacion {
+            get {
+                return ResourceManager.GetString("captionObservacion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Probabilidad.
         /// </summary>
         public static string captionProbabilidad {

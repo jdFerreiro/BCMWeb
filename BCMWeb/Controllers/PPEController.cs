@@ -1234,7 +1234,7 @@ namespace BCMWeb.Controllers
 
             ViewBag.Title = string.Format("{0} - {1}", Metodos.GetModuloName(modId), Resources.BCMWebPublic.labelAppTitle);
             Metodos.FinalizarPrueba(IdPrueba);
-            return RedirectToAction("GenerarInforme", new { IdPrueba });
+            return RedirectToAction("GenerarInforme", new { IdPrueba, InformeFinal = true });
         }
         [SessionExpire]
         [HandleError]
@@ -1250,7 +1250,7 @@ namespace BCMWeb.Controllers
         }
         [SessionExpire]
         [HandleError]
-        public ActionResult GenerarInforme(long IdPrueba)
+        public ActionResult GenerarInforme(long IdPrueba, bool InformeFinal = false)
         {
             long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
             Session["IdPrueba"] = IdPrueba;
@@ -1259,7 +1259,10 @@ namespace BCMWeb.Controllers
 
             ViewBag.Title = string.Format("{0} - {1}", Metodos.GetModuloName(modId), Resources.BCMWebPublic.labelAppTitle);
             PDFPrueba _pdfManager = new PDFPrueba();
-            _pdfManager.GenerarPBE_Preliminar(true);
+            if (!InformeFinal)
+                _pdfManager.GenerarPBE_Preliminar(true);
+            else
+                _pdfManager.GenerarPBE_Documento(true);
 
 
             string _ServerPath = HttpContext.Server.MapPath(".").Replace("\\PPE", string.Empty);

@@ -526,7 +526,7 @@
     <Content Include="Views\Documento\DocumentoBIAPartialView.cshtml" />
     <Content Include="Views\Documentos\DiagramaBCP.cshtml" />
     <None Include="Views\Procesos\AjustarWRT.cshtml" />
-    <Content Include="Views\Procesos\AjustarRTOPartialView .cshtml" />
+    <Content Include="Views\Procesos\AjustarRTOPartialView.cshtml" />
     <Content Include="Views\Procesos\AjustarRTO.cshtml" />
     <Content Include="Views\Procesos\AjustarWRTPartialView.cshtml" />
     <Content Include="Views\Procesos\AjustarRPO.cshtml" />
@@ -553,6 +553,8 @@
     <Content Include="Views\Reportes\ImpactoPartialViewPrint.cshtml" />
     <Content Include="Views\Reportes\ControlPartialViewPrint.cshtml" />
     <Content Include="Views\Reportes\FuentePartialViewPrint.cshtml" />
+    <Content Include="Views\Reportes\DiagramaPersonasClave.cshtml" />
+    <Content Include="Views\Reportes\PartialDiagramaPersonasClave.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

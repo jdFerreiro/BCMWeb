@@ -2,36 +2,36 @@
 
 @model AuditoriaAdminModel
 
-    <script type="text/javascript">
-        function OnBeginGridCallback(s, e) {
-            lp.Show();
-        }
-        function OnEndGridCallback(s, e) {
-            lp.Hide();
-        }
-        function OnImageClick(sender) {
-            var idAtt = $(sender).attr("data-id");
-            var idObj = $(sender).data();
-            alert("att: " + idAtt + ":  obj.id: " + idObj.id);
-        }
-    </script>
-
-
-    @section LeftPanel {
-        @Html.DevExpress().Panel(settings =>
-   {
-       settings.Name = "LeftPane";
-       settings.FixedPosition = PanelFixedPosition.WindowLeft;
-       settings.Collapsible = true;
-       settings.SettingsAdaptivity.CollapseAtWindowInnerWidth = 1023;
-       settings.ControlStyle.CssClass = "leftPane";
-       settings.Styles.Panel.CssClass = "panel";
-       settings.SetContent(() =>
-       {
-           Html.RenderPartial("ContentLeftPartialView");
-       });
-   }).GetHtml()
+<script type="text/javascript">
+    function OnBeginGridCallback(s, e) {
+        lp.Show();
     }
+    function OnEndGridCallback(s, e) {
+        lp.Hide();
+    }
+    function OnImageClick(sender) {
+        var idAtt = $(sender).attr("data-id");
+        var idObj = $(sender).data();
+        alert("att: " + idAtt + ":  obj.id: " + idObj.id);
+    }
+</script>
+
+
+@section LeftPanel {
+    @Html.DevExpress().Panel(settings =>
+{
+    settings.Name = "LeftPane";
+    settings.FixedPosition = PanelFixedPosition.WindowLeft;
+    settings.Collapsible = true;
+    settings.SettingsAdaptivity.CollapseAtWindowInnerWidth = 1023;
+    settings.ControlStyle.CssClass = "leftPane";
+    settings.Styles.Panel.CssClass = "panel";
+    settings.SetContent(() =>
+    {
+        Html.RenderPartial("ContentLeftPartialView");
+    });
+}).GetHtml()
+}
 
 @using (Html.BeginForm("Auditar", "Administracion", FormMethod.Post, htmlAttributes: new { id= "AdminForm" }))
 {
@@ -74,7 +74,7 @@
                 }).Bind(Model.FechaHasta).GetHtml()
             </td>
             <td width="55%">
-                @Html.Partial("ComboBoxUsuariosPartialView")
+                @Html.Partial("ComboBoxUsuariosPartialView", Model)
             </td>
             <td width="15%" style="text-align: right;">
                 @Html.DevExpress().Button(b =>

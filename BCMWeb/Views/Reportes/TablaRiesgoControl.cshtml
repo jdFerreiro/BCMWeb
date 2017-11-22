@@ -25,6 +25,9 @@
     @Html.HiddenFor(m => m.IdModuloActual)
     @Html.HiddenFor(m => m.IdUnidadOrganizativa)
 
+    <div style="text-decoration: underline; font-weight: bold; padding: 10px; text-align:center;">
+        @Html.Raw(Resources.ReporteResource.TituloTablaRiesgoControl)
+    </div>
     <div style="float: right;">
         @Html.DevExpress().Button(settings =>
    {

@@ -5147,37 +5147,44 @@ namespace BCMWeb
                             {
                                 foreach (TableCell _celda in _celdas)
                                 {
-                                    if (_celda.InnerText.ToUpper().Contains("ORGANIZATIVA"))
+                                    if (_datoProceso == 0)
                                     {
-                                        _datoProceso = 1;
-                                    }
-                                    else if (_celda.InnerText.ToUpper().Contains("RESPONSABLE"))
-                                    {
-                                        _datoProceso = 2;
-                                    }
-                                    else if (_celda.InnerText.ToUpper().Contains("CARGO"))
-                                    {
-                                        _datoProceso = 3;
-                                    }
-                                    else if (_celda.InnerText.ToUpper().Contains("OFICINA"))
-                                    {
-                                        _datoProceso = 4;
-                                    }
-                                    else if (_celda.InnerText.ToUpper().Contains("CELULAR"))
-                                    {
-                                        _datoProceso = 5;
-                                    }
-                                    else if (_celda.InnerText.ToUpper().Contains("INICIO"))
-                                    {
-                                        _datoProceso = 7;
-                                    }
-                                    else if (_celda.InnerText.ToUpper().Contains("FINAL"))
-                                    {
-                                        _datoProceso = 8;
-                                    }
-                                    else if (_celda.InnerText.ToUpper().Contains("ELECTRÓNICO"))
-                                    {
-                                        _datoProceso = 9;
+                                        if (_celda.InnerText.ToUpper().Contains("ORGANIZATIVA"))
+                                        {
+                                            _datoProceso = 1;
+                                        }
+                                        else if (_celda.InnerText.ToUpper().Contains("RESPONSABLE"))
+                                        {
+                                            _datoProceso = 2;
+                                        }
+                                        else if (_celda.InnerText.ToUpper().Contains("CARGO"))
+                                        {
+                                            _datoProceso = 3;
+                                        }
+                                        else if (_celda.InnerText.ToUpper().Contains("OFICINA"))
+                                        {
+                                            _datoProceso = 4;
+                                        }
+                                        else if (_celda.InnerText.ToUpper().Contains("CELULAR"))
+                                        {
+                                            _datoProceso = 5;
+                                        }
+                                        else if (_celda.InnerText.ToUpper().Contains("INICIO"))
+                                        {
+                                            _datoProceso = 7;
+                                        }
+                                        else if (_celda.InnerText.ToUpper().Contains("FINAL"))
+                                        {
+                                            _datoProceso = 8;
+                                        }
+                                        else if (_celda.InnerText.ToUpper().Contains("ELECTRÓNICO"))
+                                        {
+                                            _datoProceso = 9;
+                                        }
+                                        else
+                                        {
+                                            _datoProceso = 0;
+                                        }
                                     }
                                     else
                                     {

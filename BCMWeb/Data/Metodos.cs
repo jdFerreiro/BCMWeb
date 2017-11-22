@@ -484,11 +484,12 @@ namespace BCMWeb
         {
             StringBuilder sb = new StringBuilder();
             long IdDocumento = (long)dataItem;
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
 
             using (Entities db = new Entities())
             {
                 List<tblBIAProceso> _procesos = (from d in db.tblBIAProceso
-                                                 where d.tblBIADocumento.IdDocumento == IdDocumento
+                                                 where d.IdEmpresa == IdEmpresa && d.tblBIADocumento.IdDocumento == IdDocumento
                                                  select d).ToList();
 
                 _procesos = _procesos.OrderBy(x => x.NroProceso).ToList();

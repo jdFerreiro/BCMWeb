@@ -595,6 +595,33 @@ namespace BCMWeb.Controllers
         }
         [SessionExpire]
         [HandleError]
+        public ActionResult PartialProcesosView()
+        {
+            return PartialView();
+        }
+        [SessionExpire]
+        [HandleError]
+        [HttpPost]
+        public ActionResult PartialProcesosView(DocumentoDiagrama model)
+        {
+            ViewBag.DataProcesos = Metodos.GetProcesosEmpresa();
+            return PartialView(model);
+        }
+        [SessionExpire]
+        [HandleError]
+        public ActionResult PartialDiagramaProceso()
+        {
+            return PartialView();
+        }
+        [SessionExpire]
+        [HandleError]
+        [HttpPost]
+        public ActionResult PartialDiagramaProceso(DocumentoDiagrama model)
+        {
+            return PartialView();
+        }
+        [SessionExpire]
+        [HandleError]
         public ActionResult DiagImpacto(long modId)
         {
             DocumentoDiagrama model = new DocumentoDiagrama();
@@ -647,30 +674,55 @@ namespace BCMWeb.Controllers
         }
         [SessionExpire]
         [HandleError]
-        public ActionResult PartialProcesosView()
+        public ActionResult DiagramaPersonasClave(long modId)
         {
-            return PartialView();
-        }
-        [SessionExpire]
-        [HandleError]
-        [HttpPost]
-        public ActionResult PartialProcesosView(DocumentoDiagrama model)
-        {
+            DocumentoDiagrama model = new DocumentoDiagrama();
+
+            string _modId = modId.ToString();
+            int IdTipoDocumento = int.Parse(_modId.Length == 7 ? _modId.Substring(0, 1) : _modId.Substring(0, 2));
+            long IdModulo = IdTipoDocumento * 1000000;
+            Session["modId"] = modId;
+
+            model.IdModuloActual = modId;
+            model.IdModulo = IdModulo;
+            ViewBag.Title = string.Format("{0} - {1}", Metodos.GetModuloName(modId), Resources.BCMWebPublic.labelAppTitle);
             ViewBag.DataProcesos = Metodos.GetProcesosEmpresa();
-            return PartialView(model);
-        }
-        [SessionExpire]
-        [HandleError]
-        public ActionResult PartialDiagramaProceso()
-        {
-            return PartialView();
+
+            return View(model);
         }
         [SessionExpire]
         [HandleError]
         [HttpPost]
-        public ActionResult PartialDiagramaProceso(DocumentoDiagrama model)
+        public ActionResult DiagramaPersonasClave(DocumentoDiagrama model)
         {
-            return PartialView();
+            string _modId = model.IdModuloActual.ToString();
+            int IdTipoDocumento = int.Parse(_modId.Length == 7 ? _modId.Substring(0, 1) : _modId.Substring(0, 2));
+            long IdModulo = IdTipoDocumento * 1000000;
+            long modId = long.Parse(Session["modId"].ToString());
+
+            model.IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            model.IdTipoDocumento = IdTipoDocumento;
+            model.IdModulo = IdModulo;
+            model.IdModuloActual = modId;
+            model.Perfil = Metodos.GetPerfilData();
+            model.PageTitle = Metodos.GetModuloName(modId);
+            Session["IdDocumento"] = Metodos.GetIdDocumentoByProceso(model.IdProceso);
+
+            DocumentoProcesoModel Proceso = Metodos.GetProceso(model.IdProceso);
+            model.Interdependencias = Metodos.GetInterdependenciasDiagrama(model.IdProceso);
+            model.Clientes_Productos = Metodos.GetClientesProductosDiagrama(model.IdProceso);
+            model.Entradas = Metodos.GetEntradasDiagrama(model.IdProceso);
+            model.PersonalClave = Metodos.GetPersonasClaveDiagrama(model.IdProceso);
+            model.Proveedores = Metodos.GetProveedoresDiagrama(model.IdProceso);
+            model.Tecnologia = Metodos.GetTecnologiaDiagrama(model.IdProceso);
+            model.NroProceso = Proceso.NroProceso.ToString();
+            model.Nombre = Proceso.Nombre;
+            model.Descripcion = Proceso.Descripcion;
+
+            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
+            ViewBag.DataProcesos = Metodos.GetProcesosEmpresa();
+
+            return View(model);
         }
         [SessionExpire]
         [HandleError]

@@ -159,6 +159,9 @@
   <data name="captionNroProceso" xml:space="preserve">
     <value>Nro. Proceso</value>
   </data>
+  <data name="captionObservacion" xml:space="preserve">
+    <value>Observación</value>
+  </data>
   <data name="captionProbabilidad" xml:space="preserve">
     <value>Probabilidad</value>
   </data>

@@ -1,8 +1,6 @@
 ﻿using BCMWeb.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace BCMWeb.Controllers
@@ -150,16 +148,16 @@ namespace BCMWeb.Controllers
         {
 
             AuditoriaAdminModel model = new AuditoriaAdminModel();
-            string _modId = Session["IdModulo"].ToString();
-            long modId = long.Parse(_modId);
-            int IdTipoDocumento = int.Parse(_modId.Length == 7 ? _modId.Substring(0, 1) : _modId.Substring(0, 2));
-            long IdModulo = IdTipoDocumento * 1000000;
+            //string _modId = Session["IdModulo"].ToString();
+            //long modId = long.Parse(_modId);
+            //int IdTipoDocumento = int.Parse(_modId.Length == 7 ? _modId.Substring(0, 1) : _modId.Substring(0, 2));
+            //long IdModulo = IdTipoDocumento * 1000000;
 
-            model.PageTitle = Metodos.GetModuloName(modId);
-            ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
-            model.IdModulo = IdModulo;
-            model.Perfil = Metodos.GetPerfilData();
-            model.IdModuloActual = modId;
+            //model.PageTitle = Metodos.GetModuloName(modId);
+            //ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
+            //model.IdModulo = IdModulo;
+            //model.Perfil = Metodos.GetPerfilData();
+            //model.IdModuloActual = modId;
             model.IdUsuario = long.Parse(Session["IdUsuarioAuditoria"].ToString());
 
             return PartialView(model);

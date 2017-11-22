@@ -574,6 +574,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tablas de Riesgo según Controles.
+        /// </summary>
+        public static string TituloTablaRiesgoControl {
+            get {
+                return ResourceManager.GetString("TituloTablaRiesgoControl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tablas: Valoración del Riesgo.
         /// </summary>
         public static string TituloTablasValoracionRiesgo {

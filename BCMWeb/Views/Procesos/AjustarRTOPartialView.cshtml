@@ -61,20 +61,6 @@ settings =>
         c.ColumnType = MVCxGridViewColumnType.Memo;
         c.ReadOnly = true;
     });
-    settings.Columns.Add(c =>
-    {
-        c.Settings.AllowSort = DefaultBoolean.True;
-        c.FieldName = "Impacto";
-        c.Width = Unit.Percentage(25);
-        c.Caption = Metodos.GetNombreEscala(eTipoEscala.MTD);
-        c.CellStyle.Wrap = DefaultBoolean.True;
-        c.CellStyle.HorizontalAlign = HorizontalAlign.Justify;
-        c.HeaderStyle.Wrap = DefaultBoolean.True;
-        c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
-        c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
-        c.ColumnType = MVCxGridViewColumnType.Memo;
-        c.ReadOnly = true;
-    });
     settings.Columns.Add(column =>
     {
         column.FieldName = "IdTipoEscala";
@@ -86,6 +72,20 @@ settings =>
             p.ValueType = typeof(int);
             p.DataSource = Metodos.GetTipoEscalaGrafico(eTipoEscala.RTO);
         });
+    });
+    settings.Columns.Add(c =>
+    {
+        c.Settings.AllowSort = DefaultBoolean.True;
+        c.FieldName = "Impacto";
+        c.Width = Unit.Percentage(25);
+        c.Caption = Resources.ProcesosResource.captionObservacion;
+        c.CellStyle.Wrap = DefaultBoolean.True;
+        c.CellStyle.HorizontalAlign = HorizontalAlign.Justify;
+        c.HeaderStyle.Wrap = DefaultBoolean.True;
+        c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+        c.ColumnType = MVCxGridViewColumnType.Memo;
+        c.ReadOnly = true;
     });
 }).Bind(Metodos.GetProcesosAjustarValores(eTipoEscala.RTO)).GetHtml()
 
