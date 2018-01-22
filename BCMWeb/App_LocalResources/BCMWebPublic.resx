@@ -222,4 +222,10 @@ AIACABtk25KCATmC3MAAAB/AAAAEgAAAAAAAAAAAAAAAADmBQAAd29yZC9udW1iZXJpbmcueG1sUEsBA
   <data name="captionButtonFilter" xml:space="preserve">
     <value>Filtrar</value>
   </data>
+  <data name="labelLoadPanelAprobacion" xml:space="preserve">
+    <value>Enviando correos a los aprobadores. Espere por favor...</value>
+  </data>
+  <data name="labelLoadPanelCertificacion" xml:space="preserve">
+    <value>Enviando correos a los certificadores. Espere por favor...</value>
+  </data>
 </root>

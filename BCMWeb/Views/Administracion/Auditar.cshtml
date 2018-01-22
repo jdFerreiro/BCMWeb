@@ -41,7 +41,7 @@
 
     <table cellspacing="5" cellpadding="5">
         <tr>
-            <td width="15%">
+            <td width="25%">
                 @Html.DevExpress().DateEdit(
                 settings =>
                 {
@@ -49,15 +49,15 @@
                     settings.Properties.Caption = Resources.AdministracionResource.captionFechaDesde;
                     settings.Properties.UseMaskBehavior = true;
                     settings.Properties.EditFormat = EditFormat.Custom;
-                    settings.Properties.EditFormatString = "dd/MM/yyyy hh:mm tt";
+                    settings.Properties.EditFormatString = "MM/dd/yyyy HH:mm";
                     settings.Properties.TimeSectionProperties.Visible = true;
                     settings.Properties.TimeSectionProperties.TimeEditProperties.EditFormat = EditFormat.Custom;
-                    settings.Properties.TimeSectionProperties.TimeEditProperties.EditFormatString = "hh:mm tt";
+                    settings.Properties.TimeSectionProperties.TimeEditProperties.EditFormatString = "HH:mm";
                     settings.Date = DateTime.Now;
                     settings.Width = Unit.Percentage(100);
                 }).Bind(Model.FechaDesde).GetHtml()
             </td>
-            <td width="15%">
+            <td width="25%" style="padding-left: 5px;">
                 @Html.DevExpress().DateEdit(
                 settings =>
                 {
@@ -65,22 +65,23 @@
                     settings.Properties.Caption = Resources.AdministracionResource.captionFechaHasta;
                     settings.Properties.UseMaskBehavior = true;
                     settings.Properties.EditFormat = EditFormat.Custom;
-                    settings.Properties.EditFormatString = "dd/MM/yyyy hh:mm tt";
+                    settings.Properties.EditFormatString = "MM/dd/yyyy HH:mm";
                     settings.Properties.TimeSectionProperties.Visible = true;
                     settings.Properties.TimeSectionProperties.TimeEditProperties.EditFormat = EditFormat.Custom;
-                    settings.Properties.TimeSectionProperties.TimeEditProperties.EditFormatString = "hh:mm tt";
+                    settings.Properties.TimeSectionProperties.TimeEditProperties.EditFormatString = "HH:mm";
                     settings.Date = DateTime.Now;
                     settings.Width = Unit.Percentage(100);
                 }).Bind(Model.FechaHasta).GetHtml()
             </td>
-            <td width="55%">
+            <td width="40%" style="padding-left: 5px;">
                 @Html.Partial("ComboBoxUsuariosPartialView", Model)
             </td>
-            <td width="15%" style="text-align: right;">
+            <td width="10%" style="text-align: right;">
                 @Html.DevExpress().Button(b =>
                    {
                        b.Name = "botLogin";
                        b.Text = Resources.BCMWebPublic.captionButtonEnviar;
+                       b.CausesValidation = false;
                        b.UseSubmitBehavior = true;
                    }).GetHtml()
             </td>

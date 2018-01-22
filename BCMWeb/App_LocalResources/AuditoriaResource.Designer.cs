@@ -115,6 +115,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Actualizar Modulos para el usuario {0}  en la empresa {1}.
+        /// </summary>
+        public static string ActualizarModulosUsuario {
+            get {
+                return ResourceManager.GetString("ActualizarModulosUsuario", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Agregar la Iniciativa {2} - {1}.
         /// </summary>
         public static string AgregarIniciativaMessage {

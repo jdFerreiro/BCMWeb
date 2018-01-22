@@ -28,13 +28,13 @@
             settings.ClientSideEvents.EndCallback = "function (s,e) { lp.Hide(); }";
 
             settings.CommandColumn.Visible = true;
+            settings.CommandColumn.Caption = " ";
             settings.CommandColumn.ShowNewButton = false;
             settings.CommandColumn.ShowNewButtonInHeader = true;
             settings.CommandColumn.ShowDeleteButton = true;
             settings.CommandColumn.ShowEditButton = true;
             settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
             settings.CommandColumn.Width = Unit.Pixel(150);
-            settings.CommandColumn.Caption = string.Empty;
 
             settings.Columns.Add(c =>
             {

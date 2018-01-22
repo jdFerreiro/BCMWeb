@@ -46,9 +46,9 @@ namespace BCMWeb.Data.EF
         public virtual ICollection<tblBIARTO> tblBIARTO { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIAWRT> tblBIAWRT { get; set; }
-        public virtual tblEmpresa tblEmpresa { get; set; }
-        public virtual tblTipoEscala tblTipoEscala { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblCriticidad> tblCriticidad { get; set; }
+        public virtual tblEmpresa tblEmpresa { get; set; }
+        public virtual tblTipoEscala tblTipoEscala { get; set; }
     }
 }

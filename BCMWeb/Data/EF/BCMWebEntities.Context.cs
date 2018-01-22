@@ -27,6 +27,7 @@ namespace BCMWeb.Data.EF
     
         public virtual DbSet<tblAuditoria> tblAuditoria { get; set; }
         public virtual DbSet<tblAuditoriaProcesoCritico> tblAuditoriaProcesoCritico { get; set; }
+        public virtual DbSet<tblBCPDocumento> tblBCPDocumento { get; set; }
         public virtual DbSet<tblBCPReanudacionPersonaClave> tblBCPReanudacionPersonaClave { get; set; }
         public virtual DbSet<tblBCPReanudacionTarea> tblBCPReanudacionTarea { get; set; }
         public virtual DbSet<tblBCPReanudacionTareaActividad> tblBCPReanudacionTareaActividad { get; set; }
@@ -70,6 +71,7 @@ namespace BCMWeb.Data.EF
         public virtual DbSet<tblCargo> tblCargo { get; set; }
         public virtual DbSet<tblCiudad> tblCiudad { get; set; }
         public virtual DbSet<tblControlRiesgo> tblControlRiesgo { get; set; }
+        public virtual DbSet<tblCriticidad> tblCriticidad { get; set; }
         public virtual DbSet<tblCultura_Ciudad> tblCultura_Ciudad { get; set; }
         public virtual DbSet<tblCultura_Estado> tblCultura_Estado { get; set; }
         public virtual DbSet<tblCultura_EstadoDocumento> tblCultura_EstadoDocumento { get; set; }
@@ -176,7 +178,5 @@ namespace BCMWeb.Data.EF
         public virtual DbSet<tblUsuario> tblUsuario { get; set; }
         public virtual DbSet<tblUsuarioUnidadOrganizativa> tblUsuarioUnidadOrganizativa { get; set; }
         public virtual DbSet<tblVicepresidencia> tblVicepresidencia { get; set; }
-        public virtual DbSet<tblBCPDocumento> tblBCPDocumento { get; set; }
-        public virtual DbSet<tblCriticidad> tblCriticidad { get; set; }
     }
 }

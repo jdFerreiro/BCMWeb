@@ -72,7 +72,11 @@ namespace BCMWeb.Controllers
             if (model.FilterIdUnidadOrganizativa > 0)
             {
                 IList<long> UOIds = Metodos.GetRelatedUOIds(model.FilterIdUnidadOrganizativa);
-                model.Documentos = model.Documentos.Where(x => UOIds.Contains(x.DatosBIA.IdUnidadOrganizativa)).ToList().AsQueryable();
+
+                if (IdTipoDocumento == 4)
+                    model.Documentos = model.Documentos.Where(x => x.DatosBIA != null && UOIds.Contains(x.DatosBIA.IdUnidadOrganizativa)).ToList().AsQueryable();
+                else
+                    model.Documentos = model.Documentos.Where(x => x.DatosBCP != null && UOIds.Contains(x.DatosBCP.IdUnidadOrganizativa)).ToList().AsQueryable();
             }
             if (model.FilterNroDocumento > 0)
                 model.Documentos = model.Documentos.Where(x => x.NroDocumento == model.FilterNroDocumento).ToList().AsQueryable();

@@ -27,7 +27,7 @@ namespace BCMWeb
             SMTPPort = ConfigurationManager.AppSettings.Get("SMTPPort");
             Host = ConfigurationManager.AppSettings.Get("Host");
         }
-        public static void SendEmail(string From, string Subject, string Body, string text, string To, string UserID, string Password, string SMTPPort, string Host)
+        public static void SendEmail(string From, string Subject, string Body, string text, string To, string UserID, string Password, string SMTPPort, string Host, bool showAplired)
         {
 
 
@@ -36,19 +36,22 @@ namespace BCMWeb
                 ContentId = "Logo-BiaPlus",
                 TransferEncoding = TransferEncoding.Base64
             };
-            LinkedResource _logoAplired = new LinkedResource(String.Format("{0}\\LogoAplired.png", _pathLogos), MediaTypeNames.Image.Jpeg)
-            {
-                ContentId = "LogoAplired",
-                TransferEncoding = TransferEncoding.Base64
-            };
-
 
             ContentType mimeType = new System.Net.Mime.ContentType("text/html");
             HtmlString _htmlString = new HtmlString(Body);
 
             AlternateView alternate = AlternateView.CreateAlternateViewFromString(_htmlString.ToHtmlString(), mimeType);
             alternate.LinkedResources.Add(_logo);
-            alternate.LinkedResources.Add(_logoAplired);
+            if (showAplired)
+            {
+                LinkedResource _logoAplired = new LinkedResource(String.Format("{0}\\LogoAplired.png", _pathLogos), MediaTypeNames.Image.Jpeg)
+                {
+                    ContentId = "LogoAplired",
+                    TransferEncoding = TransferEncoding.Base64
+                };
+                alternate.LinkedResources.Add(_logoAplired);
+            }
+
 
             System.Net.Mail.MailMessage mail = new System.Net.Mail.MailMessage();
             mail.To.Add(To);
@@ -111,21 +114,21 @@ namespace BCMWeb
             string From = string.Empty;
 
             AppSettings(out UserID, out Password, out SMTPPort, out Host, out From);
-            SendEmail(From, Resources.ForgotPasswordResource.HeaderString, Html, Text, Email, UserID, Password, SMTPPort, Host);
+            SendEmail(From, Resources.ForgotPasswordResource.HeaderString, Html, Text, Email, UserID, Password, SMTPPort, Host, true);
         }
-        public static void EnviarEmailContacto(string Nombre, string Email, string Asunto, string Mensaje, ControllerContext _context, 
+        public static void EnviarEmailContacto(string Nombre, string Email, string Asunto, string Mensaje, ControllerContext _context,
                                                RouteCollection routeCollection, string esquema, string HostName)
         {
             string Text = string.Empty;
             string Html = string.Empty;
             Encriptador _Encriptar = new Encriptador();
 
-                Text = string.Format(Resources.ContactResource.MensajeEmailClienteTexto, Environment.NewLine, Nombre);
+            Text = string.Format(Resources.ContactResource.MensajeEmailClienteTexto, Environment.NewLine, Nombre);
 
-                Html = string.Format(Resources.ContactResource.MensajeEmailClienteHTML
-                                   , Resources.ContactResource.HeaderEmailClienteHtml
-                                   , Nombre
-                                   , Resources.BCMWebPublic.labelAppSlogan);
+            Html = string.Format(Resources.ContactResource.MensajeEmailClienteHTML
+                               , Resources.ContactResource.HeaderEmailClienteHtml
+                               , Nombre
+                               , Resources.BCMWebPublic.labelAppSlogan);
 
             string UserID = string.Empty;
             string Password = string.Empty;
@@ -134,7 +137,7 @@ namespace BCMWeb
             string From = string.Empty;
 
             AppSettings(out UserID, out Password, out SMTPPort, out Host, out From);
-            SendEmail(From, Resources.ContactResource.SubjectEmailCliente, Html, Text, Email, UserID, Password, SMTPPort, Host);
+            SendEmail(From, Resources.ContactResource.SubjectEmailCliente, Html, Text, Email, UserID, Password, SMTPPort, Host, true);
 
             Text = string.Format(Resources.ContactResource.MensajeEmailApliredTexto, Environment.NewLine, Nombre, Email, Asunto, Mensaje);
 
@@ -146,10 +149,9 @@ namespace BCMWeb
                                , Mensaje
                                , Resources.BCMWebPublic.labelAppSlogan);
 
-            SendEmail(From, Resources.ContactResource.SubjectEmailAplired, Html, Text, Resources.ContactResource.EmailContacto, UserID, Password, SMTPPort, Host);
+            SendEmail(From, Resources.ContactResource.SubjectEmailAplired, Html, Text, Resources.ContactResource.EmailContacto, UserID, Password, SMTPPort, Host, true);
 
         }
-
         public static void EnviarEmailUpdatePerfil(string Email, ControllerContext _context, RouteCollection routeCollection,
                                                       string esquema, string HostName, BCMWeb.Models.PerfilModelView Perfil)
         {
@@ -185,7 +187,7 @@ namespace BCMWeb
             string From = string.Empty;
 
             AppSettings(out UserID, out Password, out SMTPPort, out Host, out From);
-            SendEmail(From, Resources.PerfilResource.AsuntoEmailString, Html, Text, Email, UserID, Password, SMTPPort, Host);
+            SendEmail(From, Resources.PerfilResource.AsuntoEmailString, Html, Text, Email, UserID, Password, SMTPPort, Host, true);
         }
     }
 

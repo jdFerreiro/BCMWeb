@@ -70,6 +70,87 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Activar.
+        /// </summary>
+        public static string captionBotonActivar {
+            get {
+                return ResourceManager.GetString("captionBotonActivar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bloquear.
+        /// </summary>
+        public static string captionBotonBloquear {
+            get {
+                return ResourceManager.GetString("captionBotonBloquear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Editar.
+        /// </summary>
+        public static string captionBotonEditar {
+            get {
+                return ResourceManager.GetString("captionBotonEditar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Eliminar.
+        /// </summary>
+        public static string captionBotonEliminar {
+            get {
+                return ResourceManager.GetString("captionBotonEliminar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ciudad.
+        /// </summary>
+        public static string captionCiudad {
+            get {
+                return ResourceManager.GetString("captionCiudad", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Descripción del Módulo.
+        /// </summary>
+        public static string captionDescripcionModulo {
+            get {
+                return ResourceManager.GetString("captionDescripcionModulo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dirección.
+        /// </summary>
+        public static string captionDireccion {
+            get {
+                return ResourceManager.GetString("captionDireccion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Estado.
+        /// </summary>
+        public static string captionEstado {
+            get {
+                return ResourceManager.GetString("captionEstado", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Estatus.
+        /// </summary>
+        public static string captionEstatus {
+            get {
+                return ResourceManager.GetString("captionEstatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fecha Desde:.
         /// </summary>
         public static string captionFechaDesde {
@@ -88,11 +169,101 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Modulos.
+        ///   Looks up a localized string similar to Fecha de Inicio de Actividades.
+        /// </summary>
+        public static string captionFechaInicio {
+            get {
+                return ResourceManager.GetString("captionFechaInicio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fecha de Ingreso.
+        /// </summary>
+        public static string captionFechaRegistro {
+            get {
+                return ResourceManager.GetString("captionFechaRegistro", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fecha Último Estado.
+        /// </summary>
+        public static string captionFechaUltimoEstado {
+            get {
+                return ResourceManager.GetString("captionFechaUltimoEstado", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logotipo.
+        /// </summary>
+        public static string captionLogo {
+            get {
+                return ResourceManager.GetString("captionLogo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Modulos Permitidos.
         /// </summary>
         public static string captionModulos {
             get {
                 return ResourceManager.GetString("captionModulos", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nombre Comercial.
+        /// </summary>
+        public static string captionNombreComercial {
+            get {
+                return ResourceManager.GetString("captionNombreComercial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nombre Fiscal.
+        /// </summary>
+        public static string captionNombreFiscal {
+            get {
+                return ResourceManager.GetString("captionNombreFiscal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nombre del Módulo.
+        /// </summary>
+        public static string captionNombreModulo {
+            get {
+                return ResourceManager.GetString("captionNombreModulo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to País.
+        /// </summary>
+        public static string captionPais {
+            get {
+                return ResourceManager.GetString("captionPais", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No. Registro Fiscal.
+        /// </summary>
+        public static string captionRegistroFiscal {
+            get {
+                return ResourceManager.GetString("captionRegistroFiscal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Activo.
+        /// </summary>
+        public static string captionSelectModulo {
+            get {
+                return ResourceManager.GetString("captionSelectModulo", resourceCulture);
             }
         }
         
@@ -106,11 +277,65 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Está seguro de activar la empresa {0}.
+        /// </summary>
+        public static string ConfirmActivarMessage {
+            get {
+                return ResourceManager.GetString("ConfirmActivarMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Está seguro de bloquear la empresa {0}.
+        /// </summary>
+        public static string ConfirmBloquearMessage {
+            get {
+                return ResourceManager.GetString("ConfirmBloquearMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Está seguro de eliminar la empresa {0}.
+        /// </summary>
+        public static string ConfirmEliminarMessage {
+            get {
+                return ResourceManager.GetString("ConfirmEliminarMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Todos los Usuarios.
         /// </summary>
         public static string itemAllUsers {
             get {
                 return ResourceManager.GetString("itemAllUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Información de la Empresa.
+        /// </summary>
+        public static string TitleEditEmpresa {
+            get {
+                return ResourceManager.GetString("TitleEditEmpresa", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Módulos autorizados.
+        /// </summary>
+        public static string TitleEditModulos {
+            get {
+                return ResourceManager.GetString("TitleEditModulos", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Información del Usuario.
+        /// </summary>
+        public static string TitleEditUsuario {
+            get {
+                return ResourceManager.GetString("TitleEditUsuario", resourceCulture);
             }
         }
     }

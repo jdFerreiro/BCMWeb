@@ -38,7 +38,7 @@
             settings.CommandColumn.ShowEditButton = true;
             settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
             settings.CommandColumn.Width = Unit.Percentage(10);
-            settings.CommandColumn.Caption = string.Empty;
+            settings.CommandColumn.Caption = " ";
 
             settings.Columns.Add(c =>
             {
@@ -59,7 +59,7 @@
             settings.Columns.Add(c =>
             {
                 c.FieldName = "Responsable";
-                c.ColumnType = MVCxGridViewColumnType.CheckBox;                
+                c.ColumnType = MVCxGridViewColumnType.CheckBox;
                 c.Caption = Resources.PPEResource.captionResponsable;
                 c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.HeaderStyle.Wrap = DefaultBoolean.True;

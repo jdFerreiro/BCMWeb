@@ -4767,6 +4767,7 @@ namespace BCMWeb
                         IdTipoDocumento = _IdTipoDocumento,
                         Procesado = false
                     };
+                    db.tblDocumentoCertificacion.Add(_Certificacion);
                     string[] _fechaInicioArray = FechaInicioEntrevista.Split(' ');
                     string[] _fechaFinalArray = FechaFinalEntrevista.Split(' ');
 

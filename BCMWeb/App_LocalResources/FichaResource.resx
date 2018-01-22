@@ -213,4 +213,13 @@
   <data name="captionUnidadPadre" xml:space="preserve">
     <value>Unidad Padre</value>
   </data>
+  <data name="captionEstatusUsuario" xml:space="preserve">
+    <value>Estatus</value>
+  </data>
+  <data name="captionFechaEU" xml:space="preserve">
+    <value>Fecha Estatus Usuario</value>
+  </data>
+  <data name="captionFechaUC" xml:space="preserve">
+    <value>Fecha de Última Conexión</value>
+  </data>
 </root>

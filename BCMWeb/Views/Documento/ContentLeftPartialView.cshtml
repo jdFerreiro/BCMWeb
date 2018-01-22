@@ -188,6 +188,118 @@
                                 </td>
                             </tr>
                             break;
+                        case "7":
+                            <tr>
+                                <td>
+                                    <div style="margin-top: 10px; max-height: 200px; overflow-y: auto;">
+                                        @Html.DevExpress().FormLayout(s =>
+                                   {
+                                       s.Name = "lyFiltroBIA";
+                                       s.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+                                       s.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 800;
+                                       s.ControlStyle.CssClass = "fromLayout";
+
+                                       s.Items.AddGroupItem(g =>
+                                       {
+                                           g.Caption = Resources.DocumentoResource.HeaderFilterBIA;
+                                           g.Height = Unit.Pixel(100);
+
+                                           g.Items.Add(m => m.FilterIdProceso, i =>
+                                           {
+                                               i.Caption = Resources.BIAFiltroResource.Proceso;
+                                               i.CaptionSettings.Location = LayoutItemCaptionLocation.Top;
+                                               i.Width = Unit.Percentage(100);
+                                               i.NestedExtension().ComboBox(ct =>
+                                               {
+                                                   ct.Name = "cbProcesos";
+                                                   ct.Width = Unit.Percentage(100);
+                                                   ct.Properties.ValueType = typeof(long);
+                                                   ct.Properties.DataSource = BCMWeb.Metodos.GetProcesosBCP();
+                                                   ct.Properties.TextField = "Nombre";
+                                                   ct.Properties.ValueField = "IdProceso";
+                                                   ct.Properties.ClientSideEvents.SelectedIndexChanged = "function (s,e) { $(\"#FilterIdProceso\").val(cbProcesos.GetValue()); }";
+                                               });
+                                           });
+                                           g.Items.Add(m => m.FilterNroDocumento, i =>
+                                           {
+                                               i.Caption = Resources.BIAFiltroResource.NroDocumento;
+                                               i.CaptionSettings.Location = LayoutItemCaptionLocation.Top;
+                                               i.Width = Unit.Percentage(100);
+                                               i.NestedExtension().TextBox(ct =>
+                                               {
+                                                   ct.Name = "tbxNroDocumento";
+                                                   ct.Width = Unit.Percentage(100);
+                                                   ct.Properties.ClientSideEvents.TextChanged = "function (s,e) { $(\"#FilterNroDocumento\").val(tbxNroDocumento.GetValue()); }";
+                                               });
+                                           });
+                                           g.Items.Add(m => m.FilterResponsable, i =>
+                                           {
+                                               i.Caption = Resources.DocumentoResource.captionResponsable;
+                                               i.CaptionSettings.Location = LayoutItemCaptionLocation.Top;
+                                               i.Width = Unit.Percentage(100);
+                                               i.NestedExtension().ComboBox(ct =>
+                                               {
+                                                   ct.Name = "cbResponsable";
+                                                   ct.Width = Unit.Percentage(100);
+                                                   ct.Properties.ValueType = typeof(long);
+                                                   ct.Properties.DataSource = BCMWeb.Metodos.GetResponsablesTipoDocumento(7);
+                                                   ct.Properties.TextField = "Descripcion";
+                                                   ct.Properties.ValueField = "Id";
+                                                   ct.Properties.ClientSideEvents.SelectedIndexChanged = "function (s,e) { $(\"#FilterResponsable\").val(cbResponsable.GetValue()); }";
+                                               });
+                                           });
+                                           g.Items.Add(m => m.FilterEstadoDocumento, i =>
+                                           {
+                                               i.Caption = Resources.BIAFiltroResource.EstadoDocumento;
+                                               i.CaptionSettings.Location = LayoutItemCaptionLocation.Top;
+                                               i.Width = Unit.Percentage(100);
+                                               i.NestedExtension().ComboBox(ct =>
+                                               {
+                                                   ct.Name = "cbEstadoDocumento";
+                                                   ct.Width = Unit.Percentage(100);
+                                                   ct.Properties.ValueType = typeof(long);
+                                                   ct.Properties.DataSource = BCMWeb.Metodos.GetEstatusDocumento();
+                                                   ct.Properties.TextField = "Descripcion";
+                                                   ct.Properties.ValueField = "Id";
+                                                   ct.Properties.ClientSideEvents.SelectedIndexChanged = "function (s,e) { $(\"#FilterEstadoDocumento\").val(cbEstadoDocumento.GetValue()); }";
+                                               });
+                                           });
+                                           g.Items.Add(m => m.FilterIdUnidadOrganizativa, i =>
+                                           {
+                                               i.Caption = Resources.BIAFiltroResource.UnidadOrganizativa;
+                                               i.CaptionSettings.Location = LayoutItemCaptionLocation.Top;
+                                               i.Width = Unit.Percentage(100);
+                                               i.NestedExtension().ComboBox(ct =>
+                                               {
+                                                   ct.Name = "cbUnidadOrganizativa";
+                                                   ct.Width = Unit.Percentage(100);
+                                                   ct.Properties.ValueType = typeof(long);
+                                                   ct.Properties.DataSource = BCMWeb.Metodos.GetUnidadesOrganizativasBCPByUser(true);
+                                                   ct.Properties.TextField = "NombreUnidadOrganizativa";
+                                                   ct.Properties.ValueField = "IdUnidad";
+                                                   ct.Properties.ClientSideEvents.SelectedIndexChanged = "function (s,e) { $(\"#FilterIdUnidadOrganizativa\").val(cbUnidadOrganizativa.GetValue()); }";
+                                               });
+                                           });
+                                       });
+
+                                       s.Items.Add(i =>
+                                       {
+                                           i.ShowCaption = DefaultBoolean.False;
+                                           i.HorizontalAlign = FormLayoutHorizontalAlign.Right;
+                                           i.NestedExtension().Button(bt =>
+                                           {
+                                               bt.Name = "botFilter";
+                                               bt.Text = Resources.BCMWebPublic.captionButtonEnviar;
+                                               bt.ClientSideEvents.Click = "function(s,e) { lp.Show(); document.forms['docForm'].submit(); }";
+                                           });
+                                       });
+
+
+                                   }).GetHtml()
+                                    </div>
+                                </td>
+                            </tr>
+                            break;
                         case "8":
                             <tr>
                                 <td>

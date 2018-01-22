@@ -313,6 +313,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enviando correos a los aprobadores. Espere por favor....
+        /// </summary>
+        public static string labelLoadPanelAprobacion {
+            get {
+                return ResourceManager.GetString("labelLoadPanelAprobacion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enviando correos a los certificadores. Espere por favor....
+        /// </summary>
+        public static string labelLoadPanelCertificacion {
+            get {
+                return ResourceManager.GetString("labelLoadPanelCertificacion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Acceso a la Aplicación.
         /// </summary>
         public static string LoginPageTitle {

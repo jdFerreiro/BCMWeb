@@ -275,6 +275,26 @@ namespace BCMWeb.Controllers
                 case 13030500:
                     model.DataCuadro = Metodos.GetDataAmenazasProbabilidad();
                     break;
+                case 13050200:
+                    model.Escalas = Metodos.GetProbabilidadEmpresa().Select(x => x.Descripcion).ToList();
+                    model.DataCuadro = Metodos.GetNroProcesosByRiesgoProbabilidad();
+                    break;
+                case 13050400:
+                    model.Escalas = Metodos.GetImpactoEmpresa().Select(x => x.Descripcion).ToList();
+                    model.DataCuadro = Metodos.GetNroProcesosByRiesgoImpacto();
+                    break;
+                case 13050600:
+                    model.Escalas = Metodos.GetSeveridadEmpresa().Select(x => x.Descripcion).ToList();
+                    model.DataCuadro = Metodos.GetNroProcesosByRiesgoSeveridad();
+                    break;
+                case 13050800:
+                    model.Escalas = Metodos.GetFuenteEmpresa().Select(x => x.Descripcion).ToList();
+                    model.DataCuadro = Metodos.GetNroProcesosByRiesgoFuente();
+                    break;
+                case 13051000:
+                    model.Escalas = Metodos.GetControlEmpresa().Select(x => x.Descripcion).ToList();
+                    model.DataCuadro = Metodos.GetNroProcesosByRiesgoControl();
+                    break;
             }
 
             return View(model);
@@ -300,6 +320,14 @@ namespace BCMWeb.Controllers
         {
             return PartialView("TablaGIPartialView", Metodos.GetNroProcesosByGranImpacto());
         }
+        [SessionExpire]
+        [HandleError]
+        [HttpPost]
+        public ActionResult TablaTRPartialView()
+        {
+            return PartialView("TablaTRPartialView", Metodos.GetDataGraficoRiesgoProbabilidad());
+        }
+
         [SessionExpire]
         [HandleError]
         public ActionResult Grafico(long modId)
@@ -346,23 +374,23 @@ namespace BCMWeb.Controllers
                     iEscala = model.EscalaGrafico.FindIndex(x => x.IdTipoEscala == model.IdEscalaGrafico);
                     ViewData["TituloGrafico"] = _PageTitle + " - " + model.EscalaGrafico[iEscala].TipoEscala;
                     break;
-                case 13050200:
+                case 13050300:
                     model.DataCuadro = Metodos.GetDataGraficoRiesgoProbabilidad();
                     ViewData["TituloGrafico"] = _PageTitle;
                     break;
-                case 13050300:
+                case 13050500:
                     model.DataCuadro = Metodos.GetDataGraficoRiesgoImpacto();
                     ViewData["TituloGrafico"] = _PageTitle;
                     break;
-                case 13050400:
+                case 13050700:
                     model.DataCuadro = Metodos.GetDataGraficoRiesgoSeveridad();
                     ViewData["TituloGrafico"] = _PageTitle;
                     break;
-                case 13050500:
+                case 13050900:
                     model.DataCuadro = Metodos.GetDataGraficoRiesgoFuente();
                     ViewData["TituloGrafico"] = _PageTitle;
                     break;
-                case 13050700:
+                case 13051100:
                     model.DataCuadro = Metodos.GetDataGraficoRiesgoControl();
                     ViewData["TituloGrafico"] = _PageTitle;
                     break;
@@ -403,15 +431,7 @@ namespace BCMWeb.Controllers
                     iEscala = model.EscalaGrafico.FindIndex(x => x.IdTipoEscala == model.IdEscalaGrafico);
                     ViewData["TituloGrafico"] = _PageTitle + " - " + model.EscalaGrafico[iEscala].TipoEscala;
                     break;
-                case 13050200:
-                    model.DataCuadro = Metodos.GetDataGraficoRiesgoProbabilidad();
-                    ViewData["TituloGrafico"] = _PageTitle;
-                    break;
                 case 13050300:
-                    model.DataCuadro = Metodos.GetDataGraficoRiesgoProbabilidad();
-                    ViewData["TituloGrafico"] = _PageTitle;
-                    break;
-                case 13050400:
                     model.DataCuadro = Metodos.GetDataGraficoRiesgoProbabilidad();
                     ViewData["TituloGrafico"] = _PageTitle;
                     break;
@@ -420,6 +440,14 @@ namespace BCMWeb.Controllers
                     ViewData["TituloGrafico"] = _PageTitle;
                     break;
                 case 13050700:
+                    model.DataCuadro = Metodos.GetDataGraficoRiesgoProbabilidad();
+                    ViewData["TituloGrafico"] = _PageTitle;
+                    break;
+                case 13050900:
+                    model.DataCuadro = Metodos.GetDataGraficoRiesgoProbabilidad();
+                    ViewData["TituloGrafico"] = _PageTitle;
+                    break;
+                case 13051100:
                     model.DataCuadro = Metodos.GetDataGraficoRiesgoProbabilidad();
                     ViewData["TituloGrafico"] = _PageTitle;
                     break;
@@ -785,7 +813,7 @@ namespace BCMWeb.Controllers
         {
             RiesgoControlModel model = new RiesgoControlModel();
             model.IdUnidadOrganizativa = IdUnidadOrganizativa;
-            ViewData["IdUnidadOrganizativa"] = IdUnidadOrganizativa;
+            //ViewData["IdUnidadOrganizativa"] = IdUnidadOrganizativa;
             return PartialView(model);
         }
         [SessionExpire]
@@ -827,6 +855,42 @@ namespace BCMWeb.Controllers
             long IdUnidadOrganizativa = long.Parse(Session["IdUnidadOrganizativaPrint"].ToString());
             return GridViewExportReporteTablaGI.FormatConditionsExportFormatsInfo[GridViewExportFormat.Xlsx](GridViewExportReporteTablaGI.FormatConditionsExportGridViewSettings, Metodos.GetNroProcesosByGranImpacto());
 
+        }
+        [SessionExpire]
+        [HandleError]
+        public ActionResult ExportTablaRiesgo2()
+        {
+            int modId = int.Parse(Session["modId"].ToString());
+            object DataCuadro = null;
+
+            switch (modId)
+            {
+                case 13050200:
+                    DataCuadro = Metodos.GetNroProcesosByRiesgoProbabilidad();
+                    return GridViewExportRiesgoProbabilidad.FormatConditionsExportFormatsInfo[GridViewExportFormat.Xlsx](GridViewExportRiesgoProbabilidad.FormatConditionsExportGridViewSettings, DataCuadro);
+                case 13050400:
+                    DataCuadro = Metodos.GetNroProcesosByRiesgoImpacto();
+                    return GridViewExportRiesgoImpacto.FormatConditionsExportFormatsInfo[GridViewExportFormat.Xlsx](GridViewExportRiesgoImpacto.FormatConditionsExportGridViewSettings, DataCuadro);
+                case 13050600:
+                    DataCuadro = Metodos.GetNroProcesosByRiesgoSeveridad();
+                    return GridViewExportRiesgoSeveridad.FormatConditionsExportFormatsInfo[GridViewExportFormat.Xlsx](GridViewExportRiesgoSeveridad.FormatConditionsExportGridViewSettings, DataCuadro);
+                case 13050800:
+                    DataCuadro = Metodos.GetNroProcesosByRiesgoFuente();
+                    return GridViewExportRiesgoFuente.FormatConditionsExportFormatsInfo[GridViewExportFormat.Xlsx](GridViewExportRiesgoFuente.FormatConditionsExportGridViewSettings, DataCuadro);
+                default: //13051000:
+                    DataCuadro = Metodos.GetNroProcesosByRiesgoControl();
+                    return GridViewExportRiesgoControl.FormatConditionsExportFormatsInfo[GridViewExportFormat.Xlsx](GridViewExportRiesgoControl.FormatConditionsExportGridViewSettings, DataCuadro);
+            }
+
+
+        }
+        [SessionExpire]
+        [HandleError]
+        public ActionResult ExportTablaRiesgoFuente()
+        {
+            int modId = int.Parse(Session["modId"].ToString());
+            object DataCuadro = Metodos.GetNroProcesosByRiesgoFuente();
+            return GridViewExportRiesgoFuente.FormatConditionsExportFormatsInfo[GridViewExportFormat.Xlsx](GridViewExportRiesgoFuente.FormatConditionsExportGridViewSettings, DataCuadro);
         }
 
     }

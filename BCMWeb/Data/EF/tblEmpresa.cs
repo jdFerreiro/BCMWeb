@@ -19,10 +19,12 @@ namespace BCMWeb.Data.EF
         {
             this.tblAuditoria = new HashSet<tblAuditoria>();
             this.tblAuditoriaProcesoCritico = new HashSet<tblAuditoriaProcesoCritico>();
+            this.tblBCPDocumento = new HashSet<tblBCPDocumento>();
             this.tblBIACadenaServicio = new HashSet<tblBIACadenaServicio>();
             this.tblBIADocumento = new HashSet<tblBIADocumento>();
             this.tblBIAUnidadTrabajo = new HashSet<tblBIAUnidadTrabajo>();
             this.tblCargo = new HashSet<tblCargo>();
+            this.tblCriticidad = new HashSet<tblCriticidad>();
             this.tblDocumento = new HashSet<tblDocumento>();
             this.tblDocumentoPersonaClave = new HashSet<tblDocumentoPersonaClave>();
             this.tblProbabilidadRiesgo = new HashSet<tblProbabilidadRiesgo>();
@@ -50,8 +52,6 @@ namespace BCMWeb.Data.EF
             this.tblPMTResponsableUpdate = new HashSet<tblPMTResponsableUpdate>();
             this.tblProducto = new HashSet<tblProducto>();
             this.tblUsuarioUnidadOrganizativa = new HashSet<tblUsuarioUnidadOrganizativa>();
-            this.tblBCPDocumento = new HashSet<tblBCPDocumento>();
-            this.tblCriticidad = new HashSet<tblCriticidad>();
         }
     
         public long IdEmpresa { get; set; }
@@ -77,6 +77,8 @@ namespace BCMWeb.Data.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblAuditoriaProcesoCritico> tblAuditoriaProcesoCritico { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblBCPDocumento> tblBCPDocumento { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIACadenaServicio> tblBIACadenaServicio { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIADocumento> tblBIADocumento { get; set; }
@@ -85,6 +87,8 @@ namespace BCMWeb.Data.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblCargo> tblCargo { get; set; }
         public virtual tblCiudad tblCiudad { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblCriticidad> tblCriticidad { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblDocumento> tblDocumento { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -142,9 +146,5 @@ namespace BCMWeb.Data.EF
         public virtual ICollection<tblProducto> tblProducto { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblUsuarioUnidadOrganizativa> tblUsuarioUnidadOrganizativa { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblBCPDocumento> tblBCPDocumento { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblCriticidad> tblCriticidad { get; set; }
     }
 }

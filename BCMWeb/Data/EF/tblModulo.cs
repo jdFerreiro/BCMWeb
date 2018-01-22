@@ -17,13 +17,13 @@ namespace BCMWeb.Data.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public tblModulo()
         {
+            this.tblDocumentoContenido = new HashSet<tblDocumentoContenido>();
             this.tblModulo_NivelUsuario = new HashSet<tblModulo_NivelUsuario>();
             this.tblModulo_Usuario = new HashSet<tblModulo_Usuario>();
             this.tblPMTMensajeActualizacion = new HashSet<tblPMTMensajeActualizacion>();
             this.tblPMTProgramacion = new HashSet<tblPMTProgramacion>();
             this.tblPMTProgramacionDocumentos = new HashSet<tblPMTProgramacionDocumentos>();
             this.tblPMTResponsableUpdate = new HashSet<tblPMTResponsableUpdate>();
-            this.tblDocumentoContenido = new HashSet<tblDocumentoContenido>();
         }
     
         public long IdEmpresa { get; set; }
@@ -41,6 +41,8 @@ namespace BCMWeb.Data.EF
         public bool Negocios { get; set; }
         public bool Tecnologia { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblDocumentoContenido> tblDocumentoContenido { get; set; }
         public virtual tblEmpresa tblEmpresa { get; set; }
         public virtual tblEmpresaModulo tblEmpresaModulo { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -55,7 +57,5 @@ namespace BCMWeb.Data.EF
         public virtual ICollection<tblPMTProgramacionDocumentos> tblPMTProgramacionDocumentos { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblPMTResponsableUpdate> tblPMTResponsableUpdate { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblDocumentoContenido> tblDocumentoContenido { get; set; }
     }
 }

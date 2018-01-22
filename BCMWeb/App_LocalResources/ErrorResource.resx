@@ -249,4 +249,7 @@
   <data name="RangeErrorMultipleMale" xml:space="preserve">
     <value>Los {0} deben estar entre {1} y {2}</value>
   </data>
+  <data name="AllErrors" xml:space="preserve">
+    <value>Por favor, resuelva todos los errores.</value>
+  </data>
 </root>

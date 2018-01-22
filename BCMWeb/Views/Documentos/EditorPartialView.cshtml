@@ -20,7 +20,8 @@
         settings.SettingsDocumentSelector.UploadSettings.Enabled = true;
         settings.ClientSideEvents.CustomCommandExecuted = "OnCustomCommandExecuted";
         settings.ClientSideEvents.DocumentChanged = "docChange";
-        
+        //settings.Settings.Behavior.Copy = DocumentCapability.Hidden;
+        //settings.Settings.Behavior.Cut = DocumentCapability.Hidden;
 
         settings.CustomActionRouteValues = new { Controller = "Documentos", Action = "Open" };
 

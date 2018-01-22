@@ -17,6 +17,7 @@ namespace BCMWeb.Data.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public tblBIAProceso()
         {
+            this.tblBCPDocumento = new HashSet<tblBCPDocumento>();
             this.tblBIAAmenaza = new HashSet<tblBIAAmenaza>();
             this.tblBIAAplicacion = new HashSet<tblBIAAplicacion>();
             this.tblBIAClienteProceso = new HashSet<tblBIAClienteProceso>();
@@ -37,7 +38,6 @@ namespace BCMWeb.Data.EF
             this.tblBIARTO = new HashSet<tblBIARTO>();
             this.tblBIAUnidadTrabajoProceso = new HashSet<tblBIAUnidadTrabajoProceso>();
             this.tblBIAWRT = new HashSet<tblBIAWRT>();
-            this.tblBCPDocumento = new HashSet<tblBCPDocumento>();
         }
     
         public long IdEmpresa { get; set; }
@@ -52,6 +52,8 @@ namespace BCMWeb.Data.EF
         public Nullable<long> IdEstadoProceso { get; set; }
         public Nullable<System.DateTime> FechaUltimoEstatus { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblBCPDocumento> tblBCPDocumento { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIAAmenaza> tblBIAAmenaza { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -95,7 +97,5 @@ namespace BCMWeb.Data.EF
         public virtual ICollection<tblBIAUnidadTrabajoProceso> tblBIAUnidadTrabajoProceso { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIAWRT> tblBIAWRT { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblBCPDocumento> tblBCPDocumento { get; set; }
     }
 }

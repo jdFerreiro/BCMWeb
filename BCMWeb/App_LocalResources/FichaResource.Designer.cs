@@ -97,6 +97,33 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Estatus.
+        /// </summary>
+        public static string captionEstatusUsuario {
+            get {
+                return ResourceManager.GetString("captionEstatusUsuario", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fecha Estatus Usuario.
+        /// </summary>
+        public static string captionFechaEU {
+            get {
+                return ResourceManager.GetString("captionFechaEU", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fecha de Última Conexión.
+        /// </summary>
+        public static string captionFechaUC {
+            get {
+                return ResourceManager.GetString("captionFechaUC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Información del Entrevistado.
         /// </summary>
         public static string captionGrupo1 {

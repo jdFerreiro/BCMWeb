@@ -245,6 +245,7 @@
     <Content Include="Content\LogosEmpresa\LogoBandes.png" />
     <Content Include="Content\LogosEmpresa\logoBanesco.jpg" />
     <Content Include="Content\LogosEmpresa\logoDefault.jpg" />
+    <Content Include="Content\LogosEmpresa\logoDefault.png" />
     <Content Include="Content\LogosEmpresa\logojunko.png" />
     <Content Include="Content\LogosEmpresa\logo_bangente.jpg" />
     <Content Include="Content\LogosEmpresa\logo_Credicard.png" />
@@ -252,8 +253,8 @@
     <Content Include="Content\Site.css" />
     <Content Include="Data\EF\BCMWebEntities.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>BCMWebEntities.Context.cs</LastGenOutput>
       <DependentUpon>BCMWebEntities.edmx</DependentUpon>
+      <LastGenOutput>BCMWebEntities.Context.cs</LastGenOutput>
     </Content>
     <Content Include="Data\EF\BCMWebEntities.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -452,7 +453,6 @@
     <Content Include="Views\Reportes\TablaRiesgoControl.cshtml" />
     <Content Include="Views\Reportes\ComboBoxUnidadOrganizativa.cshtml" />
     <Content Include="Views\Reportes\TablaRiesgoPartialView.cshtml" />
-    <Content Include="Views\Administracion\ActualizaTablas.cshtml" />
     <Content Include="Views\Administracion\ContentLeftPartialView.cshtml" />
     <Content Include="Views\Administracion\ComboBoxEmpresa.cshtml" />
     <Content Include="Views\Administracion\ComboBoxModulo.cshtml" />
@@ -525,6 +525,21 @@
     <Content Include="Views\Documento\DocumentoBCPPartialView.cshtml" />
     <Content Include="Views\Documento\DocumentoBIAPartialView.cshtml" />
     <Content Include="Views\Documentos\DiagramaBCP.cshtml" />
+    <Content Include="Views\Administracion\Empresa.cshtml" />
+    <Content Include="Views\Administracion\EmpresaPartialView.cshtml" />
+    <Content Include="Views\Administracion\EditarEmpresa.cshtml" />
+    <Content Include="Views\Administracion\PaisPartialView.cshtml" />
+    <Content Include="Views\Administracion\EstadoPartialView.cshtml" />
+    <Content Include="Views\Administracion\CiudadPartialView.cshtml" />
+    <Content Include="Views\Administracion\UploadLogoPartialView.cshtml" />
+    <Content Include="Views\Administracion\ModulosAccesoEmpresa.cshtml" />
+    <Content Include="Views\Administracion\ModulosAccesoEmpresaPartialView.cshtml" />
+    <Content Include="Views\Administracion\Usuarios.cshtml" />
+    <Content Include="Views\Administracion\UsuarioPartialView.cshtml" />
+    <Content Include="Views\Administracion\ComboBoxEmpresaUsuario.cshtml" />
+    <Content Include="Views\Administracion\EditarUsuario.cshtml" />
+    <Content Include="Views\Administracion\ModulosAccesoUsuario.cshtml" />
+    <Content Include="Views\Administracion\ModulosAccesoPartialView.cshtml" />
     <None Include="Views\Procesos\AjustarWRT.cshtml" />
     <Content Include="Views\Procesos\AjustarRTOPartialView.cshtml" />
     <Content Include="Views\Procesos\AjustarRTO.cshtml" />
@@ -555,6 +570,8 @@
     <Content Include="Views\Reportes\FuentePartialViewPrint.cshtml" />
     <Content Include="Views\Reportes\DiagramaPersonasClave.cshtml" />
     <Content Include="Views\Reportes\PartialDiagramaPersonasClave.cshtml" />
+    <Content Include="Views\Reportes\TablaTRPartialView.cshtml" />
+    <Content Include="Views\Reportes\TablaTRFPartialView.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -737,6 +754,21 @@
     <Compile Include="DAL\Enumeradores.cs" />
     <Compile Include="DAL\FirstModuloSelected.cs" />
     <Compile Include="Data\dataObjects.cs" />
+    <Compile Include="Data\EF\BCMWebEntities.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BCMWebEntities.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\EF\BCMWebEntities.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BCMWebEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\EF\BCMWebEntities.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BCMWebEntities.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Data\EF\tblAuditoria.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
@@ -1202,21 +1234,6 @@
     <Compile Include="DAL\Repository.cs" />
     <Compile Include="DAL\User.cs" />
     <Compile Include="Data\Auditoria.cs" />
-    <Compile Include="Data\EF\BCMWebEntities.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>BCMWebEntities.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\EF\BCMWebEntities.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>BCMWebEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\EF\BCMWebEntities.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>BCMWebEntities.edmx</DependentUpon>
-    </Compile>
     <Compile Include="Data\Metodos.cs" />
     <Compile Include="Data\PDFManager.cs" />
     <Compile Include="Data\Soundex.cs" />
@@ -1225,6 +1242,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\CultureAwareControllerActivator.cs" />
     <Compile Include="Helpers\GridViewExport.cs" />
     <Compile Include="Helpers\UploadControlHelpers.cs" />
     <Compile Include="Models\AccountModels.cs" />

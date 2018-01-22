@@ -18,6 +18,7 @@ namespace BCMWeb.Models
             }
         }
         public List<TipoEscalaGrafico> EscalaGrafico { get; set; }
+        public List<String> Escalas { get; set; }
         public long IdEscalaGrafico { get; set; }
         public object DataCuadro { get; set; }
         public object DataMTD { get; set; }
@@ -130,11 +131,13 @@ namespace BCMWeb.Models
     public class DataRiesgoControl
     {
         public int NroProceso { get; set; }
+        public string Proceso { get; set; }
         public string Amenaza { get; set; }
         public string Evento { get; set; }
         public string Implantado { get; set; }
         public string Implantar { get; set; }
-        public int Estado { get; set; }
+        public int IdEstado { get; set; }
+        public string Estado { get; set; }
         public short Probabilidad { get; set; }
         public short Control { get; set; }
         public short Impacto { get; set; }

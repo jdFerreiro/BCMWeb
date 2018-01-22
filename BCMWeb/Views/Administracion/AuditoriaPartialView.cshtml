@@ -1,4 +1,7 @@
 ﻿@using BCMWeb
+@using BCMWeb.Models
+
+@model AuditoriaAdminModel
 
 @Html.DevExpress().GridView(
 settings =>
@@ -13,7 +16,7 @@ settings =>
     settings.ControlStyle.BorderBottom.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
     settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Hidden;
     settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
-    settings.Settings.VerticalScrollableHeight = 400;
+    settings.Settings.VerticalScrollableHeight = 350;
     settings.ClientSideEvents.BeginCallback = "OnBeginGridCallback";
     settings.ClientSideEvents.EndCallback = "OnEndGridCallback";
     settings.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;

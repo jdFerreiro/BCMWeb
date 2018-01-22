@@ -1,8 +1,6 @@
 ﻿@using BCMWeb
 @using BCMWeb.Models
 
-@model RiesgoControlModel
-
 @Html.DevExpress().ComboBox(
     settings =>
     {
@@ -17,13 +15,13 @@
         settings.Properties.NullDisplayText = "Todos";
         settings.Properties.NullText = "Todos";
         settings.Properties.TextFormatString = "{0}";
-        settings.Properties.TextField = "NombreCompleto";
+        settings.Properties.TextField = "NombreUnidadOrganizativa";
         settings.Properties.ValueField = "IdUnidad";
         settings.Properties.ValueType = typeof(System.Int64);
         settings.Properties.ItemStyle.SelectedStyle.CssClass = "selectedItem";
         settings.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.Never;
-        settings.Properties.ClientSideEvents.BeginCallback = "function (s,e) { lp.Show();}";
-        settings.Properties.ClientSideEvents.EndCallback = "function (s,e) { lp.Hide();}";
+        //settings.Properties.ClientSideEvents.BeginCallback = "function (s,e) { lp.Show();}";
+        //settings.Properties.ClientSideEvents.EndCallback = "function (s,e) { lp.Hide();}";
         settings.Properties.ClientSideEvents.SelectedIndexChanged = "function (s,e) { lp.Show(); $(\"#IdUnidadOrganizativa\").val(cbxUO.GetValue()); document.forms[\"TablaForm\"].submit(); }";
     }
 ).BindList(Metodos.GetUnidadesOrganizativas()).Bind(Model.IdUnidadOrganizativa).GetHtml()

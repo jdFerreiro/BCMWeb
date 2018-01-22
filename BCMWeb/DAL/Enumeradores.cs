@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Runtime.Serialization;
-using System.Web;
 
 namespace BCMWeb
 {
@@ -553,6 +549,39 @@ namespace BCMWeb
         [EnumMember()]
         [Description("Eliminar Notificación")]
         EliminarNotificacion,
+        [EnumMember()]
+        [Description("Agregar Empresa")]
+        AgregarEmpresa,
+        [EnumMember()]
+        [Description("Actualizar Empresa")]
+        ActualizarEmpresa,
+        [EnumMember()]
+        [Description("Eliminar Empresa")]
+        EliminarEmpresa,
+        [EnumMember()]
+        [Description("Bloquear Empresa")]
+        BloquearEmpresa,
+        [EnumMember()]
+        [Description("Activar Empresa")]
+        ActivarEmpresa,
+        [EnumMember()]
+        [Description("Agregar Usuario")]
+        AgregarUsuario,
+        [EnumMember()]
+        [Description("Actualizar Usuario")]
+        ActualizarUsuario,
+        [EnumMember()]
+        [Description("Eliminar Usuario")]
+        EliminarUsuario,
+        [EnumMember()]
+        [Description("Bloquear Usuario")]
+        BloquearUsuario,
+        [EnumMember()]
+        [Description("Activar Usuario")]
+        ActivarUsuario,
+        [EnumMember()]
+        [Description("Actualizar Módulos Usuario")]
+        ActualizarModulosUsuario,
     }
     [DataContract(Name = "Secciones de Ficha")]
     public enum eSeccionFicha

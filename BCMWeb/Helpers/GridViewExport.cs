@@ -3,9 +3,10 @@ using DevExpress.Utils;
 using DevExpress.Web;
 using DevExpress.Web.Mvc;
 using DevExpress.XtraPrinting;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.SessionState;
@@ -1759,15 +1760,12 @@ namespace BCMWeb
 
             settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
             settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
-            settings.Settings.VerticalScrollableHeight = 400;
+            settings.Settings.VerticalScrollableHeight = 380;
             settings.Width = Unit.Percentage(100);
 
-            settings.SettingsPager.PageSize = 20;
-            settings.SettingsPager.Position = PagerPosition.Bottom;
-            settings.SettingsPager.FirstPageButton.Visible = true;
-            settings.SettingsPager.LastPageButton.Visible = true;
-            settings.SettingsPager.PageSizeItemSettings.Visible = true;
-            settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20", "50", "100" };
+            settings.SettingsBehavior.AllowCellMerge = true;
+
+            settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
 
             settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
             settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
@@ -1778,22 +1776,29 @@ namespace BCMWeb
             {
                 if (e.DataColumn.FieldName == "Estado")
                 {
-                    if ((int)e.GetValue("Estado") == 3)
-                    {
-                        e.Cell.BackColor = System.Drawing.Color.Red;
-                        e.Cell.ForeColor = System.Drawing.Color.Red;
-                    }
-                    else if ((int)e.GetValue("Estado") == 2)
-                    {
-                        e.Cell.BackColor = System.Drawing.Color.Yellow;
-                        e.Cell.ForeColor = System.Drawing.Color.Yellow;
-                    }
-                    else
-                    {
-                        e.Cell.BackColor = System.Drawing.Color.Green;
-                        e.Cell.ForeColor = System.Drawing.Color.Green;
-                    }
+                    short valor = short.Parse(e.GetValue("Estado").ToString());
 
+                    switch (valor)
+                    {
+                        case 3:
+                            e.Cell.BackColor = System.Drawing.Color.Red;
+                            e.Cell.ForeColor = System.Drawing.Color.White;
+                            e.Cell.Font.Bold = true;
+                            e.Cell.Text = Metodos.GetControlNameById(valor);
+                            break;
+                        case 2:
+                            e.Cell.BackColor = System.Drawing.Color.Orange;
+                            e.Cell.ForeColor = System.Drawing.Color.White;
+                            e.Cell.Font.Bold = true;
+                            e.Cell.Text = Metodos.GetControlNameById(valor);
+                            break;
+                        default:
+                            e.Cell.BackColor = System.Drawing.Color.Green;
+                            e.Cell.ForeColor = System.Drawing.Color.White;
+                            e.Cell.Font.Bold = true;
+                            e.Cell.Text = Metodos.GetControlNameById(valor);
+                            break;
+                    }
                 }
             };
 
@@ -1801,80 +1806,64 @@ namespace BCMWeb
             {
                 c.Settings.AllowSort = DefaultBoolean.True;
                 c.FieldName = "NroProceso";
-                c.Width = Unit.Percentage(10);
+                c.Width = Unit.Percentage(5);
                 c.Caption = Resources.DocumentoResource.captionNroProceso;
                 c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.PropertiesEdit.DisplayFormatString = "{0}";
                 c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
                 c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Settings.AllowCellMerge = DefaultBoolean.True;
+            });
+            settings.Columns.Add(c =>
+            {
+                c.Settings.AllowSort = DefaultBoolean.True;
+                c.FieldName = "Proceso";
+                c.Width = Unit.Percentage(25);
+                c.Caption = Resources.DocumentoResource.captionProceso;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.PropertiesEdit.DisplayFormatString = "{0}";
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Settings.AllowCellMerge = DefaultBoolean.True;
             });
             settings.Columns.Add(c =>
             {
                 c.Settings.AllowSort = DefaultBoolean.True;
                 c.FieldName = "Amenaza";
-                c.Width = Unit.Percentage(40);
+                c.Width = Unit.Percentage(25);
                 c.Caption = Resources.ReporteResource.captionAmenaza;
                 c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
                 c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Settings.AllowCellMerge = DefaultBoolean.False;
             });
             settings.Columns.Add(c =>
             {
                 c.Settings.AllowSort = DefaultBoolean.True;
                 c.FieldName = "Evento";
-                c.Width = Unit.Percentage(40);
+                c.Width = Unit.Percentage(35);
                 c.Caption = Resources.ReporteResource.captionEvento;
                 c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
                 c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Settings.AllowCellMerge = DefaultBoolean.False;
             });
-            //settings.Columns.Add(c =>
-            //{
-            //    c.Settings.AllowSort = DefaultBoolean.True;
-            //    c.FieldName = "Probabilidad";
-            //    c.Width = Unit.Percentage(5);
-            //    c.Caption = "P";
-            //    c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
-            //    c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
-            //    c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
-            //    c.HeaderStyle.Wrap = DefaultBoolean.True;
-            //});
-            //settings.Columns.Add(c =>
-            //{
-            //    c.Settings.AllowSort = DefaultBoolean.True;
-            //    c.FieldName = "Impacto";
-            //    c.Width = Unit.Percentage(5);
-            //    c.Caption = "I";
-            //    c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
-            //    c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
-            //    c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
-            //    c.HeaderStyle.Wrap = DefaultBoolean.True;
-            //});
-            //settings.Columns.Add(c =>
-            //{
-            //    c.Settings.AllowSort = DefaultBoolean.True;
-            //    c.FieldName = "Control";
-            //    c.Width = Unit.Percentage(5);
-            //    c.Caption = "C";
-            //    c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
-            //    c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
-            //    c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
-            //    c.HeaderStyle.Wrap = DefaultBoolean.True;
-            //});
             settings.Columns.Add(c =>
             {
                 c.Settings.AllowSort = DefaultBoolean.True;
                 c.FieldName = "Estado";
                 c.Width = Unit.Percentage(10);
                 c.UnboundType = DevExpress.Data.UnboundColumnType.String;
-                c.Caption = Resources.ReporteResource.captionEstado;
+                c.Caption = Resources.ReporteResource.captionControl;
                 c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
                 c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Settings.AllowCellMerge = DefaultBoolean.False;
             });
 
             return settings;
@@ -1908,15 +1897,12 @@ namespace BCMWeb
 
             settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
             settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
-            settings.Settings.VerticalScrollableHeight = 400;
+            settings.Settings.VerticalScrollableHeight = 380;
             settings.Width = Unit.Percentage(100);
 
-            settings.SettingsPager.PageSize = 20;
-            settings.SettingsPager.Position = PagerPosition.Bottom;
-            settings.SettingsPager.FirstPageButton.Visible = true;
-            settings.SettingsPager.LastPageButton.Visible = true;
-            settings.SettingsPager.PageSizeItemSettings.Visible = true;
-            settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20", "50", "100" };
+            settings.SettingsBehavior.AllowCellMerge = true;
+
+            settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
 
             settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
             settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
@@ -1927,22 +1913,29 @@ namespace BCMWeb
             {
                 if (e.DataColumn.FieldName == "Estado")
                 {
-                    if ((int)e.GetValue("Estado") == 3)
-                    {
-                        e.Cell.BackColor = System.Drawing.Color.Red;
-                        e.Cell.ForeColor = System.Drawing.Color.Red;
-                    }
-                    else if ((int)e.GetValue("Estado") == 2)
-                    {
-                        e.Cell.BackColor = System.Drawing.Color.Yellow;
-                        e.Cell.ForeColor = System.Drawing.Color.Yellow;
-                    }
-                    else
-                    {
-                        e.Cell.BackColor = System.Drawing.Color.Green;
-                        e.Cell.ForeColor = System.Drawing.Color.Green;
-                    }
+                    short valor = short.Parse(e.GetValue("Estado").ToString());
 
+                    switch (valor)
+                    {
+                        case 3:
+                            e.Cell.BackColor = System.Drawing.Color.Red;
+                            e.Cell.ForeColor = System.Drawing.Color.White;
+                            e.Cell.Font.Bold = true;
+                            e.Cell.Text = Metodos.GetControlNameById(valor);
+                            break;
+                        case 2:
+                            e.Cell.BackColor = System.Drawing.Color.Orange;
+                            e.Cell.ForeColor = System.Drawing.Color.White;
+                            e.Cell.Font.Bold = true;
+                            e.Cell.Text = Metodos.GetControlNameById(valor);
+                            break;
+                        default:
+                            e.Cell.BackColor = System.Drawing.Color.Green;
+                            e.Cell.ForeColor = System.Drawing.Color.White;
+                            e.Cell.Font.Bold = true;
+                            e.Cell.Text = Metodos.GetControlNameById(valor);
+                            break;
+                    }
                 }
             };
 
@@ -1950,82 +1943,65 @@ namespace BCMWeb
             {
                 c.Settings.AllowSort = DefaultBoolean.True;
                 c.FieldName = "NroProceso";
-                c.Width = Unit.Percentage(10);
+                c.Width = Unit.Percentage(5);
                 c.Caption = Resources.DocumentoResource.captionNroProceso;
                 c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.PropertiesEdit.DisplayFormatString = "{0}";
                 c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
                 c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Settings.AllowCellMerge = DefaultBoolean.True;
+            });
+            settings.Columns.Add(c =>
+            {
+                c.Settings.AllowSort = DefaultBoolean.True;
+                c.FieldName = "Proceso";
+                c.Width = Unit.Percentage(25);
+                c.Caption = Resources.DocumentoResource.captionProceso;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.PropertiesEdit.DisplayFormatString = "{0}";
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Settings.AllowCellMerge = DefaultBoolean.True;
             });
             settings.Columns.Add(c =>
             {
                 c.Settings.AllowSort = DefaultBoolean.True;
                 c.FieldName = "Amenaza";
-                c.Width = Unit.Percentage(40);
+                c.Width = Unit.Percentage(25);
                 c.Caption = Resources.ReporteResource.captionAmenaza;
                 c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
                 c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Settings.AllowCellMerge = DefaultBoolean.False;
             });
             settings.Columns.Add(c =>
             {
                 c.Settings.AllowSort = DefaultBoolean.True;
                 c.FieldName = "Evento";
-                c.Width = Unit.Percentage(40);
+                c.Width = Unit.Percentage(35);
                 c.Caption = Resources.ReporteResource.captionEvento;
                 c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
                 c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Settings.AllowCellMerge = DefaultBoolean.False;
             });
-            //settings.Columns.Add(c =>
-            //{
-            //    c.Settings.AllowSort = DefaultBoolean.True;
-            //    c.FieldName = "Probabilidad";
-            //    c.Width = Unit.Percentage(5);
-            //    c.Caption = "P";
-            //    c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
-            //    c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
-            //    c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
-            //    c.HeaderStyle.Wrap = DefaultBoolean.True;
-            //});
-            //settings.Columns.Add(c =>
-            //{
-            //    c.Settings.AllowSort = DefaultBoolean.True;
-            //    c.FieldName = "Impacto";
-            //    c.Width = Unit.Percentage(5);
-            //    c.Caption = "I";
-            //    c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
-            //    c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
-            //    c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
-            //    c.HeaderStyle.Wrap = DefaultBoolean.True;
-            //});
-            //settings.Columns.Add(c =>
-            //{
-            //    c.Settings.AllowSort = DefaultBoolean.True;
-            //    c.FieldName = "Control";
-            //    c.Width = Unit.Percentage(5);
-            //    c.Caption = "C";
-            //    c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
-            //    c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
-            //    c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
-            //    c.HeaderStyle.Wrap = DefaultBoolean.True;
-            //});
             settings.Columns.Add(c =>
             {
                 c.Settings.AllowSort = DefaultBoolean.True;
                 c.FieldName = "Estado";
                 c.Width = Unit.Percentage(10);
                 c.UnboundType = DevExpress.Data.UnboundColumnType.String;
-                c.Caption = Resources.ReporteResource.captionEstado;
+                c.Caption = Resources.ReporteResource.captionControl;
                 c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
                 c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Settings.AllowCellMerge = DefaultBoolean.False;
             });
-
 
             return settings;
         }
@@ -2042,8 +2018,8 @@ namespace BCMWeb
         static GridViewSettings CreateFormatConditionsExportGridViewSettings()
         {
             var settings = new GridViewSettings();
-            settings.Name = "TablaRiesgoControl";
-            settings.CallbackRouteValues = new { Controller = "Reportes", Action = "TablaRiesgoPartialView", IdUnidadOrganizativa = Session["IdUnidadOrganizativaRiesgo"] };
+            settings.Name = "gvRiesgoControl";
+            settings.CallbackRouteValues = new { Controller = "Reportes", Action = "TablaRiesgoPartialView", IdUnidadOrganizativa = Session["IdUnidadOrganizativa"] };
 
             settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
             settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
@@ -2056,164 +2032,113 @@ namespace BCMWeb
 
             settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
             settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
-            settings.Settings.VerticalScrollableHeight = 400;
+            settings.Settings.VerticalScrollableHeight = 380;
             settings.Width = Unit.Percentage(100);
 
-            settings.SettingsPager.PageSize = 20;
-            settings.SettingsPager.Position = PagerPosition.Bottom;
-            settings.SettingsPager.FirstPageButton.Visible = true;
-            settings.SettingsPager.LastPageButton.Visible = true;
-            settings.SettingsPager.PageSizeItemSettings.Visible = true;
-            settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20", "50", "100" };
+            settings.SettingsBehavior.AllowCellMerge = true;
+
+            settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
 
             settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
             settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
             settings.EditFormLayoutProperties.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
             settings.EditFormLayoutProperties.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
 
-            settings.CustomColumnDisplayText = (s, e) =>
-            {
-                if (e.Column.FieldName != "Estado") return;
-                e.DisplayText = string.Empty;
-                e.Value = string.Empty;
-            };
+            GridViewFormatConditionHighlight Rule1 = new GridViewFormatConditionHighlight();
+            GridViewFormatConditionHighlight Rule2 = new GridViewFormatConditionHighlight();
+            GridViewFormatConditionHighlight Rule3 = new GridViewFormatConditionHighlight();
 
-            settings.HtmlDataCellPrepared = (sender, e) =>
-            {
-                if (e.DataColumn.FieldName == "Estado")
-                {
-                    if ((int)e.GetValue("Estado") == 3)
-                    {
-                        e.Cell.BackColor = System.Drawing.Color.Red;
-                        e.Cell.ForeColor = System.Drawing.Color.Red;
-                    }
-                    else if ((int)e.GetValue("Estado") == 2)
-                    {
-                        e.Cell.BackColor = System.Drawing.Color.Yellow;
-                        e.Cell.ForeColor = System.Drawing.Color.Yellow;
-                    }
-                    else
-                    {
-                        e.Cell.BackColor = System.Drawing.Color.Green;
-                        e.Cell.ForeColor = System.Drawing.Color.Green;
-                    }
-                    e.Cell.Text = string.Empty;
-                }
-            };
+            Rule1.FieldName = "Estado";
+            Rule1.Expression = "[Control] == 1";
+            Rule1.Format = GridConditionHighlightFormat.Custom;
+            Rule1.ApplyToRow = false;
+            Rule1.CellStyle.BackColor = System.Drawing.Color.Green;
+            Rule1.CellStyle.ForeColor = System.Drawing.Color.White;
+            Rule1.CellStyle.Font.Bold = true;
+            settings.FormatConditions.Add(Rule1);
+
+            Rule2.FieldName = "Estado";
+            Rule2.Expression = "[Control] == 2";
+            Rule2.Format = GridConditionHighlightFormat.Custom;
+            Rule2.ApplyToRow = false;
+            Rule2.CellStyle.BackColor = System.Drawing.Color.Orange;
+            Rule2.CellStyle.ForeColor = System.Drawing.Color.White;
+            Rule2.CellStyle.Font.Bold = true;
+            settings.FormatConditions.Add(Rule2);
+
+            Rule3.FieldName = "Estado";
+            Rule3.Expression = "[Control] == 3";
+            Rule3.Format = GridConditionHighlightFormat.Custom;
+            Rule3.ApplyToRow = false;
+            Rule3.CellStyle.BackColor = System.Drawing.Color.Red;
+            Rule3.CellStyle.ForeColor = System.Drawing.Color.White;
+            Rule3.CellStyle.Font.Bold = true;
+            settings.FormatConditions.Add(Rule3);
 
             settings.Columns.Add(c =>
             {
                 c.Settings.AllowSort = DefaultBoolean.True;
                 c.FieldName = "NroProceso";
-                c.Width = Unit.Percentage(10);
+                c.Width = Unit.Percentage(5);
                 c.Caption = Resources.DocumentoResource.captionNroProceso;
                 c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.PropertiesEdit.DisplayFormatString = "{0}";
                 c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
                 c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Settings.AllowCellMerge = DefaultBoolean.True;
+            });
+            settings.Columns.Add(c =>
+            {
+                c.Settings.AllowSort = DefaultBoolean.True;
+                c.FieldName = "Proceso";
+                c.Width = Unit.Percentage(25);
+                c.Caption = Resources.DocumentoResource.captionProceso;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.PropertiesEdit.DisplayFormatString = "{0}";
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Settings.AllowCellMerge = DefaultBoolean.True;
             });
             settings.Columns.Add(c =>
             {
                 c.Settings.AllowSort = DefaultBoolean.True;
                 c.FieldName = "Amenaza";
-                c.Width = Unit.Percentage(40);
+                c.Width = Unit.Percentage(25);
                 c.Caption = Resources.ReporteResource.captionAmenaza;
                 c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
                 c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Settings.AllowCellMerge = DefaultBoolean.False;
             });
             settings.Columns.Add(c =>
             {
                 c.Settings.AllowSort = DefaultBoolean.True;
                 c.FieldName = "Evento";
-                c.Width = Unit.Percentage(40);
+                c.Width = Unit.Percentage(35);
                 c.Caption = Resources.ReporteResource.captionEvento;
                 c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
                 c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Settings.AllowCellMerge = DefaultBoolean.False;
             });
-            //settings.Columns.Add(c =>
-            //{
-            //    c.Settings.AllowSort = DefaultBoolean.True;
-            //    c.FieldName = "Probabilidad";
-            //    c.Width = Unit.Percentage(5);
-            //    c.Caption = "P";
-            //    c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
-            //    c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
-            //    c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
-            //    c.HeaderStyle.Wrap = DefaultBoolean.True;
-            //});
-            //settings.Columns.Add(c =>
-            //{
-            //    c.Settings.AllowSort = DefaultBoolean.True;
-            //    c.FieldName = "Impacto";
-            //    c.Width = Unit.Percentage(5);
-            //    c.Caption = "I";
-            //    c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
-            //    c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
-            //    c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
-            //    c.HeaderStyle.Wrap = DefaultBoolean.True;
-            //});
-            //settings.Columns.Add(c =>
-            //{
-            //    c.Settings.AllowSort = DefaultBoolean.True;
-            //    c.FieldName = "Control";
-            //    c.Width = Unit.Percentage(5);
-            //    c.Caption = "C";
-            //    c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
-            //    c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
-            //    c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
-            //    c.HeaderStyle.Wrap = DefaultBoolean.True;
-            //});
             settings.Columns.Add(c =>
             {
                 c.Settings.AllowSort = DefaultBoolean.True;
                 c.FieldName = "Estado";
                 c.Width = Unit.Percentage(10);
                 c.UnboundType = DevExpress.Data.UnboundColumnType.String;
-                c.Caption = Resources.ReporteResource.captionEstado;
+                c.Caption = Resources.ReporteResource.captionControl;
                 c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
                 c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Settings.AllowCellMerge = DefaultBoolean.False;
             });
-            settings.FormatConditions.AddHighlight(h =>
-            {
-                h.ApplyToRow = false;
-                h.CellStyle.BackColor = Color.Green;
-                h.CellStyle.ForeColor = Color.Green;
-                h.Expression = "[Estado] == 1";
-                h.FieldName = "Estado";
-                h.Format = GridConditionHighlightFormat.Custom;
-            });
-            settings.FormatConditions.AddHighlight(h =>
-            {
-                h.ApplyToRow = false;
-                h.CellStyle.BackColor = Color.Yellow;
-                h.CellStyle.ForeColor = Color.Yellow;
-                h.Expression = "[Estado] == 2";
-                h.FieldName = "Estado";
-                h.Format = GridConditionHighlightFormat.Custom;
-            });
-            settings.FormatConditions.AddHighlight(h =>
-            {
-                h.ApplyToRow = false;
-                h.CellStyle.BackColor = Color.Red;
-                h.CellStyle.ForeColor = Color.Red;
-                h.Expression = "[Estado] == 3";
-                h.FieldName = "Estado";
-                h.Format = GridConditionHighlightFormat.Custom;
-            });
-            settings.FormatConditions.AddTopBottom(formatCondition =>
-            {
-                formatCondition.FieldName = "Discount";
-                formatCondition.Rule = GridTopBottomRule.TopItems;
-                formatCondition.Threshold = 15;
-                formatCondition.Format = GridConditionHighlightFormat.BoldText;
-            });
+
             return settings;
         }
     }
@@ -6704,5 +6629,2259 @@ namespace BCMWeb
             return settings;
         }
     }
+    public class GridViewExportRiesgoProbabilidad
+    {
+        private static HttpSessionState Session { get { return HttpContext.Current.Session; } }
+        static string ExcelDataAwareGridViewSettingsKey = "51172A18-2073-426B-A5CB-136347B3A79F";
+        static string FormatConditionsExportGridViewSettingsKey = "14634B6F-E1DC-484A-9728-F9608615B628";
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> exportFormatsInfo;
+        public static Dictionary<GridViewExportFormat, GridViewExportMethod> ExportFormatsInfo
+        {
+            get
+            {
+                if (exportFormatsInfo == null)
+                    exportFormatsInfo = CreateExportFormatsInfo();
+                return exportFormatsInfo;
+            }
+        }
+        static IDictionary Context { get { return System.Web.HttpContext.Current.Items; } }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> CreateExportFormatsInfo()
+        {
+            return new Dictionary<GridViewExportFormat, GridViewExportMethod> {
+                { GridViewExportFormat.Pdf, GridViewExtension.ExportToPdf },
+                {
+                    GridViewExportFormat.Xls,
+                    (settings, data) => GridViewExtension.ExportToXls(settings, data, new XlsExportOptionsEx { ExportType = DevExpress.Export.ExportType.WYSIWYG })
+                },
+                {
+                    GridViewExportFormat.Xlsx,
+                    (settings, data) => GridViewExtension.ExportToXlsx(settings, data, new XlsxExportOptionsEx { ExportType = DevExpress.Export.ExportType.WYSIWYG })
+                },
+                { GridViewExportFormat.Rtf, GridViewExtension.ExportToRtf },
+                {
+                    GridViewExportFormat.Csv,
+                    (settings, data) => GridViewExtension.ExportToCsv(settings, data, new CsvExportOptionsEx { ExportType = DevExpress.Export.ExportType.WYSIWYG })
+                }
+            };
+        }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> dataAwareExportFormatsInfo;
+        public static Dictionary<GridViewExportFormat, GridViewExportMethod> DataAwareExportFormatsInfo
+        {
+            get
+            {
+                if (dataAwareExportFormatsInfo == null)
+                    dataAwareExportFormatsInfo = CreateDataAwareExportFormatsInfo();
+                return dataAwareExportFormatsInfo;
+            }
+        }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> CreateDataAwareExportFormatsInfo()
+        {
+            return new Dictionary<GridViewExportFormat, GridViewExportMethod> {
+                { GridViewExportFormat.Xls, GridViewExtension.ExportToXls },
+                { GridViewExportFormat.Xlsx, GridViewExtension.ExportToXlsx },
+                { GridViewExportFormat.Csv, GridViewExtension.ExportToCsv }
+            };
+        }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> formatConditionsExportFormatsInfo;
+        public static Dictionary<GridViewExportFormat, GridViewExportMethod> FormatConditionsExportFormatsInfo
+        {
+            get
+            {
+                if (formatConditionsExportFormatsInfo == null)
+                    formatConditionsExportFormatsInfo = CreateFormatConditionsExportFormatsInfo();
+                return formatConditionsExportFormatsInfo;
+            }
+        }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> CreateFormatConditionsExportFormatsInfo()
+        {
+            return new Dictionary<GridViewExportFormat, GridViewExportMethod> {
+                { GridViewExportFormat.Pdf, GridViewExtension.ExportToPdf},
+                { GridViewExportFormat.Xls, (settings, data) => GridViewExtension.ExportToXls(settings, data) },
+                { GridViewExportFormat.Xlsx,
+                    (settings, data) => GridViewExtension.ExportToXlsx(settings, data, new XlsxExportOptionsEx {ExportType = DevExpress.Export.ExportType.WYSIWYG})
+                },
+                { GridViewExportFormat.Rtf, GridViewExtension.ExportToRtf }
+            };
+        }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> advancedBandsExportFormatsInfo;
+        public static Dictionary<GridViewExportFormat, GridViewExportMethod> AdvancedBandsExportFormatsInfo
+        {
+            get
+            {
+                if (advancedBandsExportFormatsInfo == null)
+                    advancedBandsExportFormatsInfo = CreateAdvancedBandsExportFormatsInfo();
+                return advancedBandsExportFormatsInfo;
+            }
+        }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> CreateAdvancedBandsExportFormatsInfo()
+        {
+            return new Dictionary<GridViewExportFormat, GridViewExportMethod> {
+                { GridViewExportFormat.Pdf, GridViewExtension.ExportToPdf },
+                { GridViewExportFormat.Xls, (settings, data) => GridViewExtension.ExportToXls(settings, data, new XlsExportOptionsEx {ExportType = DevExpress.Export.ExportType.WYSIWYG}) },
+                { GridViewExportFormat.Xlsx, (settings, data) => GridViewExtension.ExportToXlsx(settings, data, new XlsxExportOptionsEx {ExportType = DevExpress.Export.ExportType.WYSIWYG}) },
+                { GridViewExportFormat.Rtf, GridViewExtension.ExportToRtf }
+            };
+        }
+        public static string GetExportButtonTitle(GridViewExportFormat format)
+        {
+            if (format == GridViewExportFormat.None)
+                return string.Empty;
+            return string.Format("Export to {0}", format.ToString().ToUpper());
+        }
+        public static GridViewSettings CreateGeneralMasterGridSettings(object DataToBind)
+        {
+            return CreateGeneralMasterGridSettings(GridViewDetailExportMode.None, DataToBind);
+        }
+        public static GridViewSettings CreateGeneralMasterGridSettings(GridViewDetailExportMode exportMode, object DataToBind)
+        {
+            GridViewSettings settings = new GridViewSettings();
+            settings.Name = "masterGrid";
+            settings.Width = Unit.Percentage(100);
 
+            settings.KeyFieldName = "CategoryID";
+            settings.Columns.Add("CategoryID");
+            settings.Columns.Add("CategoryName");
+            settings.Columns.Add("Description");
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "Picture";
+                c.ColumnType = MVCxGridViewColumnType.BinaryImage;
+                BinaryImageEditProperties properties = (BinaryImageEditProperties)c.PropertiesEdit;
+                properties.ImageWidth = 120;
+                properties.ImageHeight = 80;
+                properties.ExportImageSettings.Width = 90;
+                properties.ExportImageSettings.Height = 60;
+            });
+
+            settings.SettingsDetail.ShowDetailRow = true;
+            settings.SettingsDetail.ExportMode = exportMode;
+
+            settings.SettingsExport.GetExportDetailGridViews = (s, e) =>
+            {
+                int categoryID = (int)DataBinder.Eval(e.DataItem, "CategoryID");
+                GridViewExtension grid = new GridViewExtension(CreateGeneralDetailGridSettings(categoryID));
+                grid.Bind(DataToBind);
+                e.DetailGridViews.Add(grid);
+            };
+
+            return settings;
+        }
+        public static GridViewSettings CreateGeneralDetailGridSettings(int uniqueKey)
+        {
+            GridViewSettings settings = new GridViewSettings();
+            settings.Name = "detailGrid" + uniqueKey;
+            settings.Width = Unit.Percentage(100);
+
+            settings.KeyFieldName = "ProductID";
+            settings.Columns.Add("ProductID");
+            settings.Columns.Add("ProductName");
+            settings.Columns.Add("UnitPrice");
+            settings.Columns.Add("QuantityPerUnit");
+
+            settings.SettingsDetail.MasterGridName = "masterGrid";
+
+            return settings;
+        }
+        static GridViewSettings exportGridViewSettings;
+        public static GridViewSettings ExportGridViewSettings
+        {
+            get
+            {
+                if (exportGridViewSettings == null)
+                    exportGridViewSettings = CreateExportGridViewSettings();
+                return exportGridViewSettings;
+            }
+        }
+        static GridViewSettings CreateExportGridViewSettings()
+        {
+            GridViewSettings settings = new GridViewSettings();
+
+            settings.Name = "gvTR";
+            settings.CallbackRouteValues = new { Controller = "Reportes", Action = "TablaTRPartialView" };
+
+            settings.Width = Unit.Percentage(100);
+            settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+            settings.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
+            settings.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
+            settings.ControlStyle.BorderBottom.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
+            settings.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+            settings.ClientSideEvents.BeginCallback = "function (s,e) { lp.Show(); }";
+            settings.ClientSideEvents.EndCallback = "function (s,e) { lp.Hide(); }";
+
+            settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+            settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+            settings.Settings.VerticalScrollableHeight = 400;
+            settings.Width = Unit.Percentage(100);
+
+            settings.SettingsPager.PageSize = 20;
+            settings.SettingsPager.Position = PagerPosition.Bottom;
+            settings.SettingsPager.FirstPageButton.Visible = true;
+            settings.SettingsPager.LastPageButton.Visible = true;
+            settings.SettingsPager.PageSizeItemSettings.Visible = true;
+            settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20", "50", "100" };
+
+            settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+            settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
+            settings.EditFormLayoutProperties.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+            settings.EditFormLayoutProperties.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+
+            settings.Columns.Add(c =>
+            {
+                c.Settings.AllowSort = DefaultBoolean.True;
+                c.FieldName = "Unidad";
+                c.Caption = Resources.ReporteResource.captionUnidad;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.CellStyle.Wrap = DefaultBoolean.True;
+                c.PropertiesEdit.DisplayFormatString = "{0}";
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Width = Unit.Percentage(40);
+            });
+            settings.Columns.AddBand(sb =>
+            {
+                sb.Caption = Resources.ReporteResource.captionValorEscala;
+                sb.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                int Index = 0;
+                List<string> _strEscala = Metodos.GetProbabilidadEmpresa().Select(x => x.Descripcion).ToList();
+                int pWidth = 60 / _strEscala.Count();
+
+                foreach (string Valor in _strEscala)
+                {
+                    sb.Columns.Add(c =>
+                    {
+                        c.Settings.AllowSort = DefaultBoolean.True;
+                        c.FieldName = "CantidadEscalaUnbound" + Index.ToString();
+                        c.UnboundType = DevExpress.Data.UnboundColumnType.String;
+                        c.Caption = Valor.ToString();
+                        c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                        c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                        c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+                        c.HeaderStyle.Wrap = DefaultBoolean.True;
+                        c.Width = Unit.Percentage(pWidth);
+                    });
+                    Index++;
+                }
+            });
+            settings.CustomUnboundColumnData = (s, e) =>
+            {
+                if (e.Column.FieldName.Contains("CantidadEscalaUnbound"))
+                {
+                    var valores = e.GetListSourceFieldValue("CantidadEscala") as List<Int32>;
+                    int res = 0;
+                    if (valores != null)
+                    {
+                        var ColName = e.Column.FieldName;
+                        int index = int.Parse(e.Column.FieldName.Replace("CantidadEscalaUnbound", ""));
+                        res = valores[index];
+                    }
+                    e.Value = res;
+                }
+            };
+
+            return settings;
+        }
+        public static GridViewSettings ExcelDataAwareExportGridViewSettings
+        {
+            get
+            {
+                GridViewSettings settings = Context[ExcelDataAwareGridViewSettingsKey] as GridViewSettings;
+                if (settings == null)
+                    Context[ExcelDataAwareGridViewSettingsKey] = settings = CreateExcelDataAwareExportGridViewSettings();
+                return settings;
+            }
+        }
+        static GridViewSettings CreateExcelDataAwareExportGridViewSettings()
+        {
+            GridViewSettings settings = new GridViewSettings();
+
+            settings.Name = "gvTR";
+            settings.CallbackRouteValues = new { Controller = "Reportes", Action = "TablaTRPartialView" };
+
+            settings.Width = Unit.Percentage(100);
+            settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+            settings.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
+            settings.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
+            settings.ControlStyle.BorderBottom.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
+            settings.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+            settings.ClientSideEvents.BeginCallback = "function (s,e) { lp.Show(); }";
+            settings.ClientSideEvents.EndCallback = "function (s,e) { lp.Hide(); }";
+
+            settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+            settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+            settings.Settings.VerticalScrollableHeight = 400;
+            settings.Width = Unit.Percentage(100);
+
+            settings.SettingsPager.PageSize = 20;
+            settings.SettingsPager.Position = PagerPosition.Bottom;
+            settings.SettingsPager.FirstPageButton.Visible = true;
+            settings.SettingsPager.LastPageButton.Visible = true;
+            settings.SettingsPager.PageSizeItemSettings.Visible = true;
+            settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20", "50", "100" };
+
+            settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+            settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
+            settings.EditFormLayoutProperties.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+            settings.EditFormLayoutProperties.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+
+            settings.Columns.Add(c =>
+            {
+                c.Settings.AllowSort = DefaultBoolean.True;
+                c.FieldName = "Unidad";
+                c.Caption = Resources.ReporteResource.captionUnidad;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.CellStyle.Wrap = DefaultBoolean.True;
+                c.PropertiesEdit.DisplayFormatString = "{0}";
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Width = Unit.Percentage(40);
+            });
+            settings.Columns.AddBand(sb =>
+            {
+                sb.Caption = Resources.ReporteResource.captionValorEscala;
+                sb.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                int Index = 0;
+                List<string> _strEscala = Metodos.GetProbabilidadEmpresa().Select(x => x.Descripcion).ToList();
+                int pWidth = 60 / _strEscala.Count();
+
+                foreach (string Valor in _strEscala)
+                {
+                    sb.Columns.Add(c =>
+                    {
+                        c.Settings.AllowSort = DefaultBoolean.True;
+                        c.FieldName = "CantidadEscalaUnbound" + Index.ToString();
+                        c.UnboundType = DevExpress.Data.UnboundColumnType.String;
+                        c.Caption = Valor.ToString();
+                        c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                        c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                        c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+                        c.HeaderStyle.Wrap = DefaultBoolean.True;
+                        c.Width = Unit.Percentage(pWidth);
+                    });
+                    Index++;
+                }
+            });
+            settings.CustomUnboundColumnData = (s, e) =>
+            {
+                if (e.Column.FieldName.Contains("CantidadEscalaUnbound"))
+                {
+                    var valores = e.GetListSourceFieldValue("CantidadEscala") as List<Int32>;
+                    int res = 0;
+                    if (valores != null)
+                    {
+                        var ColName = e.Column.FieldName;
+                        int index = int.Parse(e.Column.FieldName.Replace("CantidadEscalaUnbound", ""));
+                        res = valores[index];
+                    }
+                    e.Value = res;
+                }
+            };
+
+            return settings;
+        }
+        public static GridViewSettings FormatConditionsExportGridViewSettings
+        {
+            get
+            {
+                var settings = Context[FormatConditionsExportGridViewSettingsKey] as GridViewSettings;
+                if (settings == null)
+                    Context[FormatConditionsExportGridViewSettingsKey] = settings = CreateFormatConditionsExportGridViewSettings();
+                return settings;
+            }
+        }
+        static GridViewSettings CreateFormatConditionsExportGridViewSettings()
+        {
+            var settings = new GridViewSettings();
+
+            settings.Name = "gvTR";
+            settings.CallbackRouteValues = new { Controller = "Reportes", Action = "TablaTRPartialView" };
+
+            settings.Width = Unit.Percentage(100);
+            settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+            settings.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
+            settings.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
+            settings.ControlStyle.BorderBottom.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
+            settings.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+            settings.ClientSideEvents.BeginCallback = "function (s,e) { lp.Show(); }";
+            settings.ClientSideEvents.EndCallback = "function (s,e) { lp.Hide(); }";
+
+            settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+            settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+            settings.Settings.VerticalScrollableHeight = 400;
+            settings.Width = Unit.Percentage(100);
+
+            settings.SettingsPager.PageSize = 20;
+            settings.SettingsPager.Position = PagerPosition.Bottom;
+            settings.SettingsPager.FirstPageButton.Visible = true;
+            settings.SettingsPager.LastPageButton.Visible = true;
+            settings.SettingsPager.PageSizeItemSettings.Visible = true;
+            settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20", "50", "100" };
+
+            settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+            settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
+            settings.EditFormLayoutProperties.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+            settings.EditFormLayoutProperties.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+
+            settings.Columns.Add(c =>
+            {
+                c.Settings.AllowSort = DefaultBoolean.True;
+                c.FieldName = "Unidad";
+                c.Caption = Resources.ReporteResource.captionUnidad;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.CellStyle.Wrap = DefaultBoolean.True;
+                c.PropertiesEdit.DisplayFormatString = "{0}";
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Width = Unit.Percentage(40);
+            });
+            settings.Columns.AddBand(sb =>
+            {
+                sb.Caption = Resources.ReporteResource.captionValorEscala;
+                sb.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                int Index = 0;
+                List<string> _strEscala = Metodos.GetProbabilidadEmpresa().Select(x => x.Descripcion).ToList();
+                int pWidth = 60 / _strEscala.Count();
+
+                foreach (string Valor in _strEscala)
+                {
+                    sb.Columns.Add(c =>
+                    {
+                        c.Settings.AllowSort = DefaultBoolean.True;
+                        c.FieldName = "CantidadEscalaUnbound" + Index.ToString();
+                        c.UnboundType = DevExpress.Data.UnboundColumnType.String;
+                        c.Caption = Valor.ToString();
+                        c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                        c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                        c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+                        c.HeaderStyle.Wrap = DefaultBoolean.True;
+                        c.Width = Unit.Percentage(pWidth);
+                    });
+                    Index++;
+                }
+            });
+            settings.CustomUnboundColumnData = (s, e) =>
+            {
+                if (e.Column.FieldName.Contains("CantidadEscalaUnbound"))
+                {
+                    var valores = e.GetListSourceFieldValue("CantidadEscala") as List<Int32>;
+                    int res = 0;
+                    if (valores != null)
+                    {
+                        var ColName = e.Column.FieldName;
+                        int index = int.Parse(e.Column.FieldName.Replace("CantidadEscalaUnbound", ""));
+                        res = valores[index];
+                    }
+                    e.Value = res;
+                }
+            };
+
+            return settings;
+        }
+    }
+    public class GridViewExportRiesgoImpacto
+    {
+        private static HttpSessionState Session { get { return HttpContext.Current.Session; } }
+        static string ExcelDataAwareGridViewSettingsKey = "51172A18-2073-426B-A5CB-136347B3A79F";
+        static string FormatConditionsExportGridViewSettingsKey = "14634B6F-E1DC-484A-9728-F9608615B628";
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> exportFormatsInfo;
+        public static Dictionary<GridViewExportFormat, GridViewExportMethod> ExportFormatsInfo
+        {
+            get
+            {
+                if (exportFormatsInfo == null)
+                    exportFormatsInfo = CreateExportFormatsInfo();
+                return exportFormatsInfo;
+            }
+        }
+        static IDictionary Context { get { return System.Web.HttpContext.Current.Items; } }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> CreateExportFormatsInfo()
+        {
+            return new Dictionary<GridViewExportFormat, GridViewExportMethod> {
+                { GridViewExportFormat.Pdf, GridViewExtension.ExportToPdf },
+                {
+                    GridViewExportFormat.Xls,
+                    (settings, data) => GridViewExtension.ExportToXls(settings, data, new XlsExportOptionsEx { ExportType = DevExpress.Export.ExportType.WYSIWYG })
+                },
+                {
+                    GridViewExportFormat.Xlsx,
+                    (settings, data) => GridViewExtension.ExportToXlsx(settings, data, new XlsxExportOptionsEx { ExportType = DevExpress.Export.ExportType.WYSIWYG })
+                },
+                { GridViewExportFormat.Rtf, GridViewExtension.ExportToRtf },
+                {
+                    GridViewExportFormat.Csv,
+                    (settings, data) => GridViewExtension.ExportToCsv(settings, data, new CsvExportOptionsEx { ExportType = DevExpress.Export.ExportType.WYSIWYG })
+                }
+            };
+        }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> dataAwareExportFormatsInfo;
+        public static Dictionary<GridViewExportFormat, GridViewExportMethod> DataAwareExportFormatsInfo
+        {
+            get
+            {
+                if (dataAwareExportFormatsInfo == null)
+                    dataAwareExportFormatsInfo = CreateDataAwareExportFormatsInfo();
+                return dataAwareExportFormatsInfo;
+            }
+        }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> CreateDataAwareExportFormatsInfo()
+        {
+            return new Dictionary<GridViewExportFormat, GridViewExportMethod> {
+                { GridViewExportFormat.Xls, GridViewExtension.ExportToXls },
+                { GridViewExportFormat.Xlsx, GridViewExtension.ExportToXlsx },
+                { GridViewExportFormat.Csv, GridViewExtension.ExportToCsv }
+            };
+        }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> formatConditionsExportFormatsInfo;
+        public static Dictionary<GridViewExportFormat, GridViewExportMethod> FormatConditionsExportFormatsInfo
+        {
+            get
+            {
+                if (formatConditionsExportFormatsInfo == null)
+                    formatConditionsExportFormatsInfo = CreateFormatConditionsExportFormatsInfo();
+                return formatConditionsExportFormatsInfo;
+            }
+        }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> CreateFormatConditionsExportFormatsInfo()
+        {
+            return new Dictionary<GridViewExportFormat, GridViewExportMethod> {
+                { GridViewExportFormat.Pdf, GridViewExtension.ExportToPdf},
+                { GridViewExportFormat.Xls, (settings, data) => GridViewExtension.ExportToXls(settings, data) },
+                { GridViewExportFormat.Xlsx,
+                    (settings, data) => GridViewExtension.ExportToXlsx(settings, data, new XlsxExportOptionsEx {ExportType = DevExpress.Export.ExportType.WYSIWYG})
+                },
+                { GridViewExportFormat.Rtf, GridViewExtension.ExportToRtf }
+            };
+        }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> advancedBandsExportFormatsInfo;
+        public static Dictionary<GridViewExportFormat, GridViewExportMethod> AdvancedBandsExportFormatsInfo
+        {
+            get
+            {
+                if (advancedBandsExportFormatsInfo == null)
+                    advancedBandsExportFormatsInfo = CreateAdvancedBandsExportFormatsInfo();
+                return advancedBandsExportFormatsInfo;
+            }
+        }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> CreateAdvancedBandsExportFormatsInfo()
+        {
+            return new Dictionary<GridViewExportFormat, GridViewExportMethod> {
+                { GridViewExportFormat.Pdf, GridViewExtension.ExportToPdf },
+                { GridViewExportFormat.Xls, (settings, data) => GridViewExtension.ExportToXls(settings, data, new XlsExportOptionsEx {ExportType = DevExpress.Export.ExportType.WYSIWYG}) },
+                { GridViewExportFormat.Xlsx, (settings, data) => GridViewExtension.ExportToXlsx(settings, data, new XlsxExportOptionsEx {ExportType = DevExpress.Export.ExportType.WYSIWYG}) },
+                { GridViewExportFormat.Rtf, GridViewExtension.ExportToRtf }
+            };
+        }
+        public static string GetExportButtonTitle(GridViewExportFormat format)
+        {
+            if (format == GridViewExportFormat.None)
+                return string.Empty;
+            return string.Format("Export to {0}", format.ToString().ToUpper());
+        }
+        public static GridViewSettings CreateGeneralMasterGridSettings(object DataToBind)
+        {
+            return CreateGeneralMasterGridSettings(GridViewDetailExportMode.None, DataToBind);
+        }
+        public static GridViewSettings CreateGeneralMasterGridSettings(GridViewDetailExportMode exportMode, object DataToBind)
+        {
+            GridViewSettings settings = new GridViewSettings();
+            settings.Name = "masterGrid";
+            settings.Width = Unit.Percentage(100);
+
+            settings.KeyFieldName = "CategoryID";
+            settings.Columns.Add("CategoryID");
+            settings.Columns.Add("CategoryName");
+            settings.Columns.Add("Description");
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "Picture";
+                c.ColumnType = MVCxGridViewColumnType.BinaryImage;
+                BinaryImageEditProperties properties = (BinaryImageEditProperties)c.PropertiesEdit;
+                properties.ImageWidth = 120;
+                properties.ImageHeight = 80;
+                properties.ExportImageSettings.Width = 90;
+                properties.ExportImageSettings.Height = 60;
+            });
+
+            settings.SettingsDetail.ShowDetailRow = true;
+            settings.SettingsDetail.ExportMode = exportMode;
+
+            settings.SettingsExport.GetExportDetailGridViews = (s, e) =>
+            {
+                int categoryID = (int)DataBinder.Eval(e.DataItem, "CategoryID");
+                GridViewExtension grid = new GridViewExtension(CreateGeneralDetailGridSettings(categoryID));
+                grid.Bind(DataToBind);
+                e.DetailGridViews.Add(grid);
+            };
+
+            return settings;
+        }
+        public static GridViewSettings CreateGeneralDetailGridSettings(int uniqueKey)
+        {
+            GridViewSettings settings = new GridViewSettings();
+            settings.Name = "detailGrid" + uniqueKey;
+            settings.Width = Unit.Percentage(100);
+
+            settings.KeyFieldName = "ProductID";
+            settings.Columns.Add("ProductID");
+            settings.Columns.Add("ProductName");
+            settings.Columns.Add("UnitPrice");
+            settings.Columns.Add("QuantityPerUnit");
+
+            settings.SettingsDetail.MasterGridName = "masterGrid";
+
+            return settings;
+        }
+        static GridViewSettings exportGridViewSettings;
+        public static GridViewSettings ExportGridViewSettings
+        {
+            get
+            {
+                if (exportGridViewSettings == null)
+                    exportGridViewSettings = CreateExportGridViewSettings();
+                return exportGridViewSettings;
+            }
+        }
+        static GridViewSettings CreateExportGridViewSettings()
+        {
+            GridViewSettings settings = new GridViewSettings();
+
+            settings.Name = "gvTR";
+            settings.CallbackRouteValues = new { Controller = "Reportes", Action = "TablaTRPartialView" };
+
+            settings.Width = Unit.Percentage(100);
+            settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+            settings.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
+            settings.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
+            settings.ControlStyle.BorderBottom.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
+            settings.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+            settings.ClientSideEvents.BeginCallback = "function (s,e) { lp.Show(); }";
+            settings.ClientSideEvents.EndCallback = "function (s,e) { lp.Hide(); }";
+
+            settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+            settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+            settings.Settings.VerticalScrollableHeight = 400;
+            settings.Width = Unit.Percentage(100);
+
+            settings.SettingsPager.PageSize = 20;
+            settings.SettingsPager.Position = PagerPosition.Bottom;
+            settings.SettingsPager.FirstPageButton.Visible = true;
+            settings.SettingsPager.LastPageButton.Visible = true;
+            settings.SettingsPager.PageSizeItemSettings.Visible = true;
+            settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20", "50", "100" };
+
+            settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+            settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
+            settings.EditFormLayoutProperties.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+            settings.EditFormLayoutProperties.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+
+            settings.Columns.Add(c =>
+            {
+                c.Settings.AllowSort = DefaultBoolean.True;
+                c.FieldName = "Unidad";
+                c.Caption = Resources.ReporteResource.captionUnidad;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.CellStyle.Wrap = DefaultBoolean.True;
+                c.PropertiesEdit.DisplayFormatString = "{0}";
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Width = Unit.Percentage(40);
+            });
+            settings.Columns.AddBand(sb =>
+            {
+                sb.Caption = Resources.ReporteResource.captionValorEscala;
+                sb.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                int Index = 0;
+                List<string> _strEscala = Metodos.GetImpactoEmpresa().Select(x => x.Descripcion).ToList();
+                int pWidth = 60 / _strEscala.Count();
+
+                foreach (string Valor in _strEscala)
+                {
+                    sb.Columns.Add(c =>
+                    {
+                        c.Settings.AllowSort = DefaultBoolean.True;
+                        c.FieldName = "CantidadEscalaUnbound" + Index.ToString();
+                        c.UnboundType = DevExpress.Data.UnboundColumnType.String;
+                        c.Caption = Valor.ToString();
+                        c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                        c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                        c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+                        c.HeaderStyle.Wrap = DefaultBoolean.True;
+                        c.Width = Unit.Percentage(pWidth);
+                    });
+                    Index++;
+                }
+            });
+            settings.CustomUnboundColumnData = (s, e) =>
+            {
+                if (e.Column.FieldName.Contains("CantidadEscalaUnbound"))
+                {
+                    var valores = e.GetListSourceFieldValue("CantidadEscala") as List<Int32>;
+                    int res = 0;
+                    if (valores != null)
+                    {
+                        var ColName = e.Column.FieldName;
+                        int index = int.Parse(e.Column.FieldName.Replace("CantidadEscalaUnbound", ""));
+                        res = valores[index];
+                    }
+                    e.Value = res;
+                }
+            };
+
+            return settings;
+        }
+        public static GridViewSettings ExcelDataAwareExportGridViewSettings
+        {
+            get
+            {
+                GridViewSettings settings = Context[ExcelDataAwareGridViewSettingsKey] as GridViewSettings;
+                if (settings == null)
+                    Context[ExcelDataAwareGridViewSettingsKey] = settings = CreateExcelDataAwareExportGridViewSettings();
+                return settings;
+            }
+        }
+        static GridViewSettings CreateExcelDataAwareExportGridViewSettings()
+        {
+            GridViewSettings settings = new GridViewSettings();
+
+            settings.Name = "gvTR";
+            settings.CallbackRouteValues = new { Controller = "Reportes", Action = "TablaTRPartialView" };
+
+            settings.Width = Unit.Percentage(100);
+            settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+            settings.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
+            settings.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
+            settings.ControlStyle.BorderBottom.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
+            settings.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+            settings.ClientSideEvents.BeginCallback = "function (s,e) { lp.Show(); }";
+            settings.ClientSideEvents.EndCallback = "function (s,e) { lp.Hide(); }";
+
+            settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+            settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+            settings.Settings.VerticalScrollableHeight = 400;
+            settings.Width = Unit.Percentage(100);
+
+            settings.SettingsPager.PageSize = 20;
+            settings.SettingsPager.Position = PagerPosition.Bottom;
+            settings.SettingsPager.FirstPageButton.Visible = true;
+            settings.SettingsPager.LastPageButton.Visible = true;
+            settings.SettingsPager.PageSizeItemSettings.Visible = true;
+            settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20", "50", "100" };
+
+            settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+            settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
+            settings.EditFormLayoutProperties.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+            settings.EditFormLayoutProperties.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+
+            settings.Columns.Add(c =>
+            {
+                c.Settings.AllowSort = DefaultBoolean.True;
+                c.FieldName = "Unidad";
+                c.Caption = Resources.ReporteResource.captionUnidad;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.CellStyle.Wrap = DefaultBoolean.True;
+                c.PropertiesEdit.DisplayFormatString = "{0}";
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Width = Unit.Percentage(40);
+            });
+            settings.Columns.AddBand(sb =>
+            {
+                sb.Caption = Resources.ReporteResource.captionValorEscala;
+                sb.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                int Index = 0;
+                List<string> _strEscala = Metodos.GetImpactoEmpresa().Select(x => x.Descripcion).ToList();
+                int pWidth = 60 / _strEscala.Count();
+
+                foreach (string Valor in _strEscala)
+                {
+                    sb.Columns.Add(c =>
+                    {
+                        c.Settings.AllowSort = DefaultBoolean.True;
+                        c.FieldName = "CantidadEscalaUnbound" + Index.ToString();
+                        c.UnboundType = DevExpress.Data.UnboundColumnType.String;
+                        c.Caption = Valor.ToString();
+                        c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                        c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                        c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+                        c.HeaderStyle.Wrap = DefaultBoolean.True;
+                        c.Width = Unit.Percentage(pWidth);
+                    });
+                    Index++;
+                }
+            });
+            settings.CustomUnboundColumnData = (s, e) =>
+            {
+                if (e.Column.FieldName.Contains("CantidadEscalaUnbound"))
+                {
+                    var valores = e.GetListSourceFieldValue("CantidadEscala") as List<Int32>;
+                    int res = 0;
+                    if (valores != null)
+                    {
+                        var ColName = e.Column.FieldName;
+                        int index = int.Parse(e.Column.FieldName.Replace("CantidadEscalaUnbound", ""));
+                        res = valores[index];
+                    }
+                    e.Value = res;
+                }
+            };
+
+            return settings;
+        }
+        public static GridViewSettings FormatConditionsExportGridViewSettings
+        {
+            get
+            {
+                var settings = Context[FormatConditionsExportGridViewSettingsKey] as GridViewSettings;
+                if (settings == null)
+                    Context[FormatConditionsExportGridViewSettingsKey] = settings = CreateFormatConditionsExportGridViewSettings();
+                return settings;
+            }
+        }
+        static GridViewSettings CreateFormatConditionsExportGridViewSettings()
+        {
+            var settings = new GridViewSettings();
+
+            settings.Name = "gvTR";
+            settings.CallbackRouteValues = new { Controller = "Reportes", Action = "TablaTRPartialView" };
+
+            settings.Width = Unit.Percentage(100);
+            settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+            settings.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
+            settings.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
+            settings.ControlStyle.BorderBottom.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
+            settings.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+            settings.ClientSideEvents.BeginCallback = "function (s,e) { lp.Show(); }";
+            settings.ClientSideEvents.EndCallback = "function (s,e) { lp.Hide(); }";
+
+            settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+            settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+            settings.Settings.VerticalScrollableHeight = 400;
+            settings.Width = Unit.Percentage(100);
+
+            settings.SettingsPager.PageSize = 20;
+            settings.SettingsPager.Position = PagerPosition.Bottom;
+            settings.SettingsPager.FirstPageButton.Visible = true;
+            settings.SettingsPager.LastPageButton.Visible = true;
+            settings.SettingsPager.PageSizeItemSettings.Visible = true;
+            settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20", "50", "100" };
+
+            settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+            settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
+            settings.EditFormLayoutProperties.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+            settings.EditFormLayoutProperties.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+
+            settings.Columns.Add(c =>
+            {
+                c.Settings.AllowSort = DefaultBoolean.True;
+                c.FieldName = "Unidad";
+                c.Caption = Resources.ReporteResource.captionUnidad;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.CellStyle.Wrap = DefaultBoolean.True;
+                c.PropertiesEdit.DisplayFormatString = "{0}";
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Width = Unit.Percentage(40);
+            });
+            settings.Columns.AddBand(sb =>
+            {
+                sb.Caption = Resources.ReporteResource.captionValorEscala;
+                sb.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                int Index = 0;
+                List<string> _strEscala = Metodos.GetImpactoEmpresa().Select(x => x.Descripcion).ToList();
+                int pWidth = 60 / _strEscala.Count();
+
+                foreach (string Valor in _strEscala)
+                {
+                    sb.Columns.Add(c =>
+                    {
+                        c.Settings.AllowSort = DefaultBoolean.True;
+                        c.FieldName = "CantidadEscalaUnbound" + Index.ToString();
+                        c.UnboundType = DevExpress.Data.UnboundColumnType.String;
+                        c.Caption = Valor.ToString();
+                        c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                        c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                        c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+                        c.HeaderStyle.Wrap = DefaultBoolean.True;
+                        c.Width = Unit.Percentage(pWidth);
+                    });
+                    Index++;
+                }
+            });
+            settings.CustomUnboundColumnData = (s, e) =>
+            {
+                if (e.Column.FieldName.Contains("CantidadEscalaUnbound"))
+                {
+                    var valores = e.GetListSourceFieldValue("CantidadEscala") as List<Int32>;
+                    int res = 0;
+                    if (valores != null)
+                    {
+                        var ColName = e.Column.FieldName;
+                        int index = int.Parse(e.Column.FieldName.Replace("CantidadEscalaUnbound", ""));
+                        res = valores[index];
+                    }
+                    e.Value = res;
+                }
+            };
+
+            return settings;
+        }
+    }
+    public class GridViewExportRiesgoSeveridad
+    {
+        private static HttpSessionState Session { get { return HttpContext.Current.Session; } }
+        static string ExcelDataAwareGridViewSettingsKey = "51172A18-2073-426B-A5CB-136347B3A79F";
+        static string FormatConditionsExportGridViewSettingsKey = "14634B6F-E1DC-484A-9728-F9608615B628";
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> exportFormatsInfo;
+        public static Dictionary<GridViewExportFormat, GridViewExportMethod> ExportFormatsInfo
+        {
+            get
+            {
+                if (exportFormatsInfo == null)
+                    exportFormatsInfo = CreateExportFormatsInfo();
+                return exportFormatsInfo;
+            }
+        }
+        static IDictionary Context { get { return System.Web.HttpContext.Current.Items; } }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> CreateExportFormatsInfo()
+        {
+            return new Dictionary<GridViewExportFormat, GridViewExportMethod> {
+                { GridViewExportFormat.Pdf, GridViewExtension.ExportToPdf },
+                {
+                    GridViewExportFormat.Xls,
+                    (settings, data) => GridViewExtension.ExportToXls(settings, data, new XlsExportOptionsEx { ExportType = DevExpress.Export.ExportType.WYSIWYG })
+                },
+                {
+                    GridViewExportFormat.Xlsx,
+                    (settings, data) => GridViewExtension.ExportToXlsx(settings, data, new XlsxExportOptionsEx { ExportType = DevExpress.Export.ExportType.WYSIWYG })
+                },
+                { GridViewExportFormat.Rtf, GridViewExtension.ExportToRtf },
+                {
+                    GridViewExportFormat.Csv,
+                    (settings, data) => GridViewExtension.ExportToCsv(settings, data, new CsvExportOptionsEx { ExportType = DevExpress.Export.ExportType.WYSIWYG })
+                }
+            };
+        }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> dataAwareExportFormatsInfo;
+        public static Dictionary<GridViewExportFormat, GridViewExportMethod> DataAwareExportFormatsInfo
+        {
+            get
+            {
+                if (dataAwareExportFormatsInfo == null)
+                    dataAwareExportFormatsInfo = CreateDataAwareExportFormatsInfo();
+                return dataAwareExportFormatsInfo;
+            }
+        }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> CreateDataAwareExportFormatsInfo()
+        {
+            return new Dictionary<GridViewExportFormat, GridViewExportMethod> {
+                { GridViewExportFormat.Xls, GridViewExtension.ExportToXls },
+                { GridViewExportFormat.Xlsx, GridViewExtension.ExportToXlsx },
+                { GridViewExportFormat.Csv, GridViewExtension.ExportToCsv }
+            };
+        }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> formatConditionsExportFormatsInfo;
+        public static Dictionary<GridViewExportFormat, GridViewExportMethod> FormatConditionsExportFormatsInfo
+        {
+            get
+            {
+                if (formatConditionsExportFormatsInfo == null)
+                    formatConditionsExportFormatsInfo = CreateFormatConditionsExportFormatsInfo();
+                return formatConditionsExportFormatsInfo;
+            }
+        }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> CreateFormatConditionsExportFormatsInfo()
+        {
+            return new Dictionary<GridViewExportFormat, GridViewExportMethod> {
+                { GridViewExportFormat.Pdf, GridViewExtension.ExportToPdf},
+                { GridViewExportFormat.Xls, (settings, data) => GridViewExtension.ExportToXls(settings, data) },
+                { GridViewExportFormat.Xlsx,
+                    (settings, data) => GridViewExtension.ExportToXlsx(settings, data, new XlsxExportOptionsEx {ExportType = DevExpress.Export.ExportType.WYSIWYG})
+                },
+                { GridViewExportFormat.Rtf, GridViewExtension.ExportToRtf }
+            };
+        }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> advancedBandsExportFormatsInfo;
+        public static Dictionary<GridViewExportFormat, GridViewExportMethod> AdvancedBandsExportFormatsInfo
+        {
+            get
+            {
+                if (advancedBandsExportFormatsInfo == null)
+                    advancedBandsExportFormatsInfo = CreateAdvancedBandsExportFormatsInfo();
+                return advancedBandsExportFormatsInfo;
+            }
+        }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> CreateAdvancedBandsExportFormatsInfo()
+        {
+            return new Dictionary<GridViewExportFormat, GridViewExportMethod> {
+                { GridViewExportFormat.Pdf, GridViewExtension.ExportToPdf },
+                { GridViewExportFormat.Xls, (settings, data) => GridViewExtension.ExportToXls(settings, data, new XlsExportOptionsEx {ExportType = DevExpress.Export.ExportType.WYSIWYG}) },
+                { GridViewExportFormat.Xlsx, (settings, data) => GridViewExtension.ExportToXlsx(settings, data, new XlsxExportOptionsEx {ExportType = DevExpress.Export.ExportType.WYSIWYG}) },
+                { GridViewExportFormat.Rtf, GridViewExtension.ExportToRtf }
+            };
+        }
+        public static string GetExportButtonTitle(GridViewExportFormat format)
+        {
+            if (format == GridViewExportFormat.None)
+                return string.Empty;
+            return string.Format("Export to {0}", format.ToString().ToUpper());
+        }
+        public static GridViewSettings CreateGeneralMasterGridSettings(object DataToBind)
+        {
+            return CreateGeneralMasterGridSettings(GridViewDetailExportMode.None, DataToBind);
+        }
+        public static GridViewSettings CreateGeneralMasterGridSettings(GridViewDetailExportMode exportMode, object DataToBind)
+        {
+            GridViewSettings settings = new GridViewSettings();
+            settings.Name = "masterGrid";
+            settings.Width = Unit.Percentage(100);
+
+            settings.KeyFieldName = "CategoryID";
+            settings.Columns.Add("CategoryID");
+            settings.Columns.Add("CategoryName");
+            settings.Columns.Add("Description");
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "Picture";
+                c.ColumnType = MVCxGridViewColumnType.BinaryImage;
+                BinaryImageEditProperties properties = (BinaryImageEditProperties)c.PropertiesEdit;
+                properties.ImageWidth = 120;
+                properties.ImageHeight = 80;
+                properties.ExportImageSettings.Width = 90;
+                properties.ExportImageSettings.Height = 60;
+            });
+
+            settings.SettingsDetail.ShowDetailRow = true;
+            settings.SettingsDetail.ExportMode = exportMode;
+
+            settings.SettingsExport.GetExportDetailGridViews = (s, e) =>
+            {
+                int categoryID = (int)DataBinder.Eval(e.DataItem, "CategoryID");
+                GridViewExtension grid = new GridViewExtension(CreateGeneralDetailGridSettings(categoryID));
+                grid.Bind(DataToBind);
+                e.DetailGridViews.Add(grid);
+            };
+
+            return settings;
+        }
+        public static GridViewSettings CreateGeneralDetailGridSettings(int uniqueKey)
+        {
+            GridViewSettings settings = new GridViewSettings();
+            settings.Name = "detailGrid" + uniqueKey;
+            settings.Width = Unit.Percentage(100);
+
+            settings.KeyFieldName = "ProductID";
+            settings.Columns.Add("ProductID");
+            settings.Columns.Add("ProductName");
+            settings.Columns.Add("UnitPrice");
+            settings.Columns.Add("QuantityPerUnit");
+
+            settings.SettingsDetail.MasterGridName = "masterGrid";
+
+            return settings;
+        }
+        static GridViewSettings exportGridViewSettings;
+        public static GridViewSettings ExportGridViewSettings
+        {
+            get
+            {
+                if (exportGridViewSettings == null)
+                    exportGridViewSettings = CreateExportGridViewSettings();
+                return exportGridViewSettings;
+            }
+        }
+        static GridViewSettings CreateExportGridViewSettings()
+        {
+            GridViewSettings settings = new GridViewSettings();
+
+            settings.Name = "gvTR";
+            settings.CallbackRouteValues = new { Controller = "Reportes", Action = "TablaTRPartialView" };
+
+            settings.Width = Unit.Percentage(100);
+            settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+            settings.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
+            settings.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
+            settings.ControlStyle.BorderBottom.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
+            settings.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+            settings.ClientSideEvents.BeginCallback = "function (s,e) { lp.Show(); }";
+            settings.ClientSideEvents.EndCallback = "function (s,e) { lp.Hide(); }";
+
+            settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+            settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+            settings.Settings.VerticalScrollableHeight = 400;
+            settings.Width = Unit.Percentage(100);
+
+            settings.SettingsPager.PageSize = 20;
+            settings.SettingsPager.Position = PagerPosition.Bottom;
+            settings.SettingsPager.FirstPageButton.Visible = true;
+            settings.SettingsPager.LastPageButton.Visible = true;
+            settings.SettingsPager.PageSizeItemSettings.Visible = true;
+            settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20", "50", "100" };
+
+            settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+            settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
+            settings.EditFormLayoutProperties.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+            settings.EditFormLayoutProperties.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+
+            settings.Columns.Add(c =>
+            {
+                c.Settings.AllowSort = DefaultBoolean.True;
+                c.FieldName = "Unidad";
+                c.Caption = Resources.ReporteResource.captionUnidad;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.CellStyle.Wrap = DefaultBoolean.True;
+                c.PropertiesEdit.DisplayFormatString = "{0}";
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Width = Unit.Percentage(40);
+            });
+            settings.Columns.AddBand(sb =>
+            {
+                sb.Caption = Resources.ReporteResource.captionValorEscala;
+                sb.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                int Index = 0;
+                List<string> _strEscala = Metodos.GetSeveridadEmpresa().Select(x => x.Descripcion).ToList();
+                int pWidth = 60 / _strEscala.Count();
+
+                foreach (string Valor in _strEscala)
+                {
+                    sb.Columns.Add(c =>
+                    {
+                        c.Settings.AllowSort = DefaultBoolean.True;
+                        c.FieldName = "CantidadEscalaUnbound" + Index.ToString();
+                        c.UnboundType = DevExpress.Data.UnboundColumnType.String;
+                        c.Caption = Valor.ToString();
+                        c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                        c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                        c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+                        c.HeaderStyle.Wrap = DefaultBoolean.True;
+                        c.Width = Unit.Percentage(pWidth);
+                    });
+                    Index++;
+                }
+            });
+            settings.CustomUnboundColumnData = (s, e) =>
+            {
+                if (e.Column.FieldName.Contains("CantidadEscalaUnbound"))
+                {
+                    var valores = e.GetListSourceFieldValue("CantidadEscala") as List<Int32>;
+                    int res = 0;
+                    if (valores != null)
+                    {
+                        var ColName = e.Column.FieldName;
+                        int index = int.Parse(e.Column.FieldName.Replace("CantidadEscalaUnbound", ""));
+                        res = valores[index];
+                    }
+                    e.Value = res;
+                }
+            };
+
+            return settings;
+        }
+        public static GridViewSettings ExcelDataAwareExportGridViewSettings
+        {
+            get
+            {
+                GridViewSettings settings = Context[ExcelDataAwareGridViewSettingsKey] as GridViewSettings;
+                if (settings == null)
+                    Context[ExcelDataAwareGridViewSettingsKey] = settings = CreateExcelDataAwareExportGridViewSettings();
+                return settings;
+            }
+        }
+        static GridViewSettings CreateExcelDataAwareExportGridViewSettings()
+        {
+            GridViewSettings settings = new GridViewSettings();
+
+            settings.Name = "gvTR";
+            settings.CallbackRouteValues = new { Controller = "Reportes", Action = "TablaTRPartialView" };
+
+            settings.Width = Unit.Percentage(100);
+            settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+            settings.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
+            settings.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
+            settings.ControlStyle.BorderBottom.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
+            settings.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+            settings.ClientSideEvents.BeginCallback = "function (s,e) { lp.Show(); }";
+            settings.ClientSideEvents.EndCallback = "function (s,e) { lp.Hide(); }";
+
+            settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+            settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+            settings.Settings.VerticalScrollableHeight = 400;
+            settings.Width = Unit.Percentage(100);
+
+            settings.SettingsPager.PageSize = 20;
+            settings.SettingsPager.Position = PagerPosition.Bottom;
+            settings.SettingsPager.FirstPageButton.Visible = true;
+            settings.SettingsPager.LastPageButton.Visible = true;
+            settings.SettingsPager.PageSizeItemSettings.Visible = true;
+            settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20", "50", "100" };
+
+            settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+            settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
+            settings.EditFormLayoutProperties.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+            settings.EditFormLayoutProperties.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+
+            settings.Columns.Add(c =>
+            {
+                c.Settings.AllowSort = DefaultBoolean.True;
+                c.FieldName = "Unidad";
+                c.Caption = Resources.ReporteResource.captionUnidad;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.CellStyle.Wrap = DefaultBoolean.True;
+                c.PropertiesEdit.DisplayFormatString = "{0}";
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Width = Unit.Percentage(40);
+            });
+            settings.Columns.AddBand(sb =>
+            {
+                sb.Caption = Resources.ReporteResource.captionValorEscala;
+                sb.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                int Index = 0;
+                List<string> _strEscala = Metodos.GetSeveridadEmpresa().Select(x => x.Descripcion).ToList();
+                int pWidth = 60 / _strEscala.Count();
+
+                foreach (string Valor in _strEscala)
+                {
+                    sb.Columns.Add(c =>
+                    {
+                        c.Settings.AllowSort = DefaultBoolean.True;
+                        c.FieldName = "CantidadEscalaUnbound" + Index.ToString();
+                        c.UnboundType = DevExpress.Data.UnboundColumnType.String;
+                        c.Caption = Valor.ToString();
+                        c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                        c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                        c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+                        c.HeaderStyle.Wrap = DefaultBoolean.True;
+                        c.Width = Unit.Percentage(pWidth);
+                    });
+                    Index++;
+                }
+            });
+            settings.CustomUnboundColumnData = (s, e) =>
+            {
+                if (e.Column.FieldName.Contains("CantidadEscalaUnbound"))
+                {
+                    var valores = e.GetListSourceFieldValue("CantidadEscala") as List<Int32>;
+                    int res = 0;
+                    if (valores != null)
+                    {
+                        var ColName = e.Column.FieldName;
+                        int index = int.Parse(e.Column.FieldName.Replace("CantidadEscalaUnbound", ""));
+                        res = valores[index];
+                    }
+                    e.Value = res;
+                }
+            };
+
+            return settings;
+        }
+        public static GridViewSettings FormatConditionsExportGridViewSettings
+        {
+            get
+            {
+                var settings = Context[FormatConditionsExportGridViewSettingsKey] as GridViewSettings;
+                if (settings == null)
+                    Context[FormatConditionsExportGridViewSettingsKey] = settings = CreateFormatConditionsExportGridViewSettings();
+                return settings;
+            }
+        }
+        static GridViewSettings CreateFormatConditionsExportGridViewSettings()
+        {
+            var settings = new GridViewSettings();
+
+            settings.Name = "gvTR";
+            settings.CallbackRouteValues = new { Controller = "Reportes", Action = "TablaTRPartialView" };
+
+            settings.Width = Unit.Percentage(100);
+            settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+            settings.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
+            settings.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
+            settings.ControlStyle.BorderBottom.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
+            settings.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+            settings.ClientSideEvents.BeginCallback = "function (s,e) { lp.Show(); }";
+            settings.ClientSideEvents.EndCallback = "function (s,e) { lp.Hide(); }";
+
+            settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+            settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+            settings.Settings.VerticalScrollableHeight = 400;
+            settings.Width = Unit.Percentage(100);
+
+            settings.SettingsPager.PageSize = 20;
+            settings.SettingsPager.Position = PagerPosition.Bottom;
+            settings.SettingsPager.FirstPageButton.Visible = true;
+            settings.SettingsPager.LastPageButton.Visible = true;
+            settings.SettingsPager.PageSizeItemSettings.Visible = true;
+            settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20", "50", "100" };
+
+            settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+            settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
+            settings.EditFormLayoutProperties.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+            settings.EditFormLayoutProperties.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+
+            settings.Columns.Add(c =>
+            {
+                c.Settings.AllowSort = DefaultBoolean.True;
+                c.FieldName = "Unidad";
+                c.Caption = Resources.ReporteResource.captionUnidad;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.CellStyle.Wrap = DefaultBoolean.True;
+                c.PropertiesEdit.DisplayFormatString = "{0}";
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Width = Unit.Percentage(40);
+            });
+            settings.Columns.AddBand(sb =>
+            {
+                sb.Caption = Resources.ReporteResource.captionValorEscala;
+                sb.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                int Index = 0;
+                List<string> _strEscala = Metodos.GetSeveridadEmpresa().Select(x => x.Descripcion).ToList();
+                int pWidth = 60 / _strEscala.Count();
+
+                foreach (string Valor in _strEscala)
+                {
+                    sb.Columns.Add(c =>
+                    {
+                        c.Settings.AllowSort = DefaultBoolean.True;
+                        c.FieldName = "CantidadEscalaUnbound" + Index.ToString();
+                        c.UnboundType = DevExpress.Data.UnboundColumnType.String;
+                        c.Caption = Valor.ToString();
+                        c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                        c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                        c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+                        c.HeaderStyle.Wrap = DefaultBoolean.True;
+                        c.Width = Unit.Percentage(pWidth);
+                    });
+                    Index++;
+                }
+            });
+            settings.CustomUnboundColumnData = (s, e) =>
+            {
+                if (e.Column.FieldName.Contains("CantidadEscalaUnbound"))
+                {
+                    var valores = e.GetListSourceFieldValue("CantidadEscala") as List<Int32>;
+                    int res = 0;
+                    if (valores != null)
+                    {
+                        var ColName = e.Column.FieldName;
+                        int index = int.Parse(e.Column.FieldName.Replace("CantidadEscalaUnbound", ""));
+                        res = valores[index];
+                    }
+                    e.Value = res;
+                }
+            };
+
+            return settings;
+        }
+    }
+    public class GridViewExportRiesgoControl
+    {
+        private static HttpSessionState Session { get { return HttpContext.Current.Session; } }
+        static string ExcelDataAwareGridViewSettingsKey = "51172A18-2073-426B-A5CB-136347B3A79F";
+        static string FormatConditionsExportGridViewSettingsKey = "14634B6F-E1DC-484A-9728-F9608615B628";
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> exportFormatsInfo;
+        public static Dictionary<GridViewExportFormat, GridViewExportMethod> ExportFormatsInfo
+        {
+            get
+            {
+                if (exportFormatsInfo == null)
+                    exportFormatsInfo = CreateExportFormatsInfo();
+                return exportFormatsInfo;
+            }
+        }
+        static IDictionary Context { get { return System.Web.HttpContext.Current.Items; } }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> CreateExportFormatsInfo()
+        {
+            return new Dictionary<GridViewExportFormat, GridViewExportMethod> {
+                { GridViewExportFormat.Pdf, GridViewExtension.ExportToPdf },
+                {
+                    GridViewExportFormat.Xls,
+                    (settings, data) => GridViewExtension.ExportToXls(settings, data, new XlsExportOptionsEx { ExportType = DevExpress.Export.ExportType.WYSIWYG })
+                },
+                {
+                    GridViewExportFormat.Xlsx,
+                    (settings, data) => GridViewExtension.ExportToXlsx(settings, data, new XlsxExportOptionsEx { ExportType = DevExpress.Export.ExportType.WYSIWYG })
+                },
+                { GridViewExportFormat.Rtf, GridViewExtension.ExportToRtf },
+                {
+                    GridViewExportFormat.Csv,
+                    (settings, data) => GridViewExtension.ExportToCsv(settings, data, new CsvExportOptionsEx { ExportType = DevExpress.Export.ExportType.WYSIWYG })
+                }
+            };
+        }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> dataAwareExportFormatsInfo;
+        public static Dictionary<GridViewExportFormat, GridViewExportMethod> DataAwareExportFormatsInfo
+        {
+            get
+            {
+                if (dataAwareExportFormatsInfo == null)
+                    dataAwareExportFormatsInfo = CreateDataAwareExportFormatsInfo();
+                return dataAwareExportFormatsInfo;
+            }
+        }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> CreateDataAwareExportFormatsInfo()
+        {
+            return new Dictionary<GridViewExportFormat, GridViewExportMethod> {
+                { GridViewExportFormat.Xls, GridViewExtension.ExportToXls },
+                { GridViewExportFormat.Xlsx, GridViewExtension.ExportToXlsx },
+                { GridViewExportFormat.Csv, GridViewExtension.ExportToCsv }
+            };
+        }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> formatConditionsExportFormatsInfo;
+        public static Dictionary<GridViewExportFormat, GridViewExportMethod> FormatConditionsExportFormatsInfo
+        {
+            get
+            {
+                if (formatConditionsExportFormatsInfo == null)
+                    formatConditionsExportFormatsInfo = CreateFormatConditionsExportFormatsInfo();
+                return formatConditionsExportFormatsInfo;
+            }
+        }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> CreateFormatConditionsExportFormatsInfo()
+        {
+            return new Dictionary<GridViewExportFormat, GridViewExportMethod> {
+                { GridViewExportFormat.Pdf, GridViewExtension.ExportToPdf},
+                { GridViewExportFormat.Xls, (settings, data) => GridViewExtension.ExportToXls(settings, data) },
+                { GridViewExportFormat.Xlsx,
+                    (settings, data) => GridViewExtension.ExportToXlsx(settings, data, new XlsxExportOptionsEx {ExportType = DevExpress.Export.ExportType.WYSIWYG})
+                },
+                { GridViewExportFormat.Rtf, GridViewExtension.ExportToRtf }
+            };
+        }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> advancedBandsExportFormatsInfo;
+        public static Dictionary<GridViewExportFormat, GridViewExportMethod> AdvancedBandsExportFormatsInfo
+        {
+            get
+            {
+                if (advancedBandsExportFormatsInfo == null)
+                    advancedBandsExportFormatsInfo = CreateAdvancedBandsExportFormatsInfo();
+                return advancedBandsExportFormatsInfo;
+            }
+        }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> CreateAdvancedBandsExportFormatsInfo()
+        {
+            return new Dictionary<GridViewExportFormat, GridViewExportMethod> {
+                { GridViewExportFormat.Pdf, GridViewExtension.ExportToPdf },
+                { GridViewExportFormat.Xls, (settings, data) => GridViewExtension.ExportToXls(settings, data, new XlsExportOptionsEx {ExportType = DevExpress.Export.ExportType.WYSIWYG}) },
+                { GridViewExportFormat.Xlsx, (settings, data) => GridViewExtension.ExportToXlsx(settings, data, new XlsxExportOptionsEx {ExportType = DevExpress.Export.ExportType.WYSIWYG}) },
+                { GridViewExportFormat.Rtf, GridViewExtension.ExportToRtf }
+            };
+        }
+        public static string GetExportButtonTitle(GridViewExportFormat format)
+        {
+            if (format == GridViewExportFormat.None)
+                return string.Empty;
+            return string.Format("Export to {0}", format.ToString().ToUpper());
+        }
+        public static GridViewSettings CreateGeneralMasterGridSettings(object DataToBind)
+        {
+            return CreateGeneralMasterGridSettings(GridViewDetailExportMode.None, DataToBind);
+        }
+        public static GridViewSettings CreateGeneralMasterGridSettings(GridViewDetailExportMode exportMode, object DataToBind)
+        {
+            GridViewSettings settings = new GridViewSettings();
+            settings.Name = "masterGrid";
+            settings.Width = Unit.Percentage(100);
+
+            settings.KeyFieldName = "CategoryID";
+            settings.Columns.Add("CategoryID");
+            settings.Columns.Add("CategoryName");
+            settings.Columns.Add("Description");
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "Picture";
+                c.ColumnType = MVCxGridViewColumnType.BinaryImage;
+                BinaryImageEditProperties properties = (BinaryImageEditProperties)c.PropertiesEdit;
+                properties.ImageWidth = 120;
+                properties.ImageHeight = 80;
+                properties.ExportImageSettings.Width = 90;
+                properties.ExportImageSettings.Height = 60;
+            });
+
+            settings.SettingsDetail.ShowDetailRow = true;
+            settings.SettingsDetail.ExportMode = exportMode;
+
+            settings.SettingsExport.GetExportDetailGridViews = (s, e) =>
+            {
+                int categoryID = (int)DataBinder.Eval(e.DataItem, "CategoryID");
+                GridViewExtension grid = new GridViewExtension(CreateGeneralDetailGridSettings(categoryID));
+                grid.Bind(DataToBind);
+                e.DetailGridViews.Add(grid);
+            };
+
+            return settings;
+        }
+        public static GridViewSettings CreateGeneralDetailGridSettings(int uniqueKey)
+        {
+            GridViewSettings settings = new GridViewSettings();
+            settings.Name = "detailGrid" + uniqueKey;
+            settings.Width = Unit.Percentage(100);
+
+            settings.KeyFieldName = "ProductID";
+            settings.Columns.Add("ProductID");
+            settings.Columns.Add("ProductName");
+            settings.Columns.Add("UnitPrice");
+            settings.Columns.Add("QuantityPerUnit");
+
+            settings.SettingsDetail.MasterGridName = "masterGrid";
+
+            return settings;
+        }
+        static GridViewSettings exportGridViewSettings;
+        public static GridViewSettings ExportGridViewSettings
+        {
+            get
+            {
+                if (exportGridViewSettings == null)
+                    exportGridViewSettings = CreateExportGridViewSettings();
+                return exportGridViewSettings;
+            }
+        }
+        static GridViewSettings CreateExportGridViewSettings()
+        {
+            GridViewSettings settings = new GridViewSettings();
+
+            settings.Name = "gvTR";
+            settings.CallbackRouteValues = new { Controller = "Reportes", Action = "TablaTRPartialView" };
+
+            settings.Width = Unit.Percentage(100);
+            settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+            settings.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
+            settings.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
+            settings.ControlStyle.BorderBottom.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
+            settings.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+            settings.ClientSideEvents.BeginCallback = "function (s,e) { lp.Show(); }";
+            settings.ClientSideEvents.EndCallback = "function (s,e) { lp.Hide(); }";
+
+            settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+            settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+            settings.Settings.VerticalScrollableHeight = 400;
+            settings.Width = Unit.Percentage(100);
+
+            settings.SettingsPager.PageSize = 20;
+            settings.SettingsPager.Position = PagerPosition.Bottom;
+            settings.SettingsPager.FirstPageButton.Visible = true;
+            settings.SettingsPager.LastPageButton.Visible = true;
+            settings.SettingsPager.PageSizeItemSettings.Visible = true;
+            settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20", "50", "100" };
+
+            settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+            settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
+            settings.EditFormLayoutProperties.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+            settings.EditFormLayoutProperties.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+
+            settings.Columns.Add(c =>
+            {
+                c.Settings.AllowSort = DefaultBoolean.True;
+                c.FieldName = "Unidad";
+                c.Caption = Resources.ReporteResource.captionUnidad;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.CellStyle.Wrap = DefaultBoolean.True;
+                c.PropertiesEdit.DisplayFormatString = "{0}";
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Width = Unit.Percentage(40);
+            });
+            settings.Columns.AddBand(sb =>
+            {
+                sb.Caption = Resources.ReporteResource.captionValorEscala;
+                sb.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                int Index = 0;
+                List<string> _strEscala = Metodos.GetControlEmpresa().Select(x => x.Descripcion).ToList();
+                int pWidth = 60 / _strEscala.Count();
+
+                foreach (string Valor in _strEscala)
+                {
+                    sb.Columns.Add(c =>
+                    {
+                        c.Settings.AllowSort = DefaultBoolean.True;
+                        c.FieldName = "CantidadEscalaUnbound" + Index.ToString();
+                        c.UnboundType = DevExpress.Data.UnboundColumnType.String;
+                        c.Caption = Valor.ToString();
+                        c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                        c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                        c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+                        c.HeaderStyle.Wrap = DefaultBoolean.True;
+                        c.Width = Unit.Percentage(pWidth);
+                    });
+                    Index++;
+                }
+            });
+            settings.CustomUnboundColumnData = (s, e) =>
+            {
+                if (e.Column.FieldName.Contains("CantidadEscalaUnbound"))
+                {
+                    var valores = e.GetListSourceFieldValue("CantidadEscala") as List<Int32>;
+                    int res = 0;
+                    if (valores != null)
+                    {
+                        var ColName = e.Column.FieldName;
+                        int index = int.Parse(e.Column.FieldName.Replace("CantidadEscalaUnbound", ""));
+                        res = valores[index];
+                    }
+                    e.Value = res;
+                }
+            };
+
+            return settings;
+        }
+        public static GridViewSettings ExcelDataAwareExportGridViewSettings
+        {
+            get
+            {
+                GridViewSettings settings = Context[ExcelDataAwareGridViewSettingsKey] as GridViewSettings;
+                if (settings == null)
+                    Context[ExcelDataAwareGridViewSettingsKey] = settings = CreateExcelDataAwareExportGridViewSettings();
+                return settings;
+            }
+        }
+        static GridViewSettings CreateExcelDataAwareExportGridViewSettings()
+        {
+            GridViewSettings settings = new GridViewSettings();
+
+            settings.Name = "gvTR";
+            settings.CallbackRouteValues = new { Controller = "Reportes", Action = "TablaTRPartialView" };
+
+            settings.Width = Unit.Percentage(100);
+            settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+            settings.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
+            settings.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
+            settings.ControlStyle.BorderBottom.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
+            settings.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+            settings.ClientSideEvents.BeginCallback = "function (s,e) { lp.Show(); }";
+            settings.ClientSideEvents.EndCallback = "function (s,e) { lp.Hide(); }";
+
+            settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+            settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+            settings.Settings.VerticalScrollableHeight = 400;
+            settings.Width = Unit.Percentage(100);
+
+            settings.SettingsPager.PageSize = 20;
+            settings.SettingsPager.Position = PagerPosition.Bottom;
+            settings.SettingsPager.FirstPageButton.Visible = true;
+            settings.SettingsPager.LastPageButton.Visible = true;
+            settings.SettingsPager.PageSizeItemSettings.Visible = true;
+            settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20", "50", "100" };
+
+            settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+            settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
+            settings.EditFormLayoutProperties.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+            settings.EditFormLayoutProperties.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+
+            settings.Columns.Add(c =>
+            {
+                c.Settings.AllowSort = DefaultBoolean.True;
+                c.FieldName = "Unidad";
+                c.Caption = Resources.ReporteResource.captionUnidad;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.CellStyle.Wrap = DefaultBoolean.True;
+                c.PropertiesEdit.DisplayFormatString = "{0}";
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Width = Unit.Percentage(40);
+            });
+            settings.Columns.AddBand(sb =>
+            {
+                sb.Caption = Resources.ReporteResource.captionValorEscala;
+                sb.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                int Index = 0;
+                List<string> _strEscala = Metodos.GetControlEmpresa().Select(x => x.Descripcion).ToList();
+                int pWidth = 60 / _strEscala.Count();
+
+                foreach (string Valor in _strEscala)
+                {
+                    sb.Columns.Add(c =>
+                    {
+                        c.Settings.AllowSort = DefaultBoolean.True;
+                        c.FieldName = "CantidadEscalaUnbound" + Index.ToString();
+                        c.UnboundType = DevExpress.Data.UnboundColumnType.String;
+                        c.Caption = Valor.ToString();
+                        c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                        c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                        c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+                        c.HeaderStyle.Wrap = DefaultBoolean.True;
+                        c.Width = Unit.Percentage(pWidth);
+                    });
+                    Index++;
+                }
+            });
+            settings.CustomUnboundColumnData = (s, e) =>
+            {
+                if (e.Column.FieldName.Contains("CantidadEscalaUnbound"))
+                {
+                    var valores = e.GetListSourceFieldValue("CantidadEscala") as List<Int32>;
+                    int res = 0;
+                    if (valores != null)
+                    {
+                        var ColName = e.Column.FieldName;
+                        int index = int.Parse(e.Column.FieldName.Replace("CantidadEscalaUnbound", ""));
+                        res = valores[index];
+                    }
+                    e.Value = res;
+                }
+            };
+
+            return settings;
+        }
+        public static GridViewSettings FormatConditionsExportGridViewSettings
+        {
+            get
+            {
+                var settings = Context[FormatConditionsExportGridViewSettingsKey] as GridViewSettings;
+                if (settings == null)
+                    Context[FormatConditionsExportGridViewSettingsKey] = settings = CreateFormatConditionsExportGridViewSettings();
+                return settings;
+            }
+        }
+        static GridViewSettings CreateFormatConditionsExportGridViewSettings()
+        {
+            var settings = new GridViewSettings();
+
+            settings.Name = "gvTR";
+            settings.CallbackRouteValues = new { Controller = "Reportes", Action = "TablaTRPartialView" };
+
+            settings.Width = Unit.Percentage(100);
+            settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+            settings.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
+            settings.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
+            settings.ControlStyle.BorderBottom.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
+            settings.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+            settings.ClientSideEvents.BeginCallback = "function (s,e) { lp.Show(); }";
+            settings.ClientSideEvents.EndCallback = "function (s,e) { lp.Hide(); }";
+
+            settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+            settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+            settings.Settings.VerticalScrollableHeight = 400;
+            settings.Width = Unit.Percentage(100);
+
+            settings.SettingsPager.PageSize = 20;
+            settings.SettingsPager.Position = PagerPosition.Bottom;
+            settings.SettingsPager.FirstPageButton.Visible = true;
+            settings.SettingsPager.LastPageButton.Visible = true;
+            settings.SettingsPager.PageSizeItemSettings.Visible = true;
+            settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20", "50", "100" };
+
+            settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+            settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
+            settings.EditFormLayoutProperties.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+            settings.EditFormLayoutProperties.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+
+            settings.Columns.Add(c =>
+            {
+                c.Settings.AllowSort = DefaultBoolean.True;
+                c.FieldName = "Unidad";
+                c.Caption = Resources.ReporteResource.captionUnidad;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.CellStyle.Wrap = DefaultBoolean.True;
+                c.PropertiesEdit.DisplayFormatString = "{0}";
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Width = Unit.Percentage(40);
+            });
+            settings.Columns.AddBand(sb =>
+            {
+                sb.Caption = Resources.ReporteResource.captionValorEscala;
+                sb.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                int Index = 0;
+                List<string> _strEscala = Metodos.GetControlEmpresa().Select(x => x.Descripcion).ToList();
+                int pWidth = 60 / _strEscala.Count();
+
+                foreach (string Valor in _strEscala)
+                {
+                    sb.Columns.Add(c =>
+                    {
+                        c.Settings.AllowSort = DefaultBoolean.True;
+                        c.FieldName = "CantidadEscalaUnbound" + Index.ToString();
+                        c.UnboundType = DevExpress.Data.UnboundColumnType.String;
+                        c.Caption = Valor.ToString();
+                        c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                        c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                        c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+                        c.HeaderStyle.Wrap = DefaultBoolean.True;
+                        c.Width = Unit.Percentage(pWidth);
+                    });
+                    Index++;
+                }
+            });
+            settings.CustomUnboundColumnData = (s, e) =>
+            {
+                if (e.Column.FieldName.Contains("CantidadEscalaUnbound"))
+                {
+                    var valores = e.GetListSourceFieldValue("CantidadEscala") as List<Int32>;
+                    int res = 0;
+                    if (valores != null)
+                    {
+                        var ColName = e.Column.FieldName;
+                        int index = int.Parse(e.Column.FieldName.Replace("CantidadEscalaUnbound", ""));
+                        res = valores[index];
+                    }
+                    e.Value = res;
+                }
+            };
+
+            return settings;
+        }
+    }
+    public class GridViewExportRiesgoFuente
+    {
+        private static HttpSessionState Session { get { return HttpContext.Current.Session; } }
+        static string ExcelDataAwareGridViewSettingsKey = "51172A18-2073-426B-A5CB-136347B3A79F";
+        static string FormatConditionsExportGridViewSettingsKey = "14634B6F-E1DC-484A-9728-F9608615B628";
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> exportFormatsInfo;
+        public static Dictionary<GridViewExportFormat, GridViewExportMethod> ExportFormatsInfo
+        {
+            get
+            {
+                if (exportFormatsInfo == null)
+                    exportFormatsInfo = CreateExportFormatsInfo();
+                return exportFormatsInfo;
+            }
+        }
+        static IDictionary Context { get { return System.Web.HttpContext.Current.Items; } }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> CreateExportFormatsInfo()
+        {
+            return new Dictionary<GridViewExportFormat, GridViewExportMethod> {
+                { GridViewExportFormat.Pdf, GridViewExtension.ExportToPdf },
+                {
+                    GridViewExportFormat.Xls,
+                    (settings, data) => GridViewExtension.ExportToXls(settings, data, new XlsExportOptionsEx { ExportType = DevExpress.Export.ExportType.WYSIWYG })
+                },
+                {
+                    GridViewExportFormat.Xlsx,
+                    (settings, data) => GridViewExtension.ExportToXlsx(settings, data, new XlsxExportOptionsEx { ExportType = DevExpress.Export.ExportType.WYSIWYG })
+                },
+                { GridViewExportFormat.Rtf, GridViewExtension.ExportToRtf },
+                {
+                    GridViewExportFormat.Csv,
+                    (settings, data) => GridViewExtension.ExportToCsv(settings, data, new CsvExportOptionsEx { ExportType = DevExpress.Export.ExportType.WYSIWYG })
+                }
+            };
+        }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> dataAwareExportFormatsInfo;
+        public static Dictionary<GridViewExportFormat, GridViewExportMethod> DataAwareExportFormatsInfo
+        {
+            get
+            {
+                if (dataAwareExportFormatsInfo == null)
+                    dataAwareExportFormatsInfo = CreateDataAwareExportFormatsInfo();
+                return dataAwareExportFormatsInfo;
+            }
+        }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> CreateDataAwareExportFormatsInfo()
+        {
+            return new Dictionary<GridViewExportFormat, GridViewExportMethod> {
+                { GridViewExportFormat.Xls, GridViewExtension.ExportToXls },
+                { GridViewExportFormat.Xlsx, GridViewExtension.ExportToXlsx },
+                { GridViewExportFormat.Csv, GridViewExtension.ExportToCsv }
+            };
+        }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> formatConditionsExportFormatsInfo;
+        public static Dictionary<GridViewExportFormat, GridViewExportMethod> FormatConditionsExportFormatsInfo
+        {
+            get
+            {
+                if (formatConditionsExportFormatsInfo == null)
+                    formatConditionsExportFormatsInfo = CreateFormatConditionsExportFormatsInfo();
+                return formatConditionsExportFormatsInfo;
+            }
+        }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> CreateFormatConditionsExportFormatsInfo()
+        {
+            return new Dictionary<GridViewExportFormat, GridViewExportMethod> {
+                { GridViewExportFormat.Pdf, GridViewExtension.ExportToPdf},
+                { GridViewExportFormat.Xls, (settings, data) => GridViewExtension.ExportToXls(settings, data) },
+                { GridViewExportFormat.Xlsx,
+                    (settings, data) => GridViewExtension.ExportToXlsx(settings, data, new XlsxExportOptionsEx {ExportType = DevExpress.Export.ExportType.WYSIWYG})
+                },
+                { GridViewExportFormat.Rtf, GridViewExtension.ExportToRtf }
+            };
+        }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> advancedBandsExportFormatsInfo;
+        public static Dictionary<GridViewExportFormat, GridViewExportMethod> AdvancedBandsExportFormatsInfo
+        {
+            get
+            {
+                if (advancedBandsExportFormatsInfo == null)
+                    advancedBandsExportFormatsInfo = CreateAdvancedBandsExportFormatsInfo();
+                return advancedBandsExportFormatsInfo;
+            }
+        }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> CreateAdvancedBandsExportFormatsInfo()
+        {
+            return new Dictionary<GridViewExportFormat, GridViewExportMethod> {
+                { GridViewExportFormat.Pdf, GridViewExtension.ExportToPdf },
+                { GridViewExportFormat.Xls, (settings, data) => GridViewExtension.ExportToXls(settings, data, new XlsExportOptionsEx {ExportType = DevExpress.Export.ExportType.WYSIWYG}) },
+                { GridViewExportFormat.Xlsx, (settings, data) => GridViewExtension.ExportToXlsx(settings, data, new XlsxExportOptionsEx {ExportType = DevExpress.Export.ExportType.WYSIWYG}) },
+                { GridViewExportFormat.Rtf, GridViewExtension.ExportToRtf }
+            };
+        }
+        public static string GetExportButtonTitle(GridViewExportFormat format)
+        {
+            if (format == GridViewExportFormat.None)
+                return string.Empty;
+            return string.Format("Export to {0}", format.ToString().ToUpper());
+        }
+        public static GridViewSettings CreateGeneralMasterGridSettings(object DataToBind)
+        {
+            return CreateGeneralMasterGridSettings(GridViewDetailExportMode.None, DataToBind);
+        }
+        public static GridViewSettings CreateGeneralMasterGridSettings(GridViewDetailExportMode exportMode, object DataToBind)
+        {
+            GridViewSettings settings = new GridViewSettings();
+            settings.Name = "masterGrid";
+            settings.Width = Unit.Percentage(100);
+
+            settings.KeyFieldName = "CategoryID";
+            settings.Columns.Add("CategoryID");
+            settings.Columns.Add("CategoryName");
+            settings.Columns.Add("Description");
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "Picture";
+                c.ColumnType = MVCxGridViewColumnType.BinaryImage;
+                BinaryImageEditProperties properties = (BinaryImageEditProperties)c.PropertiesEdit;
+                properties.ImageWidth = 120;
+                properties.ImageHeight = 80;
+                properties.ExportImageSettings.Width = 90;
+                properties.ExportImageSettings.Height = 60;
+            });
+
+            settings.SettingsDetail.ShowDetailRow = true;
+            settings.SettingsDetail.ExportMode = exportMode;
+
+            settings.SettingsExport.GetExportDetailGridViews = (s, e) =>
+            {
+                int categoryID = (int)DataBinder.Eval(e.DataItem, "CategoryID");
+                GridViewExtension grid = new GridViewExtension(CreateGeneralDetailGridSettings(categoryID));
+                grid.Bind(DataToBind);
+                e.DetailGridViews.Add(grid);
+            };
+
+            return settings;
+        }
+        public static GridViewSettings CreateGeneralDetailGridSettings(int uniqueKey)
+        {
+            GridViewSettings settings = new GridViewSettings();
+            settings.Name = "detailGrid" + uniqueKey;
+            settings.Width = Unit.Percentage(100);
+
+            settings.KeyFieldName = "ProductID";
+            settings.Columns.Add("ProductID");
+            settings.Columns.Add("ProductName");
+            settings.Columns.Add("UnitPrice");
+            settings.Columns.Add("QuantityPerUnit");
+
+            settings.SettingsDetail.MasterGridName = "masterGrid";
+
+            return settings;
+        }
+        static GridViewSettings exportGridViewSettings;
+        public static GridViewSettings ExportGridViewSettings
+        {
+            get
+            {
+                if (exportGridViewSettings == null)
+                    exportGridViewSettings = CreateExportGridViewSettings();
+                return exportGridViewSettings;
+            }
+        }
+        static GridViewSettings CreateExportGridViewSettings()
+        {
+            GridViewSettings settings = new GridViewSettings();
+
+            settings.Name = "gvTR";
+            settings.CallbackRouteValues = new { Controller = "Reportes", Action = "TablaTRFPartialView" };
+
+            settings.Width = Unit.Percentage(100);
+            settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+            settings.ControlStyle.Paddings.Padding = Unit.Pixel(0);
+            settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
+            settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
+            settings.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+            settings.ClientSideEvents.BeginCallback = "function (s,e) { lp.Show(); }";
+            settings.ClientSideEvents.EndCallback = "function (s,e) { lp.Hide(); }";
+
+            settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+            settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+            settings.Settings.VerticalScrollableHeight = 400;
+            settings.Width = Unit.Percentage(100);
+
+            settings.SettingsPager.PageSize = 20;
+            settings.SettingsPager.Position = PagerPosition.Bottom;
+            settings.SettingsPager.FirstPageButton.Visible = true;
+            settings.SettingsPager.LastPageButton.Visible = true;
+            settings.SettingsPager.PageSizeItemSettings.Visible = true;
+            settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20", "50", "100" };
+
+            settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+            settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
+            settings.EditFormLayoutProperties.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+            settings.EditFormLayoutProperties.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+
+            settings.Columns.Add(c =>
+            {
+                c.Settings.AllowSort = DefaultBoolean.True;
+                c.FieldName = "Unidad";
+                c.Caption = Resources.ReporteResource.captionUnidad;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.CellStyle.Wrap = DefaultBoolean.True;
+                c.PropertiesEdit.DisplayFormatString = "{0}";
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Width = Unit.Percentage(40);
+            });
+            settings.Columns.AddBand(sb =>
+            {
+                sb.Caption = Resources.ReporteResource.captionValorEscala;
+                sb.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                int Index = 0;
+                List<string> _strEscala = Metodos.GetFuenteEmpresa().Select(t => t.Descripcion).ToList();
+                int pWidth = 60 / _strEscala.Count();
+
+                foreach (string Valor in _strEscala)
+                {
+                    sb.Columns.Add(c =>
+                    {
+                        c.Settings.AllowSort = DefaultBoolean.True;
+                        c.FieldName = "CantidadEscalaUnbound" + Index.ToString();
+                        c.UnboundType = DevExpress.Data.UnboundColumnType.String;
+                        c.Caption = Valor.ToString();
+                        c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                        c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                        c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+                        c.HeaderStyle.Wrap = DefaultBoolean.True;
+                        c.Width = Unit.Percentage(pWidth);
+                    });
+                    Index++;
+                }
+            });
+            settings.CustomUnboundColumnData = (s, e) =>
+            {
+                if (e.Column.FieldName.Contains("CantidadEscalaUnbound"))
+                {
+                    var valores = e.GetListSourceFieldValue("CantidadEscala") as List<Int32>;
+                    int res = 0;
+                    if (valores != null)
+                    {
+                        var ColName = e.Column.FieldName;
+                        int index = int.Parse(e.Column.FieldName.Replace("CantidadEscalaUnbound", ""));
+                        res = valores[index];
+                    }
+                    e.Value = res;
+                }
+            };
+
+            return settings;
+        }
+        public static GridViewSettings ExcelDataAwareExportGridViewSettings
+        {
+            get
+            {
+                GridViewSettings settings = Context[ExcelDataAwareGridViewSettingsKey] as GridViewSettings;
+                if (settings == null)
+                    Context[ExcelDataAwareGridViewSettingsKey] = settings = CreateExcelDataAwareExportGridViewSettings();
+                return settings;
+            }
+        }
+        static GridViewSettings CreateExcelDataAwareExportGridViewSettings()
+        {
+            GridViewSettings settings = new GridViewSettings();
+
+            settings.Name = "gvTR";
+            settings.CallbackRouteValues = new { Controller = "Reportes", Action = "TablaTRFPartialView" };
+
+            settings.Width = Unit.Percentage(100);
+            settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+            settings.ControlStyle.Paddings.Padding = Unit.Pixel(0);
+            settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
+            settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
+            settings.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+            settings.ClientSideEvents.BeginCallback = "function (s,e) { lp.Show(); }";
+            settings.ClientSideEvents.EndCallback = "function (s,e) { lp.Hide(); }";
+
+            settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+            settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+            settings.Settings.VerticalScrollableHeight = 400;
+            settings.Width = Unit.Percentage(100);
+
+            settings.SettingsPager.PageSize = 20;
+            settings.SettingsPager.Position = PagerPosition.Bottom;
+            settings.SettingsPager.FirstPageButton.Visible = true;
+            settings.SettingsPager.LastPageButton.Visible = true;
+            settings.SettingsPager.PageSizeItemSettings.Visible = true;
+            settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20", "50", "100" };
+
+            settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+            settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
+            settings.EditFormLayoutProperties.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+            settings.EditFormLayoutProperties.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+
+            settings.Columns.Add(c =>
+            {
+                c.Settings.AllowSort = DefaultBoolean.True;
+                c.FieldName = "Unidad";
+                c.Caption = Resources.ReporteResource.captionUnidad;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.CellStyle.Wrap = DefaultBoolean.True;
+                c.PropertiesEdit.DisplayFormatString = "{0}";
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Width = Unit.Percentage(40);
+            });
+            settings.Columns.AddBand(sb =>
+            {
+                sb.Caption = Resources.ReporteResource.captionValorEscala;
+                sb.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                int Index = 0;
+                List<string> _strEscala = Metodos.GetFuenteEmpresa().Select(t => t.Descripcion).ToList();
+                int pWidth = 60 / _strEscala.Count();
+
+                foreach (string Valor in _strEscala)
+                {
+                    sb.Columns.Add(c =>
+                    {
+                        c.Settings.AllowSort = DefaultBoolean.True;
+                        c.FieldName = "CantidadEscalaUnbound" + Index.ToString();
+                        c.UnboundType = DevExpress.Data.UnboundColumnType.String;
+                        c.Caption = Valor.ToString();
+                        c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                        c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                        c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+                        c.HeaderStyle.Wrap = DefaultBoolean.True;
+                        c.Width = Unit.Percentage(pWidth);
+                    });
+                    Index++;
+                }
+            });
+            settings.CustomUnboundColumnData = (s, e) =>
+            {
+                if (e.Column.FieldName.Contains("CantidadEscalaUnbound"))
+                {
+                    var valores = e.GetListSourceFieldValue("CantidadEscala") as List<Int32>;
+                    int res = 0;
+                    if (valores != null)
+                    {
+                        var ColName = e.Column.FieldName;
+                        int index = int.Parse(e.Column.FieldName.Replace("CantidadEscalaUnbound", ""));
+                        res = valores[index];
+                    }
+                    e.Value = res;
+                }
+            };
+
+            return settings;
+        }
+        public static GridViewSettings FormatConditionsExportGridViewSettings
+        {
+            get
+            {
+                var settings = Context[FormatConditionsExportGridViewSettingsKey] as GridViewSettings;
+                if (settings == null)
+                    Context[FormatConditionsExportGridViewSettingsKey] = settings = CreateFormatConditionsExportGridViewSettings();
+                return settings;
+            }
+        }
+        static GridViewSettings CreateFormatConditionsExportGridViewSettings()
+        {
+            var settings = new GridViewSettings();
+
+            settings.Name = "gvTR";
+            settings.CallbackRouteValues = new { Controller = "Reportes", Action = "TablaTRFPartialView" };
+
+            settings.Width = Unit.Percentage(100);
+            settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+            settings.ControlStyle.Paddings.Padding = Unit.Pixel(0);
+            settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
+            settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
+            settings.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+            settings.ClientSideEvents.BeginCallback = "function (s,e) { lp.Show(); }";
+            settings.ClientSideEvents.EndCallback = "function (s,e) { lp.Hide(); }";
+
+            settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+            settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+            settings.Settings.VerticalScrollableHeight = 400;
+            settings.Width = Unit.Percentage(100);
+
+            settings.SettingsPager.PageSize = 20;
+            settings.SettingsPager.Position = PagerPosition.Bottom;
+            settings.SettingsPager.FirstPageButton.Visible = true;
+            settings.SettingsPager.LastPageButton.Visible = true;
+            settings.SettingsPager.PageSizeItemSettings.Visible = true;
+            settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20", "50", "100" };
+
+            settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+            settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
+            settings.EditFormLayoutProperties.SettingsAdaptivity.AdaptivityMode = FormLayoutAdaptivityMode.SingleColumnWindowLimit;
+            settings.EditFormLayoutProperties.SettingsAdaptivity.SwitchToSingleColumnAtWindowInnerWidth = 600;
+
+            settings.Columns.Add(c =>
+            {
+                c.Settings.AllowSort = DefaultBoolean.True;
+                c.FieldName = "Unidad";
+                c.Caption = Resources.ReporteResource.captionUnidad;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.CellStyle.Wrap = DefaultBoolean.True;
+                c.PropertiesEdit.DisplayFormatString = "{0}";
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Width = Unit.Percentage(40);
+            });
+            settings.Columns.AddBand(sb =>
+            {
+                sb.Caption = Resources.ReporteResource.captionValorEscala;
+                sb.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                int Index = 0;
+                List<string> _strEscala = Metodos.GetFuenteEmpresa().Select(t => t.Descripcion).ToList();
+                int pWidth = 60 / _strEscala.Count();
+
+                foreach (string Valor in _strEscala)
+                {
+                    sb.Columns.Add(c =>
+                    {
+                        c.Settings.AllowSort = DefaultBoolean.True;
+                        c.FieldName = "CantidadEscalaUnbound" + Index.ToString();
+                        c.UnboundType = DevExpress.Data.UnboundColumnType.String;
+                        c.Caption = Valor.ToString();
+                        c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                        c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                        c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+                        c.HeaderStyle.Wrap = DefaultBoolean.True;
+                        c.Width = Unit.Percentage(pWidth);
+                    });
+                    Index++;
+                }
+            });
+            settings.CustomUnboundColumnData = (s, e) =>
+            {
+                if (e.Column.FieldName.Contains("CantidadEscalaUnbound"))
+                {
+                    var valores = e.GetListSourceFieldValue("CantidadEscala") as List<Int32>;
+                    int res = 0;
+                    if (valores != null)
+                    {
+                        var ColName = e.Column.FieldName;
+                        int index = int.Parse(e.Column.FieldName.Replace("CantidadEscalaUnbound", ""));
+                        res = valores[index];
+                    }
+                    e.Value = res;
+                }
+            };
+
+            return settings;
+        }
+    }
 }

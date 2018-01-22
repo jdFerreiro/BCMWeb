@@ -339,4 +339,10 @@
   <data name="AllDataMale" xml:space="preserve">
     <value> Todos</value>
   </data>
+  <data name="subjectEmailAprobacion" xml:space="preserve">
+    <value>Aprobación del {0} Habilitado</value>
+  </data>
+  <data name="subjectEmailCertificacion" xml:space="preserve">
+    <value>Certificación del {0} Habilitado</value>
+  </data>
 </root>

@@ -61,6 +61,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Por favor, resuelva todos los errores..
+        /// </summary>
+        public static string AllErrors {
+            get {
+                return ResourceManager.GetString("AllErrors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to El usuario ha sido bloqueado. Por favor comuníquese con el administrador..
         /// </summary>
         public static string BloqueadoErrorMessage {

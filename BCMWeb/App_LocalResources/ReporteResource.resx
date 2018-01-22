@@ -304,6 +304,9 @@
     <value>Toda la información que se muestra en los gráficos se corresponde a la última información actualizada o al último año. No existe información histórica.</value>
   </data>
   <data name="TituloTablaRiesgoControl" xml:space="preserve">
-    <value>Tablas de Riesgo según Controles</value>
+    <value>Tabla: Estado de Eventos por Proceso</value>
+  </data>
+  <data name="captionControl" xml:space="preserve">
+    <value>Control</value>
   </data>
 </root>

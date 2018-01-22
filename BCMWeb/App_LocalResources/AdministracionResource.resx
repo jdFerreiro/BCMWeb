@@ -120,19 +120,94 @@
   <data name="botActualizar" xml:space="preserve">
     <value>Actualizar</value>
   </data>
+  <data name="captionBotonActivar" xml:space="preserve">
+    <value>Activar</value>
+  </data>
+  <data name="captionBotonBloquear" xml:space="preserve">
+    <value>Bloquear</value>
+  </data>
+  <data name="captionBotonEditar" xml:space="preserve">
+    <value>Editar</value>
+  </data>
+  <data name="captionBotonEliminar" xml:space="preserve">
+    <value>Eliminar</value>
+  </data>
+  <data name="captionEstatus" xml:space="preserve">
+    <value>Estatus</value>
+  </data>
   <data name="captionFechaDesde" xml:space="preserve">
     <value>Fecha Desde:</value>
   </data>
   <data name="captionFechaHasta" xml:space="preserve">
     <value>Fecha Hasta:</value>
   </data>
+  <data name="captionFechaRegistro" xml:space="preserve">
+    <value>Fecha de Ingreso</value>
+  </data>
+  <data name="captionFechaUltimoEstado" xml:space="preserve">
+    <value>Fecha Último Estado</value>
+  </data>
   <data name="captionModulos" xml:space="preserve">
-    <value>Modulos</value>
+    <value>Modulos Permitidos</value>
+  </data>
+  <data name="captionNombreComercial" xml:space="preserve">
+    <value>Nombre Comercial</value>
+  </data>
+  <data name="captionRegistroFiscal" xml:space="preserve">
+    <value>No. Registro Fiscal</value>
   </data>
   <data name="captionUsuario" xml:space="preserve">
     <value>Usuario:</value>
   </data>
+  <data name="ConfirmActivarMessage" xml:space="preserve">
+    <value>Está seguro de activar la empresa {0}</value>
+  </data>
+  <data name="ConfirmBloquearMessage" xml:space="preserve">
+    <value>Está seguro de bloquear la empresa {0}</value>
+  </data>
+  <data name="ConfirmEliminarMessage" xml:space="preserve">
+    <value>Está seguro de eliminar la empresa {0}</value>
+  </data>
   <data name="itemAllUsers" xml:space="preserve">
     <value>Todos los Usuarios</value>
+  </data>
+  <data name="captionCiudad" xml:space="preserve">
+    <value>Ciudad</value>
+  </data>
+  <data name="captionDireccion" xml:space="preserve">
+    <value>Dirección</value>
+  </data>
+  <data name="captionEstado" xml:space="preserve">
+    <value>Estado</value>
+  </data>
+  <data name="captionFechaInicio" xml:space="preserve">
+    <value>Fecha de Inicio de Actividades</value>
+  </data>
+  <data name="captionLogo" xml:space="preserve">
+    <value>Logotipo</value>
+  </data>
+  <data name="captionNombreFiscal" xml:space="preserve">
+    <value>Nombre Fiscal</value>
+  </data>
+  <data name="captionPais" xml:space="preserve">
+    <value>País</value>
+  </data>
+  <data name="TitleEditEmpresa" xml:space="preserve">
+    <value>Información de la Empresa</value>
+  </data>
+  <data name="TitleEditModulos" xml:space="preserve">
+    <value>Módulos autorizados</value>
+  </data>
+  <data name="captionDescripcionModulo" xml:space="preserve">
+    <value>Descripción del Módulo</value>
+  </data>
+  <data name="captionNombreModulo" xml:space="preserve">
+    <value>Nombre del Módulo</value>
+  </data>
+  <data name="captionSelectModulo" xml:space="preserve">
+    <value>Activo</value>
+  </data>
+  <data name="TitleEditUsuario" xml:space="preserve">
+    <value>Información del Usuario</value>
   </data>
 </root>

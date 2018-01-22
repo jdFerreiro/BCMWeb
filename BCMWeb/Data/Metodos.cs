@@ -1,6 +1,7 @@
 ﻿using BCMWeb.Data.EF;
 using BCMWeb.Models;
 using BCMWeb.Security;
+using DevExpress.Web.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -145,28 +146,22 @@ namespace BCMWeb
 
                 using (Entities db = new Entities())
                 {
-                    List<tblEmpresa> Empresas = (from eu in db.tblEmpresaUsuario
-                                                 where eu.IdUsuario == UserId
-                                                 select eu.tblEmpresa).ToList();
-
-                    if (Empresas != null && Empresas.Count > 0)
-                    {
-                        foreach (tblEmpresa eu in Empresas)
-                        {
-                            Data.Add(new EmpresaModel
+                    Data = (from eu in db.tblEmpresaUsuario
+                            where eu.IdUsuario == UserId
+                            select new EmpresaModel
                             {
-                                Direccion = eu.DireccionAdministrativa,
-                                FechaInicio = eu.FechaInicioActividad,
-                                FechaUltimoEstado = eu.FechaUltimoEstado,
+                                CanDelete = eu.tblEmpresa.tblDocumento.Count() == 0 && eu.tblEmpresa.tblPBEPruebaPlanificacion.Count() == 0 && eu.tblEmpresa.tblIniciativas.Count() == 0,
+                                Direccion = eu.tblEmpresa.DireccionAdministrativa,
+                                FechaInicio = eu.tblEmpresa.FechaInicioActividad,
+                                FechaUltimoEstado = eu.tblEmpresa.FechaUltimoEstado,
                                 IdEmpresa = eu.IdEmpresa,
-                                IdEstatus = eu.IdEstado,
-                                LogoUrl = eu.LogoURL, //String.Format("{0}/PDFDocs/{1}", _AppUrl, eu.LogoURL),
-                                NombreComercial = eu.NombreComercial.Trim(),
-                                NombreFiscal = eu.NombreFiscal.Trim(),
-                                RegistroFiscal = eu.RegistroFiscal
-                            });
-                        }
-                    }
+                                IdEstatus = eu.tblEmpresa.IdEstado,
+                                LogoUrl = eu.tblEmpresa.LogoURL, //String.Format("{0}/PDFDocs/{1}", _AppUrl, eu.LogoURL),
+                                NombreComercial = eu.tblEmpresa.NombreComercial.Trim(),
+                                NombreFiscal = eu.tblEmpresa.NombreFiscal.Trim(),
+                                RegistroFiscal = eu.tblEmpresa.RegistroFiscal
+                            }).ToList();
+
                 }
 
             }
@@ -365,6 +360,7 @@ namespace BCMWeb
             long maxModulo = IdTipoDocumento * 1999999;
             eSystemModules Modulo = (eSystemModules)IdTipoDocumento;
             string TipoDocumento = Modulo.ToString();
+            Session["IdTipoDocumento"] = IdTipoDocumento;
 
             string UserTimeZone = Session["UserTimeZone"].ToString();
             int Horas = int.Parse(UserTimeZone.Split(':').First());
@@ -419,7 +415,8 @@ namespace BCMWeb
                                                                                          .Where(x => x.IdEmpresa == d.IdEmpresa && x.IdDocumento == d.IdDocumento && x.IdTipoDocumento == d.IdTipoDocumento)
                                                                                          .FirstOrDefault().IdUnidadOrganizativa)
                                                                     : true)
-                              select d).AsEnumerable()
+                              select d)
+                                .AsEnumerable()
                                 .Select(d => new DocumentoModel
                                 {
                                     Editable = CanEdit,
@@ -461,50 +458,108 @@ namespace BCMWeb
                                                     Responsable = d.tblBCPDocumento.FirstOrDefault().Responsable,
                                                     Subproceso = d.tblBCPDocumento.FirstOrDefault().SubProceso,
                                                 }),
-                                    Procesos = (d.tblBIADocumento == null || d.tblBIADocumento.Count() == 0 || d.tblBIADocumento.FirstOrDefault().tblBIAProceso == null || d.tblBIADocumento.FirstOrDefault().tblBIAProceso.Count() == 0
-                                                ? null
-                                                : d.tblBIADocumento.FirstOrDefault().tblBIAProceso.AsEnumerable()
-                                                    .Select(x => new DocumentoProcesoModel
-                                                    {
-                                                        Critico = x.Critico ?? false,
-                                                        Descripcion = x.Descripcion,
-                                                        FechaCreacion = (DateTime)x.FechaCreacion,
-                                                        FechaEstatus = (DateTime)x.FechaUltimoEstatus,
-                                                        IdEstatus = x.IdEstadoProceso ?? 0,
-                                                        IdProceso = x.IdProceso,
-                                                        Nombre = x.Nombre,
-                                                        NroProceso = x.NroProceso ?? 0
-                                                    }).ToList()),
+                                    Procesos = GetProcesosDocumento(d),
                                 }).ToList();
             }
 
             return Documentos.OrderBy(x => x.NroDocumento).ThenBy(x => x.Version).ThenBy(x => x.NroVersion).ToList().AsQueryable();
         }
+        private static List<DocumentoProcesoModel> GetProcesosDocumento(tblDocumento d)
+        {
+            switch (d.IdTipoDocumento)
+            {
+                case 4:
+                    if (d.tblBIADocumento == null || d.tblBIADocumento.Count() == 0 || d.tblBIADocumento.FirstOrDefault().tblBIAProceso == null || d.tblBIADocumento.FirstOrDefault().tblBIAProceso.Count() == 0)
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        return d.tblBIADocumento
+                            .FirstOrDefault()
+                            .tblBIAProceso
+                            .AsEnumerable()
+                            .Select(x => new DocumentoProcesoModel
+                            {
+                                Critico = x.Critico ?? false,
+                                Descripcion = x.Descripcion,
+                                FechaCreacion = (DateTime)x.FechaCreacion,
+                                FechaEstatus = (DateTime)x.FechaUltimoEstatus,
+                                IdEstatus = x.IdEstadoProceso ?? 0,
+                                IdProceso = x.IdProceso,
+                                Nombre = x.Nombre,
+                                NroProceso = x.NroProceso ?? 0
+                            }).ToList();
+                    }
+                case 7:
+                    if (d.tblBCPDocumento == null || d.tblBCPDocumento.Count() == 0 || d.tblBCPDocumento.FirstOrDefault().tblBIAProceso == null)
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        List<DocumentoProcesoModel> data = new List<DocumentoProcesoModel>();
+                        tblBIAProceso x = d.tblBCPDocumento.FirstOrDefault().tblBIAProceso;
+                        data.Add(new DocumentoProcesoModel
+                        {
+                            Critico = x.Critico ?? false,
+                            Descripcion = x.Descripcion,
+                            FechaCreacion = (DateTime)x.FechaCreacion,
+                            FechaEstatus = (DateTime)x.FechaUltimoEstatus,
+                            IdEstatus = x.IdEstadoProceso ?? 0,
+                            IdProceso = x.IdProceso,
+                            Nombre = x.Nombre,
+                            NroProceso = x.NroProceso ?? 0
+                        });
+
+                        return data;
+                    }
+                default:
+                    return null;
+            }
+        }
         public static string getStringProcesos(object dataItem)
         {
+            int IdTipoDocumento = int.Parse(Session["IdTipoDocumento"].ToString());
+
             StringBuilder sb = new StringBuilder();
             long IdDocumento = (long)dataItem;
             long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
 
             using (Entities db = new Entities())
             {
-                List<tblBIAProceso> _procesos = (from d in db.tblBIAProceso
-                                                 where d.IdEmpresa == IdEmpresa && d.tblBIADocumento.IdDocumento == IdDocumento
-                                                 select d).ToList();
-
-                _procesos = _procesos.OrderBy(x => x.NroProceso).ToList();
-
-                foreach (tblBIAProceso proceso in _procesos)
+                if (IdTipoDocumento == 4)
                 {
-                    string strItem = string.Format("<tr><td style=\"text-align: center;\">{0}</td><td>{1}</td><td style=\"margin: auto; text-align: center;\">{2}</td></tr>",
-                                                    proceso.NroProceso.ToString(),
-                                                    proceso.Nombre,
-                                                    (!(bool)proceso.Critico ? "<img width=\"15\" src=\"../../Content/Images/boton_Verde.jpg\" />" : "<img width=\"15\" src=\"../../Content/Images/Boton_rojo.png\" />"));
-                    sb.Append(strItem);
-                }
-            }
+                    List<tblBIAProceso> _procesos = (from d in db.tblBIAProceso
+                                                     where d.IdEmpresa == IdEmpresa && d.tblBIADocumento.IdDocumento == IdDocumento
+                                                     select d).ToList();
 
-            return sb.ToString();
+                    _procesos = _procesos.OrderBy(x => x.NroProceso).ToList();
+
+                    foreach (tblBIAProceso proceso in _procesos)
+                    {
+                        string strItem = string.Format("<tr><td style=\"text-align: center;\">{0}</td><td>{1}</td><td style=\"margin: auto; text-align: center;\">{2}</td></tr>",
+                                                        proceso.NroProceso.ToString(),
+                                                        proceso.Nombre,
+                                                        (!(bool)proceso.Critico ? "<img width=\"15\" src=\"../../Content/Images/boton_Verde.jpg\" />" : "<img width=\"15\" src=\"../../Content/Images/Boton_rojo.png\" />"));
+                        sb.Append(strItem);
+                    }
+                }
+                else
+                {
+                    tblBCPDocumento doc = db.tblBCPDocumento.FirstOrDefault(d => d.IdEmpresa == IdEmpresa && d.IdDocumento == IdDocumento);
+                    if (doc != null && doc.tblBIAProceso != null)
+                    {
+                        tblBIAProceso proceso = doc.tblBIAProceso;
+                        string strItem = string.Format("<tr><td style=\"text-align: center;\">{0}</td><td>{1}</td></tr>",
+                                                        proceso.NroProceso.ToString(),
+                                                        proceso.Nombre);
+                        sb.Append(strItem);
+                    }
+                }
+
+                return sb.ToString();
+            }
         }
         public static string ConvertirRuta(object dataItem)
         {
@@ -2207,16 +2262,73 @@ namespace BCMWeb
             int IdClaseDocumento = int.Parse(Session["IdClaseDocumento"].ToString());
             int IdVersion = int.Parse(Session["IdVersion"].ToString());
 
+            tblDocumento documento;
+            List<tblPersona> Personas = new List<tblPersona>();
+
+            string UserID = string.Empty;
+            string Password = string.Empty;
+            string SMTPPort = string.Empty;
+            string Host = string.Empty;
+            string From = string.Empty;
+            EmailManager.AppSettings(out UserID, out Password, out SMTPPort, out Host, out From);
+
             using (Entities db = new Entities())
             {
-                tblDocumento documento = db.tblDocumento.Where(x => x.IdEmpresa == IdEmpresa && x.IdDocumento == IdDocumento && x.IdTipoDocumento == IdTipoDocumento).FirstOrDefault();
+                documento = db.tblDocumento.Where(x => x.IdEmpresa == IdEmpresa && x.IdDocumento == IdDocumento && x.IdTipoDocumento == IdTipoDocumento).FirstOrDefault();
                 documento.IdEstadoDocumento = (int)eEstadoDocumento.PorAprobar;
                 documento.FechaEstadoDocumento = DateTime.UtcNow;
                 documento.FechaUltimaModificacion = DateTime.UtcNow;
                 db.SaveChanges();
-            }
 
-            Auditoria.RegistarAccion(eTipoAccion.IniciarAprobacion);
+                if (documento.IdPersonaResponsable > 0)
+                    Personas.Add(db.tblPersona.FirstOrDefault(x => x.IdEmpresa == IdEmpresa && x.IdPersona == documento.IdPersonaResponsable));
+
+                foreach (tblDocumentoAprobacion _aprobacion in documento.tblDocumentoAprobacion)
+                {
+                    Personas.Add(_aprobacion.tblPersona);
+                }
+
+                string _TipoDocumento = db.tblModulo.FirstOrDefault(x => x.IdEmpresa == IdEmpresa && x.IdModulo == IdModulo).Titulo;
+                string _Subject = string.Format(Resources.DocumentoResource.subjectEmailAprobacion, _TipoDocumento);
+
+                foreach (tblPersona _Persona in Personas)
+                {
+                    string Text = string.Format("Sr(a). {0}", _Persona.Nombre) + Environment.NewLine + Environment.NewLine +
+                        "Queremos informarle que ya ha finalizado el proceso de carga de información para el documento de " +
+                        _TipoDocumento +
+                        "identificado con el número " + documento.NroDocumento.ToString() + ", correspondiente a la empresa" +
+                        db.tblEmpresa.FirstOrDefault(x => x.IdEmpresa == IdEmpresa).NombreComercial + "." +
+                        Environment.NewLine + Environment.NewLine +
+                        "A partir de este momento debe ingresar a nuestro manejador de contenido a través de la dirección" +
+                        "\"<a href=\"http://www.bcmweb.net\">BCMWeb.net</a>\"con sus credenciales para que proceda a la aprobación del documento." +
+                        "En caso de que la información presente alguna incongruencia podrá realizar los ajustes en la sección correspondiente." +
+                        Environment.NewLine + Environment.NewLine + "Saludos Cordiales.";
+
+                    string Html = "<html><body><table style=\"border-collapse:collapse; width:90%; background-color:#f2f2f2\" align=\"center\">" +
+                        "<tr><td><img src=\"cid:Logo-BiaPlus\" width=\"80\"/></td><td style=\"width:100%;\">" +
+                        "<h1>Business Continuity Management</h1></td></tr><tr><td colspan=\"2\" style=\"align-content:center; text-align:center;\">" +
+                        "<h2>Proceso de Aprobación Habilitado</h2></td></tr><tr><td colspan=\"2\">" +
+                        "<table style=\"border-collapse:collapse; width:80%; background-color:#ffffff;\" align=\"center\">" +
+                        "<tr><td>" +
+                        string.Format("Sr(a). {0}", _Persona.Nombre) +
+                        "</td></tr><tr><td colspan=\"2\"><p style=\"text-align:justify;\">" +
+                        "Queremos informarle que ya ha finalizado el proceso de carga de información para el documento de " +
+                        _TipoDocumento +
+                        "identificado con el número " + documento.NroDocumento.ToString() + ", correspondiente a la empresa" +
+                        db.tblEmpresa.FirstOrDefault(x => x.IdEmpresa == IdEmpresa).NombreComercial + "." +
+                        "</p><p>A partir de este momento debe ingresar a nuestro manejador de contenido a través de la dirección" +
+                        "\"<a href=\"http://www.bcmweb.net\">BCMWeb.net</a>\"con sus credenciales para que proceda a la aprobación del documento." +
+                        "</p><p>En caso de que la información presente alguna incongruencia podrá realizar los ajustes en la sección correspondiente." +
+                        "</p><p>&nbsp;</p><p>Saludos Cordiales.</p></td><td style=\"padding-top: 15px\"><img src=\"cid:LogoAplired\" height=\"30\"/></td></tr></table></td></tr></table></body></html>";
+
+                    foreach (tblPersonaCorreo _email in _Persona.tblPersonaCorreo)
+                    {
+                        EmailManager.SendEmail(From, _Subject, Html, Text, _email.Correo, UserID, Password, SMTPPort, Host, false);
+                    }
+
+                    Auditoria.RegistarAccion(eTipoAccion.IniciarAprobacion);
+                }
+            }
         }
         public static List<DocumentoAprobacionModel> GetAprobaciones()
         {
@@ -2386,6 +2498,7 @@ namespace BCMWeb
                 if (AprobacionPendiente == 0)
                 {
                     documento.IdEstadoDocumento = (int)eEstadoDocumento.PorCertificar;
+                    SendEmailCertificadores(IdEmpresa, idDocumento, idTipoDocumento);
                 }
                 else if ((eEstadoDocumento)documento.IdEstadoDocumento == eEstadoDocumento.PorAprobar)
                 {
@@ -2397,6 +2510,72 @@ namespace BCMWeb
             }
             Auditoria.RegistarAccion(eTipoAccion.AprobarDocumento);
         }
+
+        private static void SendEmailCertificadores(long idEmpresa, long idDocumento, long idTipoDocumento)
+        {
+            long IdModulo = idTipoDocumento * 1000000;
+            tblDocumento documento;
+            List<tblPersona> Personas = new List<tblPersona>();
+
+            string UserID = string.Empty;
+            string Password = string.Empty;
+            string SMTPPort = string.Empty;
+            string Host = string.Empty;
+            string From = string.Empty;
+            EmailManager.AppSettings(out UserID, out Password, out SMTPPort, out Host, out From);
+
+            using (Entities db = new Entities())
+            {
+                documento = db.tblDocumento.FirstOrDefault(x => x.IdEmpresa == idEmpresa && x.IdDocumento == idDocumento && x.IdTipoDocumento == idTipoDocumento);
+                if (documento.IdPersonaResponsable > 0)
+                    Personas.Add(db.tblPersona.FirstOrDefault(x => x.IdEmpresa == idEmpresa && x.IdPersona == documento.IdPersonaResponsable));
+
+                foreach (tblDocumentoCertificacion _aprobacion in documento.tblDocumentoCertificacion)
+                {
+                    Personas.Add(_aprobacion.tblPersona);
+                }
+
+                string _TipoDocumento = db.tblModulo.FirstOrDefault(x => x.IdEmpresa == idEmpresa && x.IdModulo == IdModulo).Titulo;
+                string _Subject = string.Format(Resources.DocumentoResource.subjectEmailCertificacion, _TipoDocumento);
+
+                foreach (tblPersona _Persona in Personas)
+                {
+                    string Text = string.Format("Sr(a). {0}", _Persona.Nombre) + Environment.NewLine + Environment.NewLine +
+                        "Queremos informarle que ya ha finalizado el proceso de aprobación del documento de " + _TipoDocumento +
+                        "identificado con el número " + documento.NroDocumento.ToString() + ", correspondiente a la empresa" +
+                        db.tblEmpresa.FirstOrDefault(x => x.IdEmpresa == idEmpresa).NombreComercial + "." +
+                        Environment.NewLine + Environment.NewLine +
+                        "A partir de este momento debe ingresar a nuestro manejador de contenido a través de la dirección" +
+                        "\"<a href=\"http://www.bcmweb.net\">BCMWeb.net</a>\"con sus credenciales para que proceda a la certificación del documento." +
+                        "En caso de que la información presente alguna incongruencia podrá realizar los ajustes en la sección correspondiente." +
+                        Environment.NewLine + Environment.NewLine + "Saludos Cordiales.";
+
+                    string Html = "<html><body><table style=\"border-collapse:collapse; width:90%; background-color:#f2f2f2\" align=\"center\">" +
+                        "<tr><td><img src=\"cid:Logo-BiaPlus\" width=\"80\"/></td><td style=\"width:100%;\">" +
+                        "<h1>Business Continuity Management</h1></td></tr><tr><td colspan=\"2\" style=\"align-content:center; text-align:center;\">" +
+                        "<h2>Proceso de Aprobación Habilitado</h2></td></tr><tr><td colspan=\"2\">" +
+                        "<table style=\"border-collapse:collapse; width:80%; background-color:#ffffff;\" align=\"center\">" +
+                        "<tr><td>" +
+                        string.Format("Sr(a). {0}", _Persona.Nombre) +
+                        "</td></tr><tr><td colspan=\"2\"><p style=\"text-align:justify;\">" +
+                        "Queremos informarle que ya ha finalizado el proceso de aprobación del documento de " + _TipoDocumento +
+                        "identificado con el número " + documento.NroDocumento.ToString() + ", correspondiente a la empresa" +
+                        db.tblEmpresa.FirstOrDefault(x => x.IdEmpresa == idEmpresa).NombreComercial + "." +
+                        "</p><p>A partir de este momento debe ingresar a nuestro manejador de contenido a través de la dirección" +
+                        "\"<a href=\"http://www.bcmweb.net\">BCMWeb.net</a>\"con sus credenciales para que proceda a la certificación del documento." +
+                        "</p><p>En caso de que la información presente alguna incongruencia podrá realizar los ajustes en la sección correspondiente." +
+                        "</p><p>&nbsp;</p><p>Saludos Cordiales.</p></td></tr></table></td></tr></table></body></html>";
+
+                    foreach (tblPersonaCorreo _email in _Persona.tblPersonaCorreo.Where(x => !string.IsNullOrEmpty(x.Correo)).ToList())
+                    {
+                        EmailManager.SendEmail(From, _Subject, Html, Text, _email.Correo, UserID, Password, SMTPPort, Host, false);
+                    }
+
+                    Auditoria.RegistarAccion(eTipoAccion.IniciarAprobacion);
+                }
+            }
+        }
+
         public static void CertificarDocumento(long idDocumento, long idTipoDocumento)
         {
             long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
@@ -3132,6 +3311,39 @@ namespace BCMWeb
             using (Entities db = new Entities())
             {
                 Procesos = db.tblBIAProceso.Where(x => x.IdEmpresa == IdEmpresa)
+                    .Select(x => new DocumentoProcesoModel
+                    {
+                        Critico = x.Critico ?? false,
+                        Descripcion = x.Descripcion,
+                        FechaCreacion = (DateTime)x.FechaCreacion,
+                        FechaEstatus = (DateTime)x.FechaUltimoEstatus,
+                        IdEstatus = x.IdEstadoProceso ?? 0,
+                        IdProceso = x.IdProceso,
+                        Nombre = x.Nombre,
+                        NroProceso = x.NroProceso ?? 0
+                    }).Distinct().ToList();
+            }
+
+            Procesos.Add(new DocumentoProcesoModel
+            {
+                IdProceso = 0,
+                Nombre = Resources.DocumentoResource.AllDataMale,
+                NroProceso = 0
+            });
+
+            return Procesos.OrderBy(x => x.Nombre).ToList();
+        }
+        public static List<DocumentoProcesoModel> GetProcesosBCP()
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            List<DocumentoProcesoModel> Procesos = new List<DocumentoProcesoModel>();
+
+            using (Entities db = new Entities())
+            {
+                List<long> _IdProcesos = db.tblBCPDocumento.Where(x => x.IdEmpresa == IdEmpresa).Select(x => x.IdProceso ?? 0).Distinct().ToList();
+
+                Procesos = db.tblBIAProceso
+                    .Where(x => x.IdEmpresa == IdEmpresa && _IdProcesos.Contains(x.IdProceso))
                     .Select(x => new DocumentoProcesoModel
                     {
                         Critico = x.Critico ?? false,
@@ -4085,7 +4297,7 @@ namespace BCMWeb
 
             return Resultado.OrderBy(x => x.Unidad).ToList();
         }
-        public static object GetProbabilidadEmpresa()
+        public static List<TablasGeneralesModel> GetProbabilidadEmpresa()
         {
             long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
             List<TablasGeneralesModel> Resultado = new List<TablasGeneralesModel>();
@@ -4102,7 +4314,24 @@ namespace BCMWeb
 
             return Resultado;
         }
-        public static object GetImpactoEmpresa()
+        public static List<TablasGeneralesModel> GetSeveridadEmpresa()
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            List<TablasGeneralesModel> Resultado = new List<TablasGeneralesModel>();
+
+            using (Entities db = new Entities())
+            {
+                Resultado = db.tblSeveridadRiesgo.Where(x => x.IdEmpresa == IdEmpresa)
+                    .Select(x => new TablasGeneralesModel
+                    {
+                        Descripcion = x.Nombre,
+                        Valoracion = x.IdSeveridad.ToString()
+                    }).ToList();
+            }
+
+            return Resultado;
+        }
+        public static List<TablasGeneralesModel> GetImpactoEmpresa()
         {
             long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
             List<TablasGeneralesModel> Resultado = new List<TablasGeneralesModel>();
@@ -4119,7 +4348,7 @@ namespace BCMWeb
 
             return Resultado;
         }
-        public static object GetControlEmpresa()
+        public static List<TablasGeneralesModel> GetControlEmpresa()
         {
             long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
             List<TablasGeneralesModel> Resultado = new List<TablasGeneralesModel>();
@@ -4136,7 +4365,7 @@ namespace BCMWeb
 
             return Resultado;
         }
-        public static object GetFuenteEmpresa()
+        public static List<TablasGeneralesModel> GetFuenteEmpresa()
         {
             long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
             List<TablasGeneralesModel> Resultado = new List<TablasGeneralesModel>();
@@ -4162,22 +4391,26 @@ namespace BCMWeb
 
             using (Entities db = new Entities())
             {
-                Resultado = db.tblBIAAmenaza.Where(x => x.IdEmpresa == IdEmpresa && UnidadesOrganizativas.Contains((long)db.tblBIAProceso.Where(y => y.IdEmpresa == IdEmpresa && y.IdDocumentoBia == x.IdDocumentoBIA && y.IdProceso == x.IdProceso).FirstOrDefault().tblBIADocumento.IdUnidadOrganizativa))
+                Resultado = db.tblBIAAmenaza
+                    .Where(x => x.IdEmpresa == IdEmpresa && UnidadesOrganizativas.Contains((long)db.tblBIAProceso.Where(y => y.IdEmpresa == IdEmpresa && y.IdDocumentoBia == x.IdDocumentoBIA && y.IdProceso == x.IdProceso).FirstOrDefault().tblBIADocumento.IdUnidadOrganizativa))
+                    .AsEnumerable()
                     .Select(x => new DataRiesgoControl
                     {
                         Amenaza = x.Descripcion,
                         Control = x.Control ?? 0,
-                        Estado = (int)x.Estado,
+                        IdEstado = x.Estado ?? 0,
+                        Estado = (x.tblControlRiesgo != null && x.tblControlRiesgo.Nombre != null ? x.tblControlRiesgo.Nombre.Trim() : string.Empty),
                         Evento = x.Evento,
                         Impacto = x.Impacto ?? 0,
                         Implantado = x.TipoControlImplantado,
                         Implantar = x.ControlesImplantar,
                         NroProceso = (int)db.tblBIAProceso.Where(y => y.IdEmpresa == x.IdEmpresa && y.IdDocumentoBia == x.IdDocumentoBIA && y.IdProceso == x.IdProceso).FirstOrDefault().NroProceso,
                         Probabilidad = x.Probabilidad ?? 0,
+                        Proceso = x.tblBIAProceso.Nombre,
                     }).ToList();
             }
 
-            return Resultado;
+            return Resultado.OrderBy(x => x.NroProceso).ThenBy(x => x.Amenaza).ToList();
         }
         private static List<long> GetUnidadesDependientes(long idUnidadOrganizativa)
         {
@@ -4229,6 +4462,295 @@ namespace BCMWeb
 
             Session["IdEmpresa"] = _IdEmpresa;
         }
+
+        public static object GetNroProcesosByRiesgoProbabilidad()
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            List<objCantidadIO> Resultado = new List<objCantidadIO>();
+
+            using (Entities db = new Entities())
+            {
+                var objData = (from d in db.tblBIAAmenaza
+                               let Escala = d.tblProbabilidadRiesgo.IdProbabilidad
+                               where d.IdEmpresa == IdEmpresa && db.tblBIAProceso.Where(x => x.IdEmpresa == IdEmpresa && x.IdDocumentoBia == d.IdDocumentoBIA && x.IdProceso == d.IdProceso).FirstOrDefault() != null
+                               group d by new
+                               {
+                                   db.tblBIAProceso.Where(x => x.IdEmpresa == IdEmpresa && x.IdDocumentoBia == d.IdDocumentoBIA && x.IdProceso == d.IdProceso).FirstOrDefault().tblBIADocumento.IdUnidadOrganizativa,
+                                   Escala
+                               } into gcs
+                               select new
+                               {
+                                   IdUnidad = (long)gcs.Key.IdUnidadOrganizativa,
+                                   ValorEscala = gcs.Key.Escala,
+                                   CantidadEscala = gcs.Count()
+                               }).ToList();
+
+                foreach (var objInfo in objData)
+                {
+                    objCantidadIO objRes;
+                    long IdUnidadPrincipal = GetUnidadPrincipal(objInfo.IdUnidad);
+                    objRes = Resultado.Find(delegate (objCantidadIO objCIO)
+                    {
+                        return (objCIO.IdUnidad == IdUnidadPrincipal);
+                    });
+                    if (objRes == null)
+                    {
+                        objRes = new objCantidadIO();
+
+                        objRes.ValorEscala = db.tblProbabilidadRiesgo
+                            .Where(x => x.IdEmpresa == IdEmpresa)
+                            .OrderBy(x => x.IdProbabilidad)
+                            .Select(x => x.IdProbabilidad)
+                            .Distinct().ToList();
+
+                        objRes.Escala = db.tblProbabilidadRiesgo
+                            .Where(x => x.IdEmpresa == IdEmpresa)
+                            .OrderBy(x => x.IdProbabilidad)
+                            .Select(x => x.EtiquetaGrafico)
+                            .Distinct().ToList();
+
+                        objRes.IdUnidad = IdUnidadPrincipal;
+                        objRes.CantidadEscala = (new Int32[objRes.ValorEscala.Count]).ToList();
+                        Resultado.Add(objRes);
+                    }
+                    var search = new ValorEscalaSearch(objInfo.ValorEscala);
+                    int pos = objRes.ValorEscala.FindIndex(search.Exists);
+                    objRes.CantidadEscala[pos] += objInfo.CantidadEscala;
+                }
+            }
+
+            return Resultado.Where(x => !string.IsNullOrEmpty(x.Unidad)).OrderBy(x => x.Unidad).ToList();
+        }
+        public static object GetNroProcesosByRiesgoImpacto()
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            List<objCantidadIO> Resultado = new List<objCantidadIO>();
+
+            using (Entities db = new Entities())
+            {
+                var objData = (from d in db.tblBIAAmenaza
+                               let Escala = d.tblImpactoRiesgo.IdImpacto
+                               where d.IdEmpresa == IdEmpresa && db.tblBIAProceso.Where(x => x.IdEmpresa == IdEmpresa && x.IdDocumentoBia == d.IdDocumentoBIA && x.IdProceso == d.IdProceso).FirstOrDefault() != null
+                               group d by new
+                               {
+                                   db.tblBIAProceso.Where(x => x.IdEmpresa == IdEmpresa && x.IdDocumentoBia == d.IdDocumentoBIA && x.IdProceso == d.IdProceso).FirstOrDefault().tblBIADocumento.IdUnidadOrganizativa,
+                                   Escala
+                               } into gcs
+                               select new
+                               {
+                                   IdUnidad = (long)gcs.Key.IdUnidadOrganizativa,
+                                   ValorEscala = gcs.Key.Escala,
+                                   CantidadEscala = gcs.Count()
+                               }).ToList();
+
+                foreach (var objInfo in objData)
+                {
+                    objCantidadIO objRes;
+                    long IdUnidadPrincipal = GetUnidadPrincipal(objInfo.IdUnidad);
+                    objRes = Resultado.Find(delegate (objCantidadIO objCIO)
+                    {
+                        return (objCIO.IdUnidad == IdUnidadPrincipal);
+                    });
+                    if (objRes == null)
+                    {
+                        objRes = new objCantidadIO();
+
+                        objRes.ValorEscala = db.tblImpactoRiesgo
+                            .Where(x => x.IdEmpresa == IdEmpresa)
+                            .OrderBy(x => x.IdImpacto)
+                            .Select(x => x.IdImpacto)
+                            .Distinct().ToList();
+
+                        objRes.Escala = db.tblImpactoRiesgo
+                            .Where(x => x.IdEmpresa == IdEmpresa)
+                            .OrderBy(x => x.IdImpacto)
+                            .Select(x => x.Nombre)
+                            .Distinct().ToList();
+
+                        objRes.IdUnidad = IdUnidadPrincipal;
+                        objRes.CantidadEscala = (new Int32[objRes.ValorEscala.Count]).ToList();
+                        Resultado.Add(objRes);
+                    }
+                    var search = new ValorEscalaSearch(objInfo.ValorEscala);
+                    int pos = objRes.ValorEscala.FindIndex(search.Exists);
+                    objRes.CantidadEscala[pos] += objInfo.CantidadEscala;
+                }
+            }
+
+            return Resultado.Where(x => !string.IsNullOrEmpty(x.Unidad)).OrderBy(x => x.Unidad).ToList();
+        }
+        public static object GetNroProcesosByRiesgoSeveridad()
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            List<objCantidadIO> Resultado = new List<objCantidadIO>();
+
+            using (Entities db = new Entities())
+            {
+                var objData = (from d in db.tblBIAAmenaza
+                               let Escala = d.tblSeveridadRiesgo.IdSeveridad
+                               where d.IdEmpresa == IdEmpresa && db.tblBIAProceso.Where(x => x.IdEmpresa == IdEmpresa && x.IdDocumentoBia == d.IdDocumentoBIA && x.IdProceso == d.IdProceso).FirstOrDefault() != null
+                               group d by new
+                               {
+                                   db.tblBIAProceso.Where(x => x.IdEmpresa == IdEmpresa && x.IdDocumentoBia == d.IdDocumentoBIA && x.IdProceso == d.IdProceso).FirstOrDefault().tblBIADocumento.IdUnidadOrganizativa,
+                                   Escala
+                               } into gcs
+                               select new
+                               {
+                                   IdUnidad = (long)gcs.Key.IdUnidadOrganizativa,
+                                   ValorEscala = gcs.Key.Escala,
+                                   CantidadEscala = gcs.Count()
+                               }).ToList();
+
+                foreach (var objInfo in objData)
+                {
+                    objCantidadIO objRes;
+                    long IdUnidadPrincipal = GetUnidadPrincipal(objInfo.IdUnidad);
+                    objRes = Resultado.Find(delegate (objCantidadIO objCIO)
+                    {
+                        return (objCIO.IdUnidad == IdUnidadPrincipal);
+                    });
+                    if (objRes == null)
+                    {
+                        objRes = new objCantidadIO();
+
+                        objRes.ValorEscala = db.tblSeveridadRiesgo
+                            .Where(x => x.IdEmpresa == IdEmpresa)
+                            .OrderBy(x => x.IdSeveridad)
+                            .Select(x => x.IdSeveridad)
+                            .Distinct().ToList();
+
+                        objRes.Escala = db.tblSeveridadRiesgo
+                            .Where(x => x.IdEmpresa == IdEmpresa)
+                            .OrderBy(x => x.IdSeveridad)
+                            .Select(x => x.Nombre)
+                            .Distinct().ToList();
+
+                        objRes.IdUnidad = IdUnidadPrincipal;
+                        objRes.CantidadEscala = (new Int32[objRes.ValorEscala.Count]).ToList();
+                        Resultado.Add(objRes);
+                    }
+                    var search = new ValorEscalaSearch(objInfo.ValorEscala);
+                    int pos = objRes.ValorEscala.FindIndex(search.Exists);
+                    objRes.CantidadEscala[pos] += objInfo.CantidadEscala;
+                }
+            }
+
+            return Resultado.Where(x => !string.IsNullOrEmpty(x.Unidad)).OrderBy(x => x.Unidad).ToList();
+        }
+        public static object GetNroProcesosByRiesgoFuente()
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            List<objCantidadFuente> Resultado = new List<objCantidadFuente>();
+
+            using (Entities db = new Entities())
+            {
+                var objData = (from d in db.tblBIAAmenaza
+                               let Escala = d.tblFuenteRiesgo.CodigoFuente
+                               where d.IdEmpresa == IdEmpresa && db.tblBIAProceso.Where(x => x.IdEmpresa == IdEmpresa && x.IdDocumentoBia == d.IdDocumentoBIA && x.IdProceso == d.IdProceso).FirstOrDefault() != null
+                               group d by new
+                               {
+                                   db.tblBIAProceso.Where(x => x.IdEmpresa == IdEmpresa && x.IdDocumentoBia == d.IdDocumentoBIA && x.IdProceso == d.IdProceso).FirstOrDefault().tblBIADocumento.IdUnidadOrganizativa,
+                                   Escala
+                               } into gcs
+                               select new
+                               {
+                                   IdUnidad = (long)gcs.Key.IdUnidadOrganizativa,
+                                   ValorEscala = gcs.Key.Escala,
+                                   CantidadEscala = gcs.Count()
+                               }).ToList();
+
+                foreach (var objInfo in objData)
+                {
+                    objCantidadFuente objRes;
+                    long IdUnidadPrincipal = GetUnidadPrincipal(objInfo.IdUnidad);
+                    objRes = Resultado.Find(delegate (objCantidadFuente objCIO) { return objCIO.IdUnidad == IdUnidadPrincipal; });
+                    if (objRes == null)
+                    {
+                        objRes = new objCantidadFuente();
+
+                        objRes.ValorEscala = db.tblFuenteRiesgo
+                            .Where(x => x.IdEmpresa == IdEmpresa)
+                            .OrderBy(x => x.CodigoFuente)
+                            .Select(x => x.CodigoFuente)
+                            .Distinct().ToList();
+
+                        objRes.Escala = db.tblFuenteRiesgo
+                            .Where(x => x.IdEmpresa == IdEmpresa)
+                            .OrderBy(x => x.CodigoFuente)
+                            .Select(x => x.Nombre)
+                            .Distinct().ToList();
+
+                        objRes.IdUnidad = IdUnidadPrincipal;
+                        objRes.CantidadEscala = (new Int32[objRes.ValorEscala.Count]).ToList();
+                        Resultado.Add(objRes);
+                    }
+                    var search = new ValorStringSearch(objInfo.ValorEscala.ToUpperInvariant());
+                    int pos = objRes.ValorEscala.FindIndex(search.Exists);
+                    objRes.CantidadEscala[pos] += objInfo.CantidadEscala;
+                }
+            }
+
+            return Resultado.Where(x => !string.IsNullOrEmpty(x.Unidad)).OrderBy(x => x.Unidad).ToList();
+        }
+        public static object GetNroProcesosByRiesgoControl()
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            List<objCantidadIO> Resultado = new List<objCantidadIO>();
+
+            using (Entities db = new Entities())
+            {
+                var objData = (from d in db.tblBIAAmenaza
+                               let Escala = d.tblControlRiesgo.IdControl
+                               where d.IdEmpresa == IdEmpresa && db.tblBIAProceso.Where(x => x.IdEmpresa == IdEmpresa && x.IdDocumentoBia == d.IdDocumentoBIA && x.IdProceso == d.IdProceso).FirstOrDefault() != null
+                               group d by new
+                               {
+                                   db.tblBIAProceso.Where(x => x.IdEmpresa == IdEmpresa && x.IdDocumentoBia == d.IdDocumentoBIA && x.IdProceso == d.IdProceso).FirstOrDefault().tblBIADocumento.IdUnidadOrganizativa,
+                                   Escala
+                               } into gcs
+                               select new
+                               {
+                                   IdUnidad = (long)gcs.Key.IdUnidadOrganizativa,
+                                   ValorEscala = gcs.Key.Escala,
+                                   CantidadEscala = gcs.Count()
+                               }).ToList();
+
+                foreach (var objInfo in objData)
+                {
+                    objCantidadIO objRes;
+                    long IdUnidadPrincipal = GetUnidadPrincipal(objInfo.IdUnidad);
+                    objRes = Resultado.Find(delegate (objCantidadIO objCIO)
+                    {
+                        return (objCIO.IdUnidad == IdUnidadPrincipal);
+                    });
+                    if (objRes == null)
+                    {
+                        objRes = new objCantidadIO();
+
+                        objRes.ValorEscala = db.tblControlRiesgo
+                            .Where(x => x.IdEmpresa == IdEmpresa)
+                            .OrderBy(x => x.IdControl)
+                            .Select(x => x.IdControl)
+                            .Distinct().ToList();
+
+                        objRes.Escala = db.tblControlRiesgo
+                            .Where(x => x.IdEmpresa == IdEmpresa)
+                            .OrderBy(x => x.IdControl)
+                            .Select(x => x.Nombre)
+                            .Distinct().ToList();
+
+                        objRes.IdUnidad = IdUnidadPrincipal;
+                        objRes.CantidadEscala = (new Int32[objRes.ValorEscala.Count]).ToList();
+                        Resultado.Add(objRes);
+                    }
+                    var search = new ValorEscalaSearch(objInfo.ValorEscala);
+                    int pos = objRes.ValorEscala.FindIndex(search.Exists);
+                    objRes.CantidadEscala[pos] += objInfo.CantidadEscala;
+                }
+            }
+
+            return Resultado.Where(x => !string.IsNullOrEmpty(x.Unidad)).OrderBy(x => x.Unidad).ToList();
+        }
+
         public static object GetDataGraficoRiesgoProbabilidad()
         {
             long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
@@ -7221,6 +7743,39 @@ namespace BCMWeb
             return data.OrderBy(x => x.Descripcion).ToList();
 
         }
+        public static List<TablaModel> GetResponsablesTipoDocumento(int IdTipoDocumento)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdClaseDocumento = int.Parse(Session["IdClaseDocumento"].ToString());
+            List<TablaModel> data = new List<TablaModel>();
+
+            using (Entities db = new Entities())
+            {
+
+                List<long> _Responsables = db.tblDocumento
+                    .Where(x => x.IdEmpresa == IdEmpresa && x.IdTipoDocumento == IdTipoDocumento && x.Negocios == (IdClaseDocumento == 1))
+                    .Select(x => x.IdPersonaResponsable).Distinct().ToList();
+
+                data = db.tblPersona
+                    .Where(x => x.IdEmpresa == IdEmpresa && _Responsables.Contains(x.IdPersona))
+                    .AsEnumerable()
+                    .Select(to => new TablaModel
+                    {
+                        Descripcion = string.IsNullOrEmpty(to.Nombre) ? string.Format("Responsable Id {0}", to.IdPersona.ToString()) : to.Nombre,
+                        Id = to.IdPersona
+                    }).ToList();
+
+            }
+
+            data.Add(new TablaModel
+            {
+                Id = 0,
+                Descripcion = Resources.DocumentoResource.AllDataMale,
+            });
+
+            return data.OrderBy(x => x.Descripcion).ToList();
+
+        }
         public static IList<UnidadOrganizativaModel> GetUnidadesOrganizativasByUser(bool forFilter)
         {
             List<UnidadOrganizativaModel> Data = new List<UnidadOrganizativaModel>();
@@ -7236,6 +7791,39 @@ namespace BCMWeb
                         IdUnidad = x.tblUnidadOrganizativa.IdUnidadOrganizativa,
                         IdUnidadPadre = x.tblUnidadOrganizativa.IdUnidadPadre,
                         NombreUnidadOrganizativa = x.tblUnidadOrganizativa.Nombre
+                    }).ToList();
+            }
+
+            if (forFilter)
+            {
+                Data.Add(new UnidadOrganizativaModel
+                {
+                    IdUnidad = 0,
+                    IdUnidadPadre = 0,
+                    NombreUnidadOrganizativa = Resources.DocumentoResource.AllDataFemale,
+                });
+            }
+
+            return Data.OrderBy(x => x.NombreUnidadOrganizativa).ToList();
+        }
+        public static IList<UnidadOrganizativaModel> GetUnidadesOrganizativasBCPByUser(bool forFilter)
+        {
+            List<UnidadOrganizativaModel> Data = new List<UnidadOrganizativaModel>();
+
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            long IdUser = long.Parse(Session["UserId"].ToString());
+
+            using (Entities db = new Entities())
+            {
+                List<long> _IdUnidades = db.tblBCPDocumento.Where(x => x.IdEmpresa == IdEmpresa).Select(x => x.IdUnidadOrganizativa ?? 0).Distinct().ToList();
+
+                Data = db.tblUnidadOrganizativa
+                    .Where(x => x.IdEmpresa == IdEmpresa && _IdUnidades.Contains(x.IdUnidadOrganizativa))
+                    .Select(x => new UnidadOrganizativaModel()
+                    {
+                        IdUnidad = x.IdUnidadOrganizativa,
+                        IdUnidadPadre = x.IdUnidadPadre,
+                        NombreUnidadOrganizativa = x.Nombre
                     }).ToList();
             }
 
@@ -7314,7 +7902,679 @@ namespace BCMWeb
 
             return _CanActivate;
         }
+        public static EmpresaModel GetEmpresa(long idEmpresa)
+        {
+            EmpresaModel data = new EmpresaModel();
 
+            using (Entities db = new Entities())
+            {
+                data = db.tblEmpresa.Where(x => x.IdEmpresa == idEmpresa)
+                    .Select(x => new EmpresaModel
+                    {
+                        CanDelete = x.tblDocumento.Count() == 0 && x.tblPBEPruebaPlanificacion.Count() == 0 && x.tblIniciativas.Count() == 0,
+                        Direccion = x.DireccionAdministrativa,
+                        FechaInicio = x.FechaInicioActividad,
+                        FechaUltimoEstado = x.FechaUltimoEstado,
+                        IdEmpresa = x.IdEmpresa,
+                        IdCiudad = x.IdPaisEstadoCiudad ?? 0,
+                        IdEstado = x.IdPaisEstado ?? 0,
+                        IdEstatus = x.IdEstado,
+                        IdPais = x.IdPais ?? 0,
+                        LogoUrl = x.LogoURL,
+                        NombreComercial = x.NombreComercial,
+                        NombreFiscal = x.NombreFiscal,
+                        RegistroFiscal = x.RegistroFiscal,
+                    }).FirstOrDefault();
+            }
+
+            return data;
+        }
+        public static EmpresaModel ActualizarEmpresa(EmpresaModel data)
+        {
+            data.ErrorUpdating = string.Empty;
+
+            using (Entities db = new Entities())
+            {
+                try
+                {
+                    if (data.IdEmpresa == -1)
+                    {
+                        tblEmpresa reg = new tblEmpresa
+                        {
+                            CrearAplicaciones = true,
+                            CrearDocumento = true,
+                            CrearProcesos = true,
+                            CrearUnidadOrganizativa = true,
+                            CrearUnidadTrabajo = true,
+                            DireccionAdministrativa = data.Direccion,
+                            FechaInicioActividad = data.FechaInicio,
+                            FechaUltimoEstado = DateTime.UtcNow,
+                            IdEstado = 1,
+                            IdPais = data.IdPais,
+                            IdPaisEstado = data.IdEstado,
+                            IdPaisEstadoCiudad = data.IdCiudad,
+                            LogoURL = data.LogoUrl,
+                            NombreComercial = data.NombreComercial,
+                            NombreFiscal = data.NombreFiscal,
+                            RegistroFiscal = data.RegistroFiscal,
+                        };
+
+                        db.tblEmpresa.Add(reg);
+                        db.SaveChanges();
+
+                        data.IdEmpresa = reg.IdEmpresa;
+
+                        List<tblEmpresaUsuario> _UsuarioAdmin = db.tblEmpresaUsuario.Where(x => x.IdEmpresa == 0 && x.IdNivelUsuario == 6).ToList();
+                        foreach (tblEmpresaUsuario _empresaUsuario in _UsuarioAdmin)
+                        {
+                            tblEmpresaUsuario _regEmpresaUsuario = new tblEmpresaUsuario
+                            {
+                                FechaCreacion = DateTime.UtcNow,
+                                IdEmpresa = reg.IdEmpresa,
+                                IdNivelUsuario = _empresaUsuario.IdNivelUsuario,
+                                IdUsuario = _empresaUsuario.IdUsuario,
+                            };
+
+                            db.tblEmpresaUsuario.Add(_regEmpresaUsuario);
+                            foreach (tblModulo_Usuario _moduloUsuario in db.tblModulo_Usuario.Where(x => x.IdEmpresa == 0 && x.IdUsuario == _empresaUsuario.IdUsuario).ToList())
+                            {
+                                tblModulo_Usuario _regModuloUsuario = new tblModulo_Usuario
+                                {
+                                    Actualizar = _moduloUsuario.Actualizar,
+                                    Eliminar = _moduloUsuario.Eliminar,
+                                    IdEmpresa = reg.IdEmpresa,
+                                    IdModulo = _moduloUsuario.IdModulo,
+                                    IdUsuario = _empresaUsuario.IdUsuario,
+                                };
+                                db.tblModulo_Usuario.Add(_regModuloUsuario);
+                            }
+                        }
+
+                        foreach (tblModulo modulo in db.tblModulo.Where(x => x.IdEmpresa == 0).ToList())
+                        {
+                            db.tblModulo.Add(new tblModulo
+                            {
+                                IdEmpresa = reg.IdEmpresa,
+                                IdModulo = modulo.IdModulo,
+                                Accion = modulo.Accion,
+                                Activo = modulo.Activo,
+                                Controller = modulo.Controller,
+                                Descripcion = modulo.Descripcion,
+                                IdCodigoModulo = modulo.IdCodigoModulo,
+                                IdModuloPadre = modulo.IdModuloPadre,
+                                IdTipoElemento = modulo.IdTipoElemento,
+                                imageRoot = modulo.imageRoot,
+                                Negocios = modulo.Negocios,
+                                Nombre = modulo.Nombre,
+                                Tecnologia = modulo.Tecnologia,
+                                Titulo = modulo.Titulo,
+                            });
+
+                        }
+
+                    }
+                    else
+                    {
+                        tblEmpresa reg = db.tblEmpresa.FirstOrDefault(x => x.IdEmpresa == data.IdEmpresa);
+                        reg.DireccionAdministrativa = data.Direccion;
+                        reg.FechaInicioActividad = data.FechaInicio;
+                        reg.IdPais = data.IdPais;
+                        reg.IdPaisEstado = data.IdEstado;
+                        reg.IdPaisEstadoCiudad = data.IdCiudad;
+                        reg.LogoURL = data.LogoUrl;
+                        reg.NombreComercial = data.NombreComercial;
+                        reg.NombreFiscal = data.NombreFiscal;
+                        reg.RegistroFiscal = data.RegistroFiscal;
+                    }
+
+                    db.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    data.ErrorUpdating = ex.Message;
+                }
+            }
+
+            return data;
+        }
+        public static bool DeleteEmpresa(long IdEmpresa)
+        {
+            bool done = false;
+            using (Entities db = new Entities())
+            {
+                try
+                {
+                    tblEmpresa reg = db.tblEmpresa.FirstOrDefault(x => x.IdEmpresa == IdEmpresa);
+                    db.tblAuditoria.RemoveRange(reg.tblAuditoria);
+                    db.tblAuditoriaProcesoCritico.RemoveRange(reg.tblAuditoriaProcesoCritico);
+                    db.tblBCPReanudacionPersonaClave.RemoveRange(db.tblBCPReanudacionPersonaClave.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBCPReanudacionTareaActividad.RemoveRange(db.tblBCPReanudacionTareaActividad.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBCPReanudacionTarea.RemoveRange(db.tblBCPReanudacionTarea.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBCPRecuperacionPersonaClave.RemoveRange(db.tblBCPRecuperacionPersonaClave.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBCPRecuperacionRecurso.RemoveRange(db.tblBCPRecuperacionRecurso.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBCPRespuestaAccion.RemoveRange(db.tblBCPRespuestaAccion.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBCPRespuestaRecurso.RemoveRange(db.tblBCPRespuestaRecurso.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBCPRestauracionEquipo.RemoveRange(db.tblBCPRestauracionEquipo.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBCPRestauracionInfraestructura.RemoveRange(db.tblBCPRestauracionInfraestructura.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBCPRestauracionMobiliario.RemoveRange(db.tblBCPRestauracionMobiliario.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBCPRestauracionOtro.RemoveRange(db.tblBCPRestauracionOtro.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBCPDocumento.RemoveRange(db.tblBCPDocumento.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBIAAmenaza.RemoveRange(db.tblBIAAmenaza.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBIAAmenazaEvento.RemoveRange(db.tblBIAAmenazaEvento.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBIAAplicacion.RemoveRange(db.tblBIAAplicacion.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBIACadenaServicio.RemoveRange(db.tblBIACadenaServicio.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBIAClienteProceso.RemoveRange(db.tblBIAClienteProceso.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBIAComentario.RemoveRange(db.tblBIAComentario.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBIADocumentacion.RemoveRange(db.tblBIADocumentacion.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBIAEntrada.RemoveRange(db.tblBIAEntrada.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBIAEventoControl.RemoveRange(db.tblBIAEventoControl.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBIAEventoRiesgo.RemoveRange(db.tblBIAEventoRiesgo.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBIAGranImpacto.RemoveRange(db.tblBIAGranImpacto.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBIAImpactoFinanciero.RemoveRange(db.tblBIAImpactoFinanciero.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBIAImpactoOperacional.RemoveRange(db.tblBIAImpactoOperacional.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBIAInterdependencia.RemoveRange(db.tblBIAInterdependencia.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBIAMTD.RemoveRange(db.tblBIAMTD.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBIAPersonaClave.RemoveRange(db.tblBIAPersonaClave.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBIAPersonaRespaldoProceso.RemoveRange(db.tblBIAPersonaRespaldoProceso.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBIAProcesoAlterno.RemoveRange(db.tblBIAProcesoAlterno.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBIAProveedor.RemoveRange(db.tblBIAProveedor.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBIARespaldoPrimario.RemoveRange(db.tblBIARespaldoPrimario.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBIARespaldoSecundario.RemoveRange(db.tblBIARespaldoSecundario.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBIARPO.RemoveRange(db.tblBIARPO.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBIARTO.RemoveRange(db.tblBIARTO.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBIAUnidadTrabajoPersonas.RemoveRange(db.tblBIAUnidadTrabajoPersonas.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBIAUnidadTrabajoProceso.RemoveRange(db.tblBIAUnidadTrabajoProceso.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBIAUnidadTrabajo.RemoveRange(db.tblBIAUnidadTrabajo.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBIAWRT.RemoveRange(db.tblBIAWRT.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBIAProceso.RemoveRange(db.tblBIAProceso.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblBIADocumento.RemoveRange(db.tblBIADocumento.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblCargo.RemoveRange(db.tblCargo.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblControlRiesgo.RemoveRange(db.tblControlRiesgo.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblCriticidad.RemoveRange(db.tblCriticidad.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblDocumentoPersonaClave.RemoveRange(db.tblDocumentoPersonaClave.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblDocumentoEntrevistaPersona.RemoveRange(db.tblDocumentoEntrevistaPersona.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblDocumentoEntrevista.RemoveRange(db.tblDocumentoEntrevista.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblDocumentoContenido.RemoveRange(db.tblDocumentoContenido.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblDocumentoCertificacion.RemoveRange(db.tblDocumentoCertificacion.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblDocumentoAprobacion.RemoveRange(db.tblDocumentoAprobacion.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblDocumentoAnexo.RemoveRange(db.tblDocumentoAnexo.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblDocumento.RemoveRange(db.tblDocumento.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblEmpresaModulo.RemoveRange(db.tblEmpresaModulo.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblEscala.RemoveRange(db.tblEscala.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblFuenteRiesgo.RemoveRange(db.tblFuenteRiesgo.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblImpactoRiesgo.RemoveRange(db.tblImpactoRiesgo.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblIniciativaPrioridad.RemoveRange(db.tblIniciativaPrioridad.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblIniciativaResponsable.RemoveRange(db.tblIniciativaResponsable.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblIniciativas_Anexo.RemoveRange(db.tblIniciativas_Anexo.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblIniciativas.RemoveRange(db.tblIniciativas.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblLocalidad.RemoveRange(db.tblLocalidad.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblModuloAnexo.RemoveRange(db.tblModuloAnexo.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblModulo_NivelUsuario.RemoveRange(db.tblModulo_NivelUsuario.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblModuloAnexo.RemoveRange(db.tblModuloAnexo.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblModulo.RemoveRange(db.tblModulo.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblPBEPruebaEjecucionResultado.RemoveRange(db.tblPBEPruebaEjecucionResultado.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblPBEPruebaEjecucionParticipante.RemoveRange(db.tblPBEPruebaEjecucionParticipante.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblPBEPruebaEjecucionEjercicioRecurso.RemoveRange(db.tblPBEPruebaEjecucionEjercicioRecurso.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblPBEPruebaEjecucionEjercicioParticipante.RemoveRange(db.tblPBEPruebaEjecucionEjercicioParticipante.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblPBEPruebaEjecucionEjercicio.RemoveRange(db.tblPBEPruebaEjecucionEjercicio.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblPBEPruebaEjecucion.RemoveRange(db.tblPBEPruebaEjecucion.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblPBEPruebaPlanificacionParticipante.RemoveRange(db.tblPBEPruebaPlanificacionParticipante.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblPBEPruebaPlanificacionEjercicioRecurso.RemoveRange(db.tblPBEPruebaPlanificacionEjercicioRecurso.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblPBEPruebaPlanificacionEjercicioParticipante.RemoveRange(db.tblPBEPruebaPlanificacionEjercicioParticipante.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblPBEPruebaPlanificacionEjercicio.RemoveRange(db.tblPBEPruebaPlanificacionEjercicio.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblPBEPruebaPlanificacion.RemoveRange(db.tblPBEPruebaPlanificacion.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblPersonaCorreo.RemoveRange(db.tblPersonaCorreo.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblPersonaDireccion.RemoveRange(db.tblPersonaDireccion.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblPersonaTelefono.RemoveRange(db.tblPersonaTelefono.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblPersona.RemoveRange(db.tblPersona.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblPlanTrabajoAuditoria.RemoveRange(db.tblPlanTrabajoAuditoria.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblPlanTrabajoAccion.RemoveRange(db.tblPlanTrabajoAccion.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblPlanTrabajo.RemoveRange(db.tblPlanTrabajo.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblPMTMensajeActualizacion.RemoveRange(db.tblPMTMensajeActualizacion.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblPMTProgramacionDocumentos.RemoveRange(db.tblPMTProgramacionDocumentos.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblPMTResponsableUpdate_Correo.RemoveRange(db.tblPMTResponsableUpdate_Correo.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblPPEFrecuencia.RemoveRange(db.tblPPEFrecuencia.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblProbabilidadRiesgo.RemoveRange(db.tblProbabilidadRiesgo.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblProducto.RemoveRange(db.tblProducto.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblProveedor.RemoveRange(db.tblProveedor.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblSeveridadRiesgo.RemoveRange(db.tblSeveridadRiesgo.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblTipoEscala.RemoveRange(db.tblTipoEscala.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblUsuarioUnidadOrganizativa.RemoveRange(db.tblUsuarioUnidadOrganizativa.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+                    db.tblUnidadOrganizativa.RemoveRange(db.tblUnidadOrganizativa.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+
+                    List<long> _UsuariosEmpresa = db.tblEmpresaUsuario.Where(x => x.IdEmpresa == IdEmpresa).Select(x => x.IdUsuario).ToList();
+                    db.tblEmpresaUsuario.RemoveRange(db.tblEmpresaUsuario.Where(x => x.IdEmpresa == IdEmpresa).ToList());
+
+                    List<tblUsuario> userDelete = (from d in db.tblUsuario
+                                                   where !db.tblEmpresaUsuario.Select(eu => eu.IdUsuario).Contains(d.IdUsuario)
+                                                        && _UsuariosEmpresa.Contains(d.IdUsuario)
+                                                   select d).ToList();
+                    // db.tblUsuario.Where(u => !db.tblEmpresaUsuario.Select(x => x.IdUsuario).Contains(u.IdUsuario)).ToList();
+                    db.tblUsuario.RemoveRange(userDelete);
+                    db.tblEmpresa.Remove(reg);
+                    db.SaveChanges();
+                    done = true;
+                }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+                    done = false;
+                }
+            }
+
+            return done;
+        }
+        public static void BloquearEmpresa(long IdEmpresa)
+        {
+            using (Entities db = new Entities())
+            {
+                try
+                {
+                    tblEmpresa reg = db.tblEmpresa.FirstOrDefault(x => x.IdEmpresa == IdEmpresa);
+                    reg.IdEstado = 2;
+                    reg.FechaUltimoEstado = DateTime.UtcNow;
+                    db.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+                }
+            }
+
+        }
+        public static void ActivarEmpresa(long IdEmpresa)
+        {
+            using (Entities db = new Entities())
+            {
+                try
+                {
+                    tblEmpresa reg = db.tblEmpresa.FirstOrDefault(x => x.IdEmpresa == IdEmpresa);
+                    reg.IdEstado = 1;
+                    reg.FechaUltimoEstado = DateTime.UtcNow;
+                    db.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+                }
+            }
+
+        }
+        public static List<ModuloAsignadoModel> GetModulosEmpresa(long IdEmpresa)
+        {
+            List<ModuloAsignadoModel> modulos = new List<ModuloAsignadoModel>();
+
+            using (Entities db = new Entities())
+            {
+                modulos = db.tblModulo.Where(x => x.IdEmpresa == 0).AsEnumerable().Select(x => new ModuloAsignadoModel
+                {
+                    Descripcion = x.Descripcion,
+                    IdEmpresa = IdEmpresa,
+                    IdModuloAsignado = x.IdModulo,
+                    Selected = db.tblModulo.FirstOrDefault(y => y.IdEmpresa == IdEmpresa && y.IdModulo == x.IdModulo) != null,
+                    Nombre = x.IdTipoElemento == 1 ? x.Nombre : x.IdTipoElemento == 2 ? string.Format("\t {0}", x.Nombre) : x.IdTipoElemento == 3 ? string.Format("\t\t {0}", x.Nombre) : string.Format("\t\t\t {0}", x.Nombre)
+                }).ToList();
+
+            }
+
+            return modulos;
+        }
+        public static void ActualizarModuloEmpresa(ModuloAsignadoModel modulo)
+        {
+            using (Entities db = new Entities())
+            {
+
+                tblModulo _modulo = db.tblModulo.FirstOrDefault(x => x.IdEmpresa == modulo.IdEmpresa && x.IdModulo == modulo.IdModuloAsignado);
+
+                if (modulo.Selected && _modulo == null)
+                {
+                    tblModulo dataModulo = db.tblModulo.FirstOrDefault(x => x.IdEmpresa == 0 && x.IdModulo == modulo.IdModuloAsignado);
+                    tblModulo moduloNuevo = new tblModulo
+                    {
+                        Accion = dataModulo.Accion,
+                        Activo = dataModulo.Activo,
+                        Controller = dataModulo.Controller,
+                        Descripcion = dataModulo.Descripcion,
+                        IdCodigoModulo = dataModulo.IdCodigoModulo,
+                        IdEmpresa = modulo.IdEmpresa,
+                        IdModulo = dataModulo.IdModulo,
+                        IdModuloPadre = dataModulo.IdModuloPadre,
+                        IdTipoElemento = dataModulo.IdTipoElemento,
+                        imageRoot = dataModulo.imageRoot,
+                        Nombre = modulo.Nombre,
+                        Negocios = dataModulo.Negocios,
+                        Tecnologia = dataModulo.Tecnologia,
+                        Titulo = dataModulo.Titulo,
+                    };
+                    db.tblModulo.Add(moduloNuevo);
+                    long IdModuloPadre = moduloNuevo.IdModuloPadre;
+
+                    while (IdModuloPadre > 0)
+                    {
+                        _modulo = db.tblModulo.FirstOrDefault(x => x.IdEmpresa == modulo.IdEmpresa && x.IdModulo == IdModuloPadre);
+                        if (_modulo == null)
+                        {
+                            dataModulo = db.tblModulo.FirstOrDefault(x => x.IdEmpresa == 0 && x.IdModulo == IdModuloPadre);
+                            tblModulo moduloPadre = new tblModulo
+                            {
+                                Accion = dataModulo.Accion,
+                                Activo = dataModulo.Activo,
+                                Controller = dataModulo.Controller,
+                                Descripcion = dataModulo.Descripcion,
+                                IdCodigoModulo = dataModulo.IdCodigoModulo,
+                                IdEmpresa = modulo.IdEmpresa,
+                                IdModulo = dataModulo.IdModulo,
+                                IdModuloPadre = dataModulo.IdModuloPadre,
+                                IdTipoElemento = dataModulo.IdTipoElemento,
+                                imageRoot = dataModulo.imageRoot,
+                                Nombre = modulo.Nombre,
+                                Negocios = dataModulo.Negocios,
+                                Tecnologia = dataModulo.Tecnologia,
+                                Titulo = dataModulo.Titulo,
+                            };
+                            db.tblModulo.Add(moduloPadre);
+                            IdModuloPadre = dataModulo.IdModuloPadre;
+                        }
+                        else
+                            IdModuloPadre = _modulo.IdModuloPadre;
+
+                    }
+
+                    List<tblModulo> ModulosHijos = db.tblModulo.Where(x => x.IdEmpresa == 0 && x.IdModuloPadre == moduloNuevo.IdModulo).ToList();
+
+                    AgregarModulosHijos(ModulosHijos, moduloNuevo, db);
+
+                }
+                else if (modulo.Selected && _modulo != null)
+                {
+                    _modulo.Nombre = modulo.Nombre;
+                    _modulo.Descripcion = modulo.Descripcion;
+                }
+                else if (!modulo.Selected && _modulo != null)
+                {
+                    db.tblModulo.Remove(_modulo);
+                    List<tblModulo> ModulosHijos = db.tblModulo.Where(x => x.IdEmpresa == _modulo.IdEmpresa && x.IdModuloPadre == _modulo.IdModulo).ToList();
+                    EliminarModulosHijos(ModulosHijos, _modulo, db);
+
+                    if (_modulo.IdModuloPadre > 0)
+                        EliminarModuloPadre(_modulo, db);
+                }
+
+                db.SaveChanges();
+            }
+        }
+        private static void EliminarModuloPadre(tblModulo _modulo, Entities db)
+        {
+            List<tblModulo> OtrosHijos = db.tblModulo.Where(x => x.IdEmpresa == _modulo.IdEmpresa && x.IdModuloPadre == _modulo.IdModuloPadre).ToList();
+            if (OtrosHijos.Count == 0 || (OtrosHijos.Count == 1 && OtrosHijos[0].IdModulo == _modulo.IdModulo))
+            {
+                tblModulo ModuloPadre = db.tblModulo.FirstOrDefault(x => x.IdEmpresa == _modulo.IdEmpresa && x.IdModulo == _modulo.IdModuloPadre);
+                db.tblModulo.Remove(ModuloPadre);
+
+                if (ModuloPadre.IdModuloPadre > 0)
+                    EliminarModuloPadre(ModuloPadre, db);
+            }
+        }
+        private static void AgregarModulosHijos(List<tblModulo> modulosHijos, tblModulo modulo, Entities db)
+        {
+            if (modulosHijos.Count > 0)
+            {
+                foreach (tblModulo moduloHijo in modulosHijos)
+                {
+                    tblModulo _modulo = db.tblModulo.FirstOrDefault(x => x.IdEmpresa == modulo.IdEmpresa && x.IdModulo == moduloHijo.IdModulo);
+                    if (_modulo == null)
+                    {
+                        tblModulo dataModulo = db.tblModulo.FirstOrDefault(x => x.IdEmpresa == 0 && x.IdModulo == moduloHijo.IdModulo);
+                        tblModulo moduloNuevo = new tblModulo
+                        {
+                            Accion = dataModulo.Accion,
+                            Activo = dataModulo.Activo,
+                            Controller = dataModulo.Controller,
+                            Descripcion = dataModulo.Descripcion,
+                            IdCodigoModulo = dataModulo.IdCodigoModulo,
+                            IdEmpresa = modulo.IdEmpresa,
+                            IdModulo = dataModulo.IdModulo,
+                            IdModuloPadre = dataModulo.IdModuloPadre,
+                            IdTipoElemento = dataModulo.IdTipoElemento,
+                            imageRoot = dataModulo.imageRoot,
+                            Nombre = modulo.Nombre,
+                            Negocios = dataModulo.Negocios,
+                            Tecnologia = dataModulo.Tecnologia,
+                            Titulo = dataModulo.Titulo,
+                        };
+                        db.tblModulo.Add(moduloNuevo);
+
+                        List<tblModulo> ModulosHijos = db.tblModulo.Where(x => x.IdEmpresa == 0 && x.IdModuloPadre == moduloNuevo.IdModulo).ToList();
+                        AgregarModulosHijos(ModulosHijos, moduloNuevo, db);
+                    }
+                    else
+                    {
+                        List<tblModulo> ModulosHijos = db.tblModulo.Where(x => x.IdEmpresa == 0 && x.IdModuloPadre == _modulo.IdModulo).ToList();
+                        AgregarModulosHijos(ModulosHijos, _modulo, db);
+                    }
+                }
+            }
+        }
+        private static void EliminarModulosHijos(List<tblModulo> modulosHijos, tblModulo modulo, Entities db)
+        {
+            if (modulosHijos.Count > 0)
+            {
+                foreach (tblModulo moduloHijo in modulosHijos)
+                {
+                    List<tblModulo> ModulosHijos = db.tblModulo.Where(x => x.IdEmpresa == modulo.IdEmpresa && x.IdModuloPadre == moduloHijo.IdModulo).ToList();
+                    EliminarModulosHijos(ModulosHijos, moduloHijo, db);
+
+                }
+                db.tblModulo.RemoveRange(modulosHijos);
+            }
+        }
+        public static List<PerfilModelView> GetUsuarioEmpresa(long idEmpresaSelected)
+        {
+            List<PerfilModelView> data = new List<PerfilModelView>();
+            Encriptador Encriptar = new Encriptador();
+
+            using (Entities db = new Entities())
+            {
+                data = db.tblEmpresaUsuario
+                    .Where(x => x.IdEmpresa == idEmpresaSelected && x.IdUsuario > 0)
+                    .AsEnumerable()
+                    .Select(x => new PerfilModelView
+                    {
+                        CanDelete = false,
+                        Changed = false,
+                        EditDocumento = false,
+                        Email = x.tblUsuario.Email,
+                        EstatusUsuario = x.tblUsuario.tblEstadoUsuario.tblCultura_EstadoUsuario.FirstOrDefault(c => c.Culture == Culture || c.Culture == "es-VE").Descripcion,
+                        FechaEstatusUsuario = x.tblUsuario.FechaEstado,
+                        FechaUltimaConexion = x.tblUsuario.FechaUltimaConexion,
+                        IdEmpresa = idEmpresaSelected,
+                        IdEstatusUsuario = x.tblUsuario.EstadoUsuario,
+                        IdUsuario = x.IdUsuario,
+                        Nombre = x.tblUsuario.Nombre,
+                        Password = Encriptar.Desencriptar(x.tblUsuario.ClaveUsuario, Encriptador.HasAlgorimt.SHA1, Encriptador.Keysize.KS256),
+                        //PasswordCompare = Encriptar.Desencriptar(x.tblUsuario.ClaveUsuario, Encriptador.HasAlgorimt.SHA1, Encriptador.Keysize.KS256),
+                    })
+                    .ToList();
+            }
+
+            return data;
+        }
+        public static PerfilModelView GetUsuarioByEmpresaAndId(long idEmpresaSelected, long IdUsuario)
+        {
+            PerfilModelView data = new PerfilModelView();
+            Encriptador Encriptar = new Encriptador();
+            Encriptador Encriptar2 = new Encriptador();
+
+            using (Entities db = new Entities())
+            {
+                data = db.tblEmpresaUsuario
+                    .Where(x => x.IdEmpresa == idEmpresaSelected && x.IdUsuario > 0)
+                    .AsEnumerable()
+                    .Select(x => new PerfilModelView
+                    {
+                        CanDelete = false,
+                        Changed = false,
+                        EditDocumento = false,
+                        Email = x.tblUsuario.Email,
+                        EstatusUsuario = x.tblUsuario.tblEstadoUsuario.tblCultura_EstadoUsuario.FirstOrDefault(c => c.Culture == Culture || c.Culture == "es-VE").Descripcion,
+                        FechaEstatusUsuario = x.tblUsuario.FechaEstado,
+                        FechaUltimaConexion = x.tblUsuario.FechaUltimaConexion,
+                        IdEmpresa = idEmpresaSelected,
+                        IdEstatusUsuario = x.tblUsuario.EstadoUsuario,
+                        IdUsuario = x.IdUsuario,
+                        Nombre = x.tblUsuario.Nombre,
+                        Password = Encriptar.Desencriptar(x.tblUsuario.ClaveUsuario, Encriptador.HasAlgorimt.SHA1, Encriptador.Keysize.KS256),
+                        PasswordCompare = Encriptar.Desencriptar(x.tblUsuario.ClaveUsuario, Encriptador.HasAlgorimt.SHA1, Encriptador.Keysize.KS256),
+                    })
+                    .FirstOrDefault();
+            }
+
+            return data;
+        }
+        public static PerfilModelView ActualizarUsuario(PerfilModelView data)
+        {
+            data.ErrorUpdating = string.Empty;
+            Encriptador Encriptar = new Encriptador();
+
+            using (Entities db = new Entities())
+            {
+                try
+                {
+                    if (data.IdEmpresa == -1)
+                    {
+                        tblUsuario reg = new tblUsuario
+                        {
+                            ClaveUsuario = Encriptar.Encriptar(data.Password, Encriptador.HasAlgorimt.SHA1, Encriptador.Keysize.KS256),
+                            CodigoUsuario = data.Email,
+                            Email = data.Email,
+                            EstadoUsuario = 1,
+                            FechaEstado = DateTime.UtcNow,
+                            Nombre = data.Nombre,
+                            PrimeraVez = true,
+                        };
+
+                        db.tblUsuario.Add(reg);
+                        db.SaveChanges();
+
+                        data.IdUsuario = reg.IdUsuario;
+
+                        List<tblEmpresaUsuario> _UsuarioAdmin = db.tblEmpresaUsuario.Where(x => x.IdEmpresa == 0 && x.IdNivelUsuario == 6).ToList();
+                        foreach (tblEmpresaUsuario _empresaUsuario in _UsuarioAdmin)
+                        {
+                            tblEmpresaUsuario _regEmpresaUsuario = new tblEmpresaUsuario
+                            {
+                                FechaCreacion = DateTime.UtcNow,
+                                IdEmpresa = _empresaUsuario.IdEmpresa,
+                                IdNivelUsuario = _empresaUsuario.IdNivelUsuario,
+                                IdUsuario = _empresaUsuario.IdUsuario,
+                            };
+
+                            db.tblEmpresaUsuario.Add(_regEmpresaUsuario);
+                            foreach (tblModulo_Usuario _moduloUsuario in db.tblModulo_Usuario.Where(x => x.IdEmpresa == 0 && x.IdUsuario == _empresaUsuario.IdUsuario).ToList())
+                            {
+                                tblModulo_Usuario _regModuloUsuario = new tblModulo_Usuario
+                                {
+                                    Actualizar = _moduloUsuario.Actualizar,
+                                    Eliminar = _moduloUsuario.Eliminar,
+                                    IdEmpresa = _empresaUsuario.IdEmpresa,
+                                    IdModulo = _moduloUsuario.IdModulo,
+                                    IdUsuario = _empresaUsuario.IdUsuario,
+                                };
+                                db.tblModulo_Usuario.Add(_regModuloUsuario);
+                            }
+                        }
+
+                        foreach (tblModulo modulo in db.tblModulo.Where(x => x.IdEmpresa == 0).ToList())
+                        {
+                            db.tblModulo.Add(new tblModulo
+                            {
+                                IdEmpresa = data.IdEmpresa,
+                                IdModulo = modulo.IdModulo,
+                                Accion = modulo.Accion,
+                                Activo = modulo.Activo,
+                                Controller = modulo.Controller,
+                                Descripcion = modulo.Descripcion,
+                                IdCodigoModulo = modulo.IdCodigoModulo,
+                                IdModuloPadre = modulo.IdModuloPadre,
+                                IdTipoElemento = modulo.IdTipoElemento,
+                                imageRoot = modulo.imageRoot,
+                                Negocios = modulo.Negocios,
+                                Nombre = modulo.Nombre,
+                                Tecnologia = modulo.Tecnologia,
+                                Titulo = modulo.Titulo,
+                            });
+
+                        }
+
+                    }
+                    else
+                    {
+                        tblUsuario reg = db.tblUsuario.FirstOrDefault(x => x.IdUsuario == data.IdUsuario);
+                        reg.ClaveUsuario = Encriptar.Encriptar(data.Password, Encriptador.HasAlgorimt.SHA1, Encriptador.Keysize.KS256);
+                        reg.CodigoUsuario = data.Email;
+                        reg.Email = data.Email;
+                        reg.Nombre = data.Nombre;
+                        reg.PrimeraVez = true;
+                    }
+
+                    db.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    data.ErrorUpdating = ex.Message;
+                }
+            }
+
+            return data;
+        }
+        public static List<dataModulosUsuario> GetModulosUsuario(long idEmpresa, long idUsuario)
+        {
+            List<dataModulosUsuario> data = new List<dataModulosUsuario>();
+
+            using (Entities db = new Entities())
+            {
+                data = db.tblModulo
+                    .Where(x => x.IdEmpresa == idEmpresa && x.IdModulo < 99000000)
+                    .AsEnumerable()
+                    .Select(x => new dataModulosUsuario
+                    {
+                        Delete = (x.tblModulo_Usuario != null && x.tblModulo_Usuario.FirstOrDefault(u => u.IdUsuario == idUsuario) != null ? x.tblModulo_Usuario.FirstOrDefault(u => u.IdUsuario == idUsuario).Eliminar : false),
+                        IdModulo = x.IdModulo,
+                        IdPadre = x.IdModuloPadre,
+                        Nombre = x.Nombre,
+                        Selected = x.tblModulo_Usuario.Where(u => u.IdUsuario == idUsuario).Count() > 0,
+                        TipoElemento = x.IdTipoElemento,
+                        Update = (x.tblModulo_Usuario != null && x.tblModulo_Usuario.FirstOrDefault(u => u.IdUsuario == idUsuario) != null ? x.tblModulo_Usuario.FirstOrDefault(u => u.IdUsuario == idUsuario).Actualizar : false),
+                    })
+                    .ToList();
+            }
+
+            return data;
+        }
+        public static void CreateTreeViewNodesRecursive(IQueryable<dataModulosUsuario> model, MVCxTreeViewNodeCollection nodesCollection, long parentID)
+        {
+            List<dataModulosUsuario> rows = model.Where(x => x.IdPadre == parentID).ToList();
+
+            foreach (dataModulosUsuario row in rows)
+            {
+                MVCxTreeViewNode node = nodesCollection.Add(row.Nombre, row.IdModulo.ToString());
+                CreateTreeViewNodesRecursive(model, node.Nodes, row.IdModulo);
+            }
+        }
+        public static string GetControlNameById(short IdControl)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            string Name = string.Empty;
+
+            using (Entities db = new Entities())
+            {
+                Name = db.tblControlRiesgo
+                    .FirstOrDefault(x => x.IdEmpresa == IdEmpresa && x.IdControl == IdControl)
+                    .Nombre;
+            }
+
+            return Name;
+        }
 
     }
 }

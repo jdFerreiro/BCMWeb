@@ -691,6 +691,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Aprobación del {0} Habilitado.
+        /// </summary>
+        public static string subjectEmailAprobacion {
+            get {
+                return ResourceManager.GetString("subjectEmailAprobacion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Certificación del {0} Habilitado.
+        /// </summary>
+        public static string subjectEmailCertificacion {
+            get {
+                return ResourceManager.GetString("subjectEmailCertificacion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Aprobar.
         /// </summary>
         public static string textButtonAprobar {

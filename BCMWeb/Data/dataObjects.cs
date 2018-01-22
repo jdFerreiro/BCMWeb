@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace BCMWeb
 {
@@ -10,7 +8,7 @@ namespace BCMWeb
     {
         public long IdProceso { get; set; }
         public string Proceso { get; set; }
-        public string  ImpactoOperacional { get; set; }
+        public string ImpactoOperacional { get; set; }
         public int Escala { get; set; }
         public string DescEscala { get; set; }
     }
@@ -142,4 +140,19 @@ namespace BCMWeb
         public string Fuente { get; set; }
         public int Estado { get; set; }
     }
+    public class objCantidadFuente
+    {
+        public long IdUnidad { get; set; }
+        public string Unidad
+        {
+            get
+            {
+                return Metodos.GetNombreUnidadCompleto(IdUnidad);
+            }
+        }
+        public IList<string> ValorEscala { get; set; }
+        public IList<string> Escala { get; set; }
+        public IList<Int32> CantidadEscala { get; set; }
+    }
+
 }

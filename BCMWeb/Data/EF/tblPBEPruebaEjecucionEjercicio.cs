@@ -27,10 +27,10 @@ namespace BCMWeb.Data.EF
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
         public System.DateTime FechaInicio { get; set; }
-        public Nullable<short> IdEstatus { get; set; }
-        public long IdEjercicioPlanificacion { get; set; }
         public int DuracionHoras { get; set; }
         public int DuracionMinutos { get; set; }
+        public Nullable<short> IdEstatus { get; set; }
+        public long IdEjercicioPlanificacion { get; set; }
     
         public virtual tblEmpresa tblEmpresa { get; set; }
         public virtual tblPBEPruebaEjecucion tblPBEPruebaEjecucion { get; set; }

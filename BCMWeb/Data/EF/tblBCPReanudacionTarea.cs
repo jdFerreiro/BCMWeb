@@ -25,8 +25,8 @@ namespace BCMWeb.Data.EF
         public long IdBCPReanudacionTarea { get; set; }
         public string Nombre { get; set; }
     
+        public virtual tblBCPDocumento tblBCPDocumento { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBCPReanudacionTareaActividad> tblBCPReanudacionTareaActividad { get; set; }
-        public virtual tblBCPDocumento tblBCPDocumento { get; set; }
     }
 }

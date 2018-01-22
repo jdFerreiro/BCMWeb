@@ -315,4 +315,7 @@
   <data name="MostrarProgramacionMessage" xml:space="preserve">
     <value>Consultar la programación de mantenimientos</value>
   </data>
+  <data name="ActualizarModulosUsuario" xml:space="preserve">
+    <value>Actualizar Modulos para el usuario {0}  en la empresa {1}</value>
+  </data>
 </root>

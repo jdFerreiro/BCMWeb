@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace BCMWeb.Models
 {
-    public class PerfilModelView
+
+    public class UsuariosModel : ModulosUserModel
+    {
+        public long IdEmpresaSelected { get; set; }
+        public List<PerfilModelView> Usuarios { get; set; }
+    }
+    public class PerfilModelView : ModulosUserModel
     {
         [Display(Name = "captionNombre", ResourceType = typeof(Resources.FichaResource))]
         public long IdUsuario { get; set; }
@@ -30,6 +34,17 @@ namespace BCMWeb.Models
         public string PasswordCompare { get; set; }
         private bool _Changed = false;
         public bool Changed { get { return _Changed; } set { _Changed = value; } }
-
+        [Display(Name = "captionEstatusUsuario", ResourceType = typeof(Resources.FichaResource))]
+        public short IdEstatusUsuario { get; set; }
+        [Display(Name = "captionEstatusUsuario", ResourceType = typeof(Resources.FichaResource))]
+        public string EstatusUsuario { get; set; }
+        [DataType(DataType.Date)]
+        [Display(Name = "captionFechaEU", ResourceType = typeof(Resources.FichaResource))]
+        public Nullable<DateTime> FechaEstatusUsuario { get; set; }
+        [DataType(DataType.Date)]
+        [Display(Name = "captionFechaUC", ResourceType = typeof(Resources.FichaResource))]
+        public Nullable<DateTime> FechaUltimaConexion { get; set; }
+        public bool CanDelete { get; set; }
+        public string ErrorUpdating { get; set; }
     }
 }

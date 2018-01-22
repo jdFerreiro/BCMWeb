@@ -115,6 +115,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Control.
+        /// </summary>
+        public static string captionControl {
+            get {
+                return ResourceManager.GetString("captionControl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Escala.
         /// </summary>
         public static string captionDescEscala {
@@ -574,7 +583,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tablas de Riesgo según Controles.
+        ///   Looks up a localized string similar to Tabla: Estado de Eventos por Proceso.
         /// </summary>
         public static string TituloTablaRiesgoControl {
             get {

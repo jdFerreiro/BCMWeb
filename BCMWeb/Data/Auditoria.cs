@@ -1,6 +1,5 @@
 ﻿using BCMWeb.Data.EF;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -11,7 +10,7 @@ namespace BCMWeb
     public static class Auditoria
     {
         internal static HttpSessionState Session { get { return HttpContext.Current.Session; } }
-        internal static HttpRequest Request { get { return HttpContext.Current.Request;  } }
+        internal static HttpRequest Request { get { return HttpContext.Current.Request; } }
 
         [SessionExpire]
         [HandleError]
@@ -466,6 +465,43 @@ namespace BCMWeb
                 db.SaveChanges();
             }
         }
+        [SessionExpire]
+        [HandleError]
+        public static void RegistarActualizarModulos(eTipoAccion actualizarModulosUsuario, long idEmpresa, long idUsuario)
+        {
+            long IdUser = long.Parse(Session["UserId"].ToString());
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+
+            using (Entities db = new Entities())
+            {
+                string AccionMessage = Resources.AuditoriaResource.ActualizarModulosUsuario;
+                string nombreEmpresa = db.tblEmpresa.FirstOrDefault(x => x.IdEmpresa == idEmpresa).NombreComercial;
+                string nombreUsuario = db.tblUsuario.FirstOrDefault(x => x.IdUsuario == idUsuario).Nombre;
+                tblUsuario usuario = db.tblUsuario.FirstOrDefault(x => x.IdUsuario == IdUser);
+
+                string _Accion = string.Format(AccionMessage, nombreUsuario, nombreEmpresa);
+
+                tblAuditoria regAuditoria = new tblAuditoria
+                {
+                    Accion = _Accion,
+                    DireccionIP = Request.UserHostAddress,
+                    FechaRegistro = DateTime.UtcNow,
+                    IdDocumento = 0,
+                    IdEmpresa = IdEmpresa,
+                    IdTipoDocumento = 0,
+                    IdUsuario = IdUser,
+                    Mensaje = string.Empty,
+                    Negocios = true,
+                    DatosModificados = string.Empty,
+                };
+
+                db.tblAuditoria.Add(regAuditoria);
+                usuario.FechaUltimaConexion = DateTime.UtcNow;
+                usuario.EstadoUsuario = 2;
+                db.SaveChanges();
+            }
+        }
+
 
 
     }

@@ -507,6 +507,8 @@ namespace BCMWeb
 
                         eEstadoDocumento EstadoDocumento = (eEstadoDocumento)dataDocumento.IdEstadoDocumento;
 
+                        string _docPassowrd = string.Format("BCMWEB.{0}.{1}", (dataDocumento.Negocios ? "N" : "T"), IdEmpresa.ToString("999"));
+                        string _ownerPassowrd = string.Format("{0}.{1}.{2}.BCMWEB", TipoDocumento, (dataDocumento.Negocios ? "N" : "T"), IdEmpresa.ToString("999"));
                         string _CodigoInforme = string.Format("{0}_{1}_{2}_{3}.{4}", TipoDocumento, dataDocumento.NroDocumento.ToString("#000"), (EstadoDocumento == eEstadoDocumento.Certificado ? dataDocumento.FechaEstadoDocumento.ToString("MM-yyyy") : DateTime.Now.ToString("MM-yyyy")), dataDocumento.VersionOriginal, dataDocumento.NroVersion);
                         _FileName = string.Format("{0}.pdf", _CodigoInforme.Replace("-", "_"));
                         _pathFile = String.Format("{0}\\PDFDocs\\{1}", _ServerPath, _FileName);
@@ -522,6 +524,11 @@ namespace BCMWeb
                         _Documento = new Document();
                         _pdfWrite = PdfWriter.GetInstance(_Documento, new FileStream(_pathFile, FileMode.Create));
                         _pdfWrite.PageEvent = _PDF_Events;
+                        _pdfWrite.SetEncryption(
+                              System.Text.Encoding.UTF8.GetBytes(_docPassowrd)
+                            , System.Text.Encoding.UTF8.GetBytes(_ownerPassowrd)
+                            , PdfWriter.AllowPrinting
+                            , PdfWriter.ENCRYPTION_AES_256);
 
                         string[] docKeywords = new string[]
                         {
