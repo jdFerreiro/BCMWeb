@@ -4,6 +4,14 @@
     background-color: #eaeaea;
 }
 
+.loginPage {
+    border: solid 1px #000;
+    border-radius: 5px;
+    padding: 10px 10px 40px 10px;
+    width: 50%;
+    margin: auto;
+}
+
 #slideshow {
     margin: 10px auto;
     position: relative;
@@ -196,15 +204,6 @@ h4 {
             font-weight: lighter;
             line-height: 1.5em;
         }
-
-.login {
-    display: contents;
-    border: solid 1px #000;
-    border-radius: 5px;
-    padding: 10px 10px 40px 10px;
-    width: 50%;
-    margin: auto;
-}
 
 .right {
     position: relative;

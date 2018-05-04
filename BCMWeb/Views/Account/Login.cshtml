@@ -68,7 +68,7 @@
     }
 </script>
 
-<div class="login">
+<div class="loginPage">
     <div class="accountHeader">
         <h2>@Resources.LoginResource.accountHeader</h2>
         <p>
@@ -76,36 +76,36 @@
         </p>
         <p style="color:red">@ViewBag.ErrorMessage</p>
     </div>
-    @using (Html.BeginForm("Login","Account", FormMethod.Post, htmlAttributes: new { id = "editForm" }))
-    {
+    @using (Html.BeginForm("Login", "Account", FormMethod.Post, htmlAttributes: new { id = "editForm" }))
+        {
         @Html.AntiForgeryToken()
         @Html.Hidden("IsValid", ViewData.ModelState.IsValid.ToString().ToLower())
         @Html.HiddenFor(m => m.UserTimezone)
 
         @Html.DevExpress().TextBoxFor(m => m.UserName, tb =>
-        {
-            tb.Width = Unit.Percentage(100);
-            tb.Properties.Caption = Resources.LoginResource.captionUsername;
-            tb.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
-            tb.ShowModelErrors = true;
-            tb.Properties.HelpText = Resources.LoginResource.helpTextEmail;
-            tb.Properties.HelpTextSettings.Position = HelpTextPosition.Bottom;
-            tb.Properties.ValidationSettings.Display = Display.Dynamic;
-            tb.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-        }).GetHtml()
+                {
+                    tb.Width = Unit.Percentage(100);
+                    tb.Properties.Caption = Resources.LoginResource.captionUsername;
+                    tb.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                    tb.ShowModelErrors = true;
+                    tb.Properties.HelpText = Resources.LoginResource.helpTextEmail;
+                    tb.Properties.HelpTextSettings.Position = HelpTextPosition.Bottom;
+                    tb.Properties.ValidationSettings.Display = Display.Dynamic;
+                    tb.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                }).GetHtml()
 
         @Html.DevExpress().TextBoxFor(m => m.Password, tb =>
-        {
-            tb.Width = Unit.Percentage(100);
-            tb.ShowModelErrors = true;
-            tb.Properties.Caption = Resources.LoginResource.captionPassword;
-            tb.Properties.HelpText = Resources.LoginResource.helpTextPassword;
-            tb.Properties.HelpTextSettings.Position = HelpTextPosition.Bottom;
-            tb.Properties.Password = true;
-            tb.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
-            tb.Properties.ValidationSettings.Display = Display.Dynamic;
-            tb.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-        }).GetHtml()
+                {
+                    tb.Width = Unit.Percentage(100);
+                    tb.ShowModelErrors = true;
+                    tb.Properties.Caption = Resources.LoginResource.captionPassword;
+                    tb.Properties.HelpText = Resources.LoginResource.helpTextPassword;
+                    tb.Properties.HelpTextSettings.Position = HelpTextPosition.Bottom;
+                    tb.Properties.Password = true;
+                    tb.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                    tb.Properties.ValidationSettings.Display = Display.Dynamic;
+                    tb.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                }).GetHtml()
 
         <br />
         <div style="float:left; position: relative;">
@@ -113,12 +113,12 @@
         </div>
         <div class="right">
             @Html.DevExpress().Button(b =>
-       {
-           b.Name = "botLogin";
-           b.Text = Resources.LoginResource.botLoginText;
-           b.ClientSideEvents.Click = "OnClick";
-           b.UseSubmitBehavior = true;
-       }).GetHtml()
+                    {
+                        b.Name = "botLogin";
+                        b.Text = Resources.LoginResource.botLoginText;
+                        b.ClientSideEvents.Click = "OnClick";
+                        b.UseSubmitBehavior = true;
+                    }).GetHtml()
         </div>
-    }
+        }
 </div>

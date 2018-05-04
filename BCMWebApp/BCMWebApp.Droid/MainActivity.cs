@@ -17,7 +17,7 @@ namespace BCMWebApp.Droid
 
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.Main);
-
+            var Indicator = new ActivityIndicator
             // Get our button from the layout resource,
             // and attach an event to it
             //var imageBitmap = GetImageBitmapFromUrl("https://www.bcmweb.net/content/images/Logo-BiaPlus.png");

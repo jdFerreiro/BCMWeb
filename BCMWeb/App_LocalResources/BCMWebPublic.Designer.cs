@@ -286,7 +286,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MANEJADOR DE CONTENIDOS PARA PLANES DE CONTINUIDAD.
+        ///   Looks up a localized string similar to GESTOR DE PLANES DE CONTINUIDAD.
         /// </summary>
         public static string labelAppSlogan {
             get {

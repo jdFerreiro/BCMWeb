@@ -714,12 +714,15 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="APIController\tblAuditoriaController.cs" />
     <Compile Include="APIController\tblDocumentoController.cs" />
     <Compile Include="APIController\tblEmpresaController.cs" />
     <Compile Include="APIController\tblModuloController.cs" />
     <Compile Include="APIController\tblUsuarioController.cs" />
+    <Compile Include="APIModels\AuditoriaModel.cs" />
     <Compile Include="APIModels\DocumentoModel.cs" />
     <Compile Include="APIModels\EmpresaModel.cs" />
+    <Compile Include="APIModels\ModuloModel.cs" />
     <Compile Include="APIModels\UsuarioModel.cs" />
     <Compile Include="App_GlobalResources\DocumentosGlobalResource.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -1373,6 +1376,7 @@
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\EmailManager.cs" />
+    <Compile Include="Data\PDFIniciativa.cs" />
     <Compile Include="Data\PDFPrueba.cs" />
     <Compile Include="Data\ProcesarDocumento.cs" />
     <Compile Include="DAL\Repository.cs" />

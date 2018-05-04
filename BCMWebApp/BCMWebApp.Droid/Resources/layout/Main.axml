@@ -5,8 +5,8 @@
     android:layout_height="fill_parent"
     android:minWidth="25px"
     android:minHeight="25px">
-    <Grid
-        android:minWidth="25px"
+  <LinearLayout
+      android:minWidth="25px"
         android:minHeight="25px"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -16,16 +16,6 @@
         android:scrollIndicators="right"
         android:scrollbars="vertical"
         android:scrollbarStyle="outsideInset">
-      <Grid.ColumnsDefinitions>
-        <ColumnDefinition Width="*" />
-      </Grid.ColumnsDefinitions>
-      <Grid.RowDefinitions>
-        <RowDefinition Height="*" />
-        <RowDefinition Height="auto" />
-        <RowDefinition Height="*" />
-      </Grid.RowDefinitions>
-        <ActivityIndicator IsVisible="{Binding IsLoading}" IsRunning="{Binding IsLoading}"
-            VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
         <LinearLayout
             android:orientation="vertical"
             android:minWidth="25px"
@@ -39,9 +29,7 @@
             android:background="@drawable/normalwhiteborder"
             android:backgroundTint="#ffffffff"
             android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            Grid.Row="1"
-            Grid.Column="0">
+            android:paddingRight="10dp">
             <LinearLayout
                 android:orientation="horizontal"
                 android:minWidth="25px"
@@ -159,5 +147,10 @@
                 android:textColor="@android:color/black"
                 android:backgroundTint="#ffee8d3a" />
         </LinearLayout>
-    </Grid>
+  </LinearLayout>
+    <ActivityIndicator
+        IsVisible="{Binding IsLoading}"
+        IsRunning="{Binding IsLoading}"
+        VerticalOptions="FillAndExpand"
+        HorizontalOptions="FillAndExpand" />
 </LinearLayout>

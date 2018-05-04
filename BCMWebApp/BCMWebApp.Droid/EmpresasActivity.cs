@@ -5,7 +5,7 @@ using System;
 
 namespace BCMWebApp.Droid
 {
-    [Activity(Label = "EmpresasActivity")]
+    [Activity(Label = "BCMWeb - Empresas", MainLauncher = false, SupportsPictureInPicture = true)]
     public class EmpresasActivity : Activity
     {
         protected override void OnCreate(Bundle savedInstanceState)

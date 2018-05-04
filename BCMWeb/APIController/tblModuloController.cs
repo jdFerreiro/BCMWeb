@@ -1,122 +1,185 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Web.Http;
-using System.Web.Http.Description;
+﻿using BCMWeb.APIModels;
 using BCMWeb.Data.EF;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Http;
 
 namespace BCMWeb.APIController
 {
+    [Authorize]
+    [RoutePrefix("api/modulo")]
     public class tblModuloController : ApiController
     {
         private Entities db = new Entities();
+        private string Culture;
 
-        // GET: api/tblModulo
-        public IQueryable<tblModulo> GettblModulo()
+        public tblModuloController()
         {
-            return db.tblModulo;
+            string[] _userLanguages = HttpContext.Current.Request.UserLanguages;
+            Culture = (_userLanguages == null || _userLanguages.Count() == 0 ? "es-VE" : _userLanguages[0]);
         }
 
-        // GET: api/tblModulo/5
-        [ResponseType(typeof(tblModulo))]
-        public async Task<IHttpActionResult> GettblModulo(long id)
+        [Route("GetAllNegociosByEmpresa/{idEmpresa:long}")]
+        [HttpGet]
+        public async Task<IList<ModuloModel>> GetAllNegociosByEmpresa(long idEmpresa)
         {
-            tblModulo tblModulo = await db.tblModulo.FindAsync(id);
-            if (tblModulo == null)
-            {
-                return NotFound();
-            }
+            List<ModuloModel> data = new List<ModuloModel>();
+            List<tblModulo> _modulosEmpresa = await db.tblModulo
+                .Where(x => x.IdEmpresa == idEmpresa && x.Negocios == true && x.IdCodigoModulo != 3 && x.IdCodigoModulo != 4 && x.IdCodigoModulo < 8)
+                .ToListAsync();
 
-            return Ok(tblModulo);
-        }
-
-        // PUT: api/tblModulo/5
-        [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PuttblModulo(long id, tblModulo tblModulo)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != tblModulo.IdEmpresa)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(tblModulo).State = EntityState.Modified;
-
-            try
-            {
-                await db.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!tblModuloExists(id))
+            data = _modulosEmpresa
+                .AsEnumerable()
+                .Select(x => new ModuloModel
                 {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+                    Id = x.IdModulo,
+                    IdCodigoModulo = x.IdCodigoModulo ?? 0,
+                    IdPadre = x.IdModuloPadre,
+                    IdTipoElemento = x.IdTipoElemento,
+                    Negocios = x.Negocios,
+                    Nombre = x.Nombre,
+                    Tecnologia = x.Tecnologia,
+                })
+                .ToList();
 
-            return StatusCode(HttpStatusCode.NoContent);
+            return data;
         }
-
-        // POST: api/tblModulo
-        [ResponseType(typeof(tblModulo))]
-        public async Task<IHttpActionResult> PosttblModulo(tblModulo tblModulo)
+        [Route("GetAllTecnologiaByEmpresa/{idEmpresa:long}")]
+        [HttpGet]
+        public async Task<IList<ModuloModel>> GetAllTecnologiaByEmpresa(long idEmpresa)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            List<ModuloModel> data = new List<ModuloModel>();
+            List<tblModulo> _modulosEmpresa = await db.tblModulo
+                .Where(x => x.IdEmpresa == idEmpresa && x.Tecnologia == true && x.IdCodigoModulo != 3 && x.IdCodigoModulo != 4 && x.IdCodigoModulo < 8)
+                .ToListAsync();
 
-            db.tblModulo.Add(tblModulo);
-
-            try
-            {
-                await db.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (tblModuloExists(tblModulo.IdEmpresa))
+            data = _modulosEmpresa
+                .AsEnumerable()
+                .Select(x => new ModuloModel
                 {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+                    Id = x.IdModulo,
+                    IdCodigoModulo = x.IdCodigoModulo ?? 0,
+                    IdPadre = x.IdModuloPadre,
+                    IdTipoElemento = x.IdTipoElemento,
+                    Negocios = x.Negocios,
+                    Nombre = x.Nombre,
+                    Tecnologia = x.Tecnologia,
+                })
+                .ToList();
 
-            return CreatedAtRoute("DefaultApi", new { id = tblModulo.IdEmpresa }, tblModulo);
+            return data;
         }
-
-        // DELETE: api/tblModulo/5
-        [ResponseType(typeof(tblModulo))]
-        public async Task<IHttpActionResult> DeletetblModulo(long id)
+        [Route("GetPrincipalNegocioByEmpresa/{idEmpresa:long}")]
+        [HttpGet]
+        public async Task<IList<ModuloModel>> GetPrincipalNegocioByEmpresa(long idEmpresa)
         {
-            tblModulo tblModulo = await db.tblModulo.FindAsync(id);
-            if (tblModulo == null)
-            {
-                return NotFound();
-            }
+            List<ModuloModel> data = new List<ModuloModel>();
+            List<tblModulo> _modulosEmpresa = await db.tblModulo
+                .Where(x => x.IdEmpresa == idEmpresa && x.Negocios == true && x.IdModuloPadre == 0 && x.IdCodigoModulo != 3 && x.IdCodigoModulo != 4 && x.IdCodigoModulo < 8)
+                .ToListAsync();
 
-            db.tblModulo.Remove(tblModulo);
-            await db.SaveChangesAsync();
+            data = _modulosEmpresa
+                .AsEnumerable()
+                .Select(x => new ModuloModel
+                {
+                    Id = x.IdModulo,
+                    IdCodigoModulo = x.IdCodigoModulo ?? 0,
+                    IdPadre = x.IdModuloPadre,
+                    IdTipoElemento = x.IdTipoElemento,
+                    Negocios = x.Negocios,
+                    Nombre = x.Nombre,
+                    Tecnologia = x.Tecnologia,
+                })
+                .ToList();
 
-            return Ok(tblModulo);
+            return data;
         }
+        [Route("GetPrincipalTecnologiaByEmpresa/{idEmpresa:long}")]
+        [HttpGet]
+        public async Task<IList<ModuloModel>> GetPrincipalTecnologiaByEmpresa(long idEmpresa)
+        {
+            List<ModuloModel> data = new List<ModuloModel>();
+            List<tblModulo> _modulosEmpresa = await db.tblModulo
+                .Where(x => x.IdEmpresa == idEmpresa && x.Tecnologia == true && x.IdModuloPadre == 0 && x.IdCodigoModulo != 3 && x.IdCodigoModulo != 4 && x.IdCodigoModulo < 8)
+                .ToListAsync();
 
+            data = _modulosEmpresa
+                .AsEnumerable()
+                .Select(x => new ModuloModel
+                {
+                    Id = x.IdModulo,
+                    IdCodigoModulo = x.IdCodigoModulo ?? 0,
+                    IdPadre = x.IdModuloPadre,
+                    IdTipoElemento = x.IdTipoElemento,
+                    Negocios = x.Negocios,
+                    Nombre = x.Nombre,
+                    Tecnologia = x.Tecnologia,
+                })
+                .ToList();
+
+            return data;
+        }
+        [Route("GetPrincipalNegocioByEmpresa_Usuario/{idEmpresa:long}/{idUsuario:long}")]
+        [HttpGet]
+        public async Task<IList<ModuloModel>> GetPrincipalNegocioByEmpresa_Usuario(long idEmpresa, long idUsuario)
+        {
+            List<ModuloModel> data = new List<ModuloModel>();
+            List<tblModulo> _modulosEmpresa = await db.tblModulo_Usuario
+                .Where(x => x.IdEmpresa == idEmpresa && x.tblModulo.Negocios == true
+                         && x.tblModulo.IdModuloPadre == 0 && x.IdUsuario == idUsuario
+                         && x.tblModulo.IdCodigoModulo != 3 && x.tblModulo.IdCodigoModulo != 4
+                         && x.tblModulo.IdCodigoModulo < 8)
+                .Select(x => x.tblModulo)
+                .ToListAsync();
+
+            data = _modulosEmpresa
+                .AsEnumerable()
+                .Select(x => new ModuloModel
+                {
+                    Id = x.IdModulo,
+                    IdCodigoModulo = x.IdCodigoModulo ?? 0,
+                    IdPadre = x.IdModuloPadre,
+                    IdTipoElemento = x.IdTipoElemento,
+                    Negocios = x.Negocios,
+                    Nombre = x.Nombre,
+                    Tecnologia = x.Tecnologia,
+                })
+                .ToList();
+
+            return data;
+        }
+        [Route("GetPrincipalTecnologiaByEmpresa_Usuario/{idEmpresa:long}/{idUsuario:long}")]
+        [HttpGet]
+        public async Task<IList<ModuloModel>> GetPrincipalTecnologiaByEmpresa_Usuario(long idEmpresa, long idUsuario)
+        {
+            List<ModuloModel> data = new List<ModuloModel>();
+            List<tblModulo> _modulosEmpresa = await db.tblModulo_Usuario
+                .Where(x => x.IdEmpresa == idEmpresa && x.tblModulo.Tecnologia == true
+                         && x.tblModulo.IdModuloPadre == 0 && x.IdUsuario == idUsuario
+                         && x.tblModulo.IdCodigoModulo != 3 && x.tblModulo.IdCodigoModulo != 4
+                         && x.tblModulo.IdCodigoModulo < 8)
+                .Select(x => x.tblModulo)
+                .ToListAsync();
+
+            data = _modulosEmpresa
+                .AsEnumerable()
+                .Select(x => new ModuloModel
+                {
+                    Id = x.IdModulo,
+                    IdCodigoModulo = x.IdCodigoModulo ?? 0,
+                    IdPadre = x.IdModuloPadre,
+                    IdTipoElemento = x.IdTipoElemento,
+                    Negocios = x.Negocios,
+                    Nombre = x.Nombre,
+                    Tecnologia = x.Tecnologia,
+                })
+                .ToList();
+
+            return data;
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -124,11 +187,6 @@ namespace BCMWeb.APIController
                 db.Dispose();
             }
             base.Dispose(disposing);
-        }
-
-        private bool tblModuloExists(long id)
-        {
-            return db.tblModulo.Count(e => e.IdEmpresa == id) > 0;
         }
     }
 }

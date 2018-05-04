@@ -61,27 +61,25 @@
             });
             settings.Columns.Add(c =>
             {
-                c.FieldName = "hasFiles";
-                c.Caption = Resources.IniciativaResource.captionAnexos;
-                c.ColumnType = MVCxGridViewColumnType.CheckBox;
-                c.EditFormSettings.Visible = DevExpress.Utils.DefaultBoolean.False;
-                c.Width = Unit.Pixel(70);
-                c.FixedStyle = GridViewColumnFixedStyle.Left;
+                c.UnboundType = DevExpress.Data.UnboundColumnType.String;
+                c.Settings.AllowSort = DefaultBoolean.False;
+                c.Caption = Resources.DocumentoResource.captionPDFColumn;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.FixedStyle = GridViewColumnFixedStyle.Left;
                 c.SetDataItemTemplateContent(tc =>
                 {
-                    bool _hasItems = (bool)DataBinder.Eval(tc.DataItem, "hasFiles");
-                    Html.DevExpress().Button(b =>
-                    {
-                        b.Name = "Button" + tc.KeyValue;
-                        b.Images.Image.Url = (_hasItems ? "~/Content/Images/Internal/hasAttach.png" : "");
-                        //b.Images.Image.Url = (_hasItems ? "~/Content/Images/Internal/fullfolder.jpg" : "~/Content/Images/Internal/emptyfolder.jpg");
-                        //b.Images.Image.ToolTip = (_hasItems ? Resources.IniciativaResource.toolTipHasFiles : Resources.IniciativaResource.toolTipNoHasFiles);
-                        b.Images.Image.Width = Unit.Pixel(35);
-                        b.EnableTheming = false;
-                        b.Text = string.Empty;
-                        b.ClientSideEvents.Click = string.Format("function(s, e){{  gvIniciativas.ExpandDetailRow({0}); }}", tc.VisibleIndex);
-                    }).GetHtml();
+                    ViewContext.Writer.Write(
+                        Html.DevExpress().Button(i =>
+                        {
+                            i.Name = "btn" + tc.KeyValue;
+                            i.Text = Resources.BCMWebPublic.captionButtonImprimir;
+                            i.UseSubmitBehavior = false;
+                            i.ClientSideEvents.Click = string.Format("function(s, e) {{ OnButtonClick(s, e, '{0}', '{1}'); }}", Url.Action("Start", "PlanTrabajo", null), DataBinder.Eval(tc.DataItem, "IdIniciativa"));
+                        }).GetHtml()
+                    );
                 });
             });
             settings.Columns.Add(c =>
@@ -295,6 +293,15 @@
                     fls.Name = "FormLayoutIniciativas";
                     fls.Width = Unit.Percentage(25);
                     fls.ColCount = 2;
+                    fls.Items.Add(i =>
+                    {
+                        i.FieldName = "NroIniciativa";
+                        i.Caption = Resources.IniciativaResource.NroIniciativa;
+                        i.NestedExtension().Label(s =>
+                        {
+                            s.Width = Unit.Percentage(100);
+                        });
+                    });
                     fls.Items.Add(i =>
                     {
                         i.FieldName = "Nombre";
@@ -527,7 +534,6 @@
                             s.ShowModelErrors = true;
                         });
                     });
-                    fls.Items.AddEmptyItem();
                     fls.Items.Add(i =>
                     {
                         i.FieldName = "HorasEstimadas";
@@ -580,6 +586,7 @@
                     {
                         btnSettings.Name = "btnUpdate";
                         btnSettings.Text = Resources.BCMWebPublic.captionButtonSave;
+                        btnSettings.Style[HtmlTextWriterStyle.MarginLeft] = "5px";
                         btnSettings.ClientSideEvents.Click = "function(s, e){ gvIniciativas.UpdateEdit(); }";
                     }).Render();
                         Html.DevExpress().Button(

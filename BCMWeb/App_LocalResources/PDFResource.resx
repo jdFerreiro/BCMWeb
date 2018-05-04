@@ -192,4 +192,7 @@
   <data name="ContenidoTituloString" xml:space="preserve">
     <value>Contenido</value>
   </data>
+  <data name="PTITituloString" xml:space="preserve">
+    <value>Plan de Trabajo</value>
+  </data>
 </root>

@@ -569,7 +569,7 @@ namespace BCMWeb
 
             if (!string.IsNullOrEmpty(Ruta))
             {
-                imgRuta = "<a href=\"" + Ruta + "\"><img src=\"../../Content/Images/Internal/icono-pdf-def.jpg\" /></a>";
+                imgRuta = "<a href=\"" + Ruta + "\" target=\"_blank\"><img src=\"../../Content/Images/Internal/icono-pdf-def.jpg\" /></a>";
                 sb.Append(imgRuta);
             }
 
@@ -2299,7 +2299,7 @@ namespace BCMWeb
                         "identificado con el número " + documento.NroDocumento.ToString() + ", correspondiente a la empresa" +
                         db.tblEmpresa.FirstOrDefault(x => x.IdEmpresa == IdEmpresa).NombreComercial + "." +
                         Environment.NewLine + Environment.NewLine +
-                        "A partir de este momento debe ingresar a nuestro manejador de contenido a través de la dirección" +
+                        "A partir de este momento debe ingresar a nuestro gestor de planes de continuidad a través de la dirección" +
                         "\"<a href=\"http://www.bcmweb.net\">BCMWeb.net</a>\"con sus credenciales para que proceda a la aprobación del documento." +
                         "En caso de que la información presente alguna incongruencia podrá realizar los ajustes en la sección correspondiente." +
                         Environment.NewLine + Environment.NewLine + "Saludos Cordiales.";
@@ -2316,7 +2316,7 @@ namespace BCMWeb
                         _TipoDocumento +
                         "identificado con el número " + documento.NroDocumento.ToString() + ", correspondiente a la empresa" +
                         db.tblEmpresa.FirstOrDefault(x => x.IdEmpresa == IdEmpresa).NombreComercial + "." +
-                        "</p><p>A partir de este momento debe ingresar a nuestro manejador de contenido a través de la dirección" +
+                        "</p><p>A partir de este momento debe ingresar a nuestro gestor de planes de continuidad a través de la dirección" +
                         "\"<a href=\"http://www.bcmweb.net\">BCMWeb.net</a>\"con sus credenciales para que proceda a la aprobación del documento." +
                         "</p><p>En caso de que la información presente alguna incongruencia podrá realizar los ajustes en la sección correspondiente." +
                         "</p><p>&nbsp;</p><p>Saludos Cordiales.</p></td><td style=\"padding-top: 15px\"><img src=\"cid:LogoAplired\" height=\"30\"/></td></tr></table></td></tr></table></body></html>";
@@ -2545,7 +2545,7 @@ namespace BCMWeb
                         "identificado con el número " + documento.NroDocumento.ToString() + ", correspondiente a la empresa" +
                         db.tblEmpresa.FirstOrDefault(x => x.IdEmpresa == idEmpresa).NombreComercial + "." +
                         Environment.NewLine + Environment.NewLine +
-                        "A partir de este momento debe ingresar a nuestro manejador de contenido a través de la dirección" +
+                        "A partir de este momento debe ingresar a nuestro gestor de planes de continuidad a través de la dirección" +
                         "\"<a href=\"http://www.bcmweb.net\">BCMWeb.net</a>\"con sus credenciales para que proceda a la certificación del documento." +
                         "En caso de que la información presente alguna incongruencia podrá realizar los ajustes en la sección correspondiente." +
                         Environment.NewLine + Environment.NewLine + "Saludos Cordiales.";
@@ -2561,7 +2561,7 @@ namespace BCMWeb
                         "Queremos informarle que ya ha finalizado el proceso de aprobación del documento de " + _TipoDocumento +
                         "identificado con el número " + documento.NroDocumento.ToString() + ", correspondiente a la empresa" +
                         db.tblEmpresa.FirstOrDefault(x => x.IdEmpresa == idEmpresa).NombreComercial + "." +
-                        "</p><p>A partir de este momento debe ingresar a nuestro manejador de contenido a través de la dirección" +
+                        "</p><p>A partir de este momento debe ingresar a nuestro gestor de planes de continuidad a través de la dirección" +
                         "\"<a href=\"http://www.bcmweb.net\">BCMWeb.net</a>\"con sus credenciales para que proceda a la certificación del documento." +
                         "</p><p>En caso de que la información presente alguna incongruencia podrá realizar los ajustes en la sección correspondiente." +
                         "</p><p>&nbsp;</p><p>Saludos Cordiales.</p></td></tr></table></td></tr></table></body></html>";
@@ -5742,18 +5742,6 @@ namespace BCMWeb
 
             return Actualizaciones;
         }
-        public static string GetPrioridadIniciativa(short? idPrioridad)
-        {
-            string _Prioridad = string.Empty;
-            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
-
-            using (Entities db = new Entities())
-            {
-                _Prioridad = db.tblIniciativaPrioridad.Where(x => x.IdEmpresa == IdEmpresa && x.IdPrioridad == idPrioridad).FirstOrDefault().ToString();
-            }
-
-            return _Prioridad;
-        }
         public static void DeleteIniciativa(long IdIniciativa)
         {
             long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
@@ -5796,6 +5784,22 @@ namespace BCMWeb
 
             return data;
         }
+        public static string GetEstadoIniciativa(long? IdEstado)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            string data = string.Empty;
+
+            using (Entities db = new Entities())
+            {
+                tblPlanTrabajoEstatus _dbData =
+                    db.tblPlanTrabajoEstatus.Where(x => x.IdEstatusActividad == (IdEstado == null ? 0 : IdEstado)).FirstOrDefault();
+
+                if (_dbData != null)
+                    data = _dbData.tblCultura_PlanTrabajoEstatus.Where(x => x.Culture == Culture || x.Culture == "es-VE").FirstOrDefault().Descripcion;
+            }
+
+            return data;
+        }
         public static List<TablaModel> GetPrioridadesIniciativa()
         {
             long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
@@ -5808,6 +5812,22 @@ namespace BCMWeb
                     Descripcion = x.Nombre,
                     Id = x.IdPrioridad
                 }).ToList();
+            }
+
+            return data;
+        }
+        public static string GetPrioridadIniciativa(short? IdPrioridad)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            string data = string.Empty;
+
+            using (Entities db = new Entities())
+            {
+                tblIniciativaPrioridad _dbData =
+                    db.tblIniciativaPrioridad.Where(x => x.IdPrioridad == (IdPrioridad == null ? 0 : IdPrioridad)).FirstOrDefault();
+
+                if (_dbData != null) data = _dbData.Nombre;
+
             }
 
             return data;

@@ -165,17 +165,21 @@ namespace BCMWeb
                         {
                             case eSystemModules.PAD:
                                 _orden++;
-                                _contenido = _dataDocumento.tblDocumentoContenido.Where(x => x.IdSubModulo == 10010100).FirstOrDefault();
-                                GenerarPDF_Temporal(_contenido, TipoDocumento, _orden);
+                                _contenido = _dataDocumento.tblDocumentoContenido.Where(x => x.IdSubModulo == 10000101).FirstOrDefault();
+                                if (_contenido != null)
+                                    GenerarPDF_Temporal(_contenido, TipoDocumento, _orden);
                                 _orden++;
                                 _contenido = _dataDocumento.tblDocumentoContenido.Where(x => x.IdSubModulo == 10010200).FirstOrDefault();
-                                GenerarPDF_Temporal(_contenido, TipoDocumento, _orden);
+                                if (_contenido != null)
+                                    GenerarPDF_Temporal(_contenido, TipoDocumento, _orden);
                                 _orden++;
                                 _contenido = _dataDocumento.tblDocumentoContenido.Where(x => x.IdSubModulo == 10020100).FirstOrDefault();
-                                GenerarPDF_Temporal(_contenido, TipoDocumento, _orden);
+                                if (_contenido != null)
+                                    GenerarPDF_Temporal(_contenido, TipoDocumento, _orden);
                                 _orden++;
                                 _contenido = _dataDocumento.tblDocumentoContenido.Where(x => x.IdSubModulo == 10010300).FirstOrDefault();
-                                GenerarPDF_Temporal(_contenido, TipoDocumento, _orden);
+                                if (_contenido != null)
+                                    GenerarPDF_Temporal(_contenido, TipoDocumento, _orden);
                                 break;
                             default:
                                 foreach (tblDocumentoContenido contenido in _dataDocumento.tblDocumentoContenido.OrderBy(x => x.IdSubModulo).ToList())
@@ -204,9 +208,9 @@ namespace BCMWeb
             RichEditDocumentServer _reServer = new RichEditDocumentServer();
             MemoryStream _ms = new MemoryStream();
             string _tempFileName = string.Format("tmp{0}_{1}_{2}_{3}_{4}.pdf", TipoDocumento,
-                                                    contenido.IdEmpresa.ToString("#0"),
-                                                    _orden.ToString(),
-                                                    contenido.IdDocumento.ToString("#0"),
+                                                    contenido.IdEmpresa.ToString("000"),
+                                                    _orden.ToString("00"),
+                                                    contenido.IdDocumento.ToString("000"),
                                                     contenido.IdSubModulo.ToString("00000000"));
 
             string _tempFile = string.Format("{0}/{1}", _tempFilePath, _tempFileName);
@@ -507,19 +511,25 @@ namespace BCMWeb
 
                         eEstadoDocumento EstadoDocumento = (eEstadoDocumento)dataDocumento.IdEstadoDocumento;
 
-                        string _docPassowrd = string.Format("BCMWEB.{0}.{1}", (dataDocumento.Negocios ? "N" : "T"), IdEmpresa.ToString("999"));
-                        string _ownerPassowrd = string.Format("{0}.{1}.{2}.BCMWEB", TipoDocumento, (dataDocumento.Negocios ? "N" : "T"), IdEmpresa.ToString("999"));
-                        string _CodigoInforme = string.Format("{0}_{1}_{2}_{3}.{4}", TipoDocumento, dataDocumento.NroDocumento.ToString("#000"), (EstadoDocumento == eEstadoDocumento.Certificado ? dataDocumento.FechaEstadoDocumento.ToString("MM-yyyy") : DateTime.Now.ToString("MM-yyyy")), dataDocumento.VersionOriginal, dataDocumento.NroVersion);
+                        string _docPassowrd = string.Format("BCMWEB.{0}.{1}", (dataDocumento.Negocios ? "N" : "T"), IdEmpresa.ToString("000"));
+                        string _ownerPassowrd = string.Format("{0}.{1}.{2}.BCMWEB", TipoDocumento, (dataDocumento.Negocios ? "N" : "T"), IdEmpresa.ToString("000"));
+                        string _CodigoInforme = string.Format("{0}_{1}_{2}_{3}_{4}.{5}", TipoDocumento, IdEmpresa.ToString(), dataDocumento.NroDocumento.ToString("#000"), (EstadoDocumento == eEstadoDocumento.Certificado ? dataDocumento.FechaEstadoDocumento.ToString("MM-yyyy") : DateTime.Now.ToString("MM-yyyy")), dataDocumento.VersionOriginal, dataDocumento.NroVersion);
                         _FileName = string.Format("{0}.pdf", _CodigoInforme.Replace("-", "_"));
                         _pathFile = String.Format("{0}\\PDFDocs\\{1}", _ServerPath, _FileName);
                         _strDocURL = String.Format("{0}/PDFDocs/{1}", _AppUrl, _FileName);
-                        string _LogoEmpresaPath = string.Format("{0}{1}", _ServerPath, dataDocumento.tblEmpresa.LogoURL.Replace("/", "\\"));
+                        string _LogoEmpresaPath = string.Format("{0}{1}", _ServerPath, dataDocumento.tblEmpresa.LogoURL.Replace("/", "\\").Replace("~", ""));
 
                         _ImagenEmpresa = Image.GetInstance(_LogoEmpresaPath);
                         _ImagenEmpresa.Alignment = Element.ALIGN_CENTER;
 
                         if (File.Exists(_pathFile))
                             File.Delete(_pathFile);
+
+                        List<string> _pdfFiles = Directory.GetFiles(_tempFilePath,
+                                            string.Format("tmp{1}_{2}*.pdf", _tempFilePath,
+                                                          TipoDocumento,
+                                                          IdEmpresa.ToString("#0")),
+                                            SearchOption.AllDirectories).OrderBy(q => q).ToList();
 
                         _Documento = new Document();
                         _pdfWrite = PdfWriter.GetInstance(_Documento, new FileStream(_pathFile, FileMode.Create));
@@ -542,11 +552,6 @@ namespace BCMWeb
                         _Documento.AddCreator("www.bcmweb.net");
                         _Documento.AddKeywords(string.Join(",", docKeywords));
 
-                        List<string> _pdfFiles = Directory.GetFiles(_tempFilePath,
-                                                                    string.Format("tmp{1}_{2}*.pdf", _tempFilePath,
-                                                                                  TipoDocumento,
-                                                                                  IdEmpresa.ToString("#0")),
-                                                                    SearchOption.AllDirectories).ToList();
                         int _PaginaInicioCapitulo = 1;
                         foreach (string _fileName in _pdfFiles)
                         {
@@ -584,21 +589,26 @@ namespace BCMWeb
                         }
                         long IdModuloPadre = IdTipoDocumento * 1000000;
                         NombreModulo = db.tblModulo.Where(x => x.IdEmpresa == IdEmpresa && x.IdModulo == IdModuloPadre).FirstOrDefault().Nombre;
-                    }
 
-                    GenerarIndice(NombreModulo);
-                    _Documento.Close();
-                    foreach (PdfReader _reader in reader)
-                    {
-                        _reader.Close();
-                        _reader.Dispose();
+                        GenerarIndice(NombreModulo);
+                        _Documento.Close();
+                        foreach (PdfReader _reader in reader)
+                        {
+                            _reader.Close();
+                            _reader.Dispose();
+                        }
+
+                        foreach (string _fileName in _pdfFiles)
+                        {
+                            File.Delete(_fileName);
+                        }
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
                 //_Documento.Close();
-                throw;
+                throw ex;
             }
             return _strDocURL;
         }
@@ -708,47 +718,50 @@ namespace BCMWeb
                        ***** Armando el pie de página *****
                        ************************************ */
 
-                    footerTbl2.DefaultCell.Border = Rectangle.NO_BORDER;
-                    _Phrase = new Phrase(DocName, _Font8Normal);
-                    Cell = new PdfPCell(_Phrase)
+                    if (writer.PageNumber != 1)
                     {
-                        HorizontalAlignment = Element.ALIGN_LEFT,
-                        VerticalAlignment = Element.ALIGN_MIDDLE,
-                        Border = Rectangle.NO_BORDER,
-                        Padding = 10
-                    };
-                    footerTbl.AddCell(Cell);
+                        footerTbl2.DefaultCell.Border = Rectangle.NO_BORDER;
+                        _Phrase = new Phrase(DocName, _Font8Normal);
+                        Cell = new PdfPCell(_Phrase)
+                        {
+                            HorizontalAlignment = Element.ALIGN_LEFT,
+                            VerticalAlignment = Element.ALIGN_MIDDLE,
+                            Border = Rectangle.NO_BORDER,
+                            Padding = 10
+                        };
+                        footerTbl.AddCell(Cell);
 
-                    Cell = new PdfPCell(Imagen)
-                    {
-                        HorizontalAlignment = Element.ALIGN_CENTER,
-                        Border = Rectangle.NO_BORDER
-                    };
-                    footerTbl2.AddCell(Cell);
-                    _Phrase = new Phrase(Footerstring, _FontPieNormal);
-                    Cell = new PdfPCell(_Phrase)
-                    {
-                        HorizontalAlignment = Element.ALIGN_CENTER,
-                        Border = Rectangle.NO_BORDER
-                    };
-                    footerTbl2.AddCell(Cell);
+                        Cell = new PdfPCell(Imagen)
+                        {
+                            HorizontalAlignment = Element.ALIGN_CENTER,
+                            Border = Rectangle.NO_BORDER
+                        };
+                        footerTbl2.AddCell(Cell);
+                        _Phrase = new Phrase(Footerstring, _FontPieNormal);
+                        Cell = new PdfPCell(_Phrase)
+                        {
+                            HorizontalAlignment = Element.ALIGN_CENTER,
+                            Border = Rectangle.NO_BORDER
+                        };
+                        footerTbl2.AddCell(Cell);
 
-                    if (_FileName.ToUpper().Substring(0, 3) != "PAD")
-                        _Phrase = new Phrase(string.Format("Pág. {0}", writer.PageNumber.ToString("#0")), _FontPieNormal);
-                    else
-                        _Phrase = new Phrase("", _FontPieNormal);
+                        if (_FileName.ToUpper().Substring(0, 3) != "PAD")
+                            _Phrase = new Phrase(string.Format("Pág. {0}", writer.PageNumber.ToString("#0")), _FontPieNormal);
+                        else
+                            _Phrase = new Phrase("", _FontPieNormal);
 
-                    Cell = new PdfPCell(_Phrase)
-                    {
-                        HorizontalAlignment = Element.ALIGN_RIGHT,
-                        VerticalAlignment = Element.ALIGN_MIDDLE,
-                        Border = Rectangle.NO_BORDER,
-                        Padding = 10
-                    };
+                        Cell = new PdfPCell(_Phrase)
+                        {
+                            HorizontalAlignment = Element.ALIGN_RIGHT,
+                            VerticalAlignment = Element.ALIGN_MIDDLE,
+                            Border = Rectangle.NO_BORDER,
+                            Padding = 10
+                        };
 
-                    footerTbl.AddCell(footerTbl2);
-                    footerTbl.AddCell(Cell);
-                    footerTbl.WriteSelectedRows(0, -1, 0, (document.BottomMargin), writer.DirectContent);
+                        footerTbl.AddCell(footerTbl2);
+                        footerTbl.AddCell(Cell);
+                        footerTbl.WriteSelectedRows(0, -1, 0, (document.BottomMargin), writer.DirectContent);
+                    }
                 }
             }
         }

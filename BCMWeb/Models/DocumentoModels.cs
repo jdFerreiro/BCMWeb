@@ -70,9 +70,9 @@ namespace BCMWeb.Models
                 eSystemModules Modulo = (eSystemModules)IdTipoDocumento;
                 string TipoDocumento = Modulo.ToString();
                 eEstadoDocumento EstadoDocumento = (eEstadoDocumento)IdEstatus;
-                string _CodigoInforme = string.Format("{0}_{1}_{2}_{3}.{4}", TipoDocumento, NroDocumento.ToString("#000"), (EstadoDocumento == eEstadoDocumento.Certificado ? FechaEstadoDocumento.ToString("MM-yyyy") : DateTime.Now.ToString("MM-yyyy")), VersionOriginal, NroVersion);
+                string _CodigoInforme = string.Format("{0}_{1}_{2}_{3}_{4}.{5}", TipoDocumento, IdEmpresa.ToString(), NroDocumento.ToString("#000"), (EstadoDocumento == eEstadoDocumento.Certificado ? FechaEstadoDocumento.ToString("MM-yyyy") : DateTime.Now.ToString("MM-yyyy")), VersionOriginal, NroVersion).Replace("-", "_");
                 string _FileName = string.Format("{0}.pdf", _CodigoInforme.Replace("-", "_"));
-                string _pathFile = String.Format("{0}\\PDFDocs\\{1}", _ServerPath, _FileName);
+                string _pathFile = String.Format("{0}\\PDFDocs\\{1}", _ServerPath.Replace("\\Documento",""), _FileName);
 
                 if (System.IO.File.Exists(_pathFile))
                     return String.Format("{0}/PDFDocs/{1}", _AppUrl, _FileName);

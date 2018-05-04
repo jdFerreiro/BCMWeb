@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace BCMWeb.Models
 {
@@ -98,6 +95,8 @@ namespace BCMWeb.Models
         [Display(Name = "HorasInvertidas", ResourceType = typeof(Resources.IniciativaResource))]
         public Nullable<int> HorasInvertidas { get; set; }
         public bool? hasFiles { get; set; }
+
+        public string MyProperty { get; set; }
     }
     public class AnexosIniciativaModel : ModulosUserModel
     {

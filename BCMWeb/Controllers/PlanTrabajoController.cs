@@ -1,12 +1,7 @@
 ﻿using BCMWeb.Models;
-using DevExpress.Web;
 using DevExpress.Web.Mvc;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.SessionState;
 
 namespace BCMWeb.Controllers
 {
@@ -51,7 +46,7 @@ namespace BCMWeb.Controllers
         [HttpPost]
         public ActionResult ExportIniciativas(IniciativaModel model)
         {
-            string _modId = Session["modId"] .ToString();
+            string _modId = Session["modId"].ToString();
             long modId = long.Parse(_modId);
             int IdTipoDocumento = int.Parse(_modId.Substring(0, (_modId.Length == 7 ? 1 : 2)));
 
@@ -174,8 +169,18 @@ namespace BCMWeb.Controllers
         [HandleError]
         public FileStreamResult FileManagerPartialDownload()
         {
-            return FileManagerExtension.DownloadFiles(FileManagerPlanTrabajoControllerFileManagerSettings.CreateFileManagerDownloadSettings(), 
+            return FileManagerExtension.DownloadFiles(FileManagerPlanTrabajoControllerFileManagerSettings.CreateFileManagerDownloadSettings(),
                                                       FileManagerPlanTrabajoControllerFileManagerSettings.Model);
         }
+        [HttpPost]
+        [SessionExpire]
+        [HandleError]
+        public JsonResult Start(long IdIniciativa)
+        {
+            PDFIniciativa _pdfManager = new PDFIniciativa();
+            string _rutaDocumento = _pdfManager.Generar_Documento(true, IdIniciativa);
+            return Json(new { _rutaDocumento });
+        }
+
     }
 }
