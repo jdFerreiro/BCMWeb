@@ -8884,4 +8884,656 @@ namespace BCMWeb
             return settings;
         }
     }
+
+    public class GridViewExportIncidentes
+    {
+        static string ExcelDataAwareGridViewSettingsKey = "51172A18-2073-426B-A5CB-136347B3A79F";
+        static string FormatConditionsExportGridViewSettingsKey = "14634B6F-E1DC-484A-9728-F9608615B628";
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> exportFormatsInfo;
+        public static Dictionary<GridViewExportFormat, GridViewExportMethod> ExportFormatsInfo
+        {
+            get
+            {
+                if (exportFormatsInfo == null)
+                    exportFormatsInfo = CreateExportFormatsInfo();
+                return exportFormatsInfo;
+            }
+        }
+
+        static IDictionary Context { get { return System.Web.HttpContext.Current.Items; } }
+
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> CreateExportFormatsInfo()
+        {
+            return new Dictionary<GridViewExportFormat, GridViewExportMethod> {
+                { GridViewExportFormat.Pdf, GridViewExtension.ExportToPdf },
+                {
+                    GridViewExportFormat.Xls,
+                    (settings, data) => GridViewExtension.ExportToXls(settings, data, new XlsExportOptionsEx { ExportType = DevExpress.Export.ExportType.WYSIWYG })
+                },
+                {
+                    GridViewExportFormat.Xlsx,
+                    (settings, data) => GridViewExtension.ExportToXlsx(settings, data, new XlsxExportOptionsEx { ExportType = DevExpress.Export.ExportType.WYSIWYG })
+                },
+                { GridViewExportFormat.Rtf, GridViewExtension.ExportToRtf },
+                {
+                    GridViewExportFormat.Csv,
+                    (settings, data) => GridViewExtension.ExportToCsv(settings, data, new CsvExportOptionsEx { ExportType = DevExpress.Export.ExportType.WYSIWYG })
+                }
+            };
+        }
+
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> dataAwareExportFormatsInfo;
+        public static Dictionary<GridViewExportFormat, GridViewExportMethod> DataAwareExportFormatsInfo
+        {
+            get
+            {
+                if (dataAwareExportFormatsInfo == null)
+                    dataAwareExportFormatsInfo = CreateDataAwareExportFormatsInfo();
+                return dataAwareExportFormatsInfo;
+            }
+        }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> CreateDataAwareExportFormatsInfo()
+        {
+            return new Dictionary<GridViewExportFormat, GridViewExportMethod> {
+                { GridViewExportFormat.Xls, GridViewExtension.ExportToXls },
+                { GridViewExportFormat.Xlsx, GridViewExtension.ExportToXlsx },
+                { GridViewExportFormat.Csv, GridViewExtension.ExportToCsv }
+            };
+        }
+
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> formatConditionsExportFormatsInfo;
+        public static Dictionary<GridViewExportFormat, GridViewExportMethod> FormatConditionsExportFormatsInfo
+        {
+            get
+            {
+                if (formatConditionsExportFormatsInfo == null)
+                    formatConditionsExportFormatsInfo = CreateFormatConditionsExportFormatsInfo();
+                return formatConditionsExportFormatsInfo;
+            }
+        }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> CreateFormatConditionsExportFormatsInfo()
+        {
+            return new Dictionary<GridViewExportFormat, GridViewExportMethod> {
+                { GridViewExportFormat.Pdf, GridViewExtension.ExportToPdf},
+                { GridViewExportFormat.Xls, (settings, data) => GridViewExtension.ExportToXls(settings, data) },
+                { GridViewExportFormat.Xlsx,
+                    (settings, data) => GridViewExtension.ExportToXlsx(settings, data, new XlsxExportOptionsEx {ExportType = DevExpress.Export.ExportType.WYSIWYG})
+                },
+                { GridViewExportFormat.Rtf, GridViewExtension.ExportToRtf }
+            };
+        }
+
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> advancedBandsExportFormatsInfo;
+        public static Dictionary<GridViewExportFormat, GridViewExportMethod> AdvancedBandsExportFormatsInfo
+        {
+            get
+            {
+                if (advancedBandsExportFormatsInfo == null)
+                    advancedBandsExportFormatsInfo = CreateAdvancedBandsExportFormatsInfo();
+                return advancedBandsExportFormatsInfo;
+            }
+        }
+        static Dictionary<GridViewExportFormat, GridViewExportMethod> CreateAdvancedBandsExportFormatsInfo()
+        {
+            return new Dictionary<GridViewExportFormat, GridViewExportMethod> {
+                { GridViewExportFormat.Pdf, GridViewExtension.ExportToPdf },
+                { GridViewExportFormat.Xls, (settings, data) => GridViewExtension.ExportToXls(settings, data, new XlsExportOptionsEx {ExportType = DevExpress.Export.ExportType.WYSIWYG}) },
+                { GridViewExportFormat.Xlsx, (settings, data) => GridViewExtension.ExportToXlsx(settings, data, new XlsxExportOptionsEx {ExportType = DevExpress.Export.ExportType.WYSIWYG}) },
+                { GridViewExportFormat.Rtf, GridViewExtension.ExportToRtf }
+            };
+        }
+
+        public static string GetExportButtonTitle(GridViewExportFormat format)
+        {
+            if (format == GridViewExportFormat.None)
+                return string.Empty;
+            return string.Format("Export to {0}", format.ToString().ToUpper());
+        }
+
+        public static GridViewSettings CreateGeneralMasterGridSettings(object DataToBind)
+        {
+            return CreateGeneralMasterGridSettings(GridViewDetailExportMode.None, DataToBind);
+        }
+        public static GridViewSettings CreateGeneralMasterGridSettings(GridViewDetailExportMode exportMode, object DataToBind)
+        {
+            GridViewSettings settings = new GridViewSettings();
+            settings.Name = "masterGrid";
+            settings.Width = Unit.Percentage(100);
+
+            settings.KeyFieldName = "CategoryID";
+            settings.Columns.Add("CategoryID");
+            settings.Columns.Add("CategoryName");
+            settings.Columns.Add("Description");
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "Picture";
+                c.ColumnType = MVCxGridViewColumnType.BinaryImage;
+                BinaryImageEditProperties properties = (BinaryImageEditProperties)c.PropertiesEdit;
+                properties.ImageWidth = 120;
+                properties.ImageHeight = 80;
+                properties.ExportImageSettings.Width = 90;
+                properties.ExportImageSettings.Height = 60;
+            });
+
+            settings.SettingsDetail.ShowDetailRow = true;
+            settings.SettingsDetail.ExportMode = exportMode;
+
+            settings.SettingsExport.GetExportDetailGridViews = (s, e) =>
+            {
+                int categoryID = (int)DataBinder.Eval(e.DataItem, "CategoryID");
+                GridViewExtension grid = new GridViewExtension(CreateGeneralDetailGridSettings(categoryID));
+                grid.Bind(DataToBind);
+                e.DetailGridViews.Add(grid);
+            };
+
+            return settings;
+        }
+
+        public static GridViewSettings CreateGeneralDetailGridSettings(int uniqueKey)
+        {
+            GridViewSettings settings = new GridViewSettings();
+            settings.Name = "detailGrid" + uniqueKey;
+            settings.Width = Unit.Percentage(100);
+
+            settings.KeyFieldName = "ProductID";
+            settings.Columns.Add("ProductID");
+            settings.Columns.Add("ProductName");
+            settings.Columns.Add("UnitPrice");
+            settings.Columns.Add("QuantityPerUnit");
+
+            settings.SettingsDetail.MasterGridName = "masterGrid";
+
+            return settings;
+        }
+
+        static GridViewSettings exportGridViewSettings;
+        public static GridViewSettings ExportGridViewSettings
+        {
+            get
+            {
+                if (exportGridViewSettings == null)
+                    exportGridViewSettings = CreateExportGridViewSettings();
+                return exportGridViewSettings;
+            }
+        }
+        static GridViewSettings CreateExportGridViewSettings()
+        {
+            GridViewSettings settings = new GridViewSettings();
+
+            settings.Name = "gvIncidentes";
+            settings.KeyFieldName = "IdIncidente";
+            settings.CallbackRouteValues = new { Controller = "PMI", Action = "PMIPartialView" };
+            settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "PMI", Action = "EditIncidenteAddNewPartial" };
+            settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "PMI", Action = "EditIncidenteUpdatePartial" };
+            settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "PMI", Action = "EditIncidenteDeletePartial" };
+            settings.SettingsEditing.Mode = GridViewEditingMode.PopupEditForm;
+            settings.SettingsBehavior.ConfirmDelete = true;
+            settings.Width = Unit.Percentage(100);
+            settings.Settings.VerticalScrollableHeight = 325;
+            settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+            settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+            settings.Caption = Resources.PMIResource.GridTitle;
+            settings.Styles.TitlePanel.Font.Bold = true;
+            settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+            settings.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+            settings.ClientSideEvents.BeginCallback = "function (s,e) { lp.Show(); }";
+            settings.ClientSideEvents.EndCallback = "function (s,e) { lp.Hide(); }";
+
+            settings.Settings.ShowFilterRow = true;
+            settings.Settings.ShowFilterRowMenu = true;
+            settings.Settings.ShowFooter = true;
+
+            settings.CommandColumn.Visible = true;
+            settings.CommandColumn.ShowNewButton = false;
+            settings.CommandColumn.ShowNewButtonInHeader = true;
+            settings.CommandColumn.ShowDeleteButton = true;
+            settings.CommandColumn.ShowEditButton = true;
+            settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+            settings.CommandColumn.Width = Unit.Pixel(150);
+            settings.CommandColumn.Caption = " ";
+
+            settings.SettingsDetail.AllowOnlyOneMasterRowExpanded = true;
+            settings.SettingsDetail.ShowDetailRow = true;
+            settings.SettingsDetail.ShowDetailButtons = true;
+
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "FechaIncidente";
+                c.Caption = Resources.PMIResource.captionFechaIncidente;
+                c.ColumnType = MVCxGridViewColumnType.DateEdit;
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.FixedStyle = GridViewColumnFixedStyle.Left;
+                c.Width = 100;
+            });
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "IdTipoIncidente";
+                c.Caption = Resources.PMIResource.captionTipoIncidente;
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.FixedStyle = GridViewColumnFixedStyle.Left;
+                c.Width = 50;
+                c.EditorProperties().ComboBox(p =>
+                {
+                    p.TextField = "Descripcion";
+                    p.ValueField = "Id";
+                    p.ValueType = typeof(int);
+                    p.DataSource = Metodos.GetTiposIncidente();
+                });
+            });
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "IdNaturalezaIncidente";
+                c.Caption = Resources.PMIResource.captionNaturalezaIncidente;
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.FixedStyle = GridViewColumnFixedStyle.Left;
+                c.Width = 50;
+                c.EditorProperties().ComboBox(p =>
+                {
+                    p.TextField = "Descripcion";
+                    p.ValueField = "Id";
+                    p.ValueType = typeof(int);
+                    p.DataSource = Metodos.GetNaturalezaIncidente();
+                });
+            });
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "IdFuenteIncidente";
+                c.Caption = Resources.PMIResource.captionFuenteIncidente;
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.FixedStyle = GridViewColumnFixedStyle.Left;
+                c.Width = 50;
+                c.EditorProperties().ComboBox(p =>
+                {
+                    p.TextField = "Descripcion";
+                    p.ValueField = "Id";
+                    p.ValueType = typeof(int);
+                    p.DataSource = Metodos.GetFuentesIncidente();
+                });
+            });
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "Descripcion";
+                c.Caption = Resources.PMIResource.captionDescripcion;
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Width = 450;
+                c.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+            });
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "LugarIncidente";
+                c.Caption = Resources.PMIResource.captionLugarIncidente;
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Width = 250;
+                c.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+            });
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "Duracion";
+                c.Caption = Resources.PMIResource.captionDuracion;
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Width = 50;
+                c.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+            });
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "NombreReportero";
+                c.Caption = Resources.PMIResource.captionNombreReportero;
+                c.ColumnType = MVCxGridViewColumnType.DateEdit;
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.Width = 100;
+            });
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "NombreSolucionador";
+                c.Caption = Resources.PMIResource.captionNombreSolucionador;
+                c.ColumnType = MVCxGridViewColumnType.DateEdit;
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.Width = 100;
+            });
+
+            return settings;
+        }
+
+        public static GridViewSettings ExcelDataAwareExportGridViewSettings
+        {
+            get
+            {
+                GridViewSettings settings = Context[ExcelDataAwareGridViewSettingsKey] as GridViewSettings;
+                if (settings == null)
+                    Context[ExcelDataAwareGridViewSettingsKey] = settings = CreateExcelDataAwareExportGridViewSettings();
+                return settings;
+            }
+        }
+        static GridViewSettings CreateExcelDataAwareExportGridViewSettings()
+        {
+            GridViewSettings settings = new GridViewSettings();
+
+            settings.Name = "gvIncidentes";
+            settings.KeyFieldName = "IdIncidente";
+            settings.CallbackRouteValues = new { Controller = "PMI", Action = "PMIPartialView" };
+            settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "PMI", Action = "EditIncidenteAddNewPartial" };
+            settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "PMI", Action = "EditIncidenteUpdatePartial" };
+            settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "PMI", Action = "EditIncidenteDeletePartial" };
+            settings.SettingsEditing.Mode = GridViewEditingMode.PopupEditForm;
+            settings.SettingsBehavior.ConfirmDelete = true;
+            settings.Width = Unit.Percentage(100);
+            settings.Settings.VerticalScrollableHeight = 325;
+            settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+            settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+            settings.Caption = Resources.PMIResource.GridTitle;
+            settings.Styles.TitlePanel.Font.Bold = true;
+            settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+            settings.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+            settings.ClientSideEvents.BeginCallback = "function (s,e) { lp.Show(); }";
+            settings.ClientSideEvents.EndCallback = "function (s,e) { lp.Hide(); }";
+
+            settings.Settings.ShowFilterRow = true;
+            settings.Settings.ShowFilterRowMenu = true;
+            settings.Settings.ShowFooter = true;
+
+            settings.CommandColumn.Visible = true;
+            settings.CommandColumn.ShowNewButton = false;
+            settings.CommandColumn.ShowNewButtonInHeader = true;
+            settings.CommandColumn.ShowDeleteButton = true;
+            settings.CommandColumn.ShowEditButton = true;
+            settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+            settings.CommandColumn.Width = Unit.Pixel(150);
+            settings.CommandColumn.Caption = " ";
+
+            settings.SettingsDetail.AllowOnlyOneMasterRowExpanded = true;
+            settings.SettingsDetail.ShowDetailRow = true;
+            settings.SettingsDetail.ShowDetailButtons = true;
+
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "FechaIncidente";
+                c.Caption = Resources.PMIResource.captionFechaIncidente;
+                c.ColumnType = MVCxGridViewColumnType.DateEdit;
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.FixedStyle = GridViewColumnFixedStyle.Left;
+                c.Width = 100;
+            });
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "IdTipoIncidente";
+                c.Caption = Resources.PMIResource.captionTipoIncidente;
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.FixedStyle = GridViewColumnFixedStyle.Left;
+                c.Width = 50;
+                c.EditorProperties().ComboBox(p =>
+                {
+                    p.TextField = "Descripcion";
+                    p.ValueField = "Id";
+                    p.ValueType = typeof(int);
+                    p.DataSource = Metodos.GetTiposIncidente();
+                });
+            });
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "IdNaturalezaIncidente";
+                c.Caption = Resources.PMIResource.captionNaturalezaIncidente;
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.FixedStyle = GridViewColumnFixedStyle.Left;
+                c.Width = 50;
+                c.EditorProperties().ComboBox(p =>
+                {
+                    p.TextField = "Descripcion";
+                    p.ValueField = "Id";
+                    p.ValueType = typeof(int);
+                    p.DataSource = Metodos.GetNaturalezaIncidente();
+                });
+            });
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "IdFuenteIncidente";
+                c.Caption = Resources.PMIResource.captionFuenteIncidente;
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.FixedStyle = GridViewColumnFixedStyle.Left;
+                c.Width = 50;
+                c.EditorProperties().ComboBox(p =>
+                {
+                    p.TextField = "Descripcion";
+                    p.ValueField = "Id";
+                    p.ValueType = typeof(int);
+                    p.DataSource = Metodos.GetFuentesIncidente();
+                });
+            });
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "Descripcion";
+                c.Caption = Resources.PMIResource.captionDescripcion;
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Width = 450;
+                c.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+            });
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "LugarIncidente";
+                c.Caption = Resources.PMIResource.captionLugarIncidente;
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Width = 250;
+                c.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+            });
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "Duracion";
+                c.Caption = Resources.PMIResource.captionDuracion;
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Width = 50;
+                c.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+            });
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "NombreReportero";
+                c.Caption = Resources.PMIResource.captionNombreReportero;
+                c.ColumnType = MVCxGridViewColumnType.DateEdit;
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.Width = 100;
+            });
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "NombreSolucionador";
+                c.Caption = Resources.PMIResource.captionNombreSolucionador;
+                c.ColumnType = MVCxGridViewColumnType.DateEdit;
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.Width = 100;
+            });
+
+            return settings;
+        }
+        public static GridViewSettings FormatConditionsExportGridViewSettings
+        {
+            get
+            {
+                var settings = Context[FormatConditionsExportGridViewSettingsKey] as GridViewSettings;
+                if (settings == null)
+                    Context[FormatConditionsExportGridViewSettingsKey] = settings = CreateFormatConditionsExportGridViewSettings();
+                return settings;
+            }
+        }
+        static GridViewSettings CreateFormatConditionsExportGridViewSettings()
+        {
+            GridViewSettings settings = new GridViewSettings();
+
+            settings.Name = "gvIncidentes";
+            settings.KeyFieldName = "IdIncidente";
+            settings.CallbackRouteValues = new { Controller = "PMI", Action = "PMIPartialView" };
+            settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "PMI", Action = "EditIncidenteAddNewPartial" };
+            settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "PMI", Action = "EditIncidenteUpdatePartial" };
+            settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "PMI", Action = "EditIncidenteDeletePartial" };
+            settings.SettingsEditing.Mode = GridViewEditingMode.PopupEditForm;
+            settings.SettingsBehavior.ConfirmDelete = true;
+            settings.Width = Unit.Percentage(100);
+            settings.Settings.VerticalScrollableHeight = 325;
+            settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+            settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+            settings.Caption = Resources.PMIResource.GridTitle;
+            settings.Styles.TitlePanel.Font.Bold = true;
+            settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+            settings.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+            settings.ClientSideEvents.BeginCallback = "function (s,e) { lp.Show(); }";
+            settings.ClientSideEvents.EndCallback = "function (s,e) { lp.Hide(); }";
+
+            settings.Settings.ShowFilterRow = true;
+            settings.Settings.ShowFilterRowMenu = true;
+            settings.Settings.ShowFooter = true;
+
+            settings.CommandColumn.Visible = true;
+            settings.CommandColumn.ShowNewButton = false;
+            settings.CommandColumn.ShowNewButtonInHeader = true;
+            settings.CommandColumn.ShowDeleteButton = true;
+            settings.CommandColumn.ShowEditButton = true;
+            settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+            settings.CommandColumn.Width = Unit.Pixel(150);
+            settings.CommandColumn.Caption = " ";
+
+            settings.SettingsDetail.AllowOnlyOneMasterRowExpanded = true;
+            settings.SettingsDetail.ShowDetailRow = true;
+            settings.SettingsDetail.ShowDetailButtons = true;
+
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "FechaIncidente";
+                c.Caption = Resources.PMIResource.captionFechaIncidente;
+                c.ColumnType = MVCxGridViewColumnType.DateEdit;
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.FixedStyle = GridViewColumnFixedStyle.Left;
+                c.Width = 100;
+            });
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "IdTipoIncidente";
+                c.Caption = Resources.PMIResource.captionTipoIncidente;
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.FixedStyle = GridViewColumnFixedStyle.Left;
+                c.Width = 50;
+                c.EditorProperties().ComboBox(p =>
+                {
+                    p.TextField = "Descripcion";
+                    p.ValueField = "Id";
+                    p.ValueType = typeof(int);
+                    p.DataSource = Metodos.GetTiposIncidente();
+                });
+            });
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "IdNaturalezaIncidente";
+                c.Caption = Resources.PMIResource.captionNaturalezaIncidente;
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.FixedStyle = GridViewColumnFixedStyle.Left;
+                c.Width = 50;
+                c.EditorProperties().ComboBox(p =>
+                {
+                    p.TextField = "Descripcion";
+                    p.ValueField = "Id";
+                    p.ValueType = typeof(int);
+                    p.DataSource = Metodos.GetNaturalezaIncidente();
+                });
+            });
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "IdFuenteIncidente";
+                c.Caption = Resources.PMIResource.captionFuenteIncidente;
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.FixedStyle = GridViewColumnFixedStyle.Left;
+                c.Width = 50;
+                c.EditorProperties().ComboBox(p =>
+                {
+                    p.TextField = "Descripcion";
+                    p.ValueField = "Id";
+                    p.ValueType = typeof(int);
+                    p.DataSource = Metodos.GetFuentesIncidente();
+                });
+            });
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "Descripcion";
+                c.Caption = Resources.PMIResource.captionDescripcion;
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Width = 450;
+                c.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+            });
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "LugarIncidente";
+                c.Caption = Resources.PMIResource.captionLugarIncidente;
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Width = 250;
+                c.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+            });
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "Duracion";
+                c.Caption = Resources.PMIResource.captionDuracion;
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.Width = 50;
+                c.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+            });
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "NombreReportero";
+                c.Caption = Resources.PMIResource.captionNombreReportero;
+                c.ColumnType = MVCxGridViewColumnType.DateEdit;
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.Width = 100;
+            });
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "NombreSolucionador";
+                c.Caption = Resources.PMIResource.captionNombreSolucionador;
+                c.ColumnType = MVCxGridViewColumnType.DateEdit;
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.Width = 100;
+            });
+
+            return settings;
+        }
+
+    }
+
 }

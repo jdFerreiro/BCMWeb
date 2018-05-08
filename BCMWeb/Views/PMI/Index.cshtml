@@ -1,0 +1,25 @@
+﻿@using (Html.BeginForm("ExportIncidentes", "PMI", FormMethod.Post, htmlAttributes: new { id = "PMIForm" }))
+{
+
+    <div style="margin-top: -15px; margin-bottom: 3px;">
+        <div>
+            @Html.DevExpress().Button(b =>
+                     {
+                         b.Name = "botReturn";
+                         b.Text = Resources.BCMWebPublic.botReturnText;
+                         b.ClientSideEvents.Click = "function(s, e) { lp.Show(); document.location='" + Url.Action("Index", "Documento", new { IdModulo = Session["modId"].ToString() }) + "' }";
+                     }).GetHtml()
+        </div>
+        @*<div style="float: right; margin-top: -20px; margin-bottom: 5px;">
+                @Html.DevExpress().Button(settings =>
+            {
+                settings.Name = "btExport";
+                settings.Text = Resources.BCMWebPublic.stringExportExcel;
+                settings.UseSubmitBehavior = true;
+            }).GetHtml()
+            </div>*@
+    </div>
+
+    @Html.Partial("PMIPartialView")
+
+}

@@ -28,6 +28,7 @@
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -674,6 +675,8 @@
     <Content Include="Views\Administracion\EditarUsuario.cshtml" />
     <Content Include="Views\Administracion\ModulosAccesoUsuario.cshtml" />
     <Content Include="Views\Administracion\ModulosAccesoPartialView.cshtml" />
+    <Content Include="Views\PMI\Index.cshtml" />
+    <Content Include="Views\PMI\PMIPartialView.cshtml" />
     <None Include="Views\Procesos\AjustarWRT.cshtml" />
     <Content Include="Views\Procesos\AjustarRTOPartialView.cshtml" />
     <Content Include="Views\Procesos\AjustarRTO.cshtml" />
@@ -849,6 +852,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PerfilResource.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_LocalResources\PMIResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PMIResource.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_LocalResources\PPEResource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -890,6 +898,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
     <Compile Include="Controllers\PlanTrabajoController.cs" />
+    <Compile Include="Controllers\PMIController.cs" />
     <Compile Include="Controllers\PMTController.cs" />
     <Compile Include="Controllers\PPEController.cs" />
     <Compile Include="Controllers\ProcesosController.cs" />
@@ -1129,6 +1138,15 @@
     <Compile Include="Data\EF\tblCultura_TipoUbicacionInformacion.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Data\EF\tblCulture_FuenteIncidente.cs">
+      <DependentUpon>BCMWebEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\EF\tblCulture_NaturalezaIncidente.cs">
+      <DependentUpon>BCMWebEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\EF\tblCulture_TipoIncidente.cs">
+      <DependentUpon>BCMWebEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Data\EF\tblDocumento.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
@@ -1186,10 +1204,16 @@
     <Compile Include="Data\EF\tblFormatosEmail.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Data\EF\tblFuenteIncidente.cs">
+      <DependentUpon>BCMWebEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Data\EF\tblFuenteRiesgo.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\EF\tblImpactoRiesgo.cs">
+      <DependentUpon>BCMWebEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\EF\tblIncidentes.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\EF\tblIniciativaPrioridad.cs">
@@ -1220,6 +1244,9 @@
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\EF\tblModulo_Usuario.cs">
+      <DependentUpon>BCMWebEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\EF\tblNaturalezaIncidente.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\EF\tblNivelImpacto.cs">
@@ -1345,6 +1372,9 @@
     <Compile Include="Data\EF\tblTipoImpacto.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Data\EF\tblTipoIncidente.cs">
+      <DependentUpon>BCMWebEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Data\EF\tblTipoInterdependencia.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
@@ -1406,6 +1436,7 @@
     <Compile Include="Models\ModuloModels.cs" />
     <Compile Include="Models\PersonaModels.cs" />
     <Compile Include="Models\PlanTrabajoModels.cs" />
+    <Compile Include="Models\PMIModels.cs" />
     <Compile Include="Models\PPEModels.cs" />
     <Compile Include="Models\ProcesosModels.cs" />
     <Compile Include="Models\ReporteModels.cs" />
@@ -1556,6 +1587,11 @@
       <CustomToolNamespace>Resources</CustomToolNamespace>
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PerfilResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App_LocalResources\PMIResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PMIResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="App_LocalResources\PPEResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

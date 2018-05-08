@@ -12,14 +12,18 @@ namespace BCMWeb
         
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            DateTime fechaAComparar = DateTime.Parse(((DateTime)value).ToString("yyyy/MM/dd"));
-            DateTime hoy = DateTime.Parse(DateTime.UtcNow.ToString("yyyy/MM/dd"));
 
-            if (fechaAComparar <= hoy)
+            if (value != null)
             {
-                return ValidationResult.Success;
-            }
+                DateTime fechaAComparar = DateTime.Parse(((DateTime)value).ToString("yyyy/MM/dd"));
+                DateTime hoy = DateTime.Parse(DateTime.UtcNow.ToString("yyyy/MM/dd"));
 
+                if (fechaAComparar <= hoy)
+                {
+                    return ValidationResult.Success;
+                }
+
+            }
             string Error = string.Format(Resources.ErrorResource.FechaMayorIgualQueHoy, validationContext.DisplayName);
             return new ValidationResult(ErrorMessage ?? Error);
         }
@@ -29,12 +33,15 @@ namespace BCMWeb
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            DateTime fechaAComparar = DateTime.Parse(((DateTime)value).ToString("yyyy/MM/dd"));
-            DateTime hoy = DateTime.Parse(DateTime.UtcNow.ToString("yyyy/MM/dd"));
-
-            if (fechaAComparar >= hoy)
+            if (value != null)
             {
-                return ValidationResult.Success;
+                DateTime fechaAComparar = DateTime.Parse(((DateTime)value).ToString("yyyy/MM/dd"));
+                DateTime hoy = DateTime.Parse(DateTime.UtcNow.ToString("yyyy/MM/dd"));
+
+                if (fechaAComparar >= hoy)
+                {
+                    return ValidationResult.Success;
+                }
             }
 
             string Error = string.Format(Resources.ErrorResource.FechaMenorIgualQueHoy, validationContext.DisplayName);

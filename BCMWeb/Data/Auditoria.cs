@@ -501,6 +501,58 @@ namespace BCMWeb
                 db.SaveChanges();
             }
         }
+        [SessionExpire]
+        [HandleError]
+        public static void RegistarIncidente(eTipoAccion Accion, long IdIncidente, string TipoIncidente, string DatosActualizados)
+        {
+            long IdUser = long.Parse(Session["UserId"].ToString());
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+
+            using (Entities db = new Entities())
+            {
+                string AccionMessage = string.Empty;
+                string NombreModulo = Resources.PMIResource.captionModulo;
+                tblIncidentes reg = null;
+
+                switch (Accion)
+                {
+                    case eTipoAccion.AgregarIncidente:
+                        AccionMessage = Resources.AuditoriaResource.AgregarIncidenteMessage;
+                        reg = db.tblIncidentes.Where(x => x.IdEmpresa == IdEmpresa && x.IdIncidente == IdIncidente).FirstOrDefault();
+                        break;
+                    case eTipoAccion.ActualizarIncidente:
+                        AccionMessage = Resources.AuditoriaResource.ActualizarIncidenteMessage;
+                        reg = db.tblIncidentes.Where(x => x.IdEmpresa == IdEmpresa && x.IdIncidente == IdIncidente).FirstOrDefault();
+                        break;
+                    case eTipoAccion.EliminarIncidente:
+                        AccionMessage = Resources.AuditoriaResource.EliminarIncidenteMessage;
+                        break;
+                }
+
+                tblUsuario usuario = db.tblUsuario.Where(x => x.IdUsuario == IdUser).FirstOrDefault();
+
+                string _Accion = AccionMessage;
+
+                tblAuditoria regAuditoria = new tblAuditoria
+                {
+                    Accion = _Accion,
+                    DireccionIP = Request.UserHostAddress,
+                    FechaRegistro = DateTime.UtcNow,
+                    IdDocumento = 0,
+                    IdEmpresa = IdEmpresa,
+                    IdTipoDocumento = 0,
+                    IdUsuario = IdUser,
+                    Mensaje = string.Empty,
+                    Negocios = true,
+                    DatosModificados = DatosActualizados
+                };
+
+                db.tblAuditoria.Add(regAuditoria);
+                usuario.FechaUltimaConexion = DateTime.UtcNow;
+                usuario.EstadoUsuario = 2;
+                db.SaveChanges();
+            }
+        }
 
 
 

@@ -373,6 +373,21 @@
         <AssociationConnector Association="EntitiesModel.FK_tblPPEFrecuencia_tblTipoFrecuencia" ManuallyRouted="false" />
         <AssociationConnector Association="EntitiesModel.FK_tblUsuarioUnidadOrganizativa_tblUnidadOrganizativa" ManuallyRouted="false" />
         <AssociationConnector Association="EntitiesModel.FK_tblUsuarioUnidadOrganizativa_tblUsuario" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="EntitiesModel.tblFuenteIncidente" Width="1.5" PointX="10.5" PointY="132.75" />
+        <EntityTypeShape EntityType="EntitiesModel.tblIncidentes" Width="1.5" PointX="12.75" PointY="137" />
+        <EntityTypeShape EntityType="EntitiesModel.tblNaturalezaIncidente" Width="1.5" PointX="10.5" PointY="127.375" />
+        <EntityTypeShape EntityType="EntitiesModel.tblTipoIncidente" Width="1.5" PointX="10.5" PointY="130.125" />
+        <AssociationConnector Association="EntitiesModel.FK_tblBIAAmenazaEvento_tblBIADocumento" />
+        <AssociationConnector Association="EntitiesModel.FK_tblIncidentes_tblEmpresa" />
+        <AssociationConnector Association="EntitiesModel.FK_tblIncidentes_tblFuenteIncidente" />
+        <AssociationConnector Association="EntitiesModel.FK_tblIncidentes_tblNaturalezaIncidente" />
+        <AssociationConnector Association="EntitiesModel.FK_tblIncidentes_tblTipoIncidente" />
+        <EntityTypeShape EntityType="EntitiesModel.tblCulture_FuenteIncidente" Width="1.5" PointX="12.75" PointY="122.75" />
+        <EntityTypeShape EntityType="EntitiesModel.tblCulture_NaturalezaIncidente" Width="1.5" PointX="12.75" PointY="125.375" />
+        <EntityTypeShape EntityType="EntitiesModel.tblCulture_TipoIncidente" Width="1.5" PointX="12.75" PointY="128.125" />
+        <AssociationConnector Association="EntitiesModel.FK_tblCulture_FuenteIncidente_tblFuenteIncidente" />
+        <AssociationConnector Association="EntitiesModel.FK_tblCulture_NaturalezaIncidente_tblNaturalezaIncidente" />
+        <AssociationConnector Association="EntitiesModel.FK_tblCulture_TipoIncidente_tblTipoIncidente" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

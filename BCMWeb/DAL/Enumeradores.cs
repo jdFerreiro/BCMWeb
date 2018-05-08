@@ -582,6 +582,16 @@ namespace BCMWeb
         [EnumMember()]
         [Description("Actualizar Módulos Usuario")]
         ActualizarModulosUsuario,
+        [EnumMember()]
+        [Description("Agregar Incidente")]
+        AgregarIncidente,
+        [EnumMember()]
+        [Description("Actualizar Incidente")]
+        ActualizarIncidente,
+        [EnumMember()]
+        [Description("Eliminar Incidente")]
+        EliminarIncidente,
+
     }
     [DataContract(Name = "Secciones de Ficha")]
     public enum eSeccionFicha

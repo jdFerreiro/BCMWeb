@@ -318,4 +318,13 @@
   <data name="ActualizarModulosUsuario" xml:space="preserve">
     <value>Actualizar Modulos para el usuario {0}  en la empresa {1}</value>
   </data>
+  <data name="ActualizarIncidenteMessage" xml:space="preserve">
+    <value>Actualizar Incidente</value>
+  </data>
+  <data name="AgregarIncidenteMessage" xml:space="preserve">
+    <value>Agregar un nuevo incidente</value>
+  </data>
+  <data name="EliminarIncidenteMessage" xml:space="preserve">
+    <value>Eliminar Incidente</value>
+  </data>
 </root>

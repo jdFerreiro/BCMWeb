@@ -7,7 +7,7 @@ using System.Web.Mvc;
 
 namespace BCMWeb.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class PMTController : Controller
     {
         [SessionExpire]

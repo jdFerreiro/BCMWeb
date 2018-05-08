@@ -19,7 +19,7 @@ namespace Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class AuditoriaResource {
@@ -115,11 +115,29 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Actualizar Incidente.
+        /// </summary>
+        public static string ActualizarIncidenteMessage {
+            get {
+                return ResourceManager.GetString("ActualizarIncidenteMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Actualizar Modulos para el usuario {0}  en la empresa {1}.
         /// </summary>
         public static string ActualizarModulosUsuario {
             get {
                 return ResourceManager.GetString("ActualizarModulosUsuario", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Agregar un nuevo incidente.
+        /// </summary>
+        public static string AgregarIncidenteMessage {
+            get {
+                return ResourceManager.GetString("AgregarIncidenteMessage", resourceCulture);
             }
         }
         
@@ -552,6 +570,15 @@ namespace Resources {
         public static string EliminarAccionMessage1 {
             get {
                 return ResourceManager.GetString("EliminarAccionMessage1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Eliminar Incidente.
+        /// </summary>
+        public static string EliminarIncidenteMessage {
+            get {
+                return ResourceManager.GetString("EliminarIncidenteMessage", resourceCulture);
             }
         }
         

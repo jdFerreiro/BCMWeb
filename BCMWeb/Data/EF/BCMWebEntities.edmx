@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="EntitiesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="EntitiesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="tblAuditoria">
           <Key>
             <PropertyRef Name="IdAuditoria" />
@@ -883,6 +883,33 @@
           <Property Name="Culture" Type="nchar" MaxLength="5" Nullable="false" />
           <Property Name="IdTipoUbicacionInformacion" Type="int" Nullable="false" />
           <Property Name="Descripcion" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="tblCulture_FuenteIncidente">
+          <Key>
+            <PropertyRef Name="Culture" />
+            <PropertyRef Name="IdFuenteIncidente" />
+          </Key>
+          <Property Name="Culture" Type="nchar" MaxLength="5" Nullable="false" />
+          <Property Name="IdFuenteIncidente" Type="int" Nullable="false" />
+          <Property Name="Descripcion" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="tblCulture_NaturalezaIncidente">
+          <Key>
+            <PropertyRef Name="Culture" />
+            <PropertyRef Name="IdNaturalezaIncidente" />
+          </Key>
+          <Property Name="Culture" Type="nchar" MaxLength="5" Nullable="false" />
+          <Property Name="IdNaturalezaIncidente" Type="int" Nullable="false" />
+          <Property Name="Descripcion" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="tblCulture_TipoIncidente">
+          <Key>
+            <PropertyRef Name="Culture" />
+            <PropertyRef Name="IdTipoIncidente" />
+          </Key>
+          <Property Name="Culture" Type="nchar" MaxLength="5" Nullable="false" />
+          <Property Name="IdTipoIncidente" Type="int" Nullable="false" />
+          <Property Name="Descripcion" Type="nvarchar" MaxLength="250" />
         </EntityType>
         <EntityType Name="tblDocumento">
           <Key>
@@ -1823,6 +1850,41 @@
           <Property Name="IdEstado" Type="bigint" Nullable="false" />
           <Property Name="IdPais" Type="bigint" Nullable="false" />
         </EntityType>
+        <EntityType Name="tblFuenteIncidente">
+          <Key>
+            <PropertyRef Name="IdFuenteIncidente" />
+          </Key>
+          <Property Name="IdFuenteIncidente" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblIncidentes">
+          <Key>
+            <PropertyRef Name="IdEmpresa" />
+            <PropertyRef Name="IdIncidente" />
+          </Key>
+          <Property Name="IdEmpresa" Type="bigint" Nullable="false" />
+          <Property Name="IdIncidente" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdTipoIncidente" Type="int" />
+          <Property Name="IdNaturalezaIncidente" Type="int" />
+          <Property Name="IdFuenteIncidente" Type="int" />
+          <Property Name="FechaIncidente" Type="datetime" />
+          <Property Name="Descripcion" Type="nvarchar(max)" />
+          <Property Name="LugarIncidente" Type="nvarchar(max)" />
+          <Property Name="Duracion" Type="int" />
+          <Property Name="NombreReportero" Type="nvarchar" MaxLength="500" />
+          <Property Name="NombreSolucionador" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="tblNaturalezaIncidente">
+          <Key>
+            <PropertyRef Name="IdNaturalezaIncidente" />
+          </Key>
+          <Property Name="IdNaturalezaIncidente" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblTipoIncidente">
+          <Key>
+            <PropertyRef Name="IdTipoIncidente" />
+          </Key>
+          <Property Name="IdTipoIncidente" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
         <Association Name="FK_tblAprobacion_tblDocumento">
           <End Role="tblDocumento" Type="Self.tblDocumento" Multiplicity="1" />
           <End Role="tblDocumentoAprobacion" Type="Self.tblDocumentoAprobacion" Multiplicity="*" />
@@ -2174,6 +2236,20 @@
             <Dependent Role="tblBIAAmenaza">
               <PropertyRef Name="IdEmpresa" />
               <PropertyRef Name="Severidad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblBIAAmenazaEvento_tblBIADocumento">
+          <End Role="tblBIADocumento" Type="Self.tblBIADocumento" Multiplicity="1" />
+          <End Role="tblBIAAmenazaEvento" Type="Self.tblBIAAmenazaEvento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblBIADocumento">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumentoBIA" />
+            </Principal>
+            <Dependent Role="tblBIAAmenazaEvento">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumentoBIA" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3293,6 +3369,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_tblCulture_FuenteIncidente_tblFuenteIncidente">
+          <End Role="tblFuenteIncidente" Type="Self.tblFuenteIncidente" Multiplicity="1" />
+          <End Role="tblCulture_FuenteIncidente" Type="Self.tblCulture_FuenteIncidente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblFuenteIncidente">
+              <PropertyRef Name="IdFuenteIncidente" />
+            </Principal>
+            <Dependent Role="tblCulture_FuenteIncidente">
+              <PropertyRef Name="IdFuenteIncidente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblCulture_NaturalezaIncidente_tblNaturalezaIncidente">
+          <End Role="tblNaturalezaIncidente" Type="Self.tblNaturalezaIncidente" Multiplicity="1" />
+          <End Role="tblCulture_NaturalezaIncidente" Type="Self.tblCulture_NaturalezaIncidente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblNaturalezaIncidente">
+              <PropertyRef Name="IdNaturalezaIncidente" />
+            </Principal>
+            <Dependent Role="tblCulture_NaturalezaIncidente">
+              <PropertyRef Name="IdNaturalezaIncidente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_tblCulture_NivelUsuario_tblNivelUsuario">
           <End Role="tblNivelUsuario" Type="Self.tblNivelUsuario" Multiplicity="1" />
           <End Role="tblCultura_NivelUsuario" Type="Self.tblCultura_NivelUsuario" Multiplicity="*" />
@@ -3314,6 +3414,18 @@
             </Principal>
             <Dependent Role="tblCultura_Pais">
               <PropertyRef Name="IdPais" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblCulture_TipoIncidente_tblTipoIncidente">
+          <End Role="tblTipoIncidente" Type="Self.tblTipoIncidente" Multiplicity="1" />
+          <End Role="tblCulture_TipoIncidente" Type="Self.tblCulture_TipoIncidente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblTipoIncidente">
+              <PropertyRef Name="IdTipoIncidente" />
+            </Principal>
+            <Dependent Role="tblCulture_TipoIncidente">
+              <PropertyRef Name="IdTipoIncidente" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3742,6 +3854,54 @@
             </Principal>
             <Dependent Role="tblFormatosEmail">
               <PropertyRef Name="IdEmpresa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblIncidentes_tblEmpresa">
+          <End Role="tblEmpresa" Type="Self.tblEmpresa" Multiplicity="1" />
+          <End Role="tblIncidentes" Type="Self.tblIncidentes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblEmpresa">
+              <PropertyRef Name="IdEmpresa" />
+            </Principal>
+            <Dependent Role="tblIncidentes">
+              <PropertyRef Name="IdEmpresa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblIncidentes_tblFuenteIncidente">
+          <End Role="tblFuenteIncidente" Type="Self.tblFuenteIncidente" Multiplicity="0..1" />
+          <End Role="tblIncidentes" Type="Self.tblIncidentes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblFuenteIncidente">
+              <PropertyRef Name="IdFuenteIncidente" />
+            </Principal>
+            <Dependent Role="tblIncidentes">
+              <PropertyRef Name="IdFuenteIncidente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblIncidentes_tblNaturalezaIncidente">
+          <End Role="tblNaturalezaIncidente" Type="Self.tblNaturalezaIncidente" Multiplicity="0..1" />
+          <End Role="tblIncidentes" Type="Self.tblIncidentes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblNaturalezaIncidente">
+              <PropertyRef Name="IdNaturalezaIncidente" />
+            </Principal>
+            <Dependent Role="tblIncidentes">
+              <PropertyRef Name="IdNaturalezaIncidente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblIncidentes_tblTipoIncidente">
+          <End Role="tblTipoIncidente" Type="Self.tblTipoIncidente" Multiplicity="0..1" />
+          <End Role="tblIncidentes" Type="Self.tblIncidentes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblTipoIncidente">
+              <PropertyRef Name="IdTipoIncidente" />
+            </Principal>
+            <Dependent Role="tblIncidentes">
+              <PropertyRef Name="IdTipoIncidente" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4893,6 +5053,9 @@
           <EntitySet Name="tblCultura_TipoTablaContenido" EntityType="Self.tblCultura_TipoTablaContenido" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblCultura_TipoTelefono" EntityType="Self.tblCultura_TipoTelefono" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblCultura_TipoUbicacionInformacion" EntityType="Self.tblCultura_TipoUbicacionInformacion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblCulture_FuenteIncidente" EntityType="Self.tblCulture_FuenteIncidente" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblCulture_NaturalezaIncidente" EntityType="Self.tblCulture_NaturalezaIncidente" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblCulture_TipoIncidente" EntityType="Self.tblCulture_TipoIncidente" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblDocumento" EntityType="Self.tblDocumento" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblDocumentoAnexo" EntityType="Self.tblDocumentoAnexo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblDocumentoAprobacion" EntityType="Self.tblDocumentoAprobacion" Schema="dbo" store:Type="Tables" />
@@ -4975,6 +5138,10 @@
           <EntitySet Name="tblUsuario" EntityType="Self.tblUsuario" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblUsuarioUnidadOrganizativa" EntityType="Self.tblUsuarioUnidadOrganizativa" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblVicepresidencia" EntityType="Self.tblVicepresidencia" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblFuenteIncidente" EntityType="Self.tblFuenteIncidente" Schema="PMI" store:Type="Tables" />
+          <EntitySet Name="tblIncidentes" EntityType="Self.tblIncidentes" Schema="PMI" store:Type="Tables" />
+          <EntitySet Name="tblNaturalezaIncidente" EntityType="Self.tblNaturalezaIncidente" Schema="PMI" store:Type="Tables" />
+          <EntitySet Name="tblTipoIncidente" EntityType="Self.tblTipoIncidente" Schema="PMI" store:Type="Tables" />
           <AssociationSet Name="FK_tblAprobacion_tblDocumento" Association="Self.FK_tblAprobacion_tblDocumento">
             <End Role="tblDocumento" EntitySet="tblDocumento" />
             <End Role="tblDocumentoAprobacion" EntitySet="tblDocumentoAprobacion" />
@@ -5070,6 +5237,10 @@
           <AssociationSet Name="FK_tblBIAAmenaza_tblSeveridadRiesgo" Association="Self.FK_tblBIAAmenaza_tblSeveridadRiesgo">
             <End Role="tblSeveridadRiesgo" EntitySet="tblSeveridadRiesgo" />
             <End Role="tblBIAAmenaza" EntitySet="tblBIAAmenaza" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblBIAAmenazaEvento_tblBIADocumento" Association="Self.FK_tblBIAAmenazaEvento_tblBIADocumento">
+            <End Role="tblBIADocumento" EntitySet="tblBIADocumento" />
+            <End Role="tblBIAAmenazaEvento" EntitySet="tblBIAAmenazaEvento" />
           </AssociationSet>
           <AssociationSet Name="FK_tblBIAAplicacion_tblBIAProceso" Association="Self.FK_tblBIAAplicacion_tblBIAProceso">
             <End Role="tblBIAProceso" EntitySet="tblBIAProceso" />
@@ -5379,6 +5550,14 @@
             <End Role="tblCiudad" EntitySet="tblCiudad" />
             <End Role="tblCultura_Ciudad" EntitySet="tblCultura_Ciudad" />
           </AssociationSet>
+          <AssociationSet Name="FK_tblCulture_FuenteIncidente_tblFuenteIncidente" Association="Self.FK_tblCulture_FuenteIncidente_tblFuenteIncidente">
+            <End Role="tblFuenteIncidente" EntitySet="tblFuenteIncidente" />
+            <End Role="tblCulture_FuenteIncidente" EntitySet="tblCulture_FuenteIncidente" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblCulture_NaturalezaIncidente_tblNaturalezaIncidente" Association="Self.FK_tblCulture_NaturalezaIncidente_tblNaturalezaIncidente">
+            <End Role="tblNaturalezaIncidente" EntitySet="tblNaturalezaIncidente" />
+            <End Role="tblCulture_NaturalezaIncidente" EntitySet="tblCulture_NaturalezaIncidente" />
+          </AssociationSet>
           <AssociationSet Name="FK_tblCulture_NivelUsuario_tblNivelUsuario" Association="Self.FK_tblCulture_NivelUsuario_tblNivelUsuario">
             <End Role="tblNivelUsuario" EntitySet="tblNivelUsuario" />
             <End Role="tblCultura_NivelUsuario" EntitySet="tblCultura_NivelUsuario" />
@@ -5386,6 +5565,10 @@
           <AssociationSet Name="FK_tblCulture_Pais_tblPais" Association="Self.FK_tblCulture_Pais_tblPais">
             <End Role="tblPais" EntitySet="tblPais" />
             <End Role="tblCultura_Pais" EntitySet="tblCultura_Pais" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblCulture_TipoIncidente_tblTipoIncidente" Association="Self.FK_tblCulture_TipoIncidente_tblTipoIncidente">
+            <End Role="tblTipoIncidente" EntitySet="tblTipoIncidente" />
+            <End Role="tblCulture_TipoIncidente" EntitySet="tblCulture_TipoIncidente" />
           </AssociationSet>
           <AssociationSet Name="FK_tblDocumento_tblBIADocumento" Association="Self.FK_tblDocumento_tblBIADocumento">
             <End Role="tblDocumento" EntitySet="tblDocumento" />
@@ -5514,6 +5697,22 @@
           <AssociationSet Name="FK_tblFormatosEmail_tblEmpresa" Association="Self.FK_tblFormatosEmail_tblEmpresa">
             <End Role="tblEmpresa" EntitySet="tblEmpresa" />
             <End Role="tblFormatosEmail" EntitySet="tblFormatosEmail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblIncidentes_tblEmpresa" Association="Self.FK_tblIncidentes_tblEmpresa">
+            <End Role="tblEmpresa" EntitySet="tblEmpresa" />
+            <End Role="tblIncidentes" EntitySet="tblIncidentes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblIncidentes_tblFuenteIncidente" Association="Self.FK_tblIncidentes_tblFuenteIncidente">
+            <End Role="tblFuenteIncidente" EntitySet="tblFuenteIncidente" />
+            <End Role="tblIncidentes" EntitySet="tblIncidentes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblIncidentes_tblNaturalezaIncidente" Association="Self.FK_tblIncidentes_tblNaturalezaIncidente">
+            <End Role="tblNaturalezaIncidente" EntitySet="tblNaturalezaIncidente" />
+            <End Role="tblIncidentes" EntitySet="tblIncidentes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblIncidentes_tblTipoIncidente" Association="Self.FK_tblIncidentes_tblTipoIncidente">
+            <End Role="tblTipoIncidente" EntitySet="tblTipoIncidente" />
+            <End Role="tblIncidentes" EntitySet="tblIncidentes" />
           </AssociationSet>
           <AssociationSet Name="FK_tblIniciativas_Anexo_tblEmpresa" Association="Self.FK_tblIniciativas_Anexo_tblEmpresa">
             <End Role="tblEmpresa" EntitySet="tblEmpresa" />
@@ -5836,8 +6035,7 @@
             <End Role="tblVicepresidencia" EntitySet="tblVicepresidencia" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="EntitiesModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -6112,6 +6310,7 @@
           <Property Name="Nombre" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="IdEventoRiesgo" Type="Int64" Nullable="false" />
           <NavigationProperty Name="tblBIAEventoControl" Relationship="Self.FK_tblBIAEventoControl_tblBIAAmenazaEvento" FromRole="tblBIAAmenazaEvento" ToRole="tblBIAEventoControl" />
+          <NavigationProperty Name="tblBIADocumento" Relationship="EntitiesModel.FK_tblBIAAmenazaEvento_tblBIADocumento" FromRole="tblBIAAmenazaEvento" ToRole="tblBIADocumento" />
         </EntityType>
         <EntityType Name="tblBIAAplicacion">
           <Key>
@@ -6199,6 +6398,7 @@
           <NavigationProperty Name="tblBIAProceso" Relationship="Self.FK_tblBIAProceso_tblBIADocumento" FromRole="tblBIADocumento" ToRole="tblBIAProceso" />
           <NavigationProperty Name="tblDocumento" Relationship="Self.FK_tblDocumento_tblBIADocumento" FromRole="tblBIADocumento" ToRole="tblDocumento" />
           <NavigationProperty Name="tblEmpresa" Relationship="Self.FK_tblEmpresa_tblBIADocumento_FK1" FromRole="tblBIADocumento" ToRole="tblEmpresa" />
+          <NavigationProperty Name="tblBIAAmenazaEvento" Relationship="EntitiesModel.FK_tblBIAAmenazaEvento_tblBIADocumento" FromRole="tblBIADocumento" ToRole="tblBIAAmenazaEvento" />
         </EntityType>
         <EntityType Name="tblBIAEntrada">
           <Key>
@@ -7093,6 +7293,7 @@
           <NavigationProperty Name="tblPMTResponsableUpdate" Relationship="Self.FK_tblPMTResponsableUpdate_tblEmpresa" FromRole="tblEmpresa" ToRole="tblPMTResponsableUpdate" />
           <NavigationProperty Name="tblProducto" Relationship="Self.FK_tblProducto_tblEmpresa" FromRole="tblEmpresa" ToRole="tblProducto" />
           <NavigationProperty Name="tblUsuarioUnidadOrganizativa" Relationship="Self.FK_tblUsuarioUnidadOrganizativa_tblEmpresa" FromRole="tblEmpresa" ToRole="tblUsuarioUnidadOrganizativa" />
+          <NavigationProperty Name="tblIncidentes" Relationship="EntitiesModel.FK_tblIncidentes_tblEmpresa" FromRole="tblEmpresa" ToRole="tblIncidentes" />
         </EntityType>
         <EntityType Name="tblEmpresaModulo">
           <Key>
@@ -12101,7 +12302,219 @@
             <End Role="tblUsuario" EntitySet="tblUsuario" />
             <End Role="tblUsuarioUnidadOrganizativa" EntitySet="tblUsuarioUnidadOrganizativa" />
           </AssociationSet>
+          <EntitySet Name="tblFuenteIncidente" EntityType="EntitiesModel.tblFuenteIncidente" />
+          <EntitySet Name="tblIncidentes" EntityType="EntitiesModel.tblIncidentes" />
+          <EntitySet Name="tblNaturalezaIncidente" EntityType="EntitiesModel.tblNaturalezaIncidente" />
+          <EntitySet Name="tblTipoIncidente" EntityType="EntitiesModel.tblTipoIncidente" />
+          <AssociationSet Name="FK_tblBIAAmenazaEvento_tblBIADocumento" Association="EntitiesModel.FK_tblBIAAmenazaEvento_tblBIADocumento">
+            <End Role="tblBIADocumento" EntitySet="tblBIADocumento" />
+            <End Role="tblBIAAmenazaEvento" EntitySet="tblBIAAmenazaEvento" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblIncidentes_tblEmpresa" Association="EntitiesModel.FK_tblIncidentes_tblEmpresa">
+            <End Role="tblEmpresa" EntitySet="tblEmpresa" />
+            <End Role="tblIncidentes" EntitySet="tblIncidentes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblIncidentes_tblFuenteIncidente" Association="EntitiesModel.FK_tblIncidentes_tblFuenteIncidente">
+            <End Role="tblFuenteIncidente" EntitySet="tblFuenteIncidente" />
+            <End Role="tblIncidentes" EntitySet="tblIncidentes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblIncidentes_tblNaturalezaIncidente" Association="EntitiesModel.FK_tblIncidentes_tblNaturalezaIncidente">
+            <End Role="tblNaturalezaIncidente" EntitySet="tblNaturalezaIncidente" />
+            <End Role="tblIncidentes" EntitySet="tblIncidentes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblIncidentes_tblTipoIncidente" Association="EntitiesModel.FK_tblIncidentes_tblTipoIncidente">
+            <End Role="tblTipoIncidente" EntitySet="tblTipoIncidente" />
+            <End Role="tblIncidentes" EntitySet="tblIncidentes" />
+          </AssociationSet>
+          <EntitySet Name="tblCulture_FuenteIncidente" EntityType="EntitiesModel.tblCulture_FuenteIncidente" />
+          <EntitySet Name="tblCulture_NaturalezaIncidente" EntityType="EntitiesModel.tblCulture_NaturalezaIncidente" />
+          <EntitySet Name="tblCulture_TipoIncidente" EntityType="EntitiesModel.tblCulture_TipoIncidente" />
+          <AssociationSet Name="FK_tblCulture_FuenteIncidente_tblFuenteIncidente" Association="EntitiesModel.FK_tblCulture_FuenteIncidente_tblFuenteIncidente">
+            <End Role="tblFuenteIncidente" EntitySet="tblFuenteIncidente" />
+            <End Role="tblCulture_FuenteIncidente" EntitySet="tblCulture_FuenteIncidente" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblCulture_NaturalezaIncidente_tblNaturalezaIncidente" Association="EntitiesModel.FK_tblCulture_NaturalezaIncidente_tblNaturalezaIncidente">
+            <End Role="tblNaturalezaIncidente" EntitySet="tblNaturalezaIncidente" />
+            <End Role="tblCulture_NaturalezaIncidente" EntitySet="tblCulture_NaturalezaIncidente" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblCulture_TipoIncidente_tblTipoIncidente" Association="EntitiesModel.FK_tblCulture_TipoIncidente_tblTipoIncidente">
+            <End Role="tblTipoIncidente" EntitySet="tblTipoIncidente" />
+            <End Role="tblCulture_TipoIncidente" EntitySet="tblCulture_TipoIncidente" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="tblFuenteIncidente">
+          <Key>
+            <PropertyRef Name="IdFuenteIncidente" />
+          </Key>
+          <Property Name="IdFuenteIncidente" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="tblIncidentes" Relationship="EntitiesModel.FK_tblIncidentes_tblFuenteIncidente" FromRole="tblFuenteIncidente" ToRole="tblIncidentes" />
+          <NavigationProperty Name="tblCulture_FuenteIncidente" Relationship="EntitiesModel.FK_tblCulture_FuenteIncidente_tblFuenteIncidente" FromRole="tblFuenteIncidente" ToRole="tblCulture_FuenteIncidente" />
+        </EntityType>
+        <EntityType Name="tblIncidentes">
+          <Key>
+            <PropertyRef Name="IdEmpresa" />
+            <PropertyRef Name="IdIncidente" />
+          </Key>
+          <Property Name="IdEmpresa" Type="Int64" Nullable="false" />
+          <Property Name="IdIncidente" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdTipoIncidente" Type="Int32" />
+          <Property Name="IdNaturalezaIncidente" Type="Int32" />
+          <Property Name="IdFuenteIncidente" Type="Int32" />
+          <Property Name="FechaIncidente" Type="DateTime" Precision="3" />
+          <Property Name="LugarIncidente" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Duracion" Type="Int32" />
+          <Property Name="NombreReportero" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="NombreSolucionador" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblEmpresa" Relationship="EntitiesModel.FK_tblIncidentes_tblEmpresa" FromRole="tblIncidentes" ToRole="tblEmpresa" />
+          <NavigationProperty Name="tblFuenteIncidente" Relationship="EntitiesModel.FK_tblIncidentes_tblFuenteIncidente" FromRole="tblIncidentes" ToRole="tblFuenteIncidente" />
+          <NavigationProperty Name="tblNaturalezaIncidente" Relationship="EntitiesModel.FK_tblIncidentes_tblNaturalezaIncidente" FromRole="tblIncidentes" ToRole="tblNaturalezaIncidente" />
+          <NavigationProperty Name="tblTipoIncidente" Relationship="EntitiesModel.FK_tblIncidentes_tblTipoIncidente" FromRole="tblIncidentes" ToRole="tblTipoIncidente" />
+          <Property Name="Descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="tblNaturalezaIncidente">
+          <Key>
+            <PropertyRef Name="IdNaturalezaIncidente" />
+          </Key>
+          <Property Name="IdNaturalezaIncidente" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="tblIncidentes" Relationship="EntitiesModel.FK_tblIncidentes_tblNaturalezaIncidente" FromRole="tblNaturalezaIncidente" ToRole="tblIncidentes" />
+          <NavigationProperty Name="tblCulture_NaturalezaIncidente" Relationship="EntitiesModel.FK_tblCulture_NaturalezaIncidente_tblNaturalezaIncidente" FromRole="tblNaturalezaIncidente" ToRole="tblCulture_NaturalezaIncidente" />
+        </EntityType>
+        <EntityType Name="tblTipoIncidente">
+          <Key>
+            <PropertyRef Name="IdTipoIncidente" />
+          </Key>
+          <Property Name="IdTipoIncidente" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="tblIncidentes" Relationship="EntitiesModel.FK_tblIncidentes_tblTipoIncidente" FromRole="tblTipoIncidente" ToRole="tblIncidentes" />
+          <NavigationProperty Name="tblCulture_TipoIncidente" Relationship="EntitiesModel.FK_tblCulture_TipoIncidente_tblTipoIncidente" FromRole="tblTipoIncidente" ToRole="tblCulture_TipoIncidente" />
+        </EntityType>
+        <Association Name="FK_tblBIAAmenazaEvento_tblBIADocumento">
+          <End Type="EntitiesModel.tblBIADocumento" Role="tblBIADocumento" Multiplicity="1" />
+          <End Type="EntitiesModel.tblBIAAmenazaEvento" Role="tblBIAAmenazaEvento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblBIADocumento">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumentoBIA" />
+            </Principal>
+            <Dependent Role="tblBIAAmenazaEvento">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdDocumentoBIA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblIncidentes_tblEmpresa">
+          <End Type="EntitiesModel.tblEmpresa" Role="tblEmpresa" Multiplicity="1" />
+          <End Type="EntitiesModel.tblIncidentes" Role="tblIncidentes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblEmpresa">
+              <PropertyRef Name="IdEmpresa" />
+            </Principal>
+            <Dependent Role="tblIncidentes">
+              <PropertyRef Name="IdEmpresa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblIncidentes_tblFuenteIncidente">
+          <End Type="EntitiesModel.tblFuenteIncidente" Role="tblFuenteIncidente" Multiplicity="0..1" />
+          <End Type="EntitiesModel.tblIncidentes" Role="tblIncidentes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblFuenteIncidente">
+              <PropertyRef Name="IdFuenteIncidente" />
+            </Principal>
+            <Dependent Role="tblIncidentes">
+              <PropertyRef Name="IdFuenteIncidente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblIncidentes_tblNaturalezaIncidente">
+          <End Type="EntitiesModel.tblNaturalezaIncidente" Role="tblNaturalezaIncidente" Multiplicity="0..1" />
+          <End Type="EntitiesModel.tblIncidentes" Role="tblIncidentes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblNaturalezaIncidente">
+              <PropertyRef Name="IdNaturalezaIncidente" />
+            </Principal>
+            <Dependent Role="tblIncidentes">
+              <PropertyRef Name="IdNaturalezaIncidente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblIncidentes_tblTipoIncidente">
+          <End Type="EntitiesModel.tblTipoIncidente" Role="tblTipoIncidente" Multiplicity="0..1" />
+          <End Type="EntitiesModel.tblIncidentes" Role="tblIncidentes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblTipoIncidente">
+              <PropertyRef Name="IdTipoIncidente" />
+            </Principal>
+            <Dependent Role="tblIncidentes">
+              <PropertyRef Name="IdTipoIncidente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="tblCulture_FuenteIncidente">
+          <Key>
+            <PropertyRef Name="Culture" />
+            <PropertyRef Name="IdFuenteIncidente" />
+          </Key>
+          <Property Name="Culture" Type="String" Nullable="false" MaxLength="5" FixedLength="true" Unicode="true" />
+          <Property Name="IdFuenteIncidente" Type="Int32" Nullable="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblFuenteIncidente" Relationship="EntitiesModel.FK_tblCulture_FuenteIncidente_tblFuenteIncidente" FromRole="tblCulture_FuenteIncidente" ToRole="tblFuenteIncidente" />
+        </EntityType>
+        <EntityType Name="tblCulture_NaturalezaIncidente">
+          <Key>
+            <PropertyRef Name="Culture" />
+            <PropertyRef Name="IdNaturalezaIncidente" />
+          </Key>
+          <Property Name="Culture" Type="String" Nullable="false" MaxLength="5" FixedLength="true" Unicode="true" />
+          <Property Name="IdNaturalezaIncidente" Type="Int32" Nullable="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblNaturalezaIncidente" Relationship="EntitiesModel.FK_tblCulture_NaturalezaIncidente_tblNaturalezaIncidente" FromRole="tblCulture_NaturalezaIncidente" ToRole="tblNaturalezaIncidente" />
+        </EntityType>
+        <EntityType Name="tblCulture_TipoIncidente">
+          <Key>
+            <PropertyRef Name="Culture" />
+            <PropertyRef Name="IdTipoIncidente" />
+          </Key>
+          <Property Name="Culture" Type="String" Nullable="false" MaxLength="5" FixedLength="true" Unicode="true" />
+          <Property Name="IdTipoIncidente" Type="Int32" Nullable="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblTipoIncidente" Relationship="EntitiesModel.FK_tblCulture_TipoIncidente_tblTipoIncidente" FromRole="tblCulture_TipoIncidente" ToRole="tblTipoIncidente" />
+        </EntityType>
+        <Association Name="FK_tblCulture_FuenteIncidente_tblFuenteIncidente">
+          <End Type="EntitiesModel.tblFuenteIncidente" Role="tblFuenteIncidente" Multiplicity="1" />
+          <End Type="EntitiesModel.tblCulture_FuenteIncidente" Role="tblCulture_FuenteIncidente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblFuenteIncidente">
+              <PropertyRef Name="IdFuenteIncidente" />
+            </Principal>
+            <Dependent Role="tblCulture_FuenteIncidente">
+              <PropertyRef Name="IdFuenteIncidente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblCulture_NaturalezaIncidente_tblNaturalezaIncidente">
+          <End Type="EntitiesModel.tblNaturalezaIncidente" Role="tblNaturalezaIncidente" Multiplicity="1" />
+          <End Type="EntitiesModel.tblCulture_NaturalezaIncidente" Role="tblCulture_NaturalezaIncidente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblNaturalezaIncidente">
+              <PropertyRef Name="IdNaturalezaIncidente" />
+            </Principal>
+            <Dependent Role="tblCulture_NaturalezaIncidente">
+              <PropertyRef Name="IdNaturalezaIncidente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblCulture_TipoIncidente_tblTipoIncidente">
+          <End Type="EntitiesModel.tblTipoIncidente" Role="tblTipoIncidente" Multiplicity="1" />
+          <End Type="EntitiesModel.tblCulture_TipoIncidente" Role="tblCulture_TipoIncidente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblTipoIncidente">
+              <PropertyRef Name="IdTipoIncidente" />
+            </Principal>
+            <Dependent Role="tblCulture_TipoIncidente">
+              <PropertyRef Name="IdTipoIncidente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -13830,6 +14243,71 @@
                 <ScalarProperty Name="IdCiudad" ColumnName="IdCiudad" />
                 <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
                 <ScalarProperty Name="IdPais" ColumnName="IdPais" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblFuenteIncidente">
+            <EntityTypeMapping TypeName="EntitiesModel.tblFuenteIncidente">
+              <MappingFragment StoreEntitySet="tblFuenteIncidente">
+                <ScalarProperty Name="IdFuenteIncidente" ColumnName="IdFuenteIncidente" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblIncidentes">
+            <EntityTypeMapping TypeName="EntitiesModel.tblIncidentes">
+              <MappingFragment StoreEntitySet="tblIncidentes">
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="NombreSolucionador" ColumnName="NombreSolucionador" />
+                <ScalarProperty Name="NombreReportero" ColumnName="NombreReportero" />
+                <ScalarProperty Name="Duracion" ColumnName="Duracion" />
+                <ScalarProperty Name="LugarIncidente" ColumnName="LugarIncidente" />
+                <ScalarProperty Name="FechaIncidente" ColumnName="FechaIncidente" />
+                <ScalarProperty Name="IdFuenteIncidente" ColumnName="IdFuenteIncidente" />
+                <ScalarProperty Name="IdNaturalezaIncidente" ColumnName="IdNaturalezaIncidente" />
+                <ScalarProperty Name="IdTipoIncidente" ColumnName="IdTipoIncidente" />
+                <ScalarProperty Name="IdIncidente" ColumnName="IdIncidente" />
+                <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblNaturalezaIncidente">
+            <EntityTypeMapping TypeName="EntitiesModel.tblNaturalezaIncidente">
+              <MappingFragment StoreEntitySet="tblNaturalezaIncidente">
+                <ScalarProperty Name="IdNaturalezaIncidente" ColumnName="IdNaturalezaIncidente" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblTipoIncidente">
+            <EntityTypeMapping TypeName="EntitiesModel.tblTipoIncidente">
+              <MappingFragment StoreEntitySet="tblTipoIncidente">
+                <ScalarProperty Name="IdTipoIncidente" ColumnName="IdTipoIncidente" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblCulture_FuenteIncidente">
+            <EntityTypeMapping TypeName="EntitiesModel.tblCulture_FuenteIncidente">
+              <MappingFragment StoreEntitySet="tblCulture_FuenteIncidente">
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="IdFuenteIncidente" ColumnName="IdFuenteIncidente" />
+                <ScalarProperty Name="Culture" ColumnName="Culture" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblCulture_NaturalezaIncidente">
+            <EntityTypeMapping TypeName="EntitiesModel.tblCulture_NaturalezaIncidente">
+              <MappingFragment StoreEntitySet="tblCulture_NaturalezaIncidente">
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="IdNaturalezaIncidente" ColumnName="IdNaturalezaIncidente" />
+                <ScalarProperty Name="Culture" ColumnName="Culture" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblCulture_TipoIncidente">
+            <EntityTypeMapping TypeName="EntitiesModel.tblCulture_TipoIncidente">
+              <MappingFragment StoreEntitySet="tblCulture_TipoIncidente">
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="IdTipoIncidente" ColumnName="IdTipoIncidente" />
+                <ScalarProperty Name="Culture" ColumnName="Culture" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

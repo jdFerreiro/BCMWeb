@@ -228,4 +228,7 @@ AIACABtk25KCATmC3MAAAB/AAAAEgAAAAAAAAAAAAAAAADmBQAAd29yZC9udW1iZXJpbmcueG1sUEsBA
   <data name="labelLoadPanelCertificacion" xml:space="preserve">
     <value>Enviando correos a los certificadores. Espere por favor...</value>
   </data>
+  <data name="captionButtonPMI" xml:space="preserve">
+    <value>Incidentes</value>
+  </data>
 </root>

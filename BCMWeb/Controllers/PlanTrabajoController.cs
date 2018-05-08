@@ -103,7 +103,7 @@ namespace BCMWeb.Controllers
             {
                 try
                 {
-                    string DatosActualizados = Metodos.GetDatosActualizados(Iniciativa);
+                    string DatosActualizados = Metodos.GetDatosIniciativaActualizados(Iniciativa);
                     Metodos.UpdateIniciativa(Iniciativa);
                     Auditoria.RegistarIniciativa(eTipoAccion.ActualizarIniciativa, Iniciativa.IdIniciativa, Iniciativa.Nombre, DatosActualizados);
                 }

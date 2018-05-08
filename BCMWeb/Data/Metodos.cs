@@ -106,7 +106,6 @@ namespace BCMWeb
 
             return model;
         }
-
         public static IList<long> GetRelatedUOIds(long filterIdUnidadOrganizativa)
         {
             long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
@@ -5610,7 +5609,7 @@ namespace BCMWeb
                 db.SaveChanges();
             }
         }
-        public static string GetDatosActualizados(IniciativaModel iniciativa)
+        public static string GetDatosIniciativaActualizados(IniciativaModel iniciativa)
         {
             long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
 
@@ -8595,6 +8594,256 @@ namespace BCMWeb
 
             return Name;
         }
+        public static List<PMIModel> GetIncidentes()
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            int IdTipoPruebas = int.Parse(Session["IdClaseDocumento"].ToString());
+            List<PMIModel> datos = new List<PMIModel>();
 
+            string _ServerPath = Server.MapPath(".").Replace("\\PPE", string.Empty);
+
+            using (Entities db = new Entities())
+            {
+                datos = (from d in db.tblIncidentes
+                         where d.IdEmpresa == IdEmpresa
+                         select d)
+                           .AsEnumerable()
+                           .Select(d => new PMIModel
+                           {
+                               Descripcion = d.Descripcion,
+                               Duracion = (int)d.Duracion,
+                               FechaIncidente = (DateTime)d.FechaIncidente,
+                               IdClaseDocumento = IdTipoPruebas,
+                               IdEmpresa = d.IdEmpresa,
+                               IdFuenteIncidente = (int)d.IdFuenteIncidente,
+                               IdIncidente = d.IdIncidente,
+                               IdNaturalezaIncidente = (int)d.IdNaturalezaIncidente,
+                               IdTipoIncidente = (int)d.IdTipoIncidente,
+                               LugarIncidente = d.LugarIncidente,
+                               NombreReportero = d.NombreReportero,
+                               NombreSolucionador = d.NombreSolucionador,
+                           })
+                           .ToList();
+            }
+
+            return datos;
+        }
+        public static List<TablaModel_int> GetTiposIncidente()
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            List<TablaModel_int> data = new List<TablaModel_int>();
+
+            using (Entities db = new Entities())
+            {
+                data = db.tblCulture_TipoIncidente.Where(x => x.Culture == Culture || x.Culture == "es-VE").Select(x => new TablaModel_int
+                {
+                    Descripcion = x.Descripcion,
+                    Id = x.IdTipoIncidente,
+                }).ToList();
+            }
+
+            return data.OrderBy(x => x.Descripcion).ToList();
+
+        }
+        public static List<TablaModel_int> GetFuentesIncidente()
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            List<TablaModel_int> data = new List<TablaModel_int>();
+
+            using (Entities db = new Entities())
+            {
+                data = db.tblCulture_FuenteIncidente.Where(x => x.Culture == Culture || x.Culture == "es-VE").Select(x => new TablaModel_int
+                {
+                    Descripcion = x.Descripcion,
+                    Id = x.IdFuenteIncidente,
+                }).ToList();
+            }
+
+            return data.OrderBy(x => x.Descripcion).ToList();
+
+        }
+        public static List<TablaModel_int> GetNaturalezaIncidente()
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            List<TablaModel_int> data = new List<TablaModel_int>();
+
+            using (Entities db = new Entities())
+            {
+                data = db.tblCulture_NaturalezaIncidente.Where(x => x.Culture == Culture || x.Culture == "es-VE").Select(x => new TablaModel_int
+                {
+                    Descripcion = x.Descripcion,
+                    Id = x.IdNaturalezaIncidente,
+                }).ToList();
+            }
+
+            return data.OrderBy(x => x.Descripcion).ToList();
+
+        }
+        public static PMIModel GetEditableIncidente(long IdIncidente)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            PMIModel Incidente = new PMIModel();
+
+            using (Entities db = new Entities())
+            {
+                tblIncidentes x = db.tblIncidentes.Where(d => d.IdEmpresa == IdEmpresa && d.IdIncidente == IdIncidente).FirstOrDefault();
+
+                Incidente = new PMIModel
+                {
+                    Descripcion = x.Descripcion ?? string.Empty,
+                    Duracion = x.Duracion ?? 0,
+                    FechaIncidente = x.FechaIncidente,
+                    IdEmpresa = x.IdEmpresa,
+                    IdFuenteIncidente = x.IdFuenteIncidente ?? 0,
+                    IdIncidente = x.IdIncidente,
+                    IdNaturalezaIncidente = x.IdNaturalezaIncidente ?? 0,
+                    IdTipoIncidente = x.IdTipoIncidente ?? 0,
+                    LugarIncidente = x.LugarIncidente,
+                    NombreReportero = x.NombreReportero,
+                    NombreSolucionador = x.NombreSolucionador
+                };
+            }
+
+            return Incidente;
+        }
+        public static void InsertIncidente(PMIModel Incidente)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+
+            using (Entities db = new Entities())
+            {
+                tblIncidentes reg = new tblIncidentes
+                {
+                    Descripcion = Incidente.Descripcion,
+                    Duracion = Incidente.Duracion,
+                    FechaIncidente = Incidente.FechaIncidente,
+                    IdEmpresa = IdEmpresa,
+                    IdFuenteIncidente = Incidente.IdFuenteIncidente,
+                    IdNaturalezaIncidente = Incidente.IdNaturalezaIncidente,
+                    IdTipoIncidente = Incidente.IdTipoIncidente,
+                    LugarIncidente = Incidente.LugarIncidente,
+                    NombreReportero = Incidente.NombreReportero,
+                    NombreSolucionador = Incidente.NombreSolucionador
+                };
+
+                db.tblIncidentes.Add(reg);
+                db.SaveChanges();
+
+                //Auditoria.RegistarIncidente(eTipoAccion.AgregarIncidente, reg.IdIncidente, reg.Nombre, string.Empty);
+            }
+        }
+        public static void UpdateIncidente(PMIModel Incidente)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+
+            using (Entities db = new Entities())
+            {
+                tblIncidentes reg = db.tblIncidentes.Where(x => x.IdEmpresa == IdEmpresa && x.IdIncidente == Incidente.IdIncidente).FirstOrDefault();
+
+                reg.Descripcion = Incidente.Descripcion;
+                reg.Duracion = Incidente.Duracion;
+                reg.FechaIncidente = Incidente.FechaIncidente;
+                reg.IdFuenteIncidente = Incidente.IdFuenteIncidente;
+                reg.IdNaturalezaIncidente = Incidente.IdNaturalezaIncidente;
+                reg.IdTipoIncidente = Incidente.IdTipoIncidente;
+                reg.LugarIncidente = Incidente.LugarIncidente;
+                reg.NombreReportero = Incidente.NombreReportero;
+                reg.NombreSolucionador = Incidente.NombreSolucionador;
+                db.SaveChanges();
+            }
+        }
+        public static void DeleteIncidente(long IdIncidente)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            string NombreIncidente = string.Empty;
+
+            using (Entities db = new Entities())
+            {
+                tblIncidentes reg = db.tblIncidentes.Where(x => x.IdEmpresa == IdEmpresa && x.IdIncidente == IdIncidente).FirstOrDefault();
+                IdIncidente = reg.IdIncidente;
+
+                db.tblIncidentes.Remove(reg);
+                db.SaveChanges();
+
+                Auditoria.RegistarIncidente(eTipoAccion.EliminarIncidente, IdIncidente, NombreIncidente, string.Empty);
+            }
+        }
+        public static string GetDatosIncidenteActualizados(PMIModel incidente)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+
+            tblIncidentes reg = null;
+            string Actualizaciones = string.Empty;
+
+            using (Entities db = new Entities())
+            {
+                reg = db.tblIncidentes.Where(x => x.IdEmpresa == IdEmpresa && x.IdIncidente == incidente.IdIncidente).FirstOrDefault();
+
+                if (reg != null)
+                {
+                    if (reg.Descripcion != incidente.Descripcion)
+                    {
+                        string _valorAnterior = (reg.Descripcion == null ? string.Empty : reg.Descripcion);
+                        string _valorActual = (string)(incidente.Descripcion == null ? string.Empty : incidente.Descripcion);
+                        Actualizaciones += string.Format("Descripción de la incidente de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                    }
+                    if (reg.FechaIncidente != incidente.FechaIncidente)
+                    {
+                        string _valorAnterior = (reg.FechaIncidente == null ? string.Empty : ((DateTime)reg.FechaIncidente).ToString("dd/MM/yyyy"));
+                        string _valorActual = (incidente.FechaIncidente == null ? string.Empty : ((DateTime)incidente.FechaIncidente).ToString("dd/MM/yyyy"));
+                        Actualizaciones += string.Format("Fecha del incidente de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                    }
+                    if (reg.IdTipoIncidente != incidente.IdTipoIncidente)
+                    {
+                        string _valorAnterior = (reg.IdTipoIncidente == null ? string.Empty : reg.tblTipoIncidente.tblCulture_TipoIncidente.Where(x => x.Culture == Culture || x.Culture == "es-VE").First().Descripcion.ToString());
+                        string _valorActual =  db.tblTipoIncidente.FirstOrDefault(x => x.IdTipoIncidente == incidente.IdTipoIncidente).tblCulture_TipoIncidente.Where(x => x.Culture == Culture || x.Culture == "es-VE").First().Descripcion.ToString();
+                        Actualizaciones += string.Format("Tipo de incidente de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                    }
+                    if (reg.IdNaturalezaIncidente != incidente.IdNaturalezaIncidente)
+                    {
+                        string _valorAnterior = (reg.IdNaturalezaIncidente == null ? string.Empty : reg.tblNaturalezaIncidente.tblCulture_NaturalezaIncidente.Where(x => x.Culture == Culture || x.Culture == "es-VE").First().Descripcion.ToString());
+                        string _valorActual = db.tblNaturalezaIncidente.FirstOrDefault(x => x.IdNaturalezaIncidente == incidente.IdNaturalezaIncidente).tblCulture_NaturalezaIncidente.Where(x => x.Culture == Culture || x.Culture == "es-VE").First().Descripcion.ToString();
+                        Actualizaciones += string.Format("Naturaleza de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                    }
+                    if (reg.IdFuenteIncidente != incidente.IdFuenteIncidente)
+                    {
+                        string _valorAnterior = (reg.IdFuenteIncidente == null ? string.Empty : reg.tblFuenteIncidente.tblCulture_FuenteIncidente.Where(x => x.Culture == Culture || x.Culture == "es-VE").First().Descripcion.ToString());
+                        string _valorActual = db.tblFuenteIncidente.FirstOrDefault(x => x.IdFuenteIncidente == incidente.IdNaturalezaIncidente).tblCulture_FuenteIncidente.Where(x => x.Culture == Culture || x.Culture == "es-VE").First().Descripcion.ToString();
+                        Actualizaciones += string.Format("Fecha de cierre real de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                    }
+                    if (reg.LugarIncidente != incidente.LugarIncidente)
+                    {
+                        string _valorAnterior = (reg.LugarIncidente == null ? string.Empty : reg.LugarIncidente);
+                        string _valorActual = (incidente.LugarIncidente == null ? string.Empty : incidente.LugarIncidente);
+                        Actualizaciones += string.Format("Lugar del incidente de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                    }
+                    if (reg.Duracion != incidente.Duracion)
+                    {
+                        string _valorAnterior = (reg.Duracion == null ? string.Empty : reg.Duracion.ToString());
+                        string _valorActual = (incidente.Duracion == 0 ? string.Empty : incidente.Duracion.ToString());
+                        Actualizaciones += string.Format("Duración del incidente de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                    }
+                    if (reg.NombreReportero != incidente.NombreReportero)
+                    {
+                        string _valorAnterior = (reg.NombreReportero == null ? string.Empty : reg.NombreReportero.ToString());
+                        string _valorActual = (incidente.NombreReportero == null ? string.Empty : incidente.NombreReportero.ToString());
+                        Actualizaciones += string.Format("Reportado por de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                    }
+                    if (reg.NombreSolucionador != incidente.NombreSolucionador)
+                    {
+                        string _valorAnterior = (reg.NombreSolucionador == null ? string.Empty : reg.NombreSolucionador.ToString());
+                        string _valorActual = (incidente.NombreSolucionador == null ? string.Empty : incidente.NombreSolucionador.ToString());
+                        Actualizaciones += string.Format("Solucionado por de \"{0}\" a \"{1}\"", _valorAnterior, _valorActual) + Environment.NewLine;
+                    }
+                }
+
+                if (string.IsNullOrEmpty(Actualizaciones))
+                    Actualizaciones = "Se editó pero sin modificar datos";
+                else
+                    Actualizaciones = "Información Actualizada" + Environment.NewLine + Environment.NewLine + Actualizaciones;
+            }
+
+            return Actualizaciones;
+        }
     }
 }
