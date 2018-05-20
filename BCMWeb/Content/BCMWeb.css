@@ -1,5 +1,5 @@
 ﻿html, body {
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-family: Arial, 'Arial Narrow', Arial, sans-serif;
     font-size: 10pt;
     background-color: #eaeaea;
 }
@@ -456,4 +456,22 @@ h4 {
 
 .Prueba {
     color: #ee8d3a;
+}
+
+.blueBall {
+    background-image: url(Images/pdf-printer-icon.png);
+    width: 40px;
+    height: 40px;
+}
+
+.blueBallHottracked {
+    background-color: #9cf509;
+    width: 40px;
+    height: 40px;
+}
+
+.blueBallPressed {
+    background-color: #9cf509;
+    width: 40px;
+    height: 40px;
 }

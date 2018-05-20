@@ -19,7 +19,7 @@ namespace Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class DocumentoResource {
@@ -552,6 +552,24 @@ namespace Resources {
         public static string captionResponsable {
             get {
                 return ResourceManager.GetString("captionResponsable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status Documento.
+        /// </summary>
+        public static string captionStatusDocumento {
+            get {
+                return ResourceManager.GetString("captionStatusDocumento", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status Mantenimiento.
+        /// </summary>
+        public static string captionStatusMantenimiento {
+            get {
+                return ResourceManager.GetString("captionStatusMantenimiento", resourceCulture);
             }
         }
         

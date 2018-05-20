@@ -222,4 +222,7 @@
   <data name="captionFechaUC" xml:space="preserve">
     <value>Fecha de Última Conexión</value>
   </data>
+  <data name="captionNivelUsuario" xml:space="preserve">
+    <value>Rol</value>
+  </data>
 </root>

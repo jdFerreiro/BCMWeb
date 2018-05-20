@@ -11,7 +11,7 @@ using System.Web.SessionState;
 
 namespace BCMWeb
 {
-    public class PDFIniciativa
+    public class PDFpmi
     {
         internal static HttpSessionState Session { get { return HttpContext.Current.Session; } }
         internal static string Culture = HttpContext.Current.Request.UserLanguages[0];
@@ -60,7 +60,7 @@ namespace BCMWeb
         private static string _FechaDocumento = DateTime.UtcNow.AddHours(-4).AddMinutes(-30).ToString("dd/MM/yyyy");
         private static PdfWriter _pdfWrite;
         //private static Paragraph _parrafo;
-        private static string _ptiInformeTitle;
+        private static string _INCInformeTitle;
 
         private static bool _importingPDF = false;
 
@@ -476,10 +476,10 @@ namespace BCMWeb
         }
 
         #endregion
-        public string Generar_Documento(bool Mostrar, long IdIniciativa)
+        public string Generar_Documento(bool Mostrar, long IdIncidente)
         {
 
-            _ServerPath = _Server.MapPath(".").Replace("\\PlanTrabajo", string.Empty);
+            _ServerPath = _Server.MapPath(".").Replace("\\PMI", string.Empty);
             _tempFilePath = string.Format("{0}\\PDFDocs\\tempPDF", _ServerPath);
             _ImagenApliredPath = string.Format("{0}\\LogosEmpresa\\LogoAplired.png", _ServerPath);
 
@@ -496,14 +496,14 @@ namespace BCMWeb
 
                 using (Entities db = new Entities())
                 {
-                    tblIniciativas _DataEjecucion = db.tblIniciativas
-                        .FirstOrDefault(Doc => Doc.IdEmpresa == IdEmpresa && Doc.IdIniciativa == IdIniciativa);
+                    tblIncidentes _DataEjecucion = db.tblIncidentes
+                        .FirstOrDefault(Doc => Doc.IdEmpresa == IdEmpresa && Doc.IdIncidente == IdIncidente);
 
                     if (_DataEjecucion != null)
                     {
                         tblEmpresa _Empresa = db.tblEmpresa.FirstOrDefault(em => em.IdEmpresa == IdEmpresa);
 
-                        _FileName = string.Format("PTI{0}{1}.pdf", IdEmpresa.ToString(), _DataEjecucion.NroIniciativa.ToString());
+                        _FileName = string.Format("INC{0}{1}.pdf", IdEmpresa.ToString(), _DataEjecucion.IdIncidente.ToString());
                         _pathFile = string.Format("{0}\\PDFDocs\\{1}", _ServerPath, _FileName);
                         _strDocURL = string.Format("{0}/PDFDocs/{1}", _AppUrl, _FileName);
                         Uri _DocURL = new Uri(_strDocURL, System.UriKind.RelativeOrAbsolute);
@@ -522,9 +522,9 @@ namespace BCMWeb
                         string[] docKeywords = new string[] {
                             _FileName,
                             _Empresa.NombreComercial,
-                            "PTI",
+                            "INC",
                         };
-                        _ptiInformeTitle = string.Format("Información correspondiente a la iniciativa \"{0}\"", _DataEjecucion.NroIniciativa.ToString());
+                        _INCInformeTitle = "Información correspondiente al incidente";
                         _importingPDF = false;
 
                         _Documento.Open();
@@ -543,7 +543,7 @@ namespace BCMWeb
                         _Table.HorizontalAlignment = Element.ALIGN_CENTER;
 
 
-                        _Phrase = new Phrase(_ptiInformeTitle, _FontHeader1);
+                        _Phrase = new Phrase(_INCInformeTitle, _FontHeader1);
                         _Cell = new PdfPCell(_Phrase)
                         {
                             HorizontalAlignment = Element.ALIGN_CENTER,
@@ -572,7 +572,7 @@ namespace BCMWeb
                         /* ****************
                          * Línea 1
                          * **************** */
-                        _Phrase = new Phrase(string.Format("{0}:", Resources.IniciativaResource.NroIniciativa.Trim()), _Font9Bold);
+                        _Phrase = new Phrase(string.Format("{0}:", Resources.PMIResource.captionFechaIncidente.Trim()), _Font9Bold);
                         _Cell = new PdfPCell(_Phrase)
                         {
                             HorizontalAlignment = Element.ALIGN_LEFT,
@@ -584,7 +584,7 @@ namespace BCMWeb
                         };
                         _Table.AddCell(_Cell);
 
-                        _Phrase = new Phrase(_DataEjecucion.NroIniciativa.ToString(), _Font9Normal);
+                        _Phrase = new Phrase(((DateTime)_DataEjecucion.FechaIncidente).ToString("dd/MM/yyyy HH:mm"), _Font9Normal);
                         _Cell = new PdfPCell(_Phrase)
                         {
                             HorizontalAlignment = Element.ALIGN_LEFT,
@@ -608,7 +608,7 @@ namespace BCMWeb
                         };
                         _Table.AddCell(_Cell);
 
-                        _Phrase = new Phrase(string.Format("{0}:", Resources.IniciativaResource.Nombre.Trim()), _Font9Bold);
+                        _Phrase = new Phrase(string.Format("{0}:", Resources.PMIResource.captionTipoIncidente.Trim()), _Font9Bold);
                         _Cell = new PdfPCell(_Phrase)
                         {
                             HorizontalAlignment = Element.ALIGN_LEFT,
@@ -620,7 +620,7 @@ namespace BCMWeb
                         };
                         _Table.AddCell(_Cell);
 
-                        _Phrase = new Phrase(_DataEjecucion.Nombre, _Font9Normal);
+                        _Phrase = new Phrase(_DataEjecucion.tblTipoIncidente.tblCulture_TipoIncidente.FirstOrDefault(x => x.Culture == Culture || x.Culture == "es-VE").Descripcion, _Font9Normal);
                         _Cell = new PdfPCell(_Phrase)
                         {
                             HorizontalAlignment = Element.ALIGN_JUSTIFIED,
@@ -651,7 +651,7 @@ namespace BCMWeb
                         /* ****************
                          * Línea 2
                          * **************** */
-                        _Phrase = new Phrase(string.Format("{0}:", Resources.IniciativaResource.Descripcion.Trim()), _Font9Bold);
+                        _Phrase = new Phrase(string.Format("{0}:", Resources.PMIResource.captionNaturalezaIncidente.Trim()), _Font9Bold);
                         _Cell = new PdfPCell(_Phrase)
                         {
                             HorizontalAlignment = Element.ALIGN_LEFT,
@@ -663,12 +663,47 @@ namespace BCMWeb
                         };
                         _Table.AddCell(_Cell);
 
-                        _Phrase = new Phrase(_DataEjecucion.Descripcion, _Font9Normal);
+                        _Phrase = new Phrase(_DataEjecucion.tblNaturalezaIncidente.tblCulture_NaturalezaIncidente.FirstOrDefault(x => x.Culture == Culture || x.Culture == "es-VE").Descripcion, _Font9Normal);
                         _Cell = new PdfPCell(_Phrase)
                         {
                             HorizontalAlignment = Element.ALIGN_JUSTIFIED,
                             VerticalAlignment = Element.ALIGN_MIDDLE,
-                            Colspan = 4,
+                            BorderWidthTop = 0,
+                            BorderWidthLeft = 0,
+                            BorderWidthBottom = 0,
+                            BorderWidthRight = 0,
+                        };
+                        _Table.AddCell(_Cell);
+
+                        _Phrase = new Phrase(" ", _Font9Normal);
+                        _Cell = new PdfPCell(_Phrase)
+                        {
+                            HorizontalAlignment = Element.ALIGN_CENTER,
+                            VerticalAlignment = Element.ALIGN_MIDDLE,
+                            BorderWidthTop = 0,
+                            BorderWidthLeft = 0,
+                            BorderWidthBottom = 0,
+                            BorderWidthRight = 0,
+                        };
+                        _Table.AddCell(_Cell);
+
+                        _Phrase = new Phrase(string.Format("{0}:", Resources.PMIResource.captionFuenteIncidente.Trim()), _Font9Bold);
+                        _Cell = new PdfPCell(_Phrase)
+                        {
+                            HorizontalAlignment = Element.ALIGN_LEFT,
+                            VerticalAlignment = Element.ALIGN_MIDDLE,
+                            BorderWidthTop = 0,
+                            BorderWidthLeft = 0,
+                            BorderWidthBottom = 0,
+                            BorderWidthRight = 0,
+                        };
+                        _Table.AddCell(_Cell);
+
+                        _Phrase = new Phrase(_DataEjecucion.tblFuenteIncidente.tblCulture_FuenteIncidente.FirstOrDefault(x => x.Culture == Culture || x.Culture == "es-VE").Descripcion, _Font9Normal);
+                        _Cell = new PdfPCell(_Phrase)
+                        {
+                            HorizontalAlignment = Element.ALIGN_JUSTIFIED,
+                            VerticalAlignment = Element.ALIGN_MIDDLE,
                             BorderWidthTop = 0,
                             BorderWidthLeft = 0,
                             BorderWidthBottom = 0,
@@ -695,7 +730,7 @@ namespace BCMWeb
                         /* ****************
                          * Línea 3
                          * **************** */
-                        _Phrase = new Phrase(string.Format("{0}:", Resources.IniciativaResource.UnidadOrganizativa.Trim()), _Font9Bold);
+                        _Phrase = new Phrase(string.Format("{0}:", Resources.PMIResource.captionDescripcion.Trim()), _Font9Bold);
                         _Cell = new PdfPCell(_Phrase)
                         {
                             HorizontalAlignment = Element.ALIGN_LEFT,
@@ -707,47 +742,12 @@ namespace BCMWeb
                         };
                         _Table.AddCell(_Cell);
 
-                        _Phrase = new Phrase(_DataEjecucion.UnidadOrganizativa, _Font9Normal);
+                        _Phrase = new Phrase(_DataEjecucion.Descripcion, _Font9Normal);
                         _Cell = new PdfPCell(_Phrase)
                         {
                             HorizontalAlignment = Element.ALIGN_JUSTIFIED,
                             VerticalAlignment = Element.ALIGN_MIDDLE,
-                            BorderWidthTop = 0,
-                            BorderWidthLeft = 0,
-                            BorderWidthBottom = 0,
-                            BorderWidthRight = 0,
-                        };
-                        _Table.AddCell(_Cell);
-
-                        _Phrase = new Phrase(" ", _Font9Normal);
-                        _Cell = new PdfPCell(_Phrase)
-                        {
-                            HorizontalAlignment = Element.ALIGN_CENTER,
-                            VerticalAlignment = Element.ALIGN_MIDDLE,
-                            BorderWidthTop = 0,
-                            BorderWidthLeft = 0,
-                            BorderWidthBottom = 0,
-                            BorderWidthRight = 0,
-                        };
-                        _Table.AddCell(_Cell);
-
-                        _Phrase = new Phrase(string.Format("{0}:", Resources.IniciativaResource.Responsable.Trim()), _Font9Bold);
-                        _Cell = new PdfPCell(_Phrase)
-                        {
-                            HorizontalAlignment = Element.ALIGN_LEFT,
-                            VerticalAlignment = Element.ALIGN_MIDDLE,
-                            BorderWidthTop = 0,
-                            BorderWidthLeft = 0,
-                            BorderWidthBottom = 0,
-                            BorderWidthRight = 0,
-                        };
-                        _Table.AddCell(_Cell);
-
-                        _Phrase = new Phrase(_DataEjecucion.NombreResponsable, _Font9Normal);
-                        _Cell = new PdfPCell(_Phrase)
-                        {
-                            HorizontalAlignment = Element.ALIGN_JUSTIFIED,
-                            VerticalAlignment = Element.ALIGN_MIDDLE,
+                            Colspan = 4,
                             BorderWidthTop = 0,
                             BorderWidthLeft = 0,
                             BorderWidthBottom = 0,
@@ -774,7 +774,7 @@ namespace BCMWeb
                         /* ****************
                          * Línea 4
                          * **************** */
-                        _Phrase = new Phrase(string.Format("{0}:", Resources.IniciativaResource.FechaInicioEstimada.Trim()), _Font9Bold);
+                        _Phrase = new Phrase(string.Format("{0}:", Resources.PMIResource.captionLugarIncidente.Trim()), _Font9Bold);
                         _Cell = new PdfPCell(_Phrase)
                         {
                             HorizontalAlignment = Element.ALIGN_LEFT,
@@ -786,47 +786,12 @@ namespace BCMWeb
                         };
                         _Table.AddCell(_Cell);
 
-                        _Phrase = new Phrase(_DataEjecucion.FechaInicioEstimada != null ? ((DateTime)_DataEjecucion.FechaInicioEstimada).ToString("dd/MM/yyyy") : " ", _Font9Normal);
+                        _Phrase = new Phrase(_DataEjecucion.LugarIncidente, _Font9Normal);
                         _Cell = new PdfPCell(_Phrase)
                         {
                             HorizontalAlignment = Element.ALIGN_LEFT,
                             VerticalAlignment = Element.ALIGN_MIDDLE,
-                            BorderWidthTop = 0,
-                            BorderWidthLeft = 0,
-                            BorderWidthBottom = 0,
-                            BorderWidthRight = 0,
-                        };
-                        _Table.AddCell(_Cell);
-
-                        _Phrase = new Phrase(" ", _Font9Normal);
-                        _Cell = new PdfPCell(_Phrase)
-                        {
-                            HorizontalAlignment = Element.ALIGN_CENTER,
-                            VerticalAlignment = Element.ALIGN_MIDDLE,
-                            BorderWidthTop = 0,
-                            BorderWidthLeft = 0,
-                            BorderWidthBottom = 0,
-                            BorderWidthRight = 0,
-                        };
-                        _Table.AddCell(_Cell);
-
-                        _Phrase = new Phrase(string.Format("{0}:", Resources.IniciativaResource.FechaCierreEstimada.Trim()), _Font9Bold);
-                        _Cell = new PdfPCell(_Phrase)
-                        {
-                            HorizontalAlignment = Element.ALIGN_LEFT,
-                            VerticalAlignment = Element.ALIGN_MIDDLE,
-                            BorderWidthTop = 0,
-                            BorderWidthLeft = 0,
-                            BorderWidthBottom = 0,
-                            BorderWidthRight = 0,
-                        };
-                        _Table.AddCell(_Cell);
-
-                        _Phrase = new Phrase(_DataEjecucion.FechaCierreEstimada != null ? ((DateTime)_DataEjecucion.FechaCierreEstimada).ToString("dd/MM/yyyy") : " ", _Font9Normal);
-                        _Cell = new PdfPCell(_Phrase)
-                        {
-                            HorizontalAlignment = Element.ALIGN_LEFT,
-                            VerticalAlignment = Element.ALIGN_MIDDLE,
+                            Colspan = 4,
                             BorderWidthTop = 0,
                             BorderWidthLeft = 0,
                             BorderWidthBottom = 0,
@@ -853,7 +818,7 @@ namespace BCMWeb
                         /* ****************
                          * Línea 5
                          * **************** */
-                        _Phrase = new Phrase(string.Format("{0}:", Resources.IniciativaResource.FechaInicioReal.Trim()), _Font9Bold);
+                        _Phrase = new Phrase(string.Format("{0}:", Resources.PMIResource.captionDuracion.Trim()), _Font9Bold);
                         _Cell = new PdfPCell(_Phrase)
                         {
                             HorizontalAlignment = Element.ALIGN_LEFT,
@@ -865,7 +830,7 @@ namespace BCMWeb
                         };
                         _Table.AddCell(_Cell);
 
-                        _Phrase = new Phrase(_DataEjecucion.FechaInicioReal != null ? ((DateTime)_DataEjecucion.FechaInicioReal).ToString("dd/MM/yyyy") : " ", _Font9Normal);
+                        _Phrase = new Phrase(_DataEjecucion.Duracion.ToString(), _Font9Normal);
                         _Cell = new PdfPCell(_Phrase)
                         {
                             HorizontalAlignment = Element.ALIGN_LEFT,
@@ -889,7 +854,7 @@ namespace BCMWeb
                         };
                         _Table.AddCell(_Cell);
 
-                        _Phrase = new Phrase(string.Format("{0}:", Resources.IniciativaResource.FechaCierreReal.Trim()), _Font9Bold);
+                        _Phrase = new Phrase(string.Format("{0}:", Resources.PMIResource.captionNombreReportero.Trim()), _Font9Bold);
                         _Cell = new PdfPCell(_Phrase)
                         {
                             HorizontalAlignment = Element.ALIGN_LEFT,
@@ -901,7 +866,7 @@ namespace BCMWeb
                         };
                         _Table.AddCell(_Cell);
 
-                        _Phrase = new Phrase(_DataEjecucion.FechaCierreReal != null ? ((DateTime)_DataEjecucion.FechaCierreReal).ToString("dd/MM/yyyy") : " ", _Font9Normal);
+                        _Phrase = new Phrase(_DataEjecucion.NombreReportero, _Font9Normal);
                         _Cell = new PdfPCell(_Phrase)
                         {
                             HorizontalAlignment = Element.ALIGN_LEFT,
@@ -932,7 +897,7 @@ namespace BCMWeb
                         /* ****************
                          * Línea 6
                          * **************** */
-                        _Phrase = new Phrase(string.Format("{0}:", Resources.IniciativaResource.PresupuestoEstimado.Trim()), _Font9Bold);
+                        _Phrase = new Phrase(string.Format("{0}:", Resources.PMIResource.captionNombreSolucionador.Trim()), _Font9Bold);
                         _Cell = new PdfPCell(_Phrase)
                         {
                             HorizontalAlignment = Element.ALIGN_LEFT,
@@ -944,47 +909,12 @@ namespace BCMWeb
                         };
                         _Table.AddCell(_Cell);
 
-                        _Phrase = new Phrase(_DataEjecucion.PresupuestoEstimado != null ? ((Decimal)_DataEjecucion.PresupuestoEstimado).ToString("#,##0.00") : "0,00", _Font9Normal);
+                        _Phrase = new Phrase(_DataEjecucion.NombreSolucionador, _Font9Normal);
                         _Cell = new PdfPCell(_Phrase)
                         {
                             HorizontalAlignment = Element.ALIGN_LEFT,
                             VerticalAlignment = Element.ALIGN_MIDDLE,
-                            BorderWidthTop = 0,
-                            BorderWidthLeft = 0,
-                            BorderWidthBottom = 0,
-                            BorderWidthRight = 0,
-                        };
-                        _Table.AddCell(_Cell);
-
-                        _Phrase = new Phrase(" ", _Font9Normal);
-                        _Cell = new PdfPCell(_Phrase)
-                        {
-                            HorizontalAlignment = Element.ALIGN_CENTER,
-                            VerticalAlignment = Element.ALIGN_MIDDLE,
-                            BorderWidthTop = 0,
-                            BorderWidthLeft = 0,
-                            BorderWidthBottom = 0,
-                            BorderWidthRight = 0,
-                        };
-                        _Table.AddCell(_Cell);
-
-                        _Phrase = new Phrase(string.Format("{0}:", Resources.IniciativaResource.PresupuestoReal.Trim()), _Font9Bold);
-                        _Cell = new PdfPCell(_Phrase)
-                        {
-                            HorizontalAlignment = Element.ALIGN_LEFT,
-                            VerticalAlignment = Element.ALIGN_MIDDLE,
-                            BorderWidthTop = 0,
-                            BorderWidthLeft = 0,
-                            BorderWidthBottom = 0,
-                            BorderWidthRight = 0,
-                        };
-                        _Table.AddCell(_Cell);
-
-                        _Phrase = new Phrase(_DataEjecucion.PresupuestoReal != null ? ((Decimal)_DataEjecucion.PresupuestoReal).ToString("#,##0.00") : " ", _Font9Normal);
-                        _Cell = new PdfPCell(_Phrase)
-                        {
-                            HorizontalAlignment = Element.ALIGN_LEFT,
-                            VerticalAlignment = Element.ALIGN_MIDDLE,
+                            Colspan = 4,
                             BorderWidthTop = 0,
                             BorderWidthLeft = 0,
                             BorderWidthBottom = 0,
@@ -1011,7 +941,7 @@ namespace BCMWeb
                         /* ****************
                          * Línea 7
                          * **************** */
-                        _Phrase = new Phrase(string.Format("{0}:", Resources.IniciativaResource.MontoAbonado.Trim()), _Font9Bold);
+                        _Phrase = new Phrase(string.Format("{0}:", Resources.PMIResource.captionObservacion.Trim()), _Font9Bold);
                         _Cell = new PdfPCell(_Phrase)
                         {
                             HorizontalAlignment = Element.ALIGN_LEFT,
@@ -1023,322 +953,7 @@ namespace BCMWeb
                         };
                         _Table.AddCell(_Cell);
 
-                        _Phrase = new Phrase(_DataEjecucion.MontoAbonado != null ? ((Decimal)_DataEjecucion.MontoAbonado).ToString("#,##0.00") : " ", _Font9Normal);
-                        _Cell = new PdfPCell(_Phrase)
-                        {
-                            HorizontalAlignment = Element.ALIGN_LEFT,
-                            VerticalAlignment = Element.ALIGN_MIDDLE,
-                            BorderWidthTop = 0,
-                            BorderWidthLeft = 0,
-                            BorderWidthBottom = 0,
-                            BorderWidthRight = 0,
-                        };
-                        _Table.AddCell(_Cell);
-
-                        _Phrase = new Phrase(" ", _Font9Normal);
-                        _Cell = new PdfPCell(_Phrase)
-                        {
-                            HorizontalAlignment = Element.ALIGN_CENTER,
-                            VerticalAlignment = Element.ALIGN_MIDDLE,
-                            BorderWidthTop = 0,
-                            BorderWidthLeft = 0,
-                            BorderWidthBottom = 0,
-                            BorderWidthRight = 0,
-                        };
-                        _Table.AddCell(_Cell);
-
-                        _Phrase = new Phrase(string.Format("{0}:", Resources.IniciativaResource.MontoPendiente.Trim()), _Font9Bold);
-                        _Cell = new PdfPCell(_Phrase)
-                        {
-                            HorizontalAlignment = Element.ALIGN_LEFT,
-                            VerticalAlignment = Element.ALIGN_MIDDLE,
-                            BorderWidthTop = 0,
-                            BorderWidthLeft = 0,
-                            BorderWidthBottom = 0,
-                            BorderWidthRight = 0,
-                        };
-                        _Table.AddCell(_Cell);
-
-                        _Phrase = new Phrase(_DataEjecucion.MontoPendiente != null ? ((Decimal)_DataEjecucion.MontoPendiente).ToString("#,##0.00") : " ", _Font9Normal);
-                        _Cell = new PdfPCell(_Phrase)
-                        {
-                            HorizontalAlignment = Element.ALIGN_LEFT,
-                            VerticalAlignment = Element.ALIGN_MIDDLE,
-                            BorderWidthTop = 0,
-                            BorderWidthLeft = 0,
-                            BorderWidthBottom = 0,
-                            BorderWidthRight = 0,
-                        };
-                        _Table.AddCell(_Cell);
-
-                        /* ****************
-                         * Separador 7
-                         ** **************** */
-                        _Phrase = new Phrase(" ", _Font9Normal);
-                        _Cell = new PdfPCell(_Phrase)
-                        {
-                            HorizontalAlignment = Element.ALIGN_LEFT,
-                            VerticalAlignment = Element.ALIGN_MIDDLE,
-                            Colspan = 5,
-                            BorderWidthTop = 0,
-                            BorderWidthLeft = 0,
-                            BorderWidthBottom = 0,
-                            BorderWidthRight = 0,
-                        };
-                        _Table.AddCell(_Cell);
-
-                        /* ****************
-                         * Línea 8
-                         * **************** */
-                        _Phrase = new Phrase(string.Format("{0}:", Resources.IniciativaResource.Estatus.Trim()), _Font9Bold);
-                        _Cell = new PdfPCell(_Phrase)
-                        {
-                            HorizontalAlignment = Element.ALIGN_LEFT,
-                            VerticalAlignment = Element.ALIGN_MIDDLE,
-                            BorderWidthTop = 0,
-                            BorderWidthLeft = 0,
-                            BorderWidthBottom = 0,
-                            BorderWidthRight = 0,
-                        };
-                        _Table.AddCell(_Cell);
-
-                        _Phrase = new Phrase(Metodos.GetEstadoIniciativa(_DataEjecucion.IdEstatusIniciativa), _Font9Normal);
-                        _Cell = new PdfPCell(_Phrase)
-                        {
-                            HorizontalAlignment = Element.ALIGN_JUSTIFIED,
-                            VerticalAlignment = Element.ALIGN_MIDDLE,
-                            BorderWidthTop = 0,
-                            BorderWidthLeft = 0,
-                            BorderWidthBottom = 0,
-                            BorderWidthRight = 0,
-                        };
-                        _Table.AddCell(_Cell);
-
-                        _Phrase = new Phrase(" ", _Font9Normal);
-                        _Cell = new PdfPCell(_Phrase)
-                        {
-                            HorizontalAlignment = Element.ALIGN_CENTER,
-                            VerticalAlignment = Element.ALIGN_MIDDLE,
-                            BorderWidthTop = 0,
-                            BorderWidthLeft = 0,
-                            BorderWidthBottom = 0,
-                            BorderWidthRight = 0,
-                        };
-                        _Table.AddCell(_Cell);
-
-                        _Phrase = new Phrase(string.Format("{0}:", Resources.IniciativaResource.Urgente.Trim()), _Font9Bold);
-                        _Cell = new PdfPCell(_Phrase)
-                        {
-                            HorizontalAlignment = Element.ALIGN_LEFT,
-                            VerticalAlignment = Element.ALIGN_MIDDLE,
-                            BorderWidthTop = 0,
-                            BorderWidthLeft = 0,
-                            BorderWidthBottom = 0,
-                            BorderWidthRight = 0,
-                        };
-                        _Table.AddCell(_Cell);
-
-                        _Phrase = new Phrase(Metodos.GetPrioridadIniciativa(_DataEjecucion.IdPrioridad), _Font9Normal);
-                        _Cell = new PdfPCell(_Phrase)
-                        {
-                            HorizontalAlignment = Element.ALIGN_LEFT,
-                            VerticalAlignment = Element.ALIGN_MIDDLE,
-                            BorderWidthTop = 0,
-                            BorderWidthLeft = 0,
-                            BorderWidthBottom = 0,
-                            BorderWidthRight = 0,
-                        };
-                        _Table.AddCell(_Cell);
-
-                        /* ****************
-                         * Separador 8
-                         ** **************** */
-                        _Phrase = new Phrase(" ", _Font9Normal);
-                        _Cell = new PdfPCell(_Phrase)
-                        {
-                            HorizontalAlignment = Element.ALIGN_LEFT,
-                            VerticalAlignment = Element.ALIGN_MIDDLE,
-                            Colspan = 5,
-                            BorderWidthTop = 0,
-                            BorderWidthLeft = 0,
-                            BorderWidthBottom = 0,
-                            BorderWidthRight = 0,
-                        };
-                        _Table.AddCell(_Cell);
-
-                        /* ****************
-                         * Línea 9
-                         * **************** */
-                        _Phrase = new Phrase(string.Format("{0}:", Resources.IniciativaResource.PorcentajeAvance.Trim()), _Font9Bold);
-                        _Cell = new PdfPCell(_Phrase)
-                        {
-                            HorizontalAlignment = Element.ALIGN_LEFT,
-                            VerticalAlignment = Element.ALIGN_MIDDLE,
-                            BorderWidthTop = 0,
-                            BorderWidthLeft = 0,
-                            BorderWidthBottom = 0,
-                            BorderWidthRight = 0,
-                        };
-                        _Table.AddCell(_Cell);
-
-                        _Phrase = new Phrase(_DataEjecucion.PorcentajeAvance != null ? ((Decimal)_DataEjecucion.PorcentajeAvance).ToString("#00.00 %") : " ", _Font9Normal);
-                        _Cell = new PdfPCell(_Phrase)
-                        {
-                            HorizontalAlignment = Element.ALIGN_LEFT,
-                            VerticalAlignment = Element.ALIGN_MIDDLE,
-                            BorderWidthTop = 0,
-                            BorderWidthLeft = 0,
-                            BorderWidthBottom = 0,
-                            BorderWidthRight = 0,
-                        };
-                        _Table.AddCell(_Cell);
-
-                        _Phrase = new Phrase(" ", _Font9Normal);
-                        _Cell = new PdfPCell(_Phrase)
-                        {
-                            HorizontalAlignment = Element.ALIGN_CENTER,
-                            VerticalAlignment = Element.ALIGN_MIDDLE,
-                            BorderWidthTop = 0,
-                            BorderWidthLeft = 0,
-                            BorderWidthBottom = 0,
-                            BorderWidthRight = 0,
-                        };
-                        _Table.AddCell(_Cell);
-
-                        _Phrase = new Phrase("", _Font9Normal);
-                        _Cell = new PdfPCell(_Phrase)
-                        {
-                            HorizontalAlignment = Element.ALIGN_LEFT,
-                            VerticalAlignment = Element.ALIGN_MIDDLE,
-                            BorderWidthTop = 0,
-                            BorderWidthLeft = 0,
-                            BorderWidthBottom = 0,
-                            BorderWidthRight = 0,
-                        };
-                        _Table.AddCell(_Cell);
-
-                        _Phrase = new Phrase("", _Font9Normal);
-                        _Cell = new PdfPCell(_Phrase)
-                        {
-                            HorizontalAlignment = Element.ALIGN_LEFT,
-                            VerticalAlignment = Element.ALIGN_MIDDLE,
-                            BorderWidthTop = 0,
-                            BorderWidthLeft = 0,
-                            BorderWidthBottom = 0,
-                            BorderWidthRight = 0,
-                        };
-                        _Table.AddCell(_Cell);
-
-                        /* ****************
-                         * Separador 9
-                         ** **************** */
-                        _Phrase = new Phrase(" ", _Font9Normal);
-                        _Cell = new PdfPCell(_Phrase)
-                        {
-                            HorizontalAlignment = Element.ALIGN_LEFT,
-                            VerticalAlignment = Element.ALIGN_MIDDLE,
-                            Colspan = 5,
-                            BorderWidthTop = 0,
-                            BorderWidthLeft = 0,
-                            BorderWidthBottom = 0,
-                            BorderWidthRight = 0,
-                        };
-                        _Table.AddCell(_Cell);
-
-                        /* ****************
-                         * Línea 10
-                         * **************** */
-                        _Phrase = new Phrase(string.Format("{0}:", Resources.IniciativaResource.HorasEstimadas.Trim()), _Font9Bold);
-                        _Cell = new PdfPCell(_Phrase)
-                        {
-                            HorizontalAlignment = Element.ALIGN_LEFT,
-                            VerticalAlignment = Element.ALIGN_MIDDLE,
-                            BorderWidthTop = 0,
-                            BorderWidthLeft = 0,
-                            BorderWidthBottom = 0,
-                            BorderWidthRight = 0,
-                        };
-                        _Table.AddCell(_Cell);
-
-                        _Phrase = new Phrase(_DataEjecucion.HorasEstimadas != null ? _DataEjecucion.HorasEstimadas.ToString() : "", _Font9Normal);
-                        _Cell = new PdfPCell(_Phrase)
-                        {
-                            HorizontalAlignment = Element.ALIGN_LEFT,
-                            VerticalAlignment = Element.ALIGN_MIDDLE,
-                            BorderWidthTop = 0,
-                            BorderWidthLeft = 0,
-                            BorderWidthBottom = 0,
-                            BorderWidthRight = 0,
-                        };
-                        _Table.AddCell(_Cell);
-
-                        _Phrase = new Phrase(" ", _Font9Normal);
-                        _Cell = new PdfPCell(_Phrase)
-                        {
-                            HorizontalAlignment = Element.ALIGN_CENTER,
-                            VerticalAlignment = Element.ALIGN_MIDDLE,
-                            BorderWidthTop = 0,
-                            BorderWidthLeft = 0,
-                            BorderWidthBottom = 0,
-                            BorderWidthRight = 0,
-                        };
-                        _Table.AddCell(_Cell);
-
-                        _Phrase = new Phrase(string.Format("{0}:", Resources.IniciativaResource.HorasInvertidas.Trim()), _Font9Bold);
-                        _Cell = new PdfPCell(_Phrase)
-                        {
-                            HorizontalAlignment = Element.ALIGN_LEFT,
-                            VerticalAlignment = Element.ALIGN_MIDDLE,
-                            BorderWidthTop = 0,
-                            BorderWidthLeft = 0,
-                            BorderWidthBottom = 0,
-                            BorderWidthRight = 0,
-                        };
-                        _Table.AddCell(_Cell);
-                        _Phrase = new Phrase(_DataEjecucion.HorasConsumidas != null ? _DataEjecucion.HorasConsumidas.ToString() : "", _Font9Normal);
-                        _Cell = new PdfPCell(_Phrase)
-                        {
-                            HorizontalAlignment = Element.ALIGN_LEFT,
-                            VerticalAlignment = Element.ALIGN_MIDDLE,
-                            BorderWidthTop = 0,
-                            BorderWidthLeft = 0,
-                            BorderWidthBottom = 0,
-                            BorderWidthRight = 0,
-                        };
-                        _Table.AddCell(_Cell);
-
-                        /* ****************
-                         * Separador 10
-                         ** **************** */
-                        _Phrase = new Phrase(" ", _Font9Normal);
-                        _Cell = new PdfPCell(_Phrase)
-                        {
-                            HorizontalAlignment = Element.ALIGN_LEFT,
-                            VerticalAlignment = Element.ALIGN_MIDDLE,
-                            Colspan = 5,
-                            BorderWidthTop = 0,
-                            BorderWidthLeft = 0,
-                            BorderWidthBottom = 0,
-                            BorderWidthRight = 0,
-                        };
-                        _Table.AddCell(_Cell);
-
-                        /* ****************
-                         * Línea 11
-                         * **************** */
-                        _Phrase = new Phrase(string.Format("{0}:", Resources.IniciativaResource.Observacion.Trim()), _Font9Bold);
-                        _Cell = new PdfPCell(_Phrase)
-                        {
-                            HorizontalAlignment = Element.ALIGN_LEFT,
-                            VerticalAlignment = Element.ALIGN_MIDDLE,
-                            BorderWidthTop = 0,
-                            BorderWidthLeft = 0,
-                            BorderWidthBottom = 0,
-                            BorderWidthRight = 0,
-                        };
-                        _Table.AddCell(_Cell);
-
-                        _Phrase = new Phrase(_DataEjecucion.Observacion, _Font9Normal);
+                        _Phrase = new Phrase(_DataEjecucion.Observaciones, _Font9Normal);
                         _Cell = new PdfPCell(_Phrase)
                         {
                             HorizontalAlignment = Element.ALIGN_JUSTIFIED,
@@ -1413,8 +1028,8 @@ namespace BCMWeb
                             _Titulo = Resources.PDFResource.PPETituloString;
                             _TableHeader = HeaderDocs(writer.PageNumber, _Titulo);
                             break;
-                        case "pti":
-                            _Titulo = _ptiInformeTitle;
+                        case "INC":
+                            _Titulo = _INCInformeTitle;
                             _TableHeader = HeaderDocs(writer.PageNumber, _Titulo);
                             break;
                         case "BIA":
@@ -1442,7 +1057,7 @@ namespace BCMWeb
                             _Titulo = Resources.PDFResource.PTITituloString;
                             _TableHeader = HeaderDocs(writer.PageNumber, _Titulo);
                             break;
-                        default:
+                         default:
                             _Titulo = String.Empty;
                             _TableHeader = HeaderDocs(writer.PageNumber, _Titulo);
                             break;

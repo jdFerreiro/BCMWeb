@@ -195,4 +195,7 @@
   <data name="PTITituloString" xml:space="preserve">
     <value>Plan de Trabajo</value>
   </data>
+  <data name="INCTituloString" xml:space="preserve">
+    <value>Incidentes Experimentados</value>
+  </data>
 </root>

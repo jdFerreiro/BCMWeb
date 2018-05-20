@@ -49,7 +49,7 @@
                     p.TextField = "Nombre";
                     p.ValueField = "IdModulo";
                     p.ValueType = typeof(long);
-                    p.DataSource = Metodos.GetModulosPrincipalesEmpresa();
+                    p.DataSource = Metodos.GetModulosPrincipalesEmpresa().Where(x => x.CodigoModulo < 11).ToList();
                 });
             });
             settings.Columns.Add(c =>
@@ -88,6 +88,40 @@
                     p.DataSource = Metodos.GetPMTTipoFrecuencia();
                 });
             });
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "statusMantenimiento";
+                c.Caption = Resources.DocumentoResource.captionStatusMantenimiento;
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.Width = Unit.Percentage(10);
+                c.SetDataItemTemplateContent(dc =>
+                {
+                    bool _status = bool.Parse(DataBinder.Eval(dc.DataItem, "statusMantenimiento").ToString());
+                    if (_status)
+                        ViewContext.Writer.Write("<img src=\"../../Content/images/boton_Verde.jpg\" width=\"20\" height=\"20\" />");
+                    else
+                        ViewContext.Writer.Write("<img src=\"../../Content/images/Boton_rojo.png\" width=\"20\" height=\"20\" />");
+                });
+            });
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "statusDocumento";
+                c.Caption = Resources.DocumentoResource.captionStatusDocumento;
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.Width = Unit.Percentage(10);
+                c.SetDataItemTemplateContent(dc =>
+                {
+                    bool _status = bool.Parse(DataBinder.Eval(dc.DataItem, "statusDocumento").ToString());
+                    if (_status)
+                        ViewContext.Writer.Write("<img src=\"../../Content/images/boton_Verde.jpg\" width=\"20\" height=\"20\" />");
+                    else
+                        ViewContext.Writer.Write("<img src=\"../../Content/images/Boton_rojo.png\" width=\"20\" height=\"20\" />");
+                });
+            });
 
             settings.SettingsPopup.EditForm.HorizontalAlign = PopupHorizontalAlign.WindowCenter;
             settings.SettingsPopup.EditForm.VerticalAlign = PopupVerticalAlign.WindowCenter;
@@ -115,7 +149,7 @@
                             s.Properties.TextField = "Nombre";
                             s.Properties.ValueField = "IdModulo";
                             s.Properties.ValueType = typeof(long);
-                            s.Properties.DataSource = Metodos.GetModulosPrincipalesEmpresa();
+                            s.Properties.DataSource = Metodos.GetModulosPrincipalesEmpresa().Where(x => x.CodigoModulo < 11).ToList();
                             s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                             s.ShowModelErrors = true;
                         });

@@ -345,4 +345,10 @@
   <data name="subjectEmailCertificacion" xml:space="preserve">
     <value>Certificación del {0} Habilitado</value>
   </data>
+  <data name="captionStatusDocumento" xml:space="preserve">
+    <value>Status Documento</value>
+  </data>
+  <data name="captionStatusMantenimiento" xml:space="preserve">
+    <value>Status Mantenimiento</value>
+  </data>
 </root>

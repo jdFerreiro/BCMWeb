@@ -69,6 +69,19 @@ namespace BCMWeb
             }
         }
 
+        public static string GetNivelUsuarioByUserId()
+        {
+            string _IdNivelUsuario = string.Empty;
+            long IdUser = long.Parse(Session["UserId"].ToString());
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+
+            using (Entities db = new Entities())
+            {
+                _IdNivelUsuario = db.tblEmpresaUsuario.FirstOrDefault(x => x.IdEmpresa == IdEmpresa && x.IdUsuario == IdUser).IdNivelUsuario.ToString();
+            }
+
+            return _IdNivelUsuario;
+        }
         public static PerfilModelView GetPerfilData()
         {
             long IdUser = long.Parse(Session["UserId"].ToString());
@@ -132,7 +145,6 @@ namespace BCMWeb
             }
             return RelatedUOIds;
         }
-
         public static IList<EmpresaModel> GetEmpresasUsuario()
         {
 
@@ -258,7 +270,7 @@ namespace BCMWeb
                                 Negocios = m.Negocios,
                                 Nombre = m.Nombre,
                                 Tecnologia = m.Tecnologia,
-                                Titulo = m.Titulo
+                                Titulo = m.Titulo,
                             }).ToList();
                 }
             }
@@ -425,6 +437,7 @@ namespace BCMWeb
                                     FechaEstadoDocumento = (DateTime)d.FechaEstadoDocumento.AddMinutes(Minutos),
                                     FechaUltimaModificacion = (DateTime)(d.FechaUltimaModificacion != null ? ((DateTime)d.FechaUltimaModificacion).AddMinutes(Minutos) : d.FechaUltimaModificacion),
                                     IdDocumento = d.IdDocumento,
+                                    IdEmpresa = d.IdEmpresa,
                                     IdEstatus = d.IdEstadoDocumento,
                                     IdPersonaResponsable = d.IdPersonaResponsable,
                                     IdTipoDocumento = d.IdTipoDocumento,
@@ -5985,9 +5998,22 @@ namespace BCMWeb
                 Programacion = (from d in db.tblPMTProgramacion
                                 let FechaHasta = SqlFunctions.DateAdd("d", -1, d.FechaFinal)
                                 where d.IdEmpresa == IdEmpresa
-                                select new ProgramacionModel
+                                select new
                                 {
-                                    FechaFinal = (DateTime)FechaHasta,
+                                    FechaHasta,
+                                    d.FechaInicio,
+                                    d.Negocios,
+                                    d.IdEmpresa,
+                                    d.IdEstado,
+                                    d.IdModulo,
+                                    d.IdPMTProgramacion,
+                                    d.IdTipoActualizacion,
+                                    d.IdTipoFrecuencia
+                                }).ToList()
+                                .AsEnumerable()
+                                .Select(d => new ProgramacionModel
+                                {
+                                    FechaFinal = d.FechaHasta ?? DateTime.Now,
                                     FechaInicio = d.FechaInicio,
                                     IdClaseDocumento = (d.Negocios ? 1 : 2),
                                     IdEmpresa = d.IdEmpresa,
@@ -5996,6 +6022,8 @@ namespace BCMWeb
                                     IdProgramacion = d.IdPMTProgramacion,
                                     IdTipoActualizacion = d.IdTipoActualizacion,
                                     IdTipoFrecuencia = d.IdTipoFrecuencia,
+                                    statusDocumento = Metodos.GetStatusDocumento(d.IdEmpresa, d.IdModulo, d.IdPMTProgramacion, d.FechaHasta ?? DateTime.Now),
+                                    statusMantenimiento = Metodos.GetStatusMantenimiento(d.IdEmpresa, d.IdModulo, d.IdPMTProgramacion, d.FechaHasta ?? DateTime.Now),
                                 }).ToList();
             }
 
@@ -8427,7 +8455,7 @@ namespace BCMWeb
             using (Entities db = new Entities())
             {
                 data = db.tblEmpresaUsuario
-                    .Where(x => x.IdEmpresa == idEmpresaSelected && x.IdUsuario > 0)
+                    .Where(x => x.IdEmpresa == idEmpresaSelected && x.IdUsuario == IdUsuario)
                     .AsEnumerable()
                     .Select(x => new PerfilModelView
                     {
@@ -8459,7 +8487,7 @@ namespace BCMWeb
             {
                 try
                 {
-                    if (data.IdEmpresa == -1)
+                    if (data.IdUsuario == -1)
                     {
                         tblUsuario reg = new tblUsuario
                         {
@@ -8477,53 +8505,56 @@ namespace BCMWeb
 
                         data.IdUsuario = reg.IdUsuario;
 
-                        List<tblEmpresaUsuario> _UsuarioAdmin = db.tblEmpresaUsuario.Where(x => x.IdEmpresa == 0 && x.IdNivelUsuario == 6).ToList();
-                        foreach (tblEmpresaUsuario _empresaUsuario in _UsuarioAdmin)
+                        tblEmpresaUsuario _regEmpresaUsuario = new tblEmpresaUsuario
                         {
-                            tblEmpresaUsuario _regEmpresaUsuario = new tblEmpresaUsuario
-                            {
-                                FechaCreacion = DateTime.UtcNow,
-                                IdEmpresa = _empresaUsuario.IdEmpresa,
-                                IdNivelUsuario = _empresaUsuario.IdNivelUsuario,
-                                IdUsuario = _empresaUsuario.IdUsuario,
-                            };
+                            FechaCreacion = DateTime.UtcNow,
+                            IdEmpresa = data.IdEmpresa,
+                            IdNivelUsuario = 1,
+                            IdUsuario = data.IdUsuario,
+                        };
 
-                            db.tblEmpresaUsuario.Add(_regEmpresaUsuario);
-                            foreach (tblModulo_Usuario _moduloUsuario in db.tblModulo_Usuario.Where(x => x.IdEmpresa == 0 && x.IdUsuario == _empresaUsuario.IdUsuario).ToList())
-                            {
-                                tblModulo_Usuario _regModuloUsuario = new tblModulo_Usuario
-                                {
-                                    Actualizar = _moduloUsuario.Actualizar,
-                                    Eliminar = _moduloUsuario.Eliminar,
-                                    IdEmpresa = _empresaUsuario.IdEmpresa,
-                                    IdModulo = _moduloUsuario.IdModulo,
-                                    IdUsuario = _empresaUsuario.IdUsuario,
-                                };
-                                db.tblModulo_Usuario.Add(_regModuloUsuario);
-                            }
-                        }
+                        db.tblEmpresaUsuario.Add(_regEmpresaUsuario);
 
-                        foreach (tblModulo modulo in db.tblModulo.Where(x => x.IdEmpresa == 0).ToList())
+                        foreach (tblModulo modulo in db.tblModulo.Where(x => x.IdEmpresa == data.IdEmpresa).ToList())
                         {
-                            db.tblModulo.Add(new tblModulo
+
+                            tblModulo_Usuario _regModuloUsuario = new tblModulo_Usuario
                             {
+                                Actualizar = false,
+                                Eliminar = false,
                                 IdEmpresa = data.IdEmpresa,
                                 IdModulo = modulo.IdModulo,
-                                Accion = modulo.Accion,
-                                Activo = modulo.Activo,
-                                Controller = modulo.Controller,
-                                Descripcion = modulo.Descripcion,
-                                IdCodigoModulo = modulo.IdCodigoModulo,
-                                IdModuloPadre = modulo.IdModuloPadre,
-                                IdTipoElemento = modulo.IdTipoElemento,
-                                imageRoot = modulo.imageRoot,
-                                Negocios = modulo.Negocios,
-                                Nombre = modulo.Nombre,
-                                Tecnologia = modulo.Tecnologia,
-                                Titulo = modulo.Titulo,
-                            });
+                                IdUsuario = data.IdUsuario,
+                            };
+                            db.tblModulo_Usuario.Add(_regModuloUsuario);
 
                         }
+                        //List<tblEmpresaUsuario> _UsuarioAdmin = db.tblEmpresaUsuario.Where(x => x.IdEmpresa == data.IdEmpresa && x.IdNivelUsuario == 6).ToList();
+                        //foreach (tblEmpresaUsuario _empresaUsuario in _UsuarioAdmin)
+                        //{
+                        //    tblEmpresaUsuario _regEmpresaUsuario = new tblEmpresaUsuario
+                        //    {
+                        //        FechaCreacion = DateTime.UtcNow,
+                        //        IdEmpresa = _empresaUsuario.IdEmpresa,
+                        //        IdNivelUsuario = _empresaUsuario.IdNivelUsuario,
+                        //        IdUsuario = _empresaUsuario.IdUsuario,
+                        //    };
+
+                        //    db.tblEmpresaUsuario.Add(_regEmpresaUsuario);
+                        //    foreach (tblModulo_Usuario _moduloUsuario in db.tblModulo_Usuario.Where(x => x.IdEmpresa == data.IdEmpresa && x.IdUsuario == _empresaUsuario.IdUsuario).ToList())
+                        //    {
+                        //        tblModulo_Usuario _regModuloUsuario = new tblModulo_Usuario
+                        //        {
+                        //            Actualizar = _moduloUsuario.Actualizar,
+                        //            Eliminar = _moduloUsuario.Eliminar,
+                        //            IdEmpresa = _empresaUsuario.IdEmpresa,
+                        //            IdModulo = _moduloUsuario.IdModulo,
+                        //            IdUsuario = _empresaUsuario.IdUsuario,
+                        //        };
+                        //        db.tblModulo_Usuario.Add(_regModuloUsuario);
+                        //    }
+                        //}
+
 
                     }
                     else
@@ -8622,6 +8653,7 @@ namespace BCMWeb
                                LugarIncidente = d.LugarIncidente,
                                NombreReportero = d.NombreReportero,
                                NombreSolucionador = d.NombreSolucionador,
+                               Observacion = d.Observaciones,
                            })
                            .ToList();
             }
@@ -8700,7 +8732,8 @@ namespace BCMWeb
                     IdTipoIncidente = x.IdTipoIncidente ?? 0,
                     LugarIncidente = x.LugarIncidente,
                     NombreReportero = x.NombreReportero,
-                    NombreSolucionador = x.NombreSolucionador
+                    NombreSolucionador = x.NombreSolucionador,
+                    Observacion = x.Observaciones,
                 };
             }
 
@@ -8723,7 +8756,8 @@ namespace BCMWeb
                     IdTipoIncidente = Incidente.IdTipoIncidente,
                     LugarIncidente = Incidente.LugarIncidente,
                     NombreReportero = Incidente.NombreReportero,
-                    NombreSolucionador = Incidente.NombreSolucionador
+                    NombreSolucionador = Incidente.NombreSolucionador,
+                    Observaciones = Incidente.Observacion,
                 };
 
                 db.tblIncidentes.Add(reg);
@@ -8749,6 +8783,7 @@ namespace BCMWeb
                 reg.LugarIncidente = Incidente.LugarIncidente;
                 reg.NombreReportero = Incidente.NombreReportero;
                 reg.NombreSolucionador = Incidente.NombreSolucionador;
+                reg.Observaciones = Incidente.Observacion;
                 db.SaveChanges();
             }
         }
@@ -8845,5 +8880,105 @@ namespace BCMWeb
 
             return Actualizaciones;
         }
+        public static List<TablaModel> GetNivelUsuario()
+        {
+            List<TablaModel> data = new List<TablaModel>();
+
+            using (Entities db = new Entities())
+            {
+                data = db.tblCultura_NivelUsuario.Where(x => x.IdNivelUsuario > 0 && (x.Culture == Culture || x.Culture == "es-VE")).Select(x => new TablaModel
+                {
+                    Descripcion = x.Descripcion,
+                    Id = x.IdNivelUsuario,
+                }).ToList();
+            }
+
+            return data.OrderBy(x => x.Descripcion).ToList();
+
+        }
+
+        public static bool GetStatusMantenimiento(long idEmpresa, long idModulo, long idPMTProgramacion, DateTime dateTime)
+        {
+            bool _status = true;
+
+            using (Entities db = new Entities())
+            {
+                tblPMTProgramacion _prog = db.tblPMTProgramacion.FirstOrDefault(x => x.IdPMTProgramacion == idPMTProgramacion);
+                int tiempoUltimaActualizacion = 0;
+
+                switch (_prog.IdTipoFrecuencia)
+                {
+                    case 1: // Por Hora
+                        tiempoUltimaActualizacion = (DateTime.Now - _prog.FechaFinal).Hours;
+                        if (tiempoUltimaActualizacion > 1) _status = false;
+                        break;
+                    case 2: // Diario
+                        tiempoUltimaActualizacion = (DateTime.Now - _prog.FechaFinal).Days;
+                        if (tiempoUltimaActualizacion > 1) _status = false;
+                        break;
+                    case 3: // Semanal
+                        tiempoUltimaActualizacion = (DateTime.Now - _prog.FechaFinal).Days;
+                        if (tiempoUltimaActualizacion > 7) _status = false;
+                        break;
+                    case 4: // Quincenal
+                        tiempoUltimaActualizacion = (DateTime.Now - _prog.FechaFinal).Days;
+                        if (tiempoUltimaActualizacion > 14) _status = false;
+                        break;
+                    case 5: // Mensual
+                        tiempoUltimaActualizacion = (DateTime.Now - _prog.FechaFinal).Days;
+                        if (tiempoUltimaActualizacion > 30) _status = false;
+                        break;
+                    case 6: // Bimensual
+                        tiempoUltimaActualizacion = (DateTime.Now - _prog.FechaFinal).Days;
+                        if (tiempoUltimaActualizacion > 60) _status = false;
+                        break;
+                    case 7: // Trimestral
+                        tiempoUltimaActualizacion = (DateTime.Now - _prog.FechaFinal).Days;
+                        if (tiempoUltimaActualizacion > 90) _status = false;
+                        break;
+                    case 8: // Semestral
+                        tiempoUltimaActualizacion = (DateTime.Now - _prog.FechaFinal).Days;
+                        if (tiempoUltimaActualizacion > 180) _status = false;
+                        break;
+                    case 9: // Anual
+                        tiempoUltimaActualizacion = (DateTime.Now - _prog.FechaFinal).Days;
+                        if (tiempoUltimaActualizacion > 365) _status = false;
+                        break;
+                }
+            }
+
+            return _status;
+        }
+        public static bool GetStatusDocumento(long idEmpresa, long idModulo, long idPMTProgramacion, DateTime dateTime)
+        {
+            bool _status = true;
+
+            using (Entities db = new Entities())
+            {
+                tblModulo _modulo = db.tblModulo.FirstOrDefault(x => x.IdEmpresa == idEmpresa && x.IdModulo == idModulo);
+                tblPMTProgramacion _prog = db.tblPMTProgramacion.FirstOrDefault(x => x.IdPMTProgramacion == idPMTProgramacion);
+                List<tblPMTProgramacionDocumentos> _progDocs = db.tblPMTProgramacionDocumentos.Where(x => x.IdEmpresa == idEmpresa && x.IdModulo == idModulo).ToList();
+
+                if (_progDocs.Count() > 0)
+                {
+                    foreach(tblPMTProgramacionDocumentos _docProg in _progDocs)
+                    {
+                        List<tblDocumento> _docs = db.tblDocumento.Where(x => x.IdEmpresa == _docProg.IdEmpresa && x.IdDocumento == _docProg.IdDocumento).ToList();
+                        tblDocumento _doc = _docs.FirstOrDefault(x => x.FechaUltimaModificacion > _prog.FechaInicio && x.FechaUltimaModificacion <= _prog.FechaFinal);
+                        if (_doc == null || (_doc.IdEstadoDocumento != 6 && _prog.FechaFinal < DateTime.Today)) _status = false;
+                        break;
+                    }
+                }
+                else
+                {
+                    List<tblDocumento> _docs = db.tblDocumento.Where(x => x.IdEmpresa == idEmpresa && x.IdTipoDocumento == _modulo.IdCodigoModulo).ToList();
+                    tblDocumento _doc = _docs.FirstOrDefault(x => x.FechaUltimaModificacion > _prog.FechaInicio && x.FechaUltimaModificacion <= _prog.FechaFinal);
+                    if (_doc == null || (_doc.IdEstadoDocumento != 6 && _prog.FechaFinal < DateTime.Today)) _status = false;
+                }
+            }
+
+            return _status;
+        }
+
     }
-}
+}   

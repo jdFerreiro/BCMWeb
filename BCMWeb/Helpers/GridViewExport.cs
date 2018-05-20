@@ -9205,6 +9205,17 @@ namespace BCMWeb
                 c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.Width = 100;
             });
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "Observacion";
+                c.Caption = Resources.PMIResource.captionObservacion;
+                c.ColumnType = MVCxGridViewColumnType.Memo;
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Justify;
+                c.Width = 250;
+                c.CellStyle.Wrap = DefaultBoolean.True;
+            });
 
             return settings;
         }
@@ -9368,6 +9379,17 @@ namespace BCMWeb
                 c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.Width = 100;
             });
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "Observacion";
+                c.Caption = Resources.PMIResource.captionObservacion;
+                c.ColumnType = MVCxGridViewColumnType.Memo;
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Justify;
+                c.Width = 250;
+                c.CellStyle.Wrap = DefaultBoolean.True;
+            });
 
             return settings;
         }
@@ -9529,6 +9551,17 @@ namespace BCMWeb
                 c.HeaderStyle.Wrap = DefaultBoolean.True;
                 c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.Width = 100;
+            });
+            settings.Columns.Add(c =>
+            {
+                c.FieldName = "Observacion";
+                c.Caption = Resources.PMIResource.captionObservacion;
+                c.ColumnType = MVCxGridViewColumnType.Memo;
+                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+                c.HeaderStyle.Wrap = DefaultBoolean.True;
+                c.CellStyle.HorizontalAlign = HorizontalAlign.Justify;
+                c.Width = 250;
+                c.CellStyle.Wrap = DefaultBoolean.True;
             });
 
             return settings;

@@ -449,6 +449,12 @@ namespace BCMWeb.Models
         [Range(1, long.MaxValue, ErrorMessageResourceName = "RequiredErrorMale", ErrorMessageResourceType = typeof(Resources.ErrorResource))]
         public long IdTipoFrecuencia { get; set; }
         public long IdTipoDocumento { get; set; }
+        [Display(Name = "captionStatusMantenimiento", ResourceType = typeof(Resources.DocumentoResource))]
+        public bool statusMantenimiento { get; set; }
+        [Display(Name = "captionStatusDocumento", ResourceType = typeof(Resources.DocumentoResource))]
+        public bool statusDocumento { get; set; }
+        public string statusMantenimientoDescripcion { get; set; }
+        public string statusDocumentoDescripcion { get; set; }
     }
     public class ProgramacionUsuarioModel
     {

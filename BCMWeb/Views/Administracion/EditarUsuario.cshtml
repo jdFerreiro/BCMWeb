@@ -65,6 +65,18 @@
                 s.ShowModelErrors = true;
             });
         });
+        itemSettings.Items.Add(i =>
+        {
+            i.FieldName = "PasswordCompare";
+            i.Caption = Resources.LoginResource.captionPasswordConfirm;
+            i.NestedExtension().TextBox(s =>
+            {
+                s.Width = Unit.Percentage(100);
+                s.Properties.Password = true;
+                s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                s.ShowModelErrors = true;
+            });
+        });
     });
 
     fls.Items.Add(i =>
@@ -95,7 +107,7 @@
             btnSettings.Name = "btnBack";
             btnSettings.Text = Resources.BCMWebPublic.botReturnText;
             btnSettings.Style[HtmlTextWriterStyle.MarginLeft] = "5px";
-            btnSettings.ClientSideEvents.Click = "function(s, e) { lp.Show(); document.location='" + Url.Action("Usuario", "Administracion", new { modId = long.Parse(Session["modId"].ToString()) }) + "'; }";
+            btnSettings.ClientSideEvents.Click = "function(s, e) { lp.Show(); document.location='" + Url.Action("Usuarios", "Administracion", new { modId = long.Parse(Session["modId"].ToString()) }) + "'; }";
         }).Render();
         Html.DevExpress().Button(
       btnSettings =>
@@ -104,7 +116,7 @@
           btnSettings.Text = Resources.BCMWebPublic.captionButtonNext;
           btnSettings.Style[HtmlTextWriterStyle.MarginLeft] = "5px";
           btnSettings.ClientVisible = (Model.IdUsuario > 0);
-          btnSettings.ClientSideEvents.Click = "function(s, e) { lp.Show(); document.location='" + Url.Action("ModulosAccesoUsuario", "Administracion", new { IdEmpresa = Model.IdEmpresa, IdUsuario = Model.IdUsuario }) + "'; }";
+          btnSettings.ClientSideEvents.Click = "function(s, e) { lp.Show(); document.location='" + Url.Action("ModulosAccesoUsuario", "Administracion", new { IdEmpresa = Model.IdEmpresa, IdUsuario = Model.IdUsuario, IdNivelUsuario = 1 }) + "'; }";
       }).Render();
         ViewContext.Writer.Write("</div>");
     });

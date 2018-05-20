@@ -23,6 +23,7 @@ namespace BCMWeb.Controllers
             model.IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
             model.ModulosPrincipales = Metodos.GetModulosPrincipalesEmpresaUsuario();
             model.Perfil = Metodos.GetPerfilData();
+            Session["IdNivelUsuario"] = Metodos.GetNivelUsuarioByUserId().ToString();
             return View(model);
         }
         [HttpPost]
@@ -34,6 +35,7 @@ namespace BCMWeb.Controllers
             Session["IdEmpresa"] = model.IdEmpresa;
             model.Perfil = Metodos.GetPerfilData();
             model.ModulosPrincipales = Metodos.GetModulosPrincipalesEmpresaUsuario();
+            Session["IdNivelUsuario"] = Metodos.GetNivelUsuarioByUserId().ToString();
 
             return View(model);
         }

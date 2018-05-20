@@ -12,7 +12,7 @@ namespace BCMWeb.Controllers
     {
         [SessionExpire]
         [HandleError]
-        public ActionResult Index(long IdClaseDocumento, long modId)
+        public ActionResult Incidentes(long IdClaseDocumento, long modId)
         {
             string _modId = modId.ToString();
             int IdTipoDocumento = int.Parse(_modId.Substring(0, (_modId.Length == 7 ? 1 : 2)));
@@ -140,6 +140,15 @@ namespace BCMWeb.Controllers
             }
             Session["GridViewData"] = Metodos.GetIncidentes();
             return PartialView("PMIPartialView");
+        }
+        [HttpPost]
+        [SessionExpire]
+        [HandleError]
+        public JsonResult Start(long IdIncidente)
+        {
+            PDFpmi _pdfManager = new PDFpmi();
+            string _rutaDocumento = _pdfManager.Generar_Documento(true, IdIncidente);
+            return Json(new { _rutaDocumento });
         }
     }
 }

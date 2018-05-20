@@ -85,7 +85,17 @@
 
 @Html.HiddenFor(m => m.IdEmpresaSelected)
 @Html.HiddenFor(m => m.IdUsuario)
+@Html.HiddenFor(m => m.IdNivelUsuario)
 
 @Html.Partial("ModulosAccesoPartialView", Model)
 
-
+<div style="float:right;">
+    @Html.DevExpress().Button(
+        btnSettings =>
+        {
+            btnSettings.Name = "btnBack";
+            btnSettings.Text = Resources.BCMWebPublic.botReturnText;
+            btnSettings.Style[HtmlTextWriterStyle.MarginLeft] = "5px";
+            btnSettings.ClientSideEvents.Click = "function(s, e) { lp.Show(); document.location='" + Url.Action("Usuarios", "Administracion", new { modId = long.Parse(Session["modId"].ToString()) }) + "'; }";
+        }).GetHtml()
+</div>

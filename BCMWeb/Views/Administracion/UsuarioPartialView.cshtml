@@ -37,7 +37,7 @@
                             if ((bool)DataBinder.Eval(tc.DataItem, "CanDelete"))
                             {
                                 ViewContext.Writer.Write(
-                                    Html.ActionLink(Resources.BCMWebPublic.captionButtonEdit, "EditarUsuario", new { IdUsuario = DataBinder.Eval(tc.DataItem, "IdUsuario") }, new { onclick = "lp.Show();" }) + "<br />" +
+                                    Html.ActionLink(Resources.BCMWebPublic.captionButtonEdit, "EditarUsuario", new { IdEmpresa = Model.IdEmpresaSelected, IdUsuario = DataBinder.Eval(tc.DataItem, "IdUsuario") }, new { onclick = "lp.Show();" }) + "<br />" +
                                     Html.ActionLink(Resources.AdministracionResource.captionBotonBloquear, "BloquearUsuario", new { IdEmpresa = Model.IdEmpresaSelected, IdUsuario = DataBinder.Eval(tc.DataItem, "IdUsuario") },
                                         new { onclick = "return confirm('" + string.Format(Resources.AdministracionResource.ConfirmBloquearMessage, DataBinder.Eval(tc.DataItem, "Nombre")) + "')" }) + "<br />" +
                                     Html.ActionLink(Resources.AdministracionResource.captionBotonEliminar, "EliminarUsuario", new { IdEmpresa = Model.IdEmpresaSelected, IdUsuario = DataBinder.Eval(tc.DataItem, "IdUsuario") },

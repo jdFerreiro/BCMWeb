@@ -1872,6 +1872,7 @@
           <Property Name="Duracion" Type="int" />
           <Property Name="NombreReportero" Type="nvarchar" MaxLength="500" />
           <Property Name="NombreSolucionador" Type="nvarchar(max)" />
+          <Property Name="Observaciones" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="tblNaturalezaIncidente">
           <Key>
@@ -12370,6 +12371,7 @@
           <NavigationProperty Name="tblNaturalezaIncidente" Relationship="EntitiesModel.FK_tblIncidentes_tblNaturalezaIncidente" FromRole="tblIncidentes" ToRole="tblNaturalezaIncidente" />
           <NavigationProperty Name="tblTipoIncidente" Relationship="EntitiesModel.FK_tblIncidentes_tblTipoIncidente" FromRole="tblIncidentes" ToRole="tblTipoIncidente" />
           <Property Name="Descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Observaciones" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="tblNaturalezaIncidente">
           <Key>
@@ -14256,6 +14258,7 @@
           <EntitySetMapping Name="tblIncidentes">
             <EntityTypeMapping TypeName="EntitiesModel.tblIncidentes">
               <MappingFragment StoreEntitySet="tblIncidentes">
+                <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
                 <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
                 <ScalarProperty Name="NombreSolucionador" ColumnName="NombreSolucionador" />
                 <ScalarProperty Name="NombreReportero" ColumnName="NombreReportero" />

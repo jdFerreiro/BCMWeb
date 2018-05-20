@@ -25,6 +25,7 @@ namespace BCMWeb.Data.EF
         public string NombreReportero { get; set; }
         public string NombreSolucionador { get; set; }
         public string Descripcion { get; set; }
+        public string Observaciones { get; set; }
     
         public virtual tblEmpresa tblEmpresa { get; set; }
         public virtual tblFuenteIncidente tblFuenteIncidente { get; set; }

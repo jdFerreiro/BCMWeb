@@ -342,8 +342,9 @@ namespace BCMWeb.Controllers
                 model = Metodos.GetUsuarioByEmpresaAndId(IdEmpresa, IdUsuario);
             }
             else
+            {
                 Auditoria.RegistarAccion(eTipoAccion.ActualizarUsuario);
-
+            }
             model.returnPage = Url.Action("Usuarios", "Administracion", new { modId = 11010100 });
             return View(model);
         }
@@ -392,11 +393,12 @@ namespace BCMWeb.Controllers
         }
         [SessionExpire]
         [HandleError]
-        public ActionResult ModulosAccesoUsuario(long IdEmpresa, long IdUsuario)
+        public ActionResult ModulosAccesoUsuario(long IdEmpresa, long IdUsuario, long IdNivelUsuario)
         {
             ModulosUsuario model = new ModulosUsuario();
             model.IdUsuario = IdUsuario;
             model.IdEmpresaSelected = IdEmpresa;
+            model.IdNivelUsuario = IdNivelUsuario;
             model.returnPage = Url.Action("Usuarios", "Administracion", new { modId = 11010100 });
             model.ModuloUsuario = Metodos.GetModulosUsuario(IdEmpresa, IdUsuario);
             Auditoria.RegistarActualizarModulos(eTipoAccion.ActualizarModulosUsuario, IdEmpresa, IdUsuario);

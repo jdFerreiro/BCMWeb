@@ -69,13 +69,22 @@
                 c.HeaderStyle.VerticalAlign = VerticalAlign.Middle;
                 c.HeaderStyle.Wrap = DefaultBoolean.True;
                 c.FixedStyle = GridViewColumnFixedStyle.Left;
+                c.Settings.AllowAutoFilter = DefaultBoolean.False;
                 c.SetDataItemTemplateContent(tc =>
                 {
                     ViewContext.Writer.Write(
                         Html.DevExpress().Button(i =>
                         {
                             i.Name = "btn" + tc.KeyValue;
-                            i.Text = Resources.BCMWebPublic.captionButtonImprimir;
+                            // i.Text = Resources.BCMWebPublic.captionButtonImprimir;
+                            i.EnableTheming = false;
+                            i.Text = "";
+                            i.AllowFocus = false;
+                            i.RenderMode = ButtonRenderMode.Link;
+                            i.Images.Image.SpriteProperties.CssClass = "blueBall";
+                            i.Images.Image.SpriteProperties.HottrackedCssClass = "blueBallHottracked";
+                            i.Images.Image.SpriteProperties.PressedCssClass = "blueBallPressed";
+
                             i.UseSubmitBehavior = false;
                             i.ClientSideEvents.Click = string.Format("function(s, e) {{ OnButtonClick(s, e, '{0}', '{1}'); }}", Url.Action("Start", "PlanTrabajo", null), DataBinder.Eval(tc.DataItem, "IdIniciativa"));
                         }).GetHtml()

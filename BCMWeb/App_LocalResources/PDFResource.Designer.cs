@@ -160,6 +160,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Incidentes Experimentados.
+        /// </summary>
+        public static string INCTituloString {
+            get {
+                return ResourceManager.GetString("INCTituloString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Plan de Adiestramiento.
         /// </summary>
         public static string PADTituloString {

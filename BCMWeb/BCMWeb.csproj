@@ -364,6 +364,8 @@
     <Content Include="Content\Images\Menu\PPE.jpg" />
     <Content Include="Content\Images\Menu\Reportes y Gráficos.jpg" />
     <Content Include="Content\Images\Menu\Riesgo.png" />
+    <Content Include="Content\Images\pdf-printer-icon 1.png" />
+    <Content Include="Content\Images\pdf-printer-icon.png" />
     <Content Include="Content\Images\PlasticBlueHeader.jpg" />
     <Content Include="Content\Images\RedWineHeader.jpg" />
     <Content Include="Content\Images\Banderas\venezuela-300x200.jpg" />
@@ -675,7 +677,7 @@
     <Content Include="Views\Administracion\EditarUsuario.cshtml" />
     <Content Include="Views\Administracion\ModulosAccesoUsuario.cshtml" />
     <Content Include="Views\Administracion\ModulosAccesoPartialView.cshtml" />
-    <Content Include="Views\PMI\Index.cshtml" />
+    <Content Include="Views\PMI\Incidentes.cshtml" />
     <Content Include="Views\PMI\PMIPartialView.cshtml" />
     <None Include="Views\Procesos\AjustarWRT.cshtml" />
     <Content Include="Views\Procesos\AjustarRTOPartialView.cshtml" />
@@ -1406,6 +1408,7 @@
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\EmailManager.cs" />
+    <Compile Include="Data\PDFpmi.cs" />
     <Compile Include="Data\PDFIniciativa.cs" />
     <Compile Include="Data\PDFPrueba.cs" />
     <Compile Include="Data\ProcesarDocumento.cs" />

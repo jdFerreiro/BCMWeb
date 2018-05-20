@@ -156,4 +156,7 @@
   <data name="captionModulo" xml:space="preserve">
     <value>Registro de Incidentes</value>
   </data>
+  <data name="captionObservacion" xml:space="preserve">
+    <value>Observación</value>
+  </data>
 </root>

@@ -22,6 +22,7 @@ namespace BCMWeb.Models
     {
         public long IdEmpresaSelected { get; set; }
         public long IdUsuario { get; set; }
+        public long IdNivelUsuario { get; set; }
         public List<dataModulosUsuario> ModuloUsuario { get; set; }
     }
     public class dataModulosUsuario

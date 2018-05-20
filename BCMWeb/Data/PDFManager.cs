@@ -525,10 +525,12 @@ namespace BCMWeb
                         if (File.Exists(_pathFile))
                             File.Delete(_pathFile);
 
-                        List<string> _pdfFiles = Directory.GetFiles(_tempFilePath,
-                                            string.Format("tmp{1}_{2}*.pdf", _tempFilePath,
+                        string _pattern = string.Format("tmp{0}_{1}???_{2}*.pdf",
                                                           TipoDocumento,
-                                                          IdEmpresa.ToString("#0")),
+                                                          IdEmpresa.ToString("000"),
+                                                          dataDocumento.IdDocumento.ToString("000"));
+
+                        List<string> _pdfFiles = Directory.GetFiles(_tempFilePath, _pattern,
                                             SearchOption.AllDirectories).OrderBy(q => q).ToList();
 
                         _Documento = new Document();
