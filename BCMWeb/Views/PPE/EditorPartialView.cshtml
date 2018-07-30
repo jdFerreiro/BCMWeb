@@ -82,7 +82,7 @@
 
                 BCMWeb.Data.EF.tblEmpresa _empresa = db.tblEmpresa.FirstOrDefault(x => x.IdEmpresa == _idEmpresa);
                 BCMWeb.Data.EF.tblPBEPruebaPlanificacion _DataPlanificacion = db.tblPBEPruebaPlanificacion.FirstOrDefault(x => x.IdEmpresa == _idEmpresa && x.IdPlanificacion == _idPrueba);
-                _empresaImageUrl = string.Format("{0}{1}", _ServerPath, _empresa.LogoURL.Replace("/", "\\"));
+                _empresaImageUrl = string.Format("{0}{1}", _ServerPath, _empresa.LogoURL.Replace("~","").Replace("/", "\\"));
                 _headerText = string.Format("INFORME RESULTADO DE LA PRUEBA \"{0}\"", _DataPlanificacion.Prueba.ToUpper());
             }
 

@@ -311,60 +311,32 @@
                             s.Width = Unit.Percentage(100);
                         });
                     });
+                    fls.Items.AddEmptyItem();
                     fls.Items.Add(i =>
                     {
                         i.FieldName = "Nombre";
                         i.Caption = Resources.IniciativaResource.Nombre;
-                        i.NestedExtension().Memo(s =>
+                        i.ColSpan = 2;
+                        i.NestedExtension().TextBox(s =>
                         {
-                            s.Height = Unit.Pixel(50);
                             s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                             s.ShowModelErrors = true;
-                            s.Width = Unit.Pixel(300);
+                            s.Width = Unit.Percentage(100);
                         });
                     });
                     fls.Items.Add(i =>
                     {
                         i.FieldName = "Descripcion";
                         i.Caption = Resources.IniciativaResource.Descripcion;
+                        i.ColSpan = 2;
                         i.NestedExtension().Memo(s =>
                         {
                             s.Height = Unit.Pixel(50);
                             s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                             s.ShowModelErrors = true;
-                            s.Width = Unit.Pixel(300);
+                            s.Width = Unit.Percentage(100);
                         });
                     });
-                    //fls.Items.Add(i =>
-                    //{
-                    //    i.FieldName = "IdUnidadOrganizativa";
-                    //    i.Caption = Resources.IniciativaResource.UnidadOrganizativa;
-                    //    i.NestedExtension().ComboBox(s =>
-                    //    {
-                    //        s.Properties.TextField = "NombreUnidadOrganizativa";
-                    //        s.Properties.ValueField = "IdUnidad";
-                    //        s.Properties.ValueType = typeof(long);
-                    //        s.Properties.DataSource = Metodos.GetUnidadesOrganizativas();
-                    //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-                    //        s.ShowModelErrors = true;
-                    //        s.Width = Unit.Pixel(300);
-                    //    });
-                    //});
-                    //fls.Items.Add(i =>
-                    //{
-                    //    i.FieldName = "Responsable";
-                    //    i.Caption = Resources.IniciativaResource.Responsable;
-                    //    i.NestedExtension().ComboBox(s =>
-                    //    {
-                    //        s.Properties.TextField = "Descripcion";
-                    //        s.Properties.ValueField = "Id";
-                    //        s.Properties.ValueType = typeof(long);
-                    //        s.Properties.DataSource = Metodos.GetIniciativaResponsables();
-                    //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-                    //        s.ShowModelErrors = true;
-                    //        s.Width = Unit.Pixel(300);
-                    //    });
-                    //});
                     fls.Items.Add(i =>
                     {
                         i.FieldName = "UnidadOrganizativa";
@@ -402,8 +374,8 @@
                     });
                     fls.Items.Add(i =>
                     {
-                        i.FieldName = "FechaCierreEstimada";
-                        i.Caption = Resources.IniciativaResource.FechaCierreEstimada;
+                        i.FieldName = "FechaInicioReal";
+                        i.Caption = Resources.IniciativaResource.FechaInicioReal;
                         i.NestedExtension().DateEdit(s =>
                         {
                             s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
@@ -415,8 +387,8 @@
                     });
                     fls.Items.Add(i =>
                     {
-                        i.FieldName = "FechaInicioReal";
-                        i.Caption = Resources.IniciativaResource.FechaInicioReal;
+                        i.FieldName = "FechaCierreEstimada";
+                        i.Caption = Resources.IniciativaResource.FechaCierreEstimada;
                         i.NestedExtension().DateEdit(s =>
                         {
                             s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
@@ -543,6 +515,7 @@
                             s.ShowModelErrors = true;
                         });
                     });
+                    fls.Items.AddEmptyItem();
                     fls.Items.Add(i =>
                     {
                         i.FieldName = "HorasEstimadas";

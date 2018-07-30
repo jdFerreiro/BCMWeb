@@ -185,5 +185,8 @@ namespace BCMWeb.Data.EF
         public virtual DbSet<tblCulture_FuenteIncidente> tblCulture_FuenteIncidente { get; set; }
         public virtual DbSet<tblCulture_NaturalezaIncidente> tblCulture_NaturalezaIncidente { get; set; }
         public virtual DbSet<tblCulture_TipoIncidente> tblCulture_TipoIncidente { get; set; }
+        public virtual DbSet<tblDispositivo> tblDispositivo { get; set; }
+        public virtual DbSet<tblDispositivoConexion> tblDispositivoConexion { get; set; }
+        public virtual DbSet<tblDispositivoEnvio> tblDispositivoEnvio { get; set; }
     }
 }

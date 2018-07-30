@@ -134,6 +134,36 @@ namespace BCMWeb
 
             return _Table;
         }
+        private void MoverDocumentosEscenarios(bool Negocios, string codigoInforme)
+        {
+            long IdDocumento = long.Parse(Session["IdDocumento"].ToString());
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            long IdUsuario = long.Parse(Session["UserId"].ToString());
+            long IdTipoDocumento = long.Parse(Session["IdTipoDocumento"].ToString());
+            eSystemModules Modulo = (eSystemModules)IdTipoDocumento;
+            string TipoDocumento = Modulo.ToString();
+
+            string _tempFileName = string.Format("tmp{0}_{1}_??_{2}_060502*.pdf"
+                 , TipoDocumento, IdEmpresa.ToString("000")
+                 , IdDocumento.ToString("000"));
+            string _tempFiles = string.Format("{0}\\{1}", _tempFilePath
+                , _tempFileName);
+            string _fixedFiles = string.Format("{0}\\PDFDocs\\{1}", _ServerPath, _tempFileName);
+
+            List<string> dirFiles = Directory.GetFiles(_tempFilePath, _tempFileName,
+                                SearchOption.AllDirectories).OrderBy(q => q).ToList();
+
+            if (dirFiles.Count() > 0)
+            {
+                foreach (string _file in dirFiles)
+                {
+                    string _defFile = _file.Replace(_tempFilePath, _tempFilePath.Replace("\\tempPDF","")).Replace("tmp","");
+                    if (File.Exists(_defFile))
+                        File.Delete(_defFile);
+                    File.Move(_file, _defFile);
+                }
+            }
+        }
         private bool GenerarArchivosTemporales()
         {
             bool Done = false;
@@ -511,8 +541,8 @@ namespace BCMWeb
 
                         eEstadoDocumento EstadoDocumento = (eEstadoDocumento)dataDocumento.IdEstadoDocumento;
 
-                        string _docPassowrd = string.Format("BCMWEB.{0}.{1}", (dataDocumento.Negocios ? "N" : "T"), IdEmpresa.ToString("000"));
-                        string _ownerPassowrd = string.Format("{0}.{1}.{2}.BCMWEB", TipoDocumento, (dataDocumento.Negocios ? "N" : "T"), IdEmpresa.ToString("000"));
+                        //string _docPassowrd = string.Format("BCMWEB.{0}.{1}", (dataDocumento.Negocios ? "N" : "T"), IdEmpresa.ToString("000"));
+                        //string _ownerPassowrd = string.Format("{0}.{1}.{2}.BCMWEB", TipoDocumento, (dataDocumento.Negocios ? "N" : "T"), IdEmpresa.ToString("000"));
                         string _CodigoInforme = string.Format("{0}_{1}_{2}_{3}_{4}.{5}", TipoDocumento, IdEmpresa.ToString(), dataDocumento.NroDocumento.ToString("#000"), (EstadoDocumento == eEstadoDocumento.Certificado ? dataDocumento.FechaEstadoDocumento.ToString("MM-yyyy") : DateTime.Now.ToString("MM-yyyy")), dataDocumento.VersionOriginal, dataDocumento.NroVersion);
                         _FileName = string.Format("{0}.pdf", _CodigoInforme.Replace("-", "_"));
                         _pathFile = String.Format("{0}\\PDFDocs\\{1}", _ServerPath, _FileName);
@@ -536,11 +566,11 @@ namespace BCMWeb
                         _Documento = new Document();
                         _pdfWrite = PdfWriter.GetInstance(_Documento, new FileStream(_pathFile, FileMode.Create));
                         _pdfWrite.PageEvent = _PDF_Events;
-                        _pdfWrite.SetEncryption(
-                              System.Text.Encoding.UTF8.GetBytes(_docPassowrd)
-                            , System.Text.Encoding.UTF8.GetBytes(_ownerPassowrd)
-                            , PdfWriter.AllowPrinting
-                            , PdfWriter.ENCRYPTION_AES_256);
+                        //_pdfWrite.SetEncryption(
+                        //      System.Text.Encoding.UTF8.GetBytes(_docPassowrd)
+                        //    , System.Text.Encoding.UTF8.GetBytes(_ownerPassowrd)
+                        //    , PdfWriter.AllowPrinting
+                        //    , PdfWriter.ENCRYPTION_AES_256);
 
                         string[] docKeywords = new string[]
                         {
@@ -600,12 +630,21 @@ namespace BCMWeb
                             _reader.Dispose();
                         }
 
+                        if (Modulo == eSystemModules.PMI)
+                        {
+                            MoverDocumentosEscenarios(dataDocumento.Negocios, _CodigoInforme);
+                        }
+
+                        _pdfFiles = Directory.GetFiles(_tempFilePath, _pattern, 
+                            SearchOption.AllDirectories).OrderBy(q => q).ToList();
+
                         foreach (string _fileName in _pdfFiles)
                         {
                             File.Delete(_fileName);
                         }
                     }
                 }
+
             }
             catch (Exception ex)
             {
@@ -614,8 +653,6 @@ namespace BCMWeb
             }
             return _strDocURL;
         }
-
-
         #region "Objetos"
         internal class itsEvents : PdfPageEventHelper
         {

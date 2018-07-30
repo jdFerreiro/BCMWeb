@@ -911,6 +911,46 @@
           <Property Name="IdTipoIncidente" Type="int" Nullable="false" />
           <Property Name="Descripcion" Type="nvarchar" MaxLength="250" />
         </EntityType>
+        <EntityType Name="tblDispositivo">
+          <Key>
+            <PropertyRef Name="IdDispositivo" />
+          </Key>
+          <Property Name="IdDispositivo" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fechaRegistro" Type="datetime" />
+          <Property Name="IdUnicoDispositivo" Type="nvarchar" MaxLength="500" />
+          <Property Name="nombre" Type="nvarchar" MaxLength="500" />
+          <Property Name="fabricante" Type="nvarchar" MaxLength="500" />
+          <Property Name="modelo" Type="nvarchar" MaxLength="500" />
+          <Property Name="plataforma" Type="nvarchar" MaxLength="500" />
+          <Property Name="version" Type="nvarchar" MaxLength="500" />
+          <Property Name="Tipo" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="tblDispositivoConexion">
+          <Key>
+            <PropertyRef Name="IdEmpresa" />
+            <PropertyRef Name="IdDispositivo" />
+            <PropertyRef Name="IdUsuario" />
+            <PropertyRef Name="fechaConexion" />
+          </Key>
+          <Property Name="IdEmpresa" Type="bigint" Nullable="false" />
+          <Property Name="IdDispositivo" Type="bigint" Nullable="false" />
+          <Property Name="IdUsuario" Type="bigint" Nullable="false" />
+          <Property Name="fechaConexion" Type="datetime" Nullable="false" />
+          <Property Name="DireccionIP" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="tblDispositivoEnvio">
+          <Key>
+            <PropertyRef Name="IdDispositivo" />
+            <PropertyRef Name="IdSubModulo" />
+          </Key>
+          <Property Name="IdDispositivo" Type="bigint" Nullable="false" />
+          <Property Name="IdSubModulo" Type="bigint" Nullable="false" />
+          <Property Name="IdEmpresa" Type="bigint" />
+          <Property Name="IdUsuarioEnvia" Type="bigint" />
+          <Property Name="FechaEnvio" Type="datetime" />
+          <Property Name="FechaDescarga" Type="datetime" />
+          <Property Name="Descargado" Type="bit" />
+        </EntityType>
         <EntityType Name="tblDocumento">
           <Key>
             <PropertyRef Name="IdEmpresa" />
@@ -3150,18 +3190,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_tblCultura_EstadoUsuario_tblEstadoUsuario">
-          <End Role="tblEstadoUsuario" Type="Self.tblEstadoUsuario" Multiplicity="1" />
-          <End Role="tblCultura_EstadoUsuario" Type="Self.tblCultura_EstadoUsuario" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblEstadoUsuario">
-              <PropertyRef Name="IdEstadoUsuario" />
-            </Principal>
-            <Dependent Role="tblCultura_EstadoUsuario">
-              <PropertyRef Name="IdEstadoUsuario" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_tblCultura_Mes_tblMes">
           <End Role="tblMes" Type="Self.tblMes" Multiplicity="1" />
           <End Role="tblCultura_Mes" Type="Self.tblCultura_Mes" Multiplicity="*" />
@@ -3427,6 +3455,68 @@
             </Principal>
             <Dependent Role="tblCulture_TipoIncidente">
               <PropertyRef Name="IdTipoIncidente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblDispositivoConexion_tblEmpresa">
+          <End Role="tblEmpresa" Type="Self.tblEmpresa" Multiplicity="1" />
+          <End Role="tblDispositivoConexion" Type="Self.tblDispositivoConexion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblEmpresa">
+              <PropertyRef Name="IdEmpresa" />
+            </Principal>
+            <Dependent Role="tblDispositivoConexion">
+              <PropertyRef Name="IdEmpresa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblDispositivoConexion_tblUsuario">
+          <End Role="tblUsuario" Type="Self.tblUsuario" Multiplicity="1" />
+          <End Role="tblDispositivoConexion" Type="Self.tblDispositivoConexion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUsuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="tblDispositivoConexion">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblDispositivoConexion_tblUsuarioDispositivo">
+          <End Role="tblDispositivo" Type="Self.tblDispositivo" Multiplicity="1" />
+          <End Role="tblDispositivoConexion" Type="Self.tblDispositivoConexion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblDispositivo">
+              <PropertyRef Name="IdDispositivo" />
+            </Principal>
+            <Dependent Role="tblDispositivoConexion">
+              <PropertyRef Name="IdDispositivo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblDispositivoEnvio_tblDispositivo">
+          <End Role="tblDispositivo" Type="Self.tblDispositivo" Multiplicity="1" />
+          <End Role="tblDispositivoEnvio" Type="Self.tblDispositivoEnvio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblDispositivo">
+              <PropertyRef Name="IdDispositivo" />
+            </Principal>
+            <Dependent Role="tblDispositivoEnvio">
+              <PropertyRef Name="IdDispositivo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblDispositivoEnvio_tblModulo">
+          <End Role="tblModulo" Type="Self.tblModulo" Multiplicity="0..1" />
+          <End Role="tblDispositivoEnvio" Type="Self.tblDispositivoEnvio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblModulo">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdModulo" />
+            </Principal>
+            <Dependent Role="tblDispositivoEnvio">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdSubModulo" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -5057,6 +5147,9 @@
           <EntitySet Name="tblCulture_FuenteIncidente" EntityType="Self.tblCulture_FuenteIncidente" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblCulture_NaturalezaIncidente" EntityType="Self.tblCulture_NaturalezaIncidente" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblCulture_TipoIncidente" EntityType="Self.tblCulture_TipoIncidente" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblDispositivo" EntityType="Self.tblDispositivo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblDispositivoConexion" EntityType="Self.tblDispositivoConexion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblDispositivoEnvio" EntityType="Self.tblDispositivoEnvio" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblDocumento" EntityType="Self.tblDocumento" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblDocumentoAnexo" EntityType="Self.tblDocumentoAnexo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblDocumentoAprobacion" EntityType="Self.tblDocumentoAprobacion" Schema="dbo" store:Type="Tables" />
@@ -5479,10 +5572,6 @@
             <End Role="tblEstadoProceso" EntitySet="tblEstadoProceso" />
             <End Role="tblCultura_EstadoProceso" EntitySet="tblCultura_EstadoProceso" />
           </AssociationSet>
-          <AssociationSet Name="FK_tblCultura_EstadoUsuario_tblEstadoUsuario" Association="Self.FK_tblCultura_EstadoUsuario_tblEstadoUsuario">
-            <End Role="tblEstadoUsuario" EntitySet="tblEstadoUsuario" />
-            <End Role="tblCultura_EstadoUsuario" EntitySet="tblCultura_EstadoUsuario" />
-          </AssociationSet>
           <AssociationSet Name="FK_tblCultura_Mes_tblMes" Association="Self.FK_tblCultura_Mes_tblMes">
             <End Role="tblMes" EntitySet="tblMes" />
             <End Role="tblCultura_Mes" EntitySet="tblCultura_Mes" />
@@ -5570,6 +5659,26 @@
           <AssociationSet Name="FK_tblCulture_TipoIncidente_tblTipoIncidente" Association="Self.FK_tblCulture_TipoIncidente_tblTipoIncidente">
             <End Role="tblTipoIncidente" EntitySet="tblTipoIncidente" />
             <End Role="tblCulture_TipoIncidente" EntitySet="tblCulture_TipoIncidente" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblDispositivoConexion_tblEmpresa" Association="Self.FK_tblDispositivoConexion_tblEmpresa">
+            <End Role="tblEmpresa" EntitySet="tblEmpresa" />
+            <End Role="tblDispositivoConexion" EntitySet="tblDispositivoConexion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblDispositivoConexion_tblUsuario" Association="Self.FK_tblDispositivoConexion_tblUsuario">
+            <End Role="tblUsuario" EntitySet="tblUsuario" />
+            <End Role="tblDispositivoConexion" EntitySet="tblDispositivoConexion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblDispositivoConexion_tblUsuarioDispositivo" Association="Self.FK_tblDispositivoConexion_tblUsuarioDispositivo">
+            <End Role="tblDispositivo" EntitySet="tblDispositivo" />
+            <End Role="tblDispositivoConexion" EntitySet="tblDispositivoConexion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblDispositivoEnvio_tblDispositivo" Association="Self.FK_tblDispositivoEnvio_tblDispositivo">
+            <End Role="tblDispositivo" EntitySet="tblDispositivo" />
+            <End Role="tblDispositivoEnvio" EntitySet="tblDispositivoEnvio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblDispositivoEnvio_tblModulo" Association="Self.FK_tblDispositivoEnvio_tblModulo">
+            <End Role="tblModulo" EntitySet="tblModulo" />
+            <End Role="tblDispositivoEnvio" EntitySet="tblDispositivoEnvio" />
           </AssociationSet>
           <AssociationSet Name="FK_tblDocumento_tblBIADocumento" Association="Self.FK_tblDocumento_tblBIADocumento">
             <End Role="tblDocumento" EntitySet="tblDocumento" />
@@ -7295,6 +7404,7 @@
           <NavigationProperty Name="tblProducto" Relationship="Self.FK_tblProducto_tblEmpresa" FromRole="tblEmpresa" ToRole="tblProducto" />
           <NavigationProperty Name="tblUsuarioUnidadOrganizativa" Relationship="Self.FK_tblUsuarioUnidadOrganizativa_tblEmpresa" FromRole="tblEmpresa" ToRole="tblUsuarioUnidadOrganizativa" />
           <NavigationProperty Name="tblIncidentes" Relationship="EntitiesModel.FK_tblIncidentes_tblEmpresa" FromRole="tblEmpresa" ToRole="tblIncidentes" />
+          <NavigationProperty Name="tblDispositivoConexion" Relationship="EntitiesModel.FK_tblDispositivoConexion_tblEmpresa" FromRole="tblEmpresa" ToRole="tblDispositivoConexion" />
         </EntityType>
         <EntityType Name="tblEmpresaModulo">
           <Key>
@@ -7550,6 +7660,7 @@
           <NavigationProperty Name="tblPMTProgramacion" Relationship="Self.FK_tblPMTProgramacion_tblModulo" FromRole="tblModulo" ToRole="tblPMTProgramacion" />
           <NavigationProperty Name="tblPMTProgramacionDocumentos" Relationship="Self.FK_tblPMTProgramacionDocumentos_tblModulo" FromRole="tblModulo" ToRole="tblPMTProgramacionDocumentos" />
           <NavigationProperty Name="tblPMTResponsableUpdate" Relationship="Self.FK_tblPMTResponsableUpdate_tblModulo" FromRole="tblModulo" ToRole="tblPMTResponsableUpdate" />
+          <NavigationProperty Name="tblDispositivoEnvio" Relationship="EntitiesModel.FK_tblDispositivoEnvio_tblModulo" FromRole="tblModulo" ToRole="tblDispositivoEnvio" />
         </EntityType>
         <EntityType Name="tblModulo_NivelUsuario">
           <Key>
@@ -8256,6 +8367,7 @@
           <NavigationProperty Name="tblPMTProgramacionUsuario" Relationship="Self.FK_tblPMTProgramacionUsuario_tblUsuario" FromRole="tblUsuario" ToRole="tblPMTProgramacionUsuario" />
           <NavigationProperty Name="tblPMTResponsableUpdate_Correo" Relationship="Self.FK_tblPMTResponsableUpdate_Correo_tblUsuario" FromRole="tblUsuario" ToRole="tblPMTResponsableUpdate_Correo" />
           <NavigationProperty Name="tblUsuarioUnidadOrganizativa" Relationship="Self.FK_tblUsuarioUnidadOrganizativa_tblUsuario" FromRole="tblUsuario" ToRole="tblUsuarioUnidadOrganizativa" />
+          <NavigationProperty Name="tblDispositivoConexion" Relationship="EntitiesModel.FK_tblDispositivoConexion_tblUsuario" FromRole="tblUsuario" ToRole="tblDispositivoConexion" />
         </EntityType>
         <EntityType Name="tblUsuarioUnidadOrganizativa">
           <Key>
@@ -12342,6 +12454,29 @@
             <End Role="tblTipoIncidente" EntitySet="tblTipoIncidente" />
             <End Role="tblCulture_TipoIncidente" EntitySet="tblCulture_TipoIncidente" />
           </AssociationSet>
+          <EntitySet Name="tblDispositivo" EntityType="EntitiesModel.tblDispositivo" />
+          <EntitySet Name="tblDispositivoConexion" EntityType="EntitiesModel.tblDispositivoConexion" />
+          <AssociationSet Name="FK_tblDispositivoConexion_tblUsuarioDispositivo" Association="EntitiesModel.FK_tblDispositivoConexion_tblUsuarioDispositivo">
+            <End Role="tblDispositivo" EntitySet="tblDispositivo" />
+            <End Role="tblDispositivoConexion" EntitySet="tblDispositivoConexion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblDispositivoConexion_tblEmpresa" Association="EntitiesModel.FK_tblDispositivoConexion_tblEmpresa">
+            <End Role="tblEmpresa" EntitySet="tblEmpresa" />
+            <End Role="tblDispositivoConexion" EntitySet="tblDispositivoConexion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblDispositivoConexion_tblUsuario" Association="EntitiesModel.FK_tblDispositivoConexion_tblUsuario">
+            <End Role="tblUsuario" EntitySet="tblUsuario" />
+            <End Role="tblDispositivoConexion" EntitySet="tblDispositivoConexion" />
+          </AssociationSet>
+          <EntitySet Name="tblDispositivoEnvio" EntityType="EntitiesModel.tblDispositivoEnvio" />
+          <AssociationSet Name="FK_tblDispositivoEnvio_tblDispositivo" Association="EntitiesModel.FK_tblDispositivoEnvio_tblDispositivo">
+            <End Role="tblDispositivo" EntitySet="tblDispositivo" />
+            <End Role="tblDispositivoEnvio" EntitySet="tblDispositivoEnvio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblDispositivoEnvio_tblModulo" Association="EntitiesModel.FK_tblDispositivoEnvio_tblModulo">
+            <End Role="tblModulo" EntitySet="tblModulo" />
+            <End Role="tblDispositivoEnvio" EntitySet="tblDispositivoEnvio" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="tblFuenteIncidente">
           <Key>
@@ -12514,6 +12649,115 @@
             </Principal>
             <Dependent Role="tblCulture_TipoIncidente">
               <PropertyRef Name="IdTipoIncidente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="tblDispositivo">
+          <Key>
+            <PropertyRef Name="IdDispositivo" />
+          </Key>
+          <Property Name="IdDispositivo" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fechaRegistro" Type="DateTime" Precision="3" />
+          <Property Name="IdUnicoDispositivo" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="nombre" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="fabricante" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="modelo" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="plataforma" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="version" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Tipo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblDispositivoConexion" Relationship="EntitiesModel.FK_tblDispositivoConexion_tblUsuarioDispositivo" FromRole="tblDispositivo" ToRole="tblDispositivoConexion" />
+          <NavigationProperty Name="tblDispositivoEnvio" Relationship="EntitiesModel.FK_tblDispositivoEnvio_tblDispositivo" FromRole="tblDispositivo" ToRole="tblDispositivoEnvio" />
+        </EntityType>
+        <EntityType Name="tblDispositivoConexion">
+          <Key>
+            <PropertyRef Name="IdEmpresa" />
+            <PropertyRef Name="IdDispositivo" />
+            <PropertyRef Name="IdUsuario" />
+            <PropertyRef Name="fechaConexion" />
+          </Key>
+          <Property Name="IdEmpresa" Type="Int64" Nullable="false" />
+          <Property Name="IdDispositivo" Type="Int64" Nullable="false" />
+          <Property Name="IdUsuario" Type="Int64" Nullable="false" />
+          <Property Name="fechaConexion" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DireccionIP" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblDispositivo" Relationship="EntitiesModel.FK_tblDispositivoConexion_tblUsuarioDispositivo" FromRole="tblDispositivoConexion" ToRole="tblDispositivo" />
+          <NavigationProperty Name="tblEmpresa" Relationship="EntitiesModel.FK_tblDispositivoConexion_tblEmpresa" FromRole="tblDispositivoConexion" ToRole="tblEmpresa" />
+          <NavigationProperty Name="tblUsuario" Relationship="EntitiesModel.FK_tblDispositivoConexion_tblUsuario" FromRole="tblDispositivoConexion" ToRole="tblUsuario" />
+        </EntityType>
+        <Association Name="FK_tblDispositivoConexion_tblUsuarioDispositivo">
+          <End Type="EntitiesModel.tblDispositivo" Role="tblDispositivo" Multiplicity="1" />
+          <End Type="EntitiesModel.tblDispositivoConexion" Role="tblDispositivoConexion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblDispositivo">
+              <PropertyRef Name="IdDispositivo" />
+            </Principal>
+            <Dependent Role="tblDispositivoConexion">
+              <PropertyRef Name="IdDispositivo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblDispositivoConexion_tblEmpresa">
+          <End Type="EntitiesModel.tblEmpresa" Role="tblEmpresa" Multiplicity="1" />
+          <End Type="EntitiesModel.tblDispositivoConexion" Role="tblDispositivoConexion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblEmpresa">
+              <PropertyRef Name="IdEmpresa" />
+            </Principal>
+            <Dependent Role="tblDispositivoConexion">
+              <PropertyRef Name="IdEmpresa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblDispositivoConexion_tblUsuario">
+          <End Type="EntitiesModel.tblUsuario" Role="tblUsuario" Multiplicity="1" />
+          <End Type="EntitiesModel.tblDispositivoConexion" Role="tblDispositivoConexion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUsuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="tblDispositivoConexion">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="tblDispositivoEnvio">
+          <Key>
+            <PropertyRef Name="IdDispositivo" />
+            <PropertyRef Name="IdSubModulo" />
+          </Key>
+          <Property Name="IdDispositivo" Type="Int64" Nullable="false" />
+          <Property Name="IdSubModulo" Type="Int64" Nullable="false" />
+          <Property Name="IdEmpresa" Type="Int64" />
+          <Property Name="IdUsuarioEnvia" Type="Int64" />
+          <Property Name="FechaEnvio" Type="DateTime" Precision="3" />
+          <Property Name="FechaDescarga" Type="DateTime" Precision="3" />
+          <Property Name="Descargado" Type="Boolean" />
+          <NavigationProperty Name="tblDispositivo" Relationship="EntitiesModel.FK_tblDispositivoEnvio_tblDispositivo" FromRole="tblDispositivoEnvio" ToRole="tblDispositivo" />
+          <NavigationProperty Name="tblModulo" Relationship="EntitiesModel.FK_tblDispositivoEnvio_tblModulo" FromRole="tblDispositivoEnvio" ToRole="tblModulo" />
+        </EntityType>
+        <Association Name="FK_tblDispositivoEnvio_tblDispositivo">
+          <End Type="EntitiesModel.tblDispositivo" Role="tblDispositivo" Multiplicity="1" />
+          <End Type="EntitiesModel.tblDispositivoEnvio" Role="tblDispositivoEnvio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblDispositivo">
+              <PropertyRef Name="IdDispositivo" />
+            </Principal>
+            <Dependent Role="tblDispositivoEnvio">
+              <PropertyRef Name="IdDispositivo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblDispositivoEnvio_tblModulo">
+          <End Type="EntitiesModel.tblModulo" Role="tblModulo" Multiplicity="0..1" />
+          <End Type="EntitiesModel.tblDispositivoEnvio" Role="tblDispositivoEnvio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblModulo">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdModulo" />
+            </Principal>
+            <Dependent Role="tblDispositivoEnvio">
+              <PropertyRef Name="IdEmpresa" />
+              <PropertyRef Name="IdSubModulo" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -14311,6 +14555,45 @@
                 <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
                 <ScalarProperty Name="IdTipoIncidente" ColumnName="IdTipoIncidente" />
                 <ScalarProperty Name="Culture" ColumnName="Culture" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblDispositivo">
+            <EntityTypeMapping TypeName="EntitiesModel.tblDispositivo">
+              <MappingFragment StoreEntitySet="tblDispositivo">
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="plataforma" ColumnName="plataforma" />
+                <ScalarProperty Name="modelo" ColumnName="modelo" />
+                <ScalarProperty Name="fabricante" ColumnName="fabricante" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="IdUnicoDispositivo" ColumnName="IdUnicoDispositivo" />
+                <ScalarProperty Name="fechaRegistro" ColumnName="fechaRegistro" />
+                <ScalarProperty Name="IdDispositivo" ColumnName="IdDispositivo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblDispositivoConexion">
+            <EntityTypeMapping TypeName="EntitiesModel.tblDispositivoConexion">
+              <MappingFragment StoreEntitySet="tblDispositivoConexion">
+                <ScalarProperty Name="DireccionIP" ColumnName="DireccionIP" />
+                <ScalarProperty Name="fechaConexion" ColumnName="fechaConexion" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="IdDispositivo" ColumnName="IdDispositivo" />
+                <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblDispositivoEnvio">
+            <EntityTypeMapping TypeName="EntitiesModel.tblDispositivoEnvio">
+              <MappingFragment StoreEntitySet="tblDispositivoEnvio">
+                <ScalarProperty Name="Descargado" ColumnName="Descargado" />
+                <ScalarProperty Name="FechaDescarga" ColumnName="FechaDescarga" />
+                <ScalarProperty Name="FechaEnvio" ColumnName="FechaEnvio" />
+                <ScalarProperty Name="IdUsuarioEnvia" ColumnName="IdUsuarioEnvia" />
+                <ScalarProperty Name="IdEmpresa" ColumnName="IdEmpresa" />
+                <ScalarProperty Name="IdSubModulo" ColumnName="IdSubModulo" />
+                <ScalarProperty Name="IdDispositivo" ColumnName="IdDispositivo" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

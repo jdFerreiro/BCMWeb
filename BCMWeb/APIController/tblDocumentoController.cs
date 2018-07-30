@@ -54,7 +54,11 @@ namespace BCMWeb.APIController
                     Id = x.IdDocumento,
                     IdTipoDocumento = x.IdTipoDocumento,
                     Negocios = x.Negocios,
-                    NombreDocumento = (x.IdTipoDocumento == 7 ? (x.tblBCPDocumento != null && x.tblBCPDocumento.Count > 0 && string.IsNullOrEmpty(x.tblBCPDocumento.FirstOrDefault().SubProceso.Trim()) ? x.tblBCPDocumento.FirstOrDefault().Proceso : string.Format("{0}({1})", x.tblBCPDocumento.FirstOrDefault().Proceso, x.tblBCPDocumento.FirstOrDefault().SubProceso)) : string.Empty),
+                    NombreDocumento = (x.IdTipoDocumento == 7 
+                            ? (x.tblBCPDocumento != null && x.tblBCPDocumento.Count > 0 && string.IsNullOrEmpty(x.tblBCPDocumento.FirstOrDefault().SubProceso.Trim()) 
+                                    ? x.tblBCPDocumento.FirstOrDefault().Proceso 
+                                    : string.Format("{0}({1})", x.tblBCPDocumento.FirstOrDefault().Proceso, x.tblBCPDocumento.FirstOrDefault().SubProceso)) 
+                            : string.Empty),
                     NroDocumento = x.NroDocumento,
                     NroVersion = x.NroVersion,
                     PdfRoute = GetRouteFile(x),

@@ -33,7 +33,7 @@ namespace BCMWeb.Controllers
             ViewBag.Title = string.Format("{0} - {1}", model.PageTitle, Resources.BCMWebPublic.labelAppTitle);
             Session["GridViewData"] = Metodos.GetIncidentes();
 
-            return View();
+            return View(model);
         }
         [SessionExpire]
         [HandleError]
@@ -59,14 +59,6 @@ namespace BCMWeb.Controllers
         [SessionExpire]
         [HandleError]
         public ActionResult PMIPartialView()
-        {
-            Session["GridViewData"] = Metodos.GetIncidentes();
-            return PartialView("PMIPartialView");
-        }
-        [SessionExpire]
-        [HandleError]
-        [HttpPost]
-        public ActionResult PMIPartialView(PMIModel model)
         {
             Session["GridViewData"] = Metodos.GetIncidentes();
             return PartialView("PMIPartialView");

@@ -59,13 +59,13 @@ namespace BCMWeb.Controllers
         {
             return PartialView("ProgramacionPartialView");
         }
-        [SessionExpire]
-        [HandleError]
-        [HttpPost]
-        public ActionResult ProgramacionPartialView(ProgramacionModel model)
-        {
-            return PartialView("ProgramacionPartialView");
-        }
+        //[SessionExpire]
+        //[HandleError]
+        //[HttpPost]
+        //public ActionResult ProgramacionPartialView(ProgramacionModel model)
+        //{
+        //    return PartialView("ProgramacionPartialView");
+        //}
         [SessionExpire]
         [HandleError]
         [HttpPost, ValidateInput(false)]

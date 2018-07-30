@@ -553,8 +553,53 @@ namespace BCMWeb
                 db.SaveChanges();
             }
         }
+        [SessionExpire]
+        [HandleError]
+        public static void ProcesarEvento(eTipoAccion Accion, long IdDispositivo, long idSubModulo, string nombre, string DatosActualizados)
+        {
+            long IdUser = long.Parse(Session["UserId"].ToString());
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
 
+            using (Entities db = new Entities())
+            {
+                string AccionMessage = string.Empty;
+                string NombreModulo = Resources.PMIResource.captionModulo;
+                tblModulo regModulo = db.tblModulo.FirstOrDefault(x => x.IdEmpresa == IdEmpresa && x.IdModulo == idSubModulo);
+                tblDispositivo regDisp = db.tblDispositivo.FirstOrDefault(x => x.IdDispositivo == IdDispositivo);
 
+                switch (Accion)
+                {
+                    case eTipoAccion.ActivarEvento:
+                        AccionMessage = string.Format(Resources.AuditoriaResource.ActivarEvento, regModulo.Nombre);
+                        break;
+                    case eTipoAccion.EliminarEvento:
+                        AccionMessage = string.Format(Resources.AuditoriaResource.EliminarEvento, regDisp.nombre, regModulo.Nombre);
+                        break;
+                }
 
+                tblUsuario usuario = db.tblUsuario.Where(x => x.IdUsuario == IdUser).FirstOrDefault();
+
+                string _Accion = AccionMessage;
+
+                tblAuditoria regAuditoria = new tblAuditoria
+                {
+                    Accion = _Accion,
+                    DireccionIP = Request.UserHostAddress,
+                    FechaRegistro = DateTime.UtcNow,
+                    IdDocumento = 0,
+                    IdEmpresa = IdEmpresa,
+                    IdTipoDocumento = 0,
+                    IdUsuario = IdUser,
+                    Mensaje = string.Empty,
+                    Negocios = true,
+                    DatosModificados = DatosActualizados
+                };
+
+                db.tblAuditoria.Add(regAuditoria);
+                usuario.FechaUltimaConexion = DateTime.UtcNow;
+                usuario.EstadoUsuario = 2;
+                db.SaveChanges();
+            }
+        }
     }
 }

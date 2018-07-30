@@ -24,6 +24,7 @@ namespace BCMWeb.Data.EF
             this.tblPMTProgramacion = new HashSet<tblPMTProgramacion>();
             this.tblPMTProgramacionDocumentos = new HashSet<tblPMTProgramacionDocumentos>();
             this.tblPMTResponsableUpdate = new HashSet<tblPMTResponsableUpdate>();
+            this.tblDispositivoEnvio = new HashSet<tblDispositivoEnvio>();
         }
     
         public long IdEmpresa { get; set; }
@@ -57,5 +58,7 @@ namespace BCMWeb.Data.EF
         public virtual ICollection<tblPMTProgramacionDocumentos> tblPMTProgramacionDocumentos { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblPMTResponsableUpdate> tblPMTResponsableUpdate { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblDispositivoEnvio> tblDispositivoEnvio { get; set; }
     }
 }

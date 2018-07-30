@@ -48,7 +48,6 @@ namespace BCMWeb.Controllers
             string _IdModulo = Session["modId"].ToString();
             long IdModulo = long.Parse(_IdModulo);
             int IdTipoDocumento = int.Parse(_IdModulo.Substring(0, (_IdModulo.Length == 7 ? 1 : 2)));
-            model.IdClaseDocumento = int.Parse(Session["IdClaseDocumento"].ToString());
             model.EditDocumento = false;
             model.IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
             model.IdDocumentoSelected = 0;

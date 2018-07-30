@@ -12,6 +12,9 @@
             settings.Name = "gvIncidentes";
             settings.KeyFieldName = "IdIncidente";
             settings.CallbackRouteValues = new { Controller = "PMI", Action = "PMIPartialView" };
+            settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "PMI", Action = "EditIncidenteAddNewPartial" };
+            settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "PMI", Action = "EditIncidenteUpdatePartial" };
+            settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "PMI", Action = "EditIncidenteDeletePartial" };
             settings.SettingsBehavior.ConfirmDelete = true;
             settings.Width = Unit.Percentage(100);
             settings.Settings.VerticalScrollableHeight = 325;
@@ -24,9 +27,6 @@
             settings.ClientSideEvents.BeginCallback = "function (s,e) { lp.Show(); }";
             settings.ClientSideEvents.EndCallback = "function (s,e) { lp.Hide(); }";
 
-            settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "PMI", Action = "EditIncidenteAddNewPartial" };
-            settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "PMI", Action = "EditIncidenteUpdatePartial" };
-            settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "PMI", Action = "EditIncidenteDeletePartial" };
             settings.SettingsEditing.Mode = GridViewEditingMode.PopupEditForm;
             settings.SettingsPopup.EditForm.HorizontalAlign = PopupHorizontalAlign.WindowCenter;
             settings.SettingsPopup.EditForm.VerticalAlign = PopupVerticalAlign.WindowCenter;
@@ -48,9 +48,9 @@
             settings.CommandColumn.Width = Unit.Pixel(150);
             settings.CommandColumn.Caption = " ";
 
-            settings.SettingsDetail.AllowOnlyOneMasterRowExpanded = true;
-            settings.SettingsDetail.ShowDetailRow = true;
-            settings.SettingsDetail.ShowDetailButtons = true;
+            //settings.SettingsDetail.AllowOnlyOneMasterRowExpanded = true;
+            //settings.SettingsDetail.ShowDetailRow = true;
+            //settings.SettingsDetail.ShowDetailButtons = true;
 
             settings.Columns.Add(c =>
             {
@@ -219,18 +219,6 @@
 
             settings.SetEditFormTemplateContent(c =>
             {
-                BCMWeb.Models.PMIModel editItem;
-
-                if (c.Grid.IsNewRowEditing)
-                {
-                    editItem = (ViewData["EditableIncidente"] == null ? new BCMWeb.Models.PMIModel() : (BCMWeb.Models.PMIModel)ViewData["EditableIncidente"]);
-                }
-                else
-                {
-                    editItem = (ViewData["EditableIncidente"] == null ? (BCMWeb.Models.PMIModel)c.Grid.GetRow(c.VisibleIndex) : (BCMWeb.Models.PMIModel)(ViewData["EditableIncidente"]));
-                }
-
-
                 Html.DevExpress().FormLayout(fls =>
                 {
                     fls.Name = "FormLayoutIncidentes";
@@ -395,7 +383,7 @@
                     });
                     fls.Items.AddEmptyItem();
                 })
-                .Bind(editItem)
+                .Bind(ViewData["EditableIncidente"] ?? c.DataItem)
                 .Render();
             });
         });

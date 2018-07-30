@@ -1,4 +1,6 @@
-﻿namespace BCMWeb.APIModels
+﻿using System;
+
+namespace BCMWeb.APIModels
 {
     public class UsuarioModel
     {
@@ -7,4 +9,5 @@
         public string Email { get; set; }
 
     }
+
 }

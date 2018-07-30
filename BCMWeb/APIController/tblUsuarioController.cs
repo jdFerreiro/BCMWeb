@@ -1,6 +1,7 @@
 ﻿using BCMWeb.APIModels;
 using BCMWeb.Data.EF;
 using BCMWeb.Security;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -41,6 +42,7 @@ namespace BCMWeb.APIController
         }
         [ResponseType(typeof(UsuarioModel))]
         [Route("GetById/{id:int}")]
+        [HttpGet]
         public async Task<IHttpActionResult> GetById(long id)
         {
             tblUsuario tblUsuario = await db.tblUsuario.FindAsync(id);
@@ -60,6 +62,7 @@ namespace BCMWeb.APIController
         }
         [ResponseType(typeof(UsuarioModel))]
         [Route("GetByCredentials/{codigo}/{password}")]
+        [HttpGet]
         public async Task<IHttpActionResult> GetByCredentials(string codigo, string password)
         {
             string _encriptedPassword = _Encriptador.Encriptar(password, Encriptador.HasAlgorimt.SHA1, Encriptador.Keysize.KS256);
@@ -79,6 +82,7 @@ namespace BCMWeb.APIController
 
             return Ok(data);
         }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

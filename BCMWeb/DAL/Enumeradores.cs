@@ -591,6 +591,15 @@ namespace BCMWeb
         [EnumMember()]
         [Description("Eliminar Incidente")]
         EliminarIncidente,
+        [EnumMember()]
+        [Description("Consultar Dispositivos")]
+        ConsultarDispositivos,
+        [EnumMember()]
+        [Description("Activar Evento")]
+        ActivarEvento,
+        [EnumMember()]
+        [Description("Eliminar Evento")]
+        EliminarEvento,
 
     }
     [DataContract(Name = "Secciones de Ficha")]

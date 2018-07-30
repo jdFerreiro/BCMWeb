@@ -510,14 +510,14 @@ namespace BCMWeb
                     {
                         tblEmpresa _Empresa = db.tblEmpresa.FirstOrDefault(em => em.IdEmpresa == IdEmpresa);
 
-                        string _docPassowrd = string.Format("BCMWEB.{0}.{1}", (_DataEjecucion.tblPBEPruebaPlanificacion.Negocios ? "N" : "T"), IdEmpresa.ToString("999"));
-                        string _ownerPassowrd = string.Format("PBE.{0}.{1}.BCMWEB", (_DataEjecucion.tblPBEPruebaPlanificacion.Negocios ? "N" : "T"), IdEmpresa.ToString("999"));
+                        //string _docPassowrd = string.Format("BCMWEB.{0}.{1}", (_DataEjecucion.tblPBEPruebaPlanificacion.Negocios ? "N" : "T"), IdEmpresa.ToString("999"));
+                        //string _ownerPassowrd = string.Format("PBE.{0}.{1}.BCMWEB", (_DataEjecucion.tblPBEPruebaPlanificacion.Negocios ? "N" : "T"), IdEmpresa.ToString("999"));
 
                         _FileName = string.Format("PBE{0}{1}.pdf", IdEmpresa.ToString(), IdPrueba.ToString());
                         _pathFile = string.Format("{0}\\PDFDocs\\{1}", _ServerPath, _FileName);
                         _strDocURL = string.Format("{0}/PDFDocs/{1}", _AppUrl, _FileName);
                         Uri _DocURL = new Uri(_strDocURL, System.UriKind.RelativeOrAbsolute);
-                        string _LogoEmpresaPath = string.Format("{0}{1}", _ServerPath, _Empresa.LogoURL.Replace("/", "\\"));
+                        string _LogoEmpresaPath = string.Format("{0}{1}", _ServerPath, _Empresa.LogoURL.Replace("~","").Replace("/", "\\"));
 
                         _ImagenEmpresa = Image.GetInstance(_LogoEmpresaPath);
                         _ImagenEmpresa.Alignment = Element.ALIGN_CENTER;
@@ -528,11 +528,11 @@ namespace BCMWeb
                         _Documento = new Document(PageSize.LETTER);
                         _pdfWrite = PdfWriter.GetInstance(_Documento, new FileStream(_pathFile, FileMode.OpenOrCreate));
                         _pdfWrite.PageEvent = _PDF_Events;
-                        _pdfWrite.SetEncryption(
-                              System.Text.Encoding.UTF8.GetBytes(_docPassowrd)
-                            , System.Text.Encoding.UTF8.GetBytes(_ownerPassowrd)
-                            , PdfWriter.AllowPrinting
-                            , PdfWriter.ENCRYPTION_AES_256);
+                        //_pdfWrite.SetEncryption(
+                        //      System.Text.Encoding.UTF8.GetBytes(_docPassowrd)
+                        //    , System.Text.Encoding.UTF8.GetBytes(_ownerPassowrd)
+                        //    , PdfWriter.AllowPrinting
+                        //    , PdfWriter.ENCRYPTION_AES_256);
 
                         string[] docKeywords = new string[] {
                             _FileName,

@@ -8896,7 +8896,6 @@ namespace BCMWeb
             return data.OrderBy(x => x.Descripcion).ToList();
 
         }
-
         public static bool GetStatusMantenimiento(long idEmpresa, long idModulo, long idPMTProgramacion, DateTime dateTime)
         {
             bool _status = true;
@@ -8978,6 +8977,150 @@ namespace BCMWeb
             }
 
             return _status;
+        }
+
+        public static List<DispositivoModel> GetDispositivosMoviles()
+        {
+
+            List<DispositivoModel> Dispositivos = new List<DispositivoModel>();
+
+            using (Entities db = new Entities())
+            {
+                Dispositivos = db.tblDispositivo
+                    .Select(x => new DispositivoModel
+                    {
+                        Conexiones = x.tblDispositivoConexion.Select(c => new DispositivoConexion
+                        {
+                            DireccionIP = c.DireccionIP,
+                            FechaConexion = c.fechaConexion,
+                            IdDispositivo = c.IdDispositivo,
+                            IdEmpresa = c.IdEmpresa,
+                            IdUsuario = c.IdUsuario,
+                            Empresa = c.tblEmpresa.NombreComercial,
+                            Usuario = c.tblUsuario.Nombre,
+                        }).OrderByDescending(c => c.FechaConexion).ToList(),
+                        fabricante = x.fabricante,
+                        FechaRegistro = x.fechaRegistro,
+                        fechaUltimaConexion = x.tblDispositivoConexion.Max(c => c.fechaConexion), 
+                        Id = x.IdDispositivo,
+                        IdUnicoDispositivo = x.IdUnicoDispositivo,
+                        modelo = x.modelo,
+                        nombre = x.nombre,
+                        plataforma = x.plataforma,
+                        tipo = x.Tipo,
+                        version = x.version
+                    }).ToList(); ;
+            }
+
+            return Dispositivos;
+        }
+        public static List<DispositivoConexion> GetConexionesDispositivo(string idDispositivo)
+        {
+            long IdDispositivo = long.Parse(idDispositivo);
+            List<DispositivoConexion> Conexiones = new List<DispositivoConexion>();
+
+            using (Entities db = new Entities())
+            {
+                Conexiones = db.tblDispositivoConexion
+                    .Where(x => x.IdDispositivo == IdDispositivo)
+                    .Select(c => new DispositivoConexion
+                    {
+                        DireccionIP = c.DireccionIP,
+                        FechaConexion = c.fechaConexion,
+                        IdDispositivo = c.IdDispositivo,
+                        IdEmpresa = c.IdEmpresa,
+                        IdUsuario = c.IdUsuario,
+                        Empresa = c.tblEmpresa.NombreComercial,
+                        Usuario = c.tblUsuario.Nombre,
+                    }).OrderByDescending(x => x.FechaConexion).ToList();
+            }
+
+            return Conexiones;
+        }
+        public static void InsertEvento(long idSubModulo, string selectedIds)
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            long IdUser = long.Parse(Session["UserId"].ToString());
+            string nombre;
+
+            using (Entities db = new Entities())
+            {
+                nombre = db.tblModulo.FirstOrDefault(x => x.IdEmpresa == IdEmpresa && x.IdModulo == idSubModulo).Nombre;
+                
+                foreach (string Id in selectedIds.Split(','))
+                {
+                    long idDispositivo = long.Parse(Id);
+
+                    tblDispositivoEnvio reg = new tblDispositivoEnvio
+                    {
+                        Descargado = false,
+                        FechaEnvio = DateTime.UtcNow,
+                        IdDispositivo = idDispositivo,
+                        IdEmpresa = IdEmpresa,
+                        IdSubModulo = idSubModulo,
+                        IdUsuarioEnvia = IdUser,
+                    };
+                    db.tblDispositivoEnvio.Add(reg);
+                    db.SaveChanges();
+
+                    Auditoria.ProcesarEvento(eTipoAccion.ActivarEvento, reg.IdDispositivo, reg.IdSubModulo, nombre, string.Empty);
+                }
+            }
+        }
+        public static List<TablaModel> GetEscenariosEmpresa()
+        {
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            List<TablaModel> data = new List<TablaModel>();
+
+            using (Entities db = new Entities())
+            {
+                data = db.tblModulo.Where(x => x.IdEmpresa == IdEmpresa && x.IdModulo > 6050200 && x.IdModulo < 6050300).Select(x => new TablaModel
+                {
+                    Descripcion = x.Nombre,
+                    Id = x.IdModulo,
+                }).ToList();
+            }
+
+            return data.OrderBy(x => x.Descripcion).ToList();
+        }
+        public static List<DispositivoModel> GetDispositivosMovilEvento(long idSubModulo)
+        {
+
+            long IdEmpresa = long.Parse(Session["IdEmpresa"].ToString());
+            List<DispositivoModel> Dispositivos = new List<DispositivoModel>();
+
+            using (Entities db = new Entities())
+            {
+                Dispositivos = db.tblDispositivo
+                    .Select(x => new DispositivoModel
+                    {
+                        Conexiones = x.tblDispositivoConexion.Select(c => new DispositivoConexion
+                        {
+                            DireccionIP = c.DireccionIP,
+                            FechaConexion = c.fechaConexion,
+                            IdDispositivo = c.IdDispositivo,
+                            IdEmpresa = c.IdEmpresa,
+                            IdUsuario = c.IdUsuario,
+                            Empresa = c.tblEmpresa.NombreComercial,
+                            Usuario = c.tblUsuario.Nombre,
+                        }).OrderByDescending(c => c.FechaConexion).ToList(),
+                        fabricante = x.fabricante,
+                        FechaDescarga = (x.tblDispositivoEnvio.FirstOrDefault(e => e.IdEmpresa == IdEmpresa && e.IdSubModulo == idSubModulo) != null ? x.tblDispositivoEnvio.FirstOrDefault(e => e.IdEmpresa == IdEmpresa && e.IdSubModulo == idSubModulo).FechaDescarga : null),
+                        FechaEnvio = (x.tblDispositivoEnvio.FirstOrDefault(e => e.IdEmpresa == IdEmpresa && e.IdSubModulo == idSubModulo) != null ? x.tblDispositivoEnvio.FirstOrDefault(e => e.IdEmpresa == IdEmpresa && e.IdSubModulo == idSubModulo).FechaEnvio : null),
+                        FechaRegistro = x.fechaRegistro,
+                        fechaUltimaConexion = x.tblDispositivoConexion.Max(c => c.fechaConexion),
+                        Id = x.IdDispositivo,
+                        IdUnicoDispositivo = x.IdUnicoDispositivo,
+                        modelo = x.modelo,
+                        nombre = x.nombre,
+                        plataforma = x.plataforma,
+                        Selected = x.tblDispositivoEnvio.FirstOrDefault(e => e.IdEmpresa == IdEmpresa && e.IdSubModulo == idSubModulo) != null,
+                        tipo = x.Tipo,
+                        version = x.version
+                    }).ToList(); ;
+            }
+
+            return Dispositivos;
         }
 
     }

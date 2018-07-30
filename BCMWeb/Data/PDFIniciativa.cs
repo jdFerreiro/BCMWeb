@@ -605,6 +605,23 @@ namespace BCMWeb
                             BorderWidthLeft = 0,
                             BorderWidthBottom = 0,
                             BorderWidthRight = 0,
+                            Colspan = 3,
+                        };
+                        _Table.AddCell(_Cell);
+
+                        /* ****************
+                         * Separador
+                         ** **************** */
+                        _Phrase = new Phrase(" ", _Font9Normal);
+                        _Cell = new PdfPCell(_Phrase)
+                        {
+                            HorizontalAlignment = Element.ALIGN_LEFT,
+                            VerticalAlignment = Element.ALIGN_MIDDLE,
+                            Colspan = 5,
+                            BorderWidthTop = 0,
+                            BorderWidthLeft = 0,
+                            BorderWidthBottom = 0,
+                            BorderWidthRight = 0,
                         };
                         _Table.AddCell(_Cell);
 
@@ -629,11 +646,12 @@ namespace BCMWeb
                             BorderWidthLeft = 0,
                             BorderWidthBottom = 0,
                             BorderWidthRight = 0,
+                            Colspan = 4,
                         };
                         _Table.AddCell(_Cell);
 
                         /* ****************
-                         * Separador 1
+                         * Separador
                          ** **************** */
                         _Phrase = new Phrase(" ", _Font9Normal);
                         _Cell = new PdfPCell(_Phrase)
@@ -649,7 +667,7 @@ namespace BCMWeb
                         _Table.AddCell(_Cell);
 
                         /* ****************
-                         * Línea 2
+                         * Línea
                          * **************** */
                         _Phrase = new Phrase(string.Format("{0}:", Resources.IniciativaResource.Descripcion.Trim()), _Font9Bold);
                         _Cell = new PdfPCell(_Phrase)
@@ -810,7 +828,7 @@ namespace BCMWeb
                         };
                         _Table.AddCell(_Cell);
 
-                        _Phrase = new Phrase(string.Format("{0}:", Resources.IniciativaResource.FechaCierreEstimada.Trim()), _Font9Bold);
+                        _Phrase = new Phrase(string.Format("{0}:", Resources.IniciativaResource.FechaInicioReal.Trim()), _Font9Bold);
                         _Cell = new PdfPCell(_Phrase)
                         {
                             HorizontalAlignment = Element.ALIGN_LEFT,
@@ -822,7 +840,7 @@ namespace BCMWeb
                         };
                         _Table.AddCell(_Cell);
 
-                        _Phrase = new Phrase(_DataEjecucion.FechaCierreEstimada != null ? ((DateTime)_DataEjecucion.FechaCierreEstimada).ToString("dd/MM/yyyy") : " ", _Font9Normal);
+                        _Phrase = new Phrase(_DataEjecucion.FechaInicioReal != null ? ((DateTime)_DataEjecucion.FechaInicioReal).ToString("dd/MM/yyyy") : " ", _Font9Normal);
                         _Cell = new PdfPCell(_Phrase)
                         {
                             HorizontalAlignment = Element.ALIGN_LEFT,
@@ -853,7 +871,7 @@ namespace BCMWeb
                         /* ****************
                          * Línea 5
                          * **************** */
-                        _Phrase = new Phrase(string.Format("{0}:", Resources.IniciativaResource.FechaInicioReal.Trim()), _Font9Bold);
+                        _Phrase = new Phrase(string.Format("{0}:", Resources.IniciativaResource.FechaCierreEstimada.Trim()), _Font9Bold);
                         _Cell = new PdfPCell(_Phrase)
                         {
                             HorizontalAlignment = Element.ALIGN_LEFT,
@@ -865,7 +883,7 @@ namespace BCMWeb
                         };
                         _Table.AddCell(_Cell);
 
-                        _Phrase = new Phrase(_DataEjecucion.FechaInicioReal != null ? ((DateTime)_DataEjecucion.FechaInicioReal).ToString("dd/MM/yyyy") : " ", _Font9Normal);
+                        _Phrase = new Phrase(_DataEjecucion.FechaCierreEstimada != null ? ((DateTime)_DataEjecucion.FechaCierreEstimada).ToString("dd/MM/yyyy") : " ", _Font9Normal);
                         _Cell = new PdfPCell(_Phrase)
                         {
                             HorizontalAlignment = Element.ALIGN_LEFT,

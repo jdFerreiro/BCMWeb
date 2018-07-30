@@ -356,6 +356,7 @@
     <Content Include="Content\Images\Menu\Criticos.jpg" />
     <Content Include="Content\Images\Menu\Estrategia.jpg" />
     <Content Include="Content\Images\Menu\Estructura.jpg" />
+    <Content Include="Content\Images\Menu\GestorEventos.png" />
     <Content Include="Content\Images\Menu\Mantenimiento.jpg" />
     <Content Include="Content\Images\Menu\no_disponible.jpg" />
     <Content Include="Content\Images\Menu\PlanTrabajo.jpg" />
@@ -461,6 +462,7 @@
     <Content Include="Data\EF\BCMWebEntities.edmx.diagram">
       <DependentUpon>BCMWebEntities.edmx</DependentUpon>
     </Content>
+    <Content Include="PMI\PDFDocs\INC92.pdf" />
     <None Include="Properties\PublishProfiles\BCMWeb2.pubxml" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\MicrosoftAjax.debug.js" />
@@ -679,6 +681,14 @@
     <Content Include="Views\Administracion\ModulosAccesoPartialView.cshtml" />
     <Content Include="Views\PMI\Incidentes.cshtml" />
     <Content Include="Views\PMI\PMIPartialView.cshtml" />
+    <Content Include="Views\Eventos\Dispositivos.cshtml" />
+    <Content Include="Views\Eventos\DispositivosPartialView.cshtml" />
+    <Content Include="Views\Eventos\ContentLeftPartialView.cshtml" />
+    <Content Include="Views\Eventos\ConexionesPartial.cshtml" />
+    <Content Include="Views\Eventos\Activar.cshtml" />
+    <Content Include="Views\Eventos\ComboBoxEmpresa.cshtml" />
+    <Content Include="Views\Eventos\ComboBoxEvento.cshtml" />
+    <Content Include="Views\Eventos\DispEventPartialView.cshtml" />
     <None Include="Views\Procesos\AjustarWRT.cshtml" />
     <Content Include="Views\Procesos\AjustarRTOPartialView.cshtml" />
     <Content Include="Views\Procesos\AjustarRTO.cshtml" />
@@ -720,11 +730,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="APIController\tblAuditoriaController.cs" />
+    <Compile Include="APIController\tblDispositivoController.cs" />
     <Compile Include="APIController\tblDocumentoController.cs" />
     <Compile Include="APIController\tblEmpresaController.cs" />
     <Compile Include="APIController\tblModuloController.cs" />
     <Compile Include="APIController\tblUsuarioController.cs" />
     <Compile Include="APIModels\AuditoriaModel.cs" />
+    <Compile Include="APIModels\DispositivoModels.cs" />
     <Compile Include="APIModels\DocumentoModel.cs" />
     <Compile Include="APIModels\EmpresaModel.cs" />
     <Compile Include="APIModels\ModuloModel.cs" />
@@ -778,6 +790,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DiagramaResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_LocalResources\DispositivoResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DispositivoResource.resx</DependentUpon>
     </Compile>
     <Compile Include="App_LocalResources\DocumentoResource.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -896,6 +913,7 @@
     <Compile Include="Controllers\DocumentoController.cs" />
     <Compile Include="Controllers\DocumentosController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\EventosController.cs" />
     <Compile Include="Controllers\FileManagerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
@@ -1147,6 +1165,15 @@
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\EF\tblCulture_TipoIncidente.cs">
+      <DependentUpon>BCMWebEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\EF\tblDispositivo.cs">
+      <DependentUpon>BCMWebEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\EF\tblDispositivoConexion.cs">
+      <DependentUpon>BCMWebEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\EF\tblDispositivoEnvio.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\EF\tblDocumento.cs">
@@ -1434,6 +1461,7 @@
     <Compile Include="Models\DocumentoModels.cs" />
     <Compile Include="Models\DocumentoWordModels.cs" />
     <Compile Include="Models\EmpresaModels.cs" />
+    <Compile Include="Models\EventoModels.cs" />
     <Compile Include="Models\FileManagerModel.cs" />
     <Compile Include="Models\MenuModels.cs" />
     <Compile Include="Models\ModuloModels.cs" />
@@ -1457,6 +1485,7 @@
     <Folder Include="Content\FileManager\AnexosPlanTrabajo\" />
     <Folder Include="Content\FileManager\Thumbnails\" />
     <Folder Include="PDFDocs\" />
+    <Folder Include="PMI\PDFDocs\tempPDF\" />
     <Folder Include="Views\AdminDoc\" />
     <Folder Include="Views\Error\" />
     <Folder Include="Views\PlanMantenimiento\" />
@@ -1514,6 +1543,11 @@
     <EmbeddedResource Include="App_LocalResources\DiagramaResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>DiagramaResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App_LocalResources\DispositivoResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DispositivoResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Resources</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="App_LocalResources\DocumentoResource.resx">

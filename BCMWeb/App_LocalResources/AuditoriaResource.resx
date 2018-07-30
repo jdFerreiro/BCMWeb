@@ -327,4 +327,10 @@
   <data name="EliminarIncidenteMessage" xml:space="preserve">
     <value>Eliminar Incidente</value>
   </data>
+  <data name="ActivarEvento" xml:space="preserve">
+    <value>Activar el evento {0}</value>
+  </data>
+  <data name="EliminarEvento" xml:space="preserve">
+    <value>Eliminar dispositio {0} para el evento {1}</value>
+  </data>
 </root>

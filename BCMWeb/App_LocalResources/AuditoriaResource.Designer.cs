@@ -106,6 +106,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Activar el evento {0}.
+        /// </summary>
+        public static string ActivarEvento {
+            get {
+                return ResourceManager.GetString("ActivarEvento", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Actualizar la sección {0} del documento {1} versión {2}.
         /// </summary>
         public static string ActualizarAccionMessage {
@@ -570,6 +579,15 @@ namespace Resources {
         public static string EliminarAccionMessage1 {
             get {
                 return ResourceManager.GetString("EliminarAccionMessage1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Eliminar dispositio {0} para el evento {1}.
+        /// </summary>
+        public static string EliminarEvento {
+            get {
+                return ResourceManager.GetString("EliminarEvento", resourceCulture);
             }
         }
         
