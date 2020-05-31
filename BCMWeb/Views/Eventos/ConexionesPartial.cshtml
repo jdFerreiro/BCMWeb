@@ -38,7 +38,7 @@
                 c.CellStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.FooterCellStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.FixedStyle = GridViewColumnFixedStyle.Left;
-                c.Width = Unit.Percentage(15);
+                c.Width = Unit.Percentage(20);
             });
             settings.Columns.Add(c =>
             {
@@ -47,16 +47,7 @@
                 c.FixedStyle = GridViewColumnFixedStyle.Left;
                 c.HeaderStyle.HorizontalAlign = HorizontalAlign.Left;
                 c.HeaderStyle.Wrap = DefaultBoolean.True;
-                c.Width = Unit.Percentage(40);
-                c.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
-            });
-            settings.Columns.Add(c =>
-            {
-                c.FieldName = "Usuario";
-                c.Caption = Resources.DispositivoResource.labelUsuario;
-                c.HeaderStyle.HorizontalAlign = HorizontalAlign.Left;
-                c.HeaderStyle.Wrap = DefaultBoolean.True;
-                c.Width = Unit.Percentage(30);
+                c.Width = Unit.Percentage(60);
                 c.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
             });
             settings.Columns.Add(c =>
@@ -65,7 +56,7 @@
                 c.Caption = Resources.DispositivoResource.labelDireccionIP;
                 c.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
                 c.HeaderStyle.Wrap = DefaultBoolean.True;
-                c.Width = Unit.Percentage(15);
+                c.Width = Unit.Percentage(20);
                 c.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
             });
         });

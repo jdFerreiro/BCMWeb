@@ -20,8 +20,10 @@
         settings.SettingsDocumentSelector.UploadSettings.Enabled = true;
         settings.ClientSideEvents.CustomCommandExecuted = "OnCustomCommandExecuted";
         settings.ClientSideEvents.DocumentChanged = "docChange";
-        //settings.Settings.Behavior.Copy = DocumentCapability.Hidden;
-        //settings.Settings.Behavior.Cut = DocumentCapability.Hidden;
+        if (settings.RibbonTabs.Find(r => r is DevExpress.Web.ASPxRichEdit.RERTableDesignTab) != null)
+            settings.RibbonTabs.Find(r => r is DevExpress.Web.ASPxRichEdit.RERTableDesignTab).Text = Resources.EditorResources.RibbonDesignTab;
+        if (settings.RibbonTabs.Find(r => r is DevExpress.Web.ASPxRichEdit.RERTableLayoutTab) != null)
+            settings.RibbonTabs.Find(r => r is DevExpress.Web.ASPxRichEdit.RERTableLayoutTab).Text = Resources.EditorResources.RibbonLayoutTab;
 
         settings.CustomActionRouteValues = new { Controller = "Documentos", Action = "Open" };
 
@@ -45,7 +47,6 @@
                 Name = "open",
                 Size = RibbonItemSize.Large,
                 Text = Resources.EditorResources.OpenCustomText,
-
             });
             richEdit.RibbonTabs[0].Groups[0].Items.Insert(1, new RibbonButtonItem
             {

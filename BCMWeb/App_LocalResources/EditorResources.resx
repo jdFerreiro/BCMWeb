@@ -126,6 +126,12 @@
   <data name="OpenCustomText" xml:space="preserve">
     <value>Abrir</value>
   </data>
+  <data name="RibbonDesignTab" xml:space="preserve">
+    <value>Diseño</value>
+  </data>
+  <data name="RibbonLayoutTab" xml:space="preserve">
+    <value>Presentación</value>
+  </data>
   <data name="SaveCustomText" xml:space="preserve">
     <value>Guardar</value>
   </data>

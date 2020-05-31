@@ -1,8 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<resources>
-  <string name="emailRequired">Debe indicar su correo electrónico</string>
-  <string name="emailInvalid">El correo electrónico no es válido</string>
-  <string name="passwordRequired">Debe indicar su contraseña</string>
-  <string name="loginError1">Las credenciales indicadas no son válidas. Verifique por favor.</string>
-  <string name="ErrorConexion">Se perdió la conexión con el servidor, por favor intente de nuevo.</string>
-</resources>

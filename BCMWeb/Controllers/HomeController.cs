@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using System.Web.Security;
 
 namespace BCMWeb.Controllers
 {
@@ -17,6 +18,21 @@ namespace BCMWeb.Controllers
         {
             // DXCOMMENT: Pass a data model for GridView
 
+            if (Session["UserId"] != null)
+            {
+                long UserId = long.Parse(Session["UserId"].ToString());
+                Metodos.Logout(UserId);
+                Session.Abandon();
+                Session.RemoveAll();
+                FormsAuthentication.SignOut();
+                Session["UserId"] = null;
+                return RedirectToAction("Index", "Home");
+            }
+            else if (Request.IsAuthenticated)
+            {
+                FormsAuthentication.SignOut();
+                return RedirectToAction("Index", "Home");
+            }
             ViewBag.Title = string.Format("{0} - {1}", Resources.BCMWebPublic.labelAppTitle, Resources.BCMWebPublic.labelAppSlogan);
             ViewBag.PageTitle = Resources.BCMWebPublic.labelAppSlogan;
             return View();

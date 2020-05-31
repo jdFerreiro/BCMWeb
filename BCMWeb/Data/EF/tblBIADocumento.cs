@@ -19,7 +19,6 @@ namespace BCMWeb.Data.EF
         {
             this.tblBIAComentario = new HashSet<tblBIAComentario>();
             this.tblBIAProceso = new HashSet<tblBIAProceso>();
-            this.tblBIAAmenazaEvento = new HashSet<tblBIAAmenazaEvento>();
         }
     
         public long IdEmpresa { get; set; }
@@ -36,7 +35,5 @@ namespace BCMWeb.Data.EF
         public virtual ICollection<tblBIAProceso> tblBIAProceso { get; set; }
         public virtual tblDocumento tblDocumento { get; set; }
         public virtual tblEmpresa tblEmpresa { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblBIAAmenazaEvento> tblBIAAmenazaEvento { get; set; }
     }
 }

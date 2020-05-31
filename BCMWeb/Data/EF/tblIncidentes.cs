@@ -20,11 +20,11 @@ namespace BCMWeb.Data.EF
         public Nullable<int> IdNaturalezaIncidente { get; set; }
         public Nullable<int> IdFuenteIncidente { get; set; }
         public Nullable<System.DateTime> FechaIncidente { get; set; }
+        public string Descripcion { get; set; }
         public string LugarIncidente { get; set; }
         public Nullable<int> Duracion { get; set; }
         public string NombreReportero { get; set; }
         public string NombreSolucionador { get; set; }
-        public string Descripcion { get; set; }
         public string Observaciones { get; set; }
     
         public virtual tblEmpresa tblEmpresa { get; set; }

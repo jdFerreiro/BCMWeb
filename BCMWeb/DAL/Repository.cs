@@ -36,7 +36,7 @@ namespace BCMWeb.Security
                                Id = x.IdUsuario,
                                Name = x.Nombre,
                                Empresas = _Empresas,
-                               FechaUltimaConexion = (DateTime)x.FechaUltimaConexion,
+                               FechaUltimaConexion = x.FechaUltimaConexion != null ? (DateTime)x.FechaUltimaConexion : DateTime.Now,
                                PrimeraVez = (bool)x.PrimeraVez
                            }).FirstOrDefault();
             }

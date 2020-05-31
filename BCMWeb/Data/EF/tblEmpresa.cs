@@ -25,6 +25,7 @@ namespace BCMWeb.Data.EF
             this.tblBIAUnidadTrabajo = new HashSet<tblBIAUnidadTrabajo>();
             this.tblCargo = new HashSet<tblCargo>();
             this.tblCriticidad = new HashSet<tblCriticidad>();
+            this.tblDispositivoConexion = new HashSet<tblDispositivoConexion>();
             this.tblDocumento = new HashSet<tblDocumento>();
             this.tblDocumentoPersonaClave = new HashSet<tblDocumentoPersonaClave>();
             this.tblProbabilidadRiesgo = new HashSet<tblProbabilidadRiesgo>();
@@ -37,6 +38,7 @@ namespace BCMWeb.Data.EF
             this.tblEmpresaModulo = new HashSet<tblEmpresaModulo>();
             this.tblEmpresaUsuario = new HashSet<tblEmpresaUsuario>();
             this.tblFormatosEmail = new HashSet<tblFormatosEmail>();
+            this.tblIncidentes = new HashSet<tblIncidentes>();
             this.tblIniciativas_Anexo = new HashSet<tblIniciativas_Anexo>();
             this.tblIniciativas = new HashSet<tblIniciativas>();
             this.tblModulo_NivelUsuario = new HashSet<tblModulo_NivelUsuario>();
@@ -52,8 +54,7 @@ namespace BCMWeb.Data.EF
             this.tblPMTResponsableUpdate = new HashSet<tblPMTResponsableUpdate>();
             this.tblProducto = new HashSet<tblProducto>();
             this.tblUsuarioUnidadOrganizativa = new HashSet<tblUsuarioUnidadOrganizativa>();
-            this.tblIncidentes = new HashSet<tblIncidentes>();
-            this.tblDispositivoConexion = new HashSet<tblDispositivoConexion>();
+            this.tblDispositivoConexion1 = new HashSet<tblDispositivoConexion1>();
         }
     
         public long IdEmpresa { get; set; }
@@ -92,6 +93,8 @@ namespace BCMWeb.Data.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblCriticidad> tblCriticidad { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblDispositivoConexion> tblDispositivoConexion { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblDocumento> tblDocumento { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblDocumentoPersonaClave> tblDocumentoPersonaClave { get; set; }
@@ -118,6 +121,8 @@ namespace BCMWeb.Data.EF
         public virtual ICollection<tblEmpresaUsuario> tblEmpresaUsuario { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblFormatosEmail> tblFormatosEmail { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblIncidentes> tblIncidentes { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblIniciativas_Anexo> tblIniciativas_Anexo { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -149,8 +154,6 @@ namespace BCMWeb.Data.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblUsuarioUnidadOrganizativa> tblUsuarioUnidadOrganizativa { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblIncidentes> tblIncidentes { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblDispositivoConexion> tblDispositivoConexion { get; set; }
+        public virtual ICollection<tblDispositivoConexion1> tblDispositivoConexion1 { get; set; }
     }
 }

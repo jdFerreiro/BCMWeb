@@ -29,7 +29,8 @@ namespace BCMWeb.Data.EF
         public string modelo { get; set; }
         public string plataforma { get; set; }
         public string version { get; set; }
-        public string Tipo { get; set; }
+        public string tipo { get; set; }
+        public string token { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblDispositivoConexion> tblDispositivoConexion { get; set; }

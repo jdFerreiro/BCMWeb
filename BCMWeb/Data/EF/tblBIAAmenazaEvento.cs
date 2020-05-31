@@ -30,6 +30,5 @@ namespace BCMWeb.Data.EF
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblBIAEventoControl> tblBIAEventoControl { get; set; }
-        public virtual tblBIADocumento tblBIADocumento { get; set; }
     }
 }

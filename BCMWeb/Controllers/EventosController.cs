@@ -99,7 +99,7 @@ namespace BCMWeb.Controllers
             long IdModulo = IdTipoDocumento * 1000000;
             Nullable<long> _idSubmodulo = Metodos.GetEscenariosEmpresa().FirstOrDefault().Id;
 
-            EventoEmpresaModel model = new EventoEmpresaModel
+            EventoRegistroEmpresaModel model = new EventoRegistroEmpresaModel
             {
                 IdSubmoduloSelected = _idSubmodulo ?? 0,
                 IdModulo = IdModulo,
@@ -117,7 +117,7 @@ namespace BCMWeb.Controllers
         [SessionExpire]
         [HandleError]
         [HttpPost]
-        public ActionResult Activar(EventoEmpresaModel model)
+        public ActionResult Activar(EventoRegistroEmpresaModel model)
         {
 
             string _modId = Session["modId"].ToString();
@@ -159,7 +159,7 @@ namespace BCMWeb.Controllers
             long IdModulo = IdTipoDocumento * 1000000;
             Nullable<long> _idSubmodulo = long.Parse(_idModuloSelected);
 
-            EventoEmpresaModel model = new EventoEmpresaModel
+            EventoRegistroEmpresaModel model = new EventoRegistroEmpresaModel
             {
                 IdSubmoduloSelected = _idSubmodulo ?? 0,
                 IdModulo = IdModulo,

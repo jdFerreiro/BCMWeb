@@ -19,7 +19,10 @@
         settings.SettingsDocumentSelector.UploadSettings.Enabled = true;
         settings.ClientSideEvents.CustomCommandExecuted = "OnCustomCommandExecuted";
         settings.ClientSideEvents.DocumentChanged = "docChange";
-
+        if (settings.RibbonTabs.Find(r => r is DevExpress.Web.ASPxRichEdit.RERTableDesignTab) != null)
+            settings.RibbonTabs.Find(r => r is DevExpress.Web.ASPxRichEdit.RERTableDesignTab).Text = Resources.EditorResources.RibbonDesignTab;
+        if (settings.RibbonTabs.Find(r => r is DevExpress.Web.ASPxRichEdit.RERTableLayoutTab) != null)
+            settings.RibbonTabs.Find(r => r is DevExpress.Web.ASPxRichEdit.RERTableLayoutTab).Text = Resources.EditorResources.RibbonLayoutTab;
 
         settings.CustomActionRouteValues = new { Controller = "PPE", Action = "Open" };
 

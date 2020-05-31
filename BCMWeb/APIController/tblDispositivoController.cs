@@ -6,6 +6,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
@@ -64,7 +65,7 @@ namespace BCMWeb.APIController
                 modelo = x.modelo,
                 nombre = x.nombre,
                 plataforma = x.plataforma,
-                tipo = x.Tipo,
+                tipo = x.tipo,
                 version = x.version
             }).ToListAsync();
 
@@ -119,21 +120,22 @@ namespace BCMWeb.APIController
                 return BadRequest(ModelState);
             }
 
-            tblDispositivo tblDispositivo = new tblDispositivo
-            {
-                fabricante = reg.fabricante,
-                fechaRegistro = DateTime.Now,
-                IdDispositivo = reg.Id,
-                IdUnicoDispositivo = reg.IdUnicoDispositivo,
-                modelo = reg.modelo,
-                nombre = reg.nombre,
-                plataforma = reg.plataforma,
-                Tipo = reg.tipo,
-                version = reg.version,
-            };
+                tblDispositivo tblDispositivo = new tblDispositivo
+                {
+                    fabricante = reg.fabricante,
+                    fechaRegistro = DateTime.Now,
+                    IdDispositivo = reg.Id,
+                    IdUnicoDispositivo = reg.IdUnicoDispositivo,
+                    modelo = reg.modelo,
+                    nombre = reg.nombre,
+                    plataforma = reg.plataforma,
+                    tipo = reg.tipo,
+                    version = reg.version,
+                };
 
             try
             {
+
                 db.tblDispositivo.Add(tblDispositivo);
                 await db.SaveChangesAsync();
                 reg.Id = tblDispositivo.IdDispositivo;

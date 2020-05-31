@@ -96,6 +96,12 @@ namespace BCMWeb.Data.EF
         public virtual DbSet<tblCultura_TipoTablaContenido> tblCultura_TipoTablaContenido { get; set; }
         public virtual DbSet<tblCultura_TipoTelefono> tblCultura_TipoTelefono { get; set; }
         public virtual DbSet<tblCultura_TipoUbicacionInformacion> tblCultura_TipoUbicacionInformacion { get; set; }
+        public virtual DbSet<tblCulture_FuenteIncidente> tblCulture_FuenteIncidente { get; set; }
+        public virtual DbSet<tblCulture_NaturalezaIncidente> tblCulture_NaturalezaIncidente { get; set; }
+        public virtual DbSet<tblCulture_TipoIncidente> tblCulture_TipoIncidente { get; set; }
+        public virtual DbSet<tblDispositivo> tblDispositivo { get; set; }
+        public virtual DbSet<tblDispositivoConexion> tblDispositivoConexion { get; set; }
+        public virtual DbSet<tblDispositivoEnvio> tblDispositivoEnvio { get; set; }
         public virtual DbSet<tblDocumento> tblDocumento { get; set; }
         public virtual DbSet<tblDocumentoAnexo> tblDocumentoAnexo { get; set; }
         public virtual DbSet<tblDocumentoAprobacion> tblDocumentoAprobacion { get; set; }
@@ -178,15 +184,12 @@ namespace BCMWeb.Data.EF
         public virtual DbSet<tblUsuario> tblUsuario { get; set; }
         public virtual DbSet<tblUsuarioUnidadOrganizativa> tblUsuarioUnidadOrganizativa { get; set; }
         public virtual DbSet<tblVicepresidencia> tblVicepresidencia { get; set; }
+        public virtual DbSet<tblDispositivo1> tblDispositivo1 { get; set; }
+        public virtual DbSet<tblDispositivoEnvio1> tblDispositivoEnvio1 { get; set; }
         public virtual DbSet<tblFuenteIncidente> tblFuenteIncidente { get; set; }
         public virtual DbSet<tblIncidentes> tblIncidentes { get; set; }
         public virtual DbSet<tblNaturalezaIncidente> tblNaturalezaIncidente { get; set; }
         public virtual DbSet<tblTipoIncidente> tblTipoIncidente { get; set; }
-        public virtual DbSet<tblCulture_FuenteIncidente> tblCulture_FuenteIncidente { get; set; }
-        public virtual DbSet<tblCulture_NaturalezaIncidente> tblCulture_NaturalezaIncidente { get; set; }
-        public virtual DbSet<tblCulture_TipoIncidente> tblCulture_TipoIncidente { get; set; }
-        public virtual DbSet<tblDispositivo> tblDispositivo { get; set; }
-        public virtual DbSet<tblDispositivoConexion> tblDispositivoConexion { get; set; }
-        public virtual DbSet<tblDispositivoEnvio> tblDispositivoEnvio { get; set; }
+        public virtual DbSet<tblDispositivoConexion1> tblDispositivoConexion1 { get; set; }
     }
 }

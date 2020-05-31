@@ -23,6 +23,5 @@ namespace BCMWeb.Data.EF
         public Nullable<bool> Descargado { get; set; }
     
         public virtual tblDispositivo tblDispositivo { get; set; }
-        public virtual tblModulo tblModulo { get; set; }
     }
 }

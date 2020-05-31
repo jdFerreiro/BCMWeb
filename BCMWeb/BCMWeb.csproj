@@ -435,6 +435,8 @@
     <Content Include="Scripts\cldr.supplemental.js" />
     <Content Include="Scripts\cldr.unresolved.js" />
     <Content Include="Scripts\ext-language_tools.js" />
+    <Content Include="Scripts\firebase-debug.js" />
+    <Content Include="Scripts\firebase.js" />
     <Content Include="Scripts\globalize.currency.js" />
     <Content Include="Scripts\globalize.date.js" />
     <Content Include="Scripts\globalize.js" />
@@ -463,6 +465,7 @@
       <DependentUpon>BCMWebEntities.edmx</DependentUpon>
     </Content>
     <Content Include="PMI\PDFDocs\INC92.pdf" />
+    <Content Include="manifiest.json" />
     <None Include="Properties\PublishProfiles\BCMWeb2.pubxml" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\MicrosoftAjax.debug.js" />
@@ -730,6 +733,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="APIController\tblAuditoriaController.cs" />
+    <Compile Include="APIController\EventosController.cs" />
     <Compile Include="APIController\tblDispositivoController.cs" />
     <Compile Include="APIController\tblDocumentoController.cs" />
     <Compile Include="APIController\tblEmpresaController.cs" />
@@ -739,6 +743,7 @@
     <Compile Include="APIModels\DispositivoModels.cs" />
     <Compile Include="APIModels\DocumentoModel.cs" />
     <Compile Include="APIModels\EmpresaModel.cs" />
+    <Compile Include="APIModels\EventoModel.cs" />
     <Compile Include="APIModels\ModuloModel.cs" />
     <Compile Include="APIModels\UsuarioModel.cs" />
     <Compile Include="App_GlobalResources\DocumentosGlobalResource.Designer.cs">
@@ -1170,10 +1175,19 @@
     <Compile Include="Data\EF\tblDispositivo.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Data\EF\tblDispositivo1.cs">
+      <DependentUpon>BCMWebEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Data\EF\tblDispositivoConexion.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Data\EF\tblDispositivoConexion1.cs">
+      <DependentUpon>BCMWebEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Data\EF\tblDispositivoEnvio.cs">
+      <DependentUpon>BCMWebEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\EF\tblDispositivoEnvio1.cs">
       <DependentUpon>BCMWebEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\EF\tblDocumento.cs">

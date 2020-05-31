@@ -17,15 +17,15 @@ namespace BCMWeb.Data.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public tblFuenteIncidente()
         {
-            this.tblIncidentes = new HashSet<tblIncidentes>();
             this.tblCulture_FuenteIncidente = new HashSet<tblCulture_FuenteIncidente>();
+            this.tblIncidentes = new HashSet<tblIncidentes>();
         }
     
         public int IdFuenteIncidente { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblIncidentes> tblIncidentes { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblCulture_FuenteIncidente> tblCulture_FuenteIncidente { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblIncidentes> tblIncidentes { get; set; }
     }
 }

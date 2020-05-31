@@ -16,8 +16,8 @@ namespace BCMWeb.APIModels
         public string plataforma { get; set; }
         public string version { get; set; }
         public string tipo { get; set; }
+        public string token { get; set; }
     }
-
     public class DispositivoConexion
     {
         public long IdEmpresa { get; set; }
@@ -33,4 +33,6 @@ namespace BCMWeb.APIModels
         public string NombreDocumento { get; set; }
         public string RutaDocumento { get; set; }
     }
+
+
 }

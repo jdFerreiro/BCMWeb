@@ -18,14 +18,17 @@ namespace BCMWeb.Data.EF
         public tblUsuario()
         {
             this.tblAuditoria = new HashSet<tblAuditoria>();
+            this.tblDispositivoConexion = new HashSet<tblDispositivoConexion>();
             this.tblEmpresaUsuario = new HashSet<tblEmpresaUsuario>();
             this.tblModulo_Usuario = new HashSet<tblModulo_Usuario>();
             this.tblPersona = new HashSet<tblPersona>();
             this.tblPlanTrabajoAuditoria = new HashSet<tblPlanTrabajoAuditoria>();
             this.tblPMTProgramacionUsuario = new HashSet<tblPMTProgramacionUsuario>();
             this.tblPMTResponsableUpdate_Correo = new HashSet<tblPMTResponsableUpdate_Correo>();
+            this.tblDispositivo1 = new HashSet<tblDispositivo1>();
+            this.tblDispositivoEnvio1 = new HashSet<tblDispositivoEnvio1>();
+            this.tblDispositivoEnvio11 = new HashSet<tblDispositivoEnvio1>();
             this.tblUsuarioUnidadOrganizativa = new HashSet<tblUsuarioUnidadOrganizativa>();
-            this.tblDispositivoConexion = new HashSet<tblDispositivoConexion>();
         }
     
         public long IdUsuario { get; set; }
@@ -41,6 +44,8 @@ namespace BCMWeb.Data.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblAuditoria> tblAuditoria { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblDispositivoConexion> tblDispositivoConexion { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblEmpresaUsuario> tblEmpresaUsuario { get; set; }
         public virtual tblEstadoUsuario tblEstadoUsuario { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -54,8 +59,12 @@ namespace BCMWeb.Data.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblPMTResponsableUpdate_Correo> tblPMTResponsableUpdate_Correo { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblUsuarioUnidadOrganizativa> tblUsuarioUnidadOrganizativa { get; set; }
+        public virtual ICollection<tblDispositivo1> tblDispositivo1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblDispositivoConexion> tblDispositivoConexion { get; set; }
+        public virtual ICollection<tblDispositivoEnvio1> tblDispositivoEnvio1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblDispositivoEnvio1> tblDispositivoEnvio11 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblUsuarioUnidadOrganizativa> tblUsuarioUnidadOrganizativa { get; set; }
     }
 }

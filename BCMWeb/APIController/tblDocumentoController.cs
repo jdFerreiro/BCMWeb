@@ -83,7 +83,7 @@ namespace BCMWeb.APIController
             List<tblDocumento> docs = new List<tblDocumento>();
             try
             {
-                if (_nivelUsuario == eNivelUsuario.ConsultorAdministrador || _nivelUsuario == eNivelUsuario.ComiteContinuidad)
+                if (_nivelUsuario == eNivelUsuario.ConsultorAdministrador || _nivelUsuario == eNivelUsuario.ComiteContinuidad || _nivelUsuario == eNivelUsuario.Administrador)
                 {
                     //docs = await db.tblDocumento
                     //    .Where(x => x.IdEmpresa == idEmpresa && x.IdEstadoDocumento == (long)eEstadoDocumento.Certificado)
@@ -109,13 +109,13 @@ namespace BCMWeb.APIController
                 }
                 else
                 {
-                    //docs = await db.tblDocumento
-                    //    .Where(x => x.IdEmpresa == idEmpresa && x.IdEstadoDocumento == (long)eEstadoDocumento.Certificado && (x.IdPersonaResponsable == id || x.tblDocumentoCertificacion.Where(cx => cx.tblPersona.IdUsuario == id).Count() > 0))
-                    //    .ToListAsync();
                     _documentos = db.tblDocumento
                        .Where(x => x.IdEmpresa == idEmpresa &&
                                    x.IdEstadoDocumento == (long)eEstadoDocumento.Certificado &&
-                                  (x.IdPersonaResponsable == id || x.tblDocumentoCertificacion.Where(cx => cx.tblPersona.IdUsuario == id).Count() > 0 || x.tblDocumentoAprobacion.Where(cx => cx.tblPersona.IdUsuario == id).Count() > 0))
+                                   ((x.IdTipoDocumento != 7 && x.IdTipoDocumento != 4) ||
+                                    (x.IdPersonaResponsable == id ||
+                                     x.tblDocumentoCertificacion.Where(cx => cx.tblPersona.IdUsuario == id).Count() > 0 || 
+                                     x.tblDocumentoAprobacion.Where(cx => cx.tblPersona.IdUsuario == id).Count() > 0)))
                        .AsEnumerable()
                        .Select(x => new DocumentoModel
                        {
@@ -168,7 +168,7 @@ namespace BCMWeb.APIController
             tblEmpresaUsuario _empresaUsuario = await db.tblEmpresaUsuario.FirstOrDefaultAsync(x => x.IdEmpresa == idEmpresa && x.IdUsuario == id);
             eNivelUsuario _nivelUsuario = (eNivelUsuario)_empresaUsuario.IdNivelUsuario;
             List<tblDocumento> docs = new List<tblDocumento>();
-            if (_nivelUsuario == eNivelUsuario.ConsultorAdministrador || _nivelUsuario == eNivelUsuario.ComiteContinuidad)
+            if (_nivelUsuario == eNivelUsuario.ConsultorAdministrador || _nivelUsuario == eNivelUsuario.ComiteContinuidad || _nivelUsuario == eNivelUsuario.Administrador)
             {
                 docs = await db.tblDocumento
                     .Where(x => x.IdEmpresa == idEmpresa &&
@@ -182,7 +182,10 @@ namespace BCMWeb.APIController
                 docs = await db.tblDocumento
                     .Where(x => x.IdEmpresa == idEmpresa &&
                                 x.IdEstadoDocumento == (long)eEstadoDocumento.Certificado &&
-                                (x.IdPersonaResponsable == id || x.tblDocumentoCertificacion.Where(cx => cx.tblPersona.IdUsuario == id).Count() > 0 || x.tblDocumentoAprobacion.Where(cx => cx.tblPersona.IdUsuario == id).Count() > 0) &&
+                                ((x.IdTipoDocumento != 7 && x.IdTipoDocumento != 4) ||
+                                    (x.IdPersonaResponsable == id ||
+                                     x.tblDocumentoCertificacion.Where(cx => cx.tblPersona.IdUsuario == id).Count() > 0 ||
+                                     x.tblDocumentoAprobacion.Where(cx => cx.tblPersona.IdUsuario == id).Count() > 0)) &&
                                 x.Negocios == negocios &&
                                 x.IdTipoDocumento == idTypeDoc)
                     .ToListAsync();
