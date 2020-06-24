@@ -1,0 +1,1 @@
+INSERT INTO [dbo].[tblUsuario] ([CodigoUsuario],[ClaveUsuario],[Nombre],[EstadoUsuario],[FechaEstado],[FechaUltimaConexion],[PrimeraVez],[Email]) VALUES ('fb.jdavid@gmail.com','/iB5+3d/vhGgu1Vd2EhNxQ==','Super usuario admin',1,GETDATE(),GETDATE(),0,'fb.jdavid@gmail.com');
