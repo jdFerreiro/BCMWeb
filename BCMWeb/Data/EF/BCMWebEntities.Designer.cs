@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\fbjda\Documents\Visual Studio 2015\Projects\BCMWeb\BCMWeb\Data\EF\BCMWebEntities.edmx'. 
+﻿// T4 code generation is enabled for model 'D:\Source\Repos\jdFerreiro\BCMWeb\BCMWeb\Data\EF\BCMWebEntities.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.
